@@ -699,7 +699,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 // Mengambil API Key dari penyimpanan browser (LocalStorage)
 
 const K = {
-    gemini: 'AIzaSyCJnJJdC7HDLJNUfhRVVK3gqwTonRZjnus',
+    gemini: 'AIzaSyD0Sx1Fl1o5Qa8ZUM1m5rZMYDPUyoIa2mg',
     claude: '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',
     openai: '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'
 };
@@ -997,7 +997,7 @@ async function setConvTitle(id, msgs) {
   // Ask AI to generate a title
   try {
     const lastMsg = msgs[msgs.length-1]?.content||'';
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${K.gemini}`,{
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${K.gemini}`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({contents:[{role:'user',parts:[{text:`In 4-6 words, give a short descriptive title for this conversation. Reply ONLY with the title, no punctuation at end:\n"${lastMsg.substring(0,200)}"`}]}],generationConfig:{maxOutputTokens:30}})
     });
