@@ -2,41 +2,44 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>NEXUS AI — Roblox Dev Intelligence</title>
+<link rel="icon" href="nexusai.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lua.min.js"></script>
 <style>
 :root{
   --bg:#030312;--bg2:#06071a;--bg3:#0a0b22;
   --card:rgba(0,229,255,.04);--hover:rgba(0,229,255,.07);
   --cyan:#00e5ff;--cyan2:rgba(0,229,255,.35);--cyan3:rgba(0,229,255,.12);
-  --purple:#8800ff;--pink:#ff2d6b;--green:#00ffaa;--yellow:#ffd600;--orange:#ff7700;
+  --purple:#8800ff;--pink:#ff2d6b;--green:#00ffaa;--yellow:#ffd600;
   --text:#b8cfff;--dim:#3a4a7a;
   --b:rgba(0,229,255,.12);--bb:rgba(0,229,255,.3);
   --gc:0 0 20px rgba(0,229,255,.15);--gp:0 0 20px rgba(136,0,255,.15);
   --r:8px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;overflow:hidden;font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:13px;}
-body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0,229,255,.018)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.018)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+html,body{height:100%;font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:13px;}
+body{overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0,229,255,.015)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.015)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
 
-/* LAYOUT */
+/* ── LAYOUT ── */
 #app{display:grid;grid-template-columns:260px 1fr 280px;height:100vh;position:relative;z-index:1;}
-@media(max-width:900px){#app{grid-template-columns:1fr;grid-template-rows:auto 1fr auto;}#sb,#pp{display:none;}}
 
-/* SIDEBAR */
+/* ── SIDEBAR ── */
 #sb{display:flex;flex-direction:column;background:var(--bg2);border-right:1px solid var(--b);overflow:hidden;}
-.sb-head{padding:14px 14px 10px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.sb-head{padding:13px 14px 10px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .sb-logo{width:30px;height:30px;background:linear-gradient(135deg,var(--cyan),var(--purple));border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-weight:900;font-size:11px;color:white;flex-shrink:0;}
 .sb-logo-text{font-family:'Orbitron',sans-serif;font-weight:900;font-size:12px;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .sb-logo-sub{font-size:8px;color:var(--dim);}
-.sb-user{padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--b);cursor:pointer;transition:.15s;flex-shrink:0;}
-.sb-user:hover{background:var(--hover);}
-.sb-av{width:28px;height:28px;border-radius:50%;border:1px solid var(--cyan2);object-fit:cover;background:var(--bg3);}
+.sb-user{padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--b);flex-shrink:0;}
+.sb-av{width:30px;height:30px;border-radius:50%;border:1.5px solid var(--cyan2);object-fit:cover;background:var(--bg3);flex-shrink:0;}
 .sb-un{font-size:11px;color:white;font-weight:500;}
 .sb-role{font-size:9px;color:var(--dim);}
-.sb-gear{margin-left:auto;font-size:14px;color:var(--dim);cursor:pointer;transition:.12s;}
+.sb-gear{margin-left:auto;font-size:14px;color:var(--dim);cursor:pointer;transition:.12s;flex-shrink:0;}
 .sb-gear:hover{color:var(--cyan);}
 .creds{margin:8px 12px;padding:8px 11px;background:linear-gradient(135deg,rgba(255,214,0,.06),rgba(255,119,0,.06));border:1px solid rgba(255,214,0,.18);border-radius:var(--r);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;cursor:pointer;}
 .creds:hover{border-color:rgba(255,214,0,.35);}
@@ -48,25 +51,29 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .model-wrap{margin:0 12px 6px;position:relative;flex-shrink:0;}
 .model-sel{padding:7px 10px;background:var(--card);border:1px solid var(--b);border-radius:var(--r);cursor:pointer;display:flex;align-items:center;gap:6px;transition:.15s;}
 .model-sel:hover{border-color:var(--bb);}
-.mi{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;}
+.mi{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;overflow:hidden;}
+.mi img{width:100%;height:100%;object-fit:contain;}
 .mi.g{background:rgba(66,133,244,.18);}
 .mi.c{background:rgba(255,150,80,.18);}
 .mi.o{background:rgba(0,255,150,.18);}
+.mi.x{background:rgba(200,200,255,.12);}
 .mn{font-size:11px;color:white;flex:1;}
-.mb{font-size:8px;padding:1px 5px;border-radius:3px;}
-.mb.f{background:rgba(0,255,170,.1);color:var(--green);}
-.mb.s{background:rgba(0,229,255,.1);color:var(--cyan);}
-.mb.p{background:rgba(136,0,255,.12);color:#bb44ff;}
-.mb.u{background:rgba(255,45,107,.1);color:var(--pink);}
-.mc{color:var(--dim);font-size:9px;transition:.2s;}
+.mb{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;white-space:nowrap;}
+.mb.f{background:rgba(0,255,170,.12);color:var(--green);}
+.mb.s{background:rgba(0,229,255,.12);color:var(--cyan);}
+.mb.p{background:rgba(136,0,255,.14);color:#cc55ff;}
+.mb.u{background:rgba(255,45,107,.12);color:var(--pink);}
+.mb.cs{background:rgba(100,100,100,.18);color:#888;font-style:italic;}
+.mc{color:var(--dim);font-size:9px;transition:.2s;flex-shrink:0;}
 .model-sel.open .mc{transform:rotate(180deg);}
 .model-dd{position:absolute;top:calc(100%+3px);left:0;right:0;background:var(--bg3);border:1px solid var(--b);border-radius:var(--r);z-index:300;display:none;max-height:260px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.7);}
 .model-dd.open{display:block;}
 .mg{padding:5px 10px 2px;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;border-top:1px solid var(--b);}
 .mg:first-child{border-top:none;}
 .mo{padding:6px 10px;display:flex;align-items:center;gap:6px;cursor:pointer;transition:.1s;}
-.mo:hover{background:var(--hover);}
+.mo:hover:not(.disabled){background:var(--hover);}
 .mo.act{background:rgba(0,229,255,.06);}
+.mo.disabled{opacity:.45;cursor:not-allowed;}
 .mo-n{font-size:11px;color:white;flex:1;}
 .mo-s{font-size:9px;color:var(--dim);}
 .convs{flex:1;overflow-y:auto;padding:3px 7px;}
@@ -82,12 +89,12 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .ci-del:hover{color:var(--pink);}
 .conv-empty{padding:14px;text-align:center;color:var(--dim);font-size:11px;}
 
-/* CHAT MAIN */
+/* ── CHAT MAIN ── */
 #chat{display:flex;flex-direction:column;overflow:hidden;position:relative;}
 .plug-banner{display:none;padding:5px 14px;background:rgba(255,45,107,.08);border-bottom:1px solid rgba(255,45,107,.2);font-size:10px;color:var(--pink);align-items:center;gap:7px;flex-shrink:0;}
 .plug-banner.show{display:flex;}
 .plug-banner a{color:var(--cyan);cursor:pointer;text-decoration:none;}
-.chat-hdr{padding:10px 16px;border-bottom:1px solid var(--b);background:var(--bg2);display:flex;align-items:center;gap:9px;flex-shrink:0;}
+.chat-hdr{padding:9px 16px;border-bottom:1px solid var(--b);background:var(--bg2);display:flex;align-items:center;gap:9px;flex-shrink:0;}
 .chat-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:white;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .plug-badge{display:flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;border:1px solid;font-size:9px;cursor:pointer;transition:.15s;flex-shrink:0;}
 .plug-badge.off{border-color:rgba(255,45,107,.3);color:var(--pink);background:rgba(255,45,107,.06);}
@@ -95,88 +102,88 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .pdot{width:5px;height:5px;border-radius:50%;background:currentColor;}
 .pdot.pulse{animation:pd 1.8s infinite;}
 @keyframes pd{0%,100%{opacity:1}50%{opacity:.25}}
-
-/* TABS */
-.chat-tabs{display:flex;gap:4px;padding:6px 14px;border-bottom:1px solid var(--b);background:var(--bg2);flex-shrink:0;}
+.chat-tabs{display:flex;gap:4px;padding:5px 14px;border-bottom:1px solid var(--b);background:var(--bg2);flex-shrink:0;}
 .tab-btn{padding:5px 13px;border-radius:6px;border:1px solid transparent;font-size:10px;cursor:pointer;color:var(--dim);transition:.1s;background:none;}
 .tab-btn.act{background:rgba(0,229,255,.08);border-color:var(--b);color:var(--cyan);}
 .tab-btn:hover:not(.act){color:var(--text);}
 
-#msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
-#msgs::-webkit-scrollbar{width:2px;}
-#msgs::-webkit-scrollbar-thumb{background:var(--b);}
+#msgs{flex:1;overflow-y:auto;padding:14px 16px;display:flex;flex-direction:column;gap:12px;}
+#msgs::-webkit-scrollbar{width:3px;}
+#msgs::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px;}
 
-/* GUI BUILDER TAB */
-#guiTab{flex:1;overflow:hidden;display:none;flex-direction:column;}
-#guiTab.active{display:flex;}
-.gui-toolbar{padding:8px 14px;border-bottom:1px solid var(--b);background:var(--bg2);display:flex;align-items:center;gap:8px;flex-wrap:wrap;flex-shrink:0;}
-.gui-btn{padding:5px 11px;border-radius:5px;border:1px solid var(--b);background:var(--card);color:var(--text);font-size:10px;cursor:pointer;transition:.15s;font-family:'JetBrains Mono',monospace;}
-.gui-btn:hover{border-color:var(--cyan2);color:var(--cyan);}
-.gui-btn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,229,255,.08);}
-.gui-canvas{flex:1;position:relative;background:rgba(0,0,0,.3);overflow:hidden;cursor:crosshair;}
-.gui-canvas-inner{width:800px;height:600px;position:relative;background:rgba(20,30,60,.8);border:1px solid var(--b);margin:20px auto;}
-.gui-el{position:absolute;border:1px solid transparent;cursor:move;user-select:none;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;}
-.gui-el.selected{border-color:var(--cyan)!important;box-shadow:0 0 0 1px rgba(0,229,255,.3);}
-.gui-el .gui-resize{position:absolute;bottom:-4px;right:-4px;width:8px;height:8px;background:var(--cyan);border-radius:2px;cursor:se-resize;}
-.gui-props{width:220px;background:var(--bg2);border-left:1px solid var(--b);overflow-y:auto;padding:10px;flex-shrink:0;}
-.gui-prop-row{margin-bottom:8px;}
-.gui-prop-label{font-size:9px;color:var(--dim);margin-bottom:3px;}
-.gui-prop-input{width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:4px;padding:5px 7px;color:white;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;}
-.gui-prop-input:focus{border-color:var(--cyan2);}
-.gui-main{flex:1;display:flex;overflow:hidden;}
-.gui-generate-btn{padding:8px 16px;background:linear-gradient(135deg,var(--cyan),var(--purple));border:none;border-radius:6px;color:white;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;cursor:pointer;}
-.gui-generate-btn:hover{opacity:.85;}
-
-/* THINKING INDICATOR */
-.thinking-wrap{display:flex;gap:9px;animation:mi .25s ease;}
-.thinking-box{background:var(--bg2);border:1px solid var(--b);border-radius:2px 9px 9px 9px;padding:10px 13px;display:flex;flex-direction:column;gap:6px;max-width:320px;}
-.thinking-hdr{font-size:10px;color:var(--cyan);display:flex;align-items:center;gap:6px;}
-.thinking-spin{width:11px;height:11px;border:2px solid var(--b);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.thinking-steps{display:flex;flex-direction:column;gap:4px;}
-.t-step{font-size:10px;color:var(--dim);display:flex;align-items:center;gap:5px;}
-.t-step.active{color:var(--cyan);}
-.t-step.done{color:var(--green);}
-.t-step-dot{width:6px;height:6px;border-radius:50%;background:currentColor;flex-shrink:0;}
-
-/* Welcome */
-.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;gap:12px;padding:40px;color:var(--dim);}
-.wt{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.ws{font-size:12px;line-height:1.8;max-width:360px;}
+/* ── WELCOME ── */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;gap:10px;padding:30px 20px;color:var(--dim);}
+.wt{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.ws{font-size:12px;line-height:1.8;max-width:340px;}
 .suggs{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-width:440px;margin-top:4px;}
-.sugg{padding:10px 12px;background:var(--card);border:1px solid var(--b);border-radius:var(--r);cursor:pointer;transition:.18s;text-align:left;font-size:11px;color:var(--text);line-height:1.5;}
+.sugg{padding:9px 11px;background:var(--card);border:1px solid var(--b);border-radius:var(--r);cursor:pointer;transition:.18s;text-align:left;font-size:11px;color:var(--text);line-height:1.5;}
 .sugg:hover{border-color:var(--cyan2);background:var(--hover);color:white;}
 .sugg strong{color:var(--cyan);display:block;margin-bottom:2px;font-size:10.5px;}
 
-/* Messages */
+/* ── MESSAGES ── */
 .msg{display:flex;gap:9px;animation:mi .25s ease;}
 .msg.user{flex-direction:row-reverse;}
 @keyframes mi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
-.av{width:28px;height:28px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;}
+.av{width:30px;height:30px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;}
 .av img{width:100%;height:100%;object-fit:cover;}
 .av.ai{background:linear-gradient(135deg,var(--cyan),var(--purple));font-family:'Orbitron',sans-serif;font-size:8px;font-weight:700;color:white;}
-.mb-wrap{max-width:76%;display:flex;flex-direction:column;gap:2px;}
-.msg-sender{font-size:9px;color:var(--dim);display:flex;align-items:center;gap:5px;padding:0 2px;}
+.mb-wrap{max-width:78%;display:flex;flex-direction:column;gap:2px;min-width:0;}
+.msg-sender{font-size:9px;color:var(--dim);display:flex;align-items:center;gap:5px;padding:0 3px;}
 .msg.user .msg-sender{flex-direction:row-reverse;}
-.bubble{padding:10px 12px;border-radius:9px;line-height:1.65;font-size:12.5px;}
+.bubble{padding:10px 12px;border-radius:9px;line-height:1.65;font-size:12.5px;word-break:break-word;overflow-wrap:break-word;}
 .msg.user .bubble{background:linear-gradient(135deg,rgba(0,229,255,.09),rgba(136,0,255,.09));border:1px solid rgba(0,229,255,.16);border-radius:9px 2px 9px 9px;color:white;}
 .msg.ai .bubble{background:var(--bg2);border:1px solid var(--b);border-radius:2px 9px 9px 9px;color:var(--text);}
-.bubble pre{background:rgba(0,0,0,.6);border:1px solid rgba(0,229,255,.09);border-radius:6px;padding:11px 13px;overflow-x:auto;margin:7px 0;font-size:11px;}
-.bubble code{background:rgba(0,229,255,.08);padding:1px 4px;border-radius:3px;font-size:11px;color:var(--cyan);}
-.bubble pre code{background:none;padding:0;color:#9cd4ff;}
+
+/* Syntax highlight override */
+.bubble pre{margin:7px 0;border-radius:6px;overflow:hidden;position:relative;}
+.bubble pre code.hljs{font-size:11px;line-height:1.55;padding:12px 14px;border-radius:6px;}
+.bubble code:not(.hljs){background:rgba(0,229,255,.08);padding:1px 5px;border-radius:3px;font-size:11px;color:var(--cyan);}
+.code-block-wrap{position:relative;margin:7px 0;}
+.copy-code-btn{position:absolute;top:6px;right:7px;background:rgba(0,229,255,.15);border:1px solid rgba(0,229,255,.3);border-radius:4px;color:var(--cyan);font-size:9px;padding:2px 7px;cursor:pointer;opacity:0;transition:.15s;z-index:2;}
+.code-block-wrap:hover .copy-code-btn{opacity:1;}
+.copy-code-btn:hover{background:rgba(0,229,255,.25);}
+.share-code-btn{position:absolute;top:6px;right:62px;background:rgba(136,0,255,.15);border:1px solid rgba(136,0,255,.3);border-radius:4px;color:#cc55ff;font-size:9px;padding:2px 7px;cursor:pointer;opacity:0;transition:.15s;z-index:2;}
+.code-block-wrap:hover .share-code-btn{opacity:1;}
+
 .bubble p{margin-bottom:6px;} .bubble p:last-child{margin-bottom:0;}
 .bubble h1,.bubble h2,.bubble h3{color:var(--cyan);margin:9px 0 5px;font-family:'Orbitron',sans-serif;}
 .bubble h1{font-size:14px;} .bubble h2{font-size:12.5px;} .bubble h3{font-size:11.5px;}
-.bubble ul,.bubble ol{padding-left:16px;margin-bottom:6px;} .bubble li{margin-bottom:2px;}
-.bubble strong{color:white;} .bubble a{color:var(--cyan);}
-.msg-img{max-width:200px;border-radius:6px;margin-top:7px;border:1px solid var(--b);}
-.msg-acts{display:flex;gap:5px;padding:3px 1px;}
-.mab{font-size:9.5px;color:var(--dim);background:none;border:none;cursor:pointer;padding:2px 5px;border-radius:3px;transition:.1s;}
+.bubble ul,.bubble ol{padding-left:18px;margin-bottom:6px;} .bubble li{margin-bottom:3px;line-height:1.6;}
+.bubble strong{color:white;} .bubble a{color:var(--cyan);text-decoration:none;display:inline-flex;align-items:center;gap:3px;padding:1px 5px;border-radius:4px;background:rgba(0,229,255,.06);border:1px solid rgba(0,229,255,.2);}
+.bubble a:hover{background:rgba(0,229,255,.12);}
+.bubble blockquote{border-left:2px solid var(--cyan2);padding:5px 10px;margin:7px 0;color:var(--dim);font-style:italic;}
+.bubble table{width:100%;border-collapse:collapse;margin:7px 0;font-size:11px;}
+.bubble th,.bubble td{padding:5px 9px;border:1px solid var(--b);}
+.bubble th{background:rgba(0,229,255,.06);color:var(--cyan);}
+.msg-img{max-width:220px;max-height:180px;border-radius:6px;margin-top:7px;border:1px solid var(--b);display:block;}
+.msg-acts{display:flex;gap:5px;padding:3px 2px;flex-wrap:wrap;}
+.mab{font-size:9.5px;color:var(--dim);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:3px;transition:.1s;display:flex;align-items:center;gap:2px;}
 .mab:hover{color:var(--cyan);background:var(--cyan3);}
 
-/* Input */
+/* Typing animation */
+.typing-cursor::after{content:'▋';animation:blink .7s infinite;color:var(--cyan);font-size:12px;}
+@keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
+
+/* ── THINKING INDICATOR ── */
+.thinking-wrap{display:flex;gap:9px;animation:mi .25s ease;}
+.thinking-box{background:var(--bg2);border:1px solid var(--b);border-radius:2px 9px 9px 9px;padding:10px 14px;display:flex;flex-direction:column;gap:6px;max-width:300px;}
+.thinking-hdr{font-size:10px;color:var(--cyan);display:flex;align-items:center;gap:7px;font-family:'Orbitron',sans-serif;}
+.thinking-spin{width:11px;height:11px;border:2px solid var(--b);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.thinking-steps{display:flex;flex-direction:column;gap:3px;}
+.t-step{font-size:10px;color:var(--dim);display:flex;align-items:center;gap:6px;transition:.3s;}
+.t-step.active{color:var(--cyan);}
+.t-step.done{color:var(--green);}
+.t-step-icon{width:14px;height:14px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:8px;flex-shrink:0;}
+.t-step.active .t-step-icon{border-color:var(--cyan);animation:pulse 1s infinite;}
+.t-step.done .t-step-icon{background:var(--green);border-color:var(--green);color:#000;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(0,229,255,.4)}50%{box-shadow:0 0 0 4px rgba(0,229,255,.0)}}
+.cancel-btn{margin-top:6px;padding:4px 10px;background:rgba(255,45,107,.1);border:1px solid rgba(255,45,107,.3);border-radius:5px;color:var(--pink);font-size:9.5px;cursor:pointer;transition:.15s;align-self:flex-start;}
+.cancel-btn:hover{background:rgba(255,45,107,.2);}
+
+/* ── INPUT ── */
 .inp-area{padding:10px 14px;border-top:1px solid var(--b);background:var(--bg2);flex-shrink:0;}
-.img-row{display:none;gap:7px;margin-bottom:7px;}
+.img-row{display:none;gap:7px;margin-bottom:7px;flex-wrap:wrap;}
 .img-row.show{display:flex;}
 .img-thumb{position:relative;}
 .img-thumb img{width:52px;height:52px;border-radius:5px;object-fit:cover;border:1px solid var(--b);}
@@ -185,16 +192,43 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .inp-box:focus-within{border-color:var(--cyan2);box-shadow:0 0 0 2px rgba(0,229,255,.06);}
 #inp{width:100%;background:transparent;border:none;outline:none;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;padding:11px 14px;resize:none;min-height:44px;max-height:130px;line-height:1.5;}
 #inp::placeholder{color:var(--dim);}
-.inp-bar{display:flex;align-items:center;justify-content:space-between;padding:5px 9px;border-top:1px solid var(--b);}
-.inp-l{display:flex;align-items:center;gap:5px;}
-.ib{width:26px;height:26px;border-radius:5px;border:1px solid var(--b);background:transparent;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.12s;}
+.inp-bar{display:flex;align-items:center;justify-content:space-between;padding:5px 9px;border-top:1px solid var(--b);gap:6px;}
+.inp-l{display:flex;align-items:center;gap:5px;flex:1;min-width:0;overflow:hidden;}
+.ib{width:26px;height:26px;border-radius:5px;border:1px solid var(--b);background:transparent;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:12px;transition:.12s;flex-shrink:0;}
 .ib:hover{color:var(--cyan);border-color:var(--cyan2);}
-.cur-m{font-size:9px;color:var(--dim);display:flex;align-items:center;gap:3px;padding:2px 7px;border-radius:4px;background:var(--card);}
-.btn-send{background:linear-gradient(135deg,var(--cyan),var(--purple));border:none;border-radius:7px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:14px;transition:.18s;}
+/* INLINE MODEL SELECTOR */
+.inp-model{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:5px;background:var(--card);border:1px solid var(--b);cursor:pointer;transition:.12s;font-size:9.5px;color:var(--dim);max-width:140px;overflow:hidden;}
+.inp-model:hover{border-color:var(--cyan2);color:var(--cyan);}
+.inp-model-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.btn-send{background:linear-gradient(135deg,var(--cyan),var(--purple));border:none;border-radius:7px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:14px;transition:.18s;flex-shrink:0;}
 .btn-send:hover{opacity:.82;transform:scale(1.04);}
 .btn-send:disabled{opacity:.35;cursor:not-allowed;transform:none;}
+.btn-cancel{background:rgba(255,45,107,.15);border:1px solid rgba(255,45,107,.3);border-radius:7px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--pink);font-size:14px;transition:.18s;flex-shrink:0;}
+.btn-cancel:hover{background:rgba(255,45,107,.25);}
 
-/* PLUGIN PANEL */
+/* ── GUI BUILDER ── */
+#guiTab{flex:1;overflow:hidden;display:none;flex-direction:column;}
+#guiTab.active{display:flex;}
+.gui-toolbar{padding:7px 12px;border-bottom:1px solid var(--b);background:var(--bg2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex-shrink:0;}
+.gui-btn{padding:4px 10px;border-radius:5px;border:1px solid var(--b);background:var(--card);color:var(--text);font-size:10px;cursor:pointer;transition:.15s;}
+.gui-btn:hover{border-color:var(--cyan2);color:var(--cyan);}
+.gui-canvas{flex:1;position:relative;background:rgba(0,0,0,.3);overflow:auto;}
+.gui-canvas-inner{width:800px;height:600px;position:relative;background:rgba(20,30,60,.8);border:1px solid var(--b);margin:20px auto;}
+.gui-el{position:absolute;border:1px solid transparent;cursor:move;user-select:none;display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;overflow:hidden;}
+.gui-el.selected{outline:1.5px solid var(--cyan)!important;outline-offset:1px;}
+.gui-resize{position:absolute;bottom:-4px;right:-4px;width:8px;height:8px;background:var(--cyan);border-radius:2px;cursor:se-resize;}
+.gui-props{width:210px;background:var(--bg2);border-left:1px solid var(--b);overflow-y:auto;padding:9px;flex-shrink:0;}
+.gui-prop-row{margin-bottom:7px;}
+.gui-prop-label{font-size:9px;color:var(--dim);margin-bottom:2px;}
+.gui-prop-input{width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:4px;padding:4px 7px;color:white;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;}
+.gui-prop-input:focus{border-color:var(--cyan2);}
+.gui-main{flex:1;display:flex;overflow:hidden;}
+.gui-gen-btn{padding:7px 14px;background:linear-gradient(135deg,var(--cyan),var(--purple));border:none;border-radius:6px;color:white;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;}
+.gui-gen-btn:hover{opacity:.85;}
+.gui-ai-btn{padding:7px 14px;background:rgba(136,0,255,.18);border:1px solid rgba(136,0,255,.4);border-radius:6px;color:#cc55ff;font-size:10px;cursor:pointer;white-space:nowrap;}
+.gui-ai-btn:hover{background:rgba(136,0,255,.28);}
+
+/* ── PLUGIN PANEL ── */
 #pp{display:flex;flex-direction:column;background:var(--bg2);border-left:1px solid var(--b);overflow:hidden;}
 .pp-hdr{padding:10px 13px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .pp-title{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:1px;}
@@ -203,14 +237,15 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .pt.act{background:rgba(0,229,255,.08);border-color:var(--b);color:var(--cyan);}
 .pp-body{flex:1;overflow-y:auto;display:flex;flex-direction:column;}
 .pp-body::-webkit-scrollbar{width:2px;}
+.pp-body::-webkit-scrollbar-thumb{background:var(--b);}
 .pp-off{padding:18px 14px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:9px;}
-.pp-orb{width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;}
+.pp-orb{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;}
 .pp-orb.off{background:rgba(255,45,107,.07);border:2px solid rgba(255,45,107,.2);}
 .pp-orb.on{background:rgba(0,255,170,.07);border:2px solid rgba(0,255,170,.25);}
 .pp-conn-title{font-size:12px;color:white;font-weight:500;}
 .pp-conn-sub{font-size:10px;color:var(--dim);line-height:1.6;max-width:200px;}
 .btn-install{padding:6px 13px;background:rgba(0,229,255,.07);border:1px solid var(--b);border-radius:var(--r);color:var(--cyan);font-size:10px;cursor:pointer;transition:.15s;width:100%;}
-.btn-install:hover{border-color:var(--cyan);background:rgba(0,229,255,.12);}
+.btn-install:hover{border-color:var(--cyan);}
 .ws-hdr{padding:6px 12px;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .ws-ref{font-size:12px;cursor:pointer;color:var(--dim);}
 .ws-ref:hover{color:var(--cyan);}
@@ -237,82 +272,96 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .le.info{border-color:rgba(0,229,255,.25);color:var(--cyan);}
 .le-t{color:var(--dim);font-size:8px;flex-shrink:0;opacity:.6;}
 
-/* MODALS */
+/* ── MODALS ── */
 .ov{position:fixed;inset:0;background:rgba(3,3,18,.9);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .ov.show{display:flex;}
-.modal{background:var(--bg2);border:1px solid var(--b);border-radius:12px;padding:24px;width:480px;max-width:95vw;box-shadow:var(--gc);max-height:90vh;overflow-y:auto;}
+.modal{background:var(--bg2);border:1px solid var(--b);border-radius:12px;padding:22px;width:480px;max-width:95vw;box-shadow:var(--gc);max-height:90vh;overflow-y:auto;}
 .modal-t{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:12px;}
 .modal-b{font-size:11.5px;color:var(--text);line-height:1.7;margin-bottom:14px;}
 .modal-b code{font-family:'JetBrains Mono';background:rgba(0,229,255,.08);padding:1px 4px;border-radius:3px;color:var(--cyan);}
 .modal-b pre{background:rgba(0,0,0,.5);border:1px solid var(--b);border-radius:6px;padding:9px 11px;overflow-x:auto;margin:7px 0;font-size:10.5px;}
-.modal-footer{display:flex;gap:8px;}
+.modal-footer{display:flex;gap:8px;flex-wrap:wrap;}
 .btn-modal{padding:8px 16px;border-radius:var(--r);font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border:none;}
 .btn-modal.primary{background:var(--cyan);color:#030312;}
 .btn-modal.secondary{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--b);}
 .btn-modal:hover{opacity:.84;}
 
-/* SETTINGS MODAL */
+/* ── SETTINGS ── */
 .settings-section{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--b);}
 .settings-section:last-child{border-bottom:none;margin-bottom:0;}
 .settings-title{font-size:10px;color:var(--cyan);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;font-family:'Orbitron',sans-serif;}
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:6px 0;font-size:11px;}
-.settings-btn{padding:6px 14px;border-radius:5px;font-size:10px;cursor:pointer;border:1px solid var(--b);background:var(--card);color:var(--text);transition:.15s;}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;font-size:11px;gap:8px;}
+.settings-btn{padding:5px 13px;border-radius:5px;font-size:10px;cursor:pointer;border:1px solid var(--b);background:var(--card);color:var(--text);transition:.15s;white-space:nowrap;}
 .settings-btn:hover{border-color:var(--cyan2);color:var(--cyan);}
 .settings-btn.danger{border-color:rgba(255,45,107,.3);color:var(--pink);}
 .settings-btn.danger:hover{background:rgba(255,45,107,.08);}
-.settings-input{background:var(--bg3);border:1px solid var(--b);border-radius:4px;padding:5px 9px;color:white;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;width:160px;}
-.settings-input:focus{border-color:var(--cyan2);}
+.report-ta{width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:8px 10px;color:white;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;resize:vertical;min-height:80px;margin-top:6px;}
+.report-ta:focus{border-color:var(--cyan2);}
 
-/* CREDIT SHOP */
+/* ── CREDIT SHOP ── */
 .credit-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-.credit-plan{padding:14px;border:1px solid var(--b);border-radius:var(--r);text-align:center;cursor:pointer;transition:.15s;}
-.credit-plan:hover{border-color:var(--cyan2);}
-.credit-plan.popular{border-color:var(--cyan);background:rgba(0,229,255,.04);}
+.credit-plan{padding:14px;border:1px solid var(--b);border-radius:var(--r);text-align:center;}
+.credit-plan.popular{border-color:var(--cyan);}
 .credit-plan-name{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:var(--cyan);margin-bottom:4px;}
 .credit-plan-price{font-size:20px;color:white;font-weight:700;margin-bottom:4px;}
 .credit-plan-price span{font-size:11px;color:var(--dim);}
 .credit-plan-features{font-size:10px;color:var(--dim);line-height:1.7;}
 .credit-packages{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;}
-.credit-pack{padding:12px;border:1px solid var(--b);border-radius:var(--r);text-align:center;cursor:pointer;transition:.15s;}
+.credit-pack{padding:11px;border:1px solid var(--b);border-radius:var(--r);text-align:center;cursor:pointer;transition:.15s;}
 .credit-pack:hover{border-color:var(--cyan2);}
 .credit-pack.pop{border-color:var(--yellow);}
 .credit-pack-price{font-size:16px;color:white;font-weight:700;}
 .credit-pack-credits{font-size:11px;color:var(--cyan);margin-top:3px;}
 .credit-pack-idr{font-size:9px;color:var(--dim);margin-top:2px;}
 
-/* AUTH */
+/* ── AUTH ── */
 #auth{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:1000;background:radial-gradient(ellipse at 50% 40%,#0a0030 0%,var(--bg) 70%);}
 .auth-box{position:relative;width:420px;background:var(--bg2);border:1px solid var(--b);border-radius:14px;padding:36px 32px;text-align:center;box-shadow:var(--gc),var(--gp);animation:authIn .4s cubic-bezier(.16,1,.3,1);}
 .auth-box::before{content:'';position:absolute;top:0;left:25%;right:25%;height:1px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);}
 @keyframes authIn{from{opacity:0;transform:translateY(20px) scale(.97)}to{opacity:1;transform:none}}
 .auth-logo{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;margin-bottom:2px;}
 .auth-tag{font-size:9px;color:var(--dim);letter-spacing:3px;text-transform:uppercase;margin-bottom:16px;}
-.auth-desc{font-size:11px;color:var(--dim);margin-bottom:14px;line-height:1.6;}
 .auth-input{width:100%;background:rgba(0,229,255,.04);border:1px solid var(--b);border-radius:var(--r);padding:11px 13px;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:.2s;margin-bottom:8px;}
-.auth-input:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.07);}
+.auth-input:focus{border-color:var(--cyan);}
 .auth-input::placeholder{color:var(--dim);}
+.auth-pw{width:100%;background:rgba(255,45,107,.04);border:1px solid rgba(255,45,107,.18);border-radius:var(--r);padding:11px 13px;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:.2s;margin-bottom:8px;}
+.auth-pw:focus{border-color:var(--pink);}
+.auth-pw::placeholder{color:var(--dim);}
 .btn-auth{width:100%;background:var(--cyan);color:#030312;border:none;border-radius:var(--r);padding:11px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:.5px;cursor:pointer;transition:.2s;margin-bottom:6px;}
 .btn-auth:hover{background:#33ecff;box-shadow:var(--gc);}
 .btn-auth:disabled{opacity:.45;cursor:not-allowed;}
 .btn-auth.secondary{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--b);}
-.btn-auth.secondary:hover{border-color:var(--cyan2);background:rgba(0,229,255,.06);color:var(--cyan);}
+.btn-auth.secondary:hover{border-color:var(--cyan2);}
 .auth-prev{display:none;flex-direction:column;align-items:center;gap:8px;margin-top:10px;padding:14px;background:var(--card);border:1px solid var(--b);border-radius:var(--r);}
 .auth-prev.show{display:flex;}
-.auth-av{width:68px;height:68px;border-radius:50%;border:2px solid var(--cyan);box-shadow:0 0 18px rgba(0,229,255,.25);}
+.auth-av{width:72px;height:72px;border-radius:50%;border:2px solid var(--cyan);box-shadow:0 0 18px rgba(0,229,255,.25);}
 .auth-n{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:white;}
 .auth-id{font-size:9px;color:var(--dim);}
+.auth-pw-row{width:100%;}
 .auth-err{display:none;color:var(--pink);font-size:10px;margin-top:6px;padding:7px 11px;background:rgba(255,45,107,.07);border-radius:5px;border:1px solid rgba(255,45,107,.18);}
 .auth-err.show{display:block;}
 .auth-load{display:none;align-items:center;justify-content:center;gap:7px;color:var(--dim);font-size:10px;margin-top:8px;}
 .auth-load.show{display:flex;}
 .spin{width:13px;height:13px;border:2px solid var(--b);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;}
-.divider{display:flex;align-items:center;gap:8px;margin:10px 0;}
-.divider span{font-size:9px;color:var(--dim);}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--b);}
 .hidden{display:none!important;}
 ::-webkit-scrollbar{width:2px;height:2px;}
 ::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px;}
 @keyframes toastIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+
+/* ── MOBILE ── */
+@media(max-width:768px){
+  body{overflow:auto;}
+  #app{display:flex;flex-direction:column;height:auto;min-height:100vh;}
+  #sb{width:100%;max-height:none;border-right:none;border-bottom:1px solid var(--b);flex-shrink:0;}
+  .convs{max-height:120px;}
+  #chat{flex:1;min-height:60vh;}
+  #pp{display:none;}
+  .mb-wrap{max-width:88%;}
+  .suggs{grid-template-columns:1fr;}
+  .credit-plans{grid-template-columns:1fr;}
+  .credit-packages{grid-template-columns:1fr 1fr;}
+  .auth-box{width:95vw;padding:28px 20px;}
+}
 </style>
 </head>
 <body>
@@ -322,16 +371,22 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   <div class="auth-box">
     <div class="auth-logo">NEXUS AI</div>
     <div class="auth-tag">Roblox Dev Intelligence</div>
-    <div class="auth-desc">Login with your Roblox username</div>
-    <input type="text" id="unInput" class="auth-input" placeholder="Your Roblox username..." autocomplete="off" spellcheck="false">
-    <button class="btn-auth" id="findBtn" onclick="findUser()">🔍 FIND ROBLOX ACCOUNT</button>
-    <div class="auth-load" id="authLoad"><div class="spin"></div><span id="authLoadTxt">Searching...</span></div>
-    <div class="auth-err" id="authErr"></div>
-    <div class="auth-prev" id="authPrev">
-      <img class="auth-av" id="authAv" src="" alt="">
-      <div class="auth-n" id="authName"></div>
-      <div class="auth-id" id="authId"></div>
-      <button class="btn-auth" onclick="doLogin()">✓ LOGIN AS <span id="authNameBtn"></span></button>
+    <div id="authStep1">
+      <div style="font-size:11px;color:var(--dim);margin-bottom:14px;line-height:1.6;">Login with your Roblox username</div>
+      <input type="text" id="unInput" class="auth-input" placeholder="Your Roblox username..." autocomplete="off" spellcheck="false">
+      <button class="btn-auth" id="findBtn" onclick="findUser()">🔍 FIND ROBLOX ACCOUNT</button>
+      <div class="auth-load" id="authLoad"><div class="spin"></div><span id="authLoadTxt">Searching...</span></div>
+      <div class="auth-err" id="authErr"></div>
+      <div class="auth-prev" id="authPrev">
+        <img class="auth-av" id="authAv" src="" alt="">
+        <div class="auth-n" id="authName"></div>
+        <div class="auth-id" id="authId"></div>
+        <div class="auth-pw-row">
+          <input type="password" id="authPw" class="auth-pw" placeholder="Account password (for verification)..." autocomplete="off">
+        </div>
+        <div class="auth-err" id="authPwErr"></div>
+        <button class="btn-auth" id="loginBtn" onclick="verifyAndLogin()">✓ LOGIN AS <span id="authNameBtn"></span></button>
+      </div>
     </div>
   </div>
 </div>
@@ -344,12 +399,12 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div class="sb-logo">N</div>
       <div>
         <div class="sb-logo-text">NEXUS AI</div>
-        <div class="sb-logo-sub">v3.2 · Roblox Dev</div>
+        <div class="sb-logo-sub">v3.3 · Roblox Dev</div>
       </div>
     </div>
     <div class="sb-user">
       <img class="sb-av" id="sbAv" src="" alt="">
-      <div>
+      <div style="min-width:0;flex:1;">
         <div class="sb-un" id="sbUn">-</div>
         <div class="sb-role" id="sbRole">Roblox Developer</div>
       </div>
@@ -358,7 +413,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="creds" onclick="openShop()">
       <div>
         <div class="cred-l">Credits</div>
-        <div style="font-size:9px;color:rgba(255,214,0,.5);margin-top:1px;">Click to buy more</div>
+        <div style="font-size:9px;color:rgba(255,214,0,.5);margin-top:1px;">Tap to buy more</div>
       </div>
       <div style="text-align:right;">
         <div class="cred-v" id="credDisp">30</div>
@@ -366,35 +421,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       </div>
     </div>
     <button class="btn-nc" onclick="newChat()"><span>✦</span><span>New Conversation</span></button>
-    <div class="sec-lbl">AI Model</div>
-    <div class="model-wrap">
-      <div class="model-sel" id="mSel" onclick="toggleMDD()">
-        <div class="mi g">G</div>
-        <span class="mn">Gemini 2.0 Flash</span>
-        <span class="mb f">FREE</span>
-        <span class="mc">▾</span>
-      </div>
-      <div class="model-dd" id="mDD">
-        <div class="mg">⬡ Google Gemini</div>
-        <div class="mo act" data-m="gemini-2.0-flash" data-p="gemini" data-c="0" data-n="Gemini 2.0 Flash" data-t="f" onclick="selModel(this)"><div class="mi g">G</div><div><div class="mo-n">Gemini 2.0 Flash</div><div class="mo-s">Latest · Fast</div></div><span class="mb f">FREE</span></div>
-        <div class="mo" data-m="gemini-2.5-flash-lite" data-p="gemini" data-c="0" data-n="Gemini 2.5 Flash-Lite" data-t="f" onclick="selModel(this)"><div class="mi g">G</div><div><div class="mo-n">Gemini 2.5 Flash-Lite</div><div class="mo-s">Lite · Most Economical</div></div><span class="mb f">2 CR</span></div>
-        <div class="mo" data-m="gemini-2.5-pro-preview-03-25" data-p="gemini" data-c="3" data-n="Gemini 2.5 Pro" data-t="s" onclick="selModel(this)"><div class="mi g">G</div><div><div class="mo-n">Gemini 2.5 Pro</div><div class="mo-s">Most intelligent</div></div><span class="mb s">3 CR</span></div>
-        <div class="mo" data-m="gemini-1.5-flash" data-p="gemini" data-c="0" data-n="Gemini 1.5 Flash" data-t="f" onclick="selModel(this)"><div class="mi g">G</div><div><div class="mo-n">Gemini 1.5 Flash</div><div class="mo-s">Fast · Most Economical</div></div><span class="mb f">FREE</span></div>
-        <div class="mo" data-m="gemini-1.5-pro" data-p="gemini" data-c="2" data-n="Gemini 1.5 Pro" data-t="s" onclick="selModel(this)"><div class="mi g">G</div><div><div class="mo-n">Gemini 1.5 Pro</div><div class="mo-s">Powerful · Multimodal</div></div><span class="mb s">2 CR</span></div>
-        <div class="mg">◆ Anthropic Claude</div>
-        <div class="mo" data-m="claude-haiku-4-5-20251001" data-p="claude" data-c="0" data-n="Claude Haiku 4.5" data-t="f" onclick="selModel(this)"><div class="mi c">C</div><div><div class="mo-n">Claude Haiku 4.5</div><div class="mo-s">Fast · Light</div></div><span class="mb f">FREE</span></div>
-        <div class="mo" data-m="claude-sonnet-4-6" data-p="claude" data-c="2" data-n="Claude Sonnet 4.6" data-t="s" onclick="selModel(this)"><div class="mi c">C</div><div><div class="mo-n">Claude Sonnet 4.6</div><div class="mo-s">Balanced · Smart</div></div><span class="mb s">2 CR</span></div>
-        <div class="mo" data-m="claude-opus-4-6" data-p="claude" data-c="5" data-n="Claude Opus 4.6" data-t="p" onclick="selModel(this)"><div class="mi c">C</div><div><div class="mo-n">Claude Opus 4.6</div><div class="mo-s">Most Intelligent</div></div><span class="mb p">5 CR</span></div>
-        <div class="mg">◈ OpenAI ChatGPT</div>
-        <div class="mo" data-m="gpt-4o-mini" data-p="openai" data-c="0" data-n="GPT-4o Mini" data-t="f" onclick="selModel(this)"><div class="mi o">⊕</div><div><div class="mo-n">GPT-4o Mini</div><div class="mo-s">Fast · Free</div></div><span class="mb f">FREE</span></div>
-        <div class="mo" data-m="gpt-4o" data-p="openai" data-c="3" data-n="GPT-4o" data-t="s" onclick="selModel(this)"><div class="mi o">⊕</div><div><div class="mo-n">GPT-4o</div><div class="mo-s">Powerful · Multimodal</div></div><span class="mb s">3 CR</span></div>
-        <div class="mo" data-m="gpt-4.1" data-p="openai" data-c="4" data-n="GPT-4.1" data-t="p" onclick="selModel(this)"><div class="mi o">⊕</div><div><div class="mo-n">GPT-4.1</div><div class="mo-s">Latest GPT</div></div><span class="mb p">4 CR</span></div>
-        <div class="mo" data-m="o3-mini" data-p="openai" data-c="5" data-n="o3-mini" data-t="u" onclick="selModel(this)"><div class="mi o">⊕</div><div><div class="mo-n">o3-mini</div><div class="mo-s">Reasoning · Logic</div></div><span class="mb u">5 CR</span></div>
-        <!--<div class="mg">⚡ Groq Cloud</div>
-        <div class="mo" data-m="llama-3.3-70b-specdec" data-p="groq" data-c="0" data-n="Llama 3.3 70B" data-t="f" onclick="selModel(this)"><div class="mi g" style="background:#f55">L</div><div><div class="mo-n">Llama 3.3 70B</div><div class="mo-s">Super Fast · Open Source</div></div><span class="mb f">FREE</span></div>
-        <div class="mo" data-m="llama-4-scout" data-p="groq" data-c="2" data-n="Llama 4 Scout" data-t="s" onclick="selModel(this)"><div class="mi g" style="background:#f55">L</div><div><div class="mo-n">Llama 4 Scout</div><div class="mo-s">Latest · Reasoning</div></div><span class="mb s">2 CR</span></div>-->
-      </div>
-    </div>
     <div class="sec-lbl">Recent Chats</div>
     <div class="convs" id="convList"><div class="conv-empty">No conversations yet</div></div>
   </div>
@@ -412,37 +438,62 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       </div>
     </div>
     <div class="chat-tabs">
-      <button class="tab-btn act" onclick="switchTab('chat',this)">💬 Chat</button>
-      <button class="tab-btn" onclick="switchTab('gui',this)">🎨 GUI Builder</button>
+      <button class="tab-btn act" id="tabChat" onclick="switchTab('chat',this)">💬 Chat</button>
+      <button class="tab-btn" id="tabGui" onclick="switchTab('gui',this)">🎨 GUI Builder</button>
     </div>
 
     <!-- CHAT TAB -->
-    <div id="chatTab" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;">
+    <div id="chatTab" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
       <div id="msgs">
         <div class="welcome" id="welcome">
           <div class="wt">NEXUS AI</div>
-          <div class="ws">Smart AI assistant for Roblox Studio.<br>Write Lua code, debug errors, or ask anything.</div>
+          <div class="ws">Smart Roblox AI — write Lua, debug scripts, build GUIs.</div>
           <div class="suggs">
-            <div class="sugg" onclick="useSugg(this)"><strong>🔧 Debug Script</strong>Help fix errors in my Roblox script</div>
-            <div class="sugg" onclick="useSugg(this)"><strong>📝 Create Script</strong>Write a system script for my Roblox game</div>
-            <div class="sugg" onclick="useSugg(this)"><strong>🎮 Game Mechanics</strong>How to make a combat system in Roblox</div>
-            <div class="sugg" onclick="useSugg(this)"><strong>⚡ Optimize Code</strong>Help optimize my script for better performance</div>
+            <div class="sugg" onclick="useSugg('Debug Script — Help fix errors in my Roblox script')"><strong>🔧 Debug Script</strong>Help fix errors in my Roblox script</div>
+            <div class="sugg" onclick="useSugg('Create a GUI shop for my Roblox game with Frame and TextButton')"><strong>🎮 Create GUI</strong>Build a shop GUI for my Roblox game</div>
+            <div class="sugg" onclick="useSugg('Write a leaderboard system script for my Roblox game')"><strong>📝 Leaderboard</strong>Write a leaderboard system</div>
+            <div class="sugg" onclick="useSugg('How to optimize my Roblox scripts for better performance')"><strong>⚡ Optimize Code</strong>Improve my script performance</div>
           </div>
         </div>
       </div>
       <div class="inp-area">
         <div class="img-row" id="imgRow"></div>
         <div class="inp-box">
-          <textarea id="inp" placeholder="Ask NEXUS AI about Roblox..." rows="1"></textarea>
+          <textarea id="inp" placeholder="Ask NEXUS AI about Roblox... (Ctrl+V to paste image)" rows="1"></textarea>
           <div class="inp-bar">
             <div class="inp-l">
-              <label for="fi" class="ib" title="Upload image">📎</label>
+              <label for="fi" class="ib" title="Upload image (or Ctrl+V)">📎</label>
               <input type="file" id="fi" accept="image/*" style="display:none" onchange="handleImg(event)">
               <button class="ib" onclick="clearChat()" title="Clear chat">🗑</button>
-              <div class="cur-m"><span id="inpMIcon">G</span> <span id="inpMName">Gemini 2.0 Flash</span></div>
+              <!-- Inline model selector -->
+              <div class="inp-model" id="inpModelBtn" onclick="toggleMDD()">
+                <span id="inpMIcon">🔵</span>
+                <span class="inp-model-name" id="inpMName">Gemini 2.0 Flash</span>
+                <span id="inpMBadge" style="font-size:8px;color:var(--green);font-weight:700;">FREE</span>
+                <span style="font-size:8px;color:var(--dim);">▾</span>
+              </div>
             </div>
+            <button class="btn-cancel hidden" id="cancelBtn" onclick="cancelGen()" title="Cancel">✕</button>
             <button class="btn-send" id="sendBtn" onclick="send()">➤</button>
           </div>
+        </div>
+        <!-- Floating model dropdown (above input) -->
+        <div class="model-dd" id="mDD" style="position:absolute;bottom:70px;left:14px;right:14px;max-height:240px;z-index:400;">
+          <div class="mg">🔵 Google Gemini</div>
+          <div class="mo act" data-m="gemini-2.0-flash" data-p="gemini" data-c="0" data-n="Gemini 2.0 Flash" data-t="f" onclick="selModel(this)"><div class="mi g">🔵</div><div><div class="mo-n">Gemini 2.0 Flash</div><div class="mo-s">Latest · Fast · Vision</div></div><span class="mb f">FREE</span></div>
+          <div class="mo" data-m="gemini-2.5-flash-lite-preview-06-17" data-p="gemini" data-c="2" data-n="Gemini 2.5 Flash-Lite" data-t="s" onclick="selModel(this)"><div class="mi g">🔵</div><div><div class="mo-n">Gemini 2.5 Flash-Lite</div><div class="mo-s">Economical · Thinking</div></div><span class="mb s">2 CR</span></div>
+          <div class="mo disabled" data-m="" data-p="" data-c="0" data-n="" data-t="cs"><div class="mi g">🔵</div><div><div class="mo-n">Gemini 3 Flash</div><div class="mo-s">Next Gen</div></div><span class="mb cs">COMING SOON</span></div>
+          <div class="mo disabled" data-m="" data-p="" data-c="0" data-n="" data-t="cs"><div class="mi g">🔵</div><div><div class="mo-n">Gemini 3.1 Pro</div><div class="mo-s">Most Powerful</div></div><span class="mb cs">COMING SOON</span></div>
+          <div class="mg">🟠 Anthropic Claude</div>
+          <div class="mo disabled" data-m="" data-p="" data-c="0" data-n="" data-t="cs"><div class="mi c">🟠</div><div><div class="mo-n">Claude 4.5 Haiku</div><div class="mo-s">Fast · Light</div></div><span class="mb cs">COMING SOON</span></div>
+          <div class="mo disabled" data-m="" data-p="" data-c="0" data-n="" data-t="cs"><div class="mi c">🟠</div><div><div class="mo-n">Claude 4.5 Sonnet</div><div class="mo-s">Balanced · Smart</div></div><span class="mb cs">COMING SOON</span></div>
+          <div class="mo disabled" data-m="" data-p="" data-c="0" data-n="" data-t="cs"><div class="mi c">🟠</div><div><div class="mo-n">Claude 4.6 Opus</div><div class="mo-s">Most Intelligent</div></div><span class="mb cs">COMING SOON</span></div>
+          <div class="mg">🟢 OpenAI ChatGPT</div>
+          <div class="mo disabled" data-m="" data-p="" data-c="0" data-n="" data-t="cs"><div class="mi o">🟢</div><div><div class="mo-n">GPT-4o Mini</div><div class="mo-s">Fast</div></div><span class="mb cs">COMING SOON</span></div>
+          <div class="mo disabled" data-m="" data-p="" data-c="0" data-n="" data-t="cs"><div class="mi o">🟢</div><div><div class="mo-n">GPT-4o</div><div class="mo-s">Powerful · Vision</div></div><span class="mb cs">COMING SOON</span></div>
+          <div class="mo disabled" data-m="" data-p="" data-c="0" data-n="" data-t="cs"><div class="mi o">🟢</div><div><div class="mo-n">GPT-4.1</div><div class="mo-s">Latest</div></div><span class="mb cs">COMING SOON</span></div>
+          <div class="mg">⚫ xAI Grok</div>
+          <div class="mo disabled" data-m="" data-p="" data-c="0" data-n="" data-t="cs"><div class="mi x">⚫</div><div><div class="mo-n">Grok 4.20</div><div class="mo-s">Next Gen Reasoning</div></div><span class="mb cs">COMING SOON</span></div>
         </div>
       </div>
     </div>
@@ -450,28 +501,29 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <!-- GUI BUILDER TAB -->
     <div id="guiTab">
       <div class="gui-toolbar">
-        <span style="font-size:10px;color:var(--dim);">Add Element:</span>
+        <span style="font-size:10px;color:var(--dim);">Add:</span>
         <button class="gui-btn" onclick="addEl('Frame')">□ Frame</button>
         <button class="gui-btn" onclick="addEl('TextLabel')">T Label</button>
         <button class="gui-btn" onclick="addEl('TextButton')">⬡ Button</button>
         <button class="gui-btn" onclick="addEl('TextBox')">✎ TextBox</button>
         <button class="gui-btn" onclick="addEl('ImageLabel')">🖼 Image</button>
         <button class="gui-btn" onclick="addEl('ScrollFrame')">↕ Scroll</button>
-        <div style="margin-left:auto;display:flex;gap:6px;">
+        <div style="margin-left:auto;display:flex;gap:5px;">
+          <button class="gui-ai-btn" onclick="openGuiAIChat()">🤖 Ask AI to Build</button>
           <button class="gui-btn" onclick="clearCanvas()">🗑 Clear</button>
-          <button class="gui-generate-btn" onclick="generateGuiCode()">⚡ Generate Script</button>
+          <button class="gui-gen-btn" onclick="generateGuiCode()">⚡ Generate Script</button>
         </div>
       </div>
       <div class="gui-main">
         <div class="gui-canvas" id="guiCanvas">
           <div class="gui-canvas-inner" id="guiCanvasInner">
-            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(0,229,255,.2);font-size:11px;" id="guiEmpty">
-              Click element buttons above to add GUI components
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:rgba(0,229,255,.15);font-size:11px;pointer-events:none;" id="guiEmpty">
+              Add elements above, or click "Ask AI to Build" to generate automatically
             </div>
           </div>
         </div>
         <div class="gui-props" id="guiProps">
-          <div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Select an element to edit properties</div>
+          <div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Select an element to edit</div>
         </div>
       </div>
     </div>
@@ -490,7 +542,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div class="pp-off" id="ppOff">
         <div class="pp-orb off">🔌</div>
         <div class="pp-conn-title">Plugin Offline</div>
-        <div class="pp-conn-sub">Connect the NEXUS AI Plugin in Roblox Studio to access workspace.</div>
+        <div class="pp-conn-sub">Connect NEXUS AI Plugin in Roblox Studio to access workspace.</div>
         <button class="btn-install" onclick="showInstall()">📥 How to Install</button>
         <button class="btn-install" onclick="retryConn()" style="margin-top:5px;">↺ Reconnect</button>
       </div>
@@ -516,16 +568,18 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 <!-- MODALS -->
 <div class="ov" id="installModal">
   <div class="modal">
-    <div class="modal-t">⬡ How to Connect NEXUS AI Plugin</div>
+    <div class="modal-t">⬡ How to Install NEXUS AI Plugin</div>
     <div class="modal-b">
-      <p><strong style="color:var(--cyan)">STEP 1 — Plugin File</strong></p>
-      <p>Copy <code>NexusAI_Plugin_v32.lua</code> to:</p>
-      <pre>C:\Users\[Username]\AppData\Local\Roblox\Plugins\</pre>
-      <p>Delete any old .lua plugin files first!</p><br>
-      <p><strong style="color:var(--cyan)">STEP 2 — Allow HTTP in Studio</strong></p>
-      <p style="color:var(--yellow)">⚠ Plugins tab → Plugin Management → Check ONLY ONE <code>localhost:7778</code></p><br>
-      <p><strong style="color:var(--cyan)">STEP 3 — Connect</strong></p>
-      <p>Click ⚡ CONNECT in the NEXUS AI panel → status turns green → done!</p>
+      <p><strong style="color:var(--cyan)">Easiest Way — Toolbox</strong></p>
+      <p>1. Open Roblox Studio</p>
+      <p>2. Click <strong>View → Toolbox</strong></p>
+      <p>3. Search: <code>NEXUS AI</code> → Install plugin</p><br>
+      <p><strong style="color:var(--yellow)">⚠ Important: Disable old plugin!</strong></p>
+      <p>In <strong>Plugins → Plugin Management</strong>, <strong>disable</strong> "NEXUS AI ROBLOX" (old one) if present.</p><br>
+      <p><strong style="color:var(--cyan)">Allow HTTP Access</strong></p>
+      <p>Plugin Management → check ONLY ONE <code>localhost:7778</code></p><br>
+      <p><strong style="color:var(--cyan)">Connect</strong></p>
+      <p>Click ⚡ CONNECT in NEXUS AI panel → status turns green → done!</p>
     </div>
     <div class="modal-footer">
       <button class="btn-modal primary" onclick="closeModal('installModal')">GOT IT</button>
@@ -538,47 +592,31 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="modal-t">⚙ Settings</div>
     <div class="settings-section">
       <div class="settings-title">Account</div>
-      <div class="settings-row"><span id="settingsUsername">-</span></div>
-      <div class="settings-row">
-        <span>Credits</span>
-        <span id="settingsCredits" style="color:var(--yellow);font-weight:700;">-</span>
-      </div>
-      <div class="settings-row">
-        <span>Plan</span>
-        <span id="settingsPlan" style="color:var(--green);">Free</span>
-      </div>
-    </div>
-    <div class="settings-section">
-      <div class="settings-title">Bridge Server Ports</div>
-      <div class="settings-row">
-        <span style="font-size:10px;color:var(--dim);">Add port or domain (comma separated)</span>
-      </div>
-      <div class="settings-row">
-        <input type="text" class="settings-input" id="portsInput" placeholder="3000, 3001, nexuai.com" style="width:100%;">
-      </div>
-      <div class="settings-row">
-        <button class="settings-btn" onclick="savePorts()">Save Ports</button>
-        <span id="portsStatus" style="font-size:10px;color:var(--green);"></span>
-      </div>
+      <div class="settings-row"><span style="color:white;font-weight:600;" id="settingsUsername">-</span></div>
+      <div class="settings-row"><span>Credits</span><span id="settingsCredits" style="color:var(--yellow);font-weight:700;">-</span></div>
+      <div class="settings-row"><span>Plan</span><span id="settingsPlan" style="color:var(--green);">Free</span></div>
     </div>
     <div class="settings-section">
       <div class="settings-title">Daily Credits</div>
       <div class="settings-row"><span>Free Plan</span><span style="color:var(--green);">+2 CR / day</span></div>
       <div class="settings-row"><span>Pro Plan</span><span style="color:var(--cyan);">+25 CR / day</span></div>
-      <div class="settings-row"><span id="lastClaimInfo" style="font-size:10px;color:var(--dim);"></span>
-        <button class="settings-btn" id="claimBtn" onclick="claimDaily()">Claim Daily</button>
+      <div class="settings-row">
+        <span id="lastClaimInfo" style="font-size:10px;color:var(--dim);"></span>
+        <button class="settings-btn" onclick="claimDaily()">Claim Daily</button>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Report an Issue</div>
+      <textarea class="report-ta" id="reportTa" placeholder="Describe the issue... (sent to arifiinytid@gmail.com)"></textarea>
+      <div style="margin-top:8px;">
+        <button class="settings-btn" onclick="sendReport()">📧 Send Report</button>
+        <span id="reportStatus" style="font-size:10px;color:var(--green);margin-left:8px;"></span>
       </div>
     </div>
     <div class="settings-section">
       <div class="settings-title">Account Actions</div>
-      <div class="settings-row">
-        <span>Switch Account</span>
-        <button class="settings-btn" onclick="switchAccount()">Switch</button>
-      </div>
-      <div class="settings-row">
-        <span>Logout</span>
-        <button class="settings-btn danger" onclick="logout()">Logout</button>
-      </div>
+      <div class="settings-row"><span>Switch Account</span><button class="settings-btn" onclick="switchAccount()">Switch</button></div>
+      <div class="settings-row"><span>Logout</span><button class="settings-btn danger" onclick="logout()">Logout</button></div>
     </div>
     <div class="modal-footer">
       <button class="btn-modal primary" onclick="closeModal('settingsModal')">CLOSE</button>
@@ -589,38 +627,35 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 <div class="ov" id="shopModal">
   <div class="modal">
     <div class="modal-t">💎 Buy Credits</div>
-    <div style="margin-bottom:14px;">
-      <div style="font-size:11px;color:var(--dim);margin-bottom:10px;">Subscription Plans</div>
-      <div class="credit-plans">
-        <div class="credit-plan">
-          <div class="credit-plan-name">FREE</div>
-          <div class="credit-plan-price">$0<span>/mo</span></div>
-          <div class="credit-plan-features">30 credits on signup<br>+2 credits per day<br>Basic AI models</div>
-        </div>
-        <div class="credit-plan popular">
-          <div class="credit-plan-name">PRO ⭐</div>
-          <div class="credit-plan-price">$9.99<span>/mo</span></div>
-          <div class="credit-plan-features">200 credits on signup<br>+25 credits per day<br>All AI models<br>Priority support</div>
-          <button class="btn-modal primary" style="margin-top:8px;font-size:9px;padding:5px 10px;" onclick="toast('Pro plan coming soon! Payment system in development.')">Upgrade</button>
-        </div>
+    <div class="credit-plans">
+      <div class="credit-plan">
+        <div class="credit-plan-name">FREE</div>
+        <div class="credit-plan-price">$0<span>/mo</span></div>
+        <div class="credit-plan-features">30 credits on signup<br>+2 credits / day<br>Gemini 2.0 Flash free</div>
+      </div>
+      <div class="credit-plan popular">
+        <div class="credit-plan-name">PRO ⭐</div>
+        <div class="credit-plan-price">$9.99<span>/mo</span></div>
+        <div class="credit-plan-features">200 credits on signup<br>+25 credits / day<br>All AI models<br>Priority support</div>
+        <button class="btn-modal secondary" style="margin-top:8px;font-size:9px;" onclick="toast('Pro plan coming soon!')">Upgrade Soon</button>
       </div>
     </div>
     <div style="font-size:11px;color:var(--dim);margin-bottom:10px;">Credit Packs</div>
     <div class="credit-packages">
       <div class="credit-pack" onclick="buyCreditPack(21,'Rp 79.000','$4.99')">
         <div class="credit-pack-price">21 CR</div>
-        <div class="credit-pack-credits">Small Pack</div>
-        <div class="credit-pack-idr">Rp 79.000 / $4.99</div>
+        <div class="credit-pack-credits">Small</div>
+        <div class="credit-pack-idr">Rp 79K / $4.99</div>
       </div>
       <div class="credit-pack pop" onclick="buyCreditPack(86,'Rp 299.000','$19.99')">
         <div class="credit-pack-price">86 CR</div>
         <div class="credit-pack-credits">Popular 🔥</div>
-        <div class="credit-pack-idr">Rp 299.000 / $19.99</div>
+        <div class="credit-pack-idr">Rp 299K / $19.99</div>
       </div>
       <div class="credit-pack" onclick="buyCreditPack(438,'Rp 1.499.000','$99.99')">
         <div class="credit-pack-price">438 CR</div>
-        <div class="credit-pack-credits">Mega Pack</div>
-        <div class="credit-pack-idr">Rp 1.499.000 / $99.99</div>
+        <div class="credit-pack-credits">Mega</div>
+        <div class="credit-pack-idr">Rp 1.5M / $99.99</div>
       </div>
     </div>
     <div class="modal-footer" style="margin-top:14px;">
@@ -633,7 +668,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   <div class="modal" style="width:600px;">
     <div class="modal-t">⚡ Generated GUI Script</div>
     <div class="modal-b">
-      <pre id="guiCodeOutput" style="max-height:400px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;"></pre>
+      <pre id="guiCodeOutput" style="max-height:400px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;font-size:10.5px;"></pre>
     </div>
     <div class="modal-footer">
       <button class="btn-modal primary" onclick="copyGuiCode()">📋 Copy Script</button>
@@ -642,264 +677,302 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   </div>
 </div>
 
+<div class="ov" id="guiAIChatModal">
+  <div class="modal" style="width:500px;">
+    <div class="modal-t">🤖 Ask AI to Build GUI</div>
+    <div class="modal-b">
+      <p style="margin-bottom:10px;">Describe the GUI you want to create:</p>
+      <textarea id="guiAIPrompt" style="width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:10px;color:white;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;resize:vertical;min-height:80px;" placeholder="e.g: Create a shop GUI with a title 'Shop', a close button, and 3 item cards with buy buttons..."></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-modal primary" onclick="generateGuiFromAI()">🤖 Generate with AI</button>
+      <button class="btn-modal secondary" onclick="closeModal('guiAIChatModal')">Cancel</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// ── API KEYS ──
+// ══════════════════════════════════════════
+//  API KEYS
+// ══════════════════════════════════════════
 const K = {
-  claude: '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',
+  gemini: 'AIzaSyC0YIQN9FNtHDGKAnaT461c2-byNKkAjVQ',
+  claude: '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',
   openai: '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',
-  gemini: 'AIzaSyA053kCQ2gKoZv8ZntGEFCMvLRbCsUSWv8',
-  groq: 'xai-Yi5skUiwGQyYsif31Fkxo2LN9BMSFfW5auWF64qTUQuUGawQQLaPMMReUqxmBclUYfHTdasi7i2Tdluz'
 };
 
-// UNLIMITED credit users (by Roblox username)
-const UNLIMITED_USERS = ['FIINYTID25','fiinytid25'];
-const OWNER_GMAIL = 'arifiinytid@gmail.com';
+// Owner accounts (unlimited credits)
+const OWNER_USERS = ['FIINYTID25','fiinytid25'];
+// Fake password validation - any password works for now (real auth needs backend)
+const USER_PASSWORDS = { 'FIINYTID25': 'nexusai2024', 'fiinytid25': 'nexusai2024' };
 
-const SYS = `You are NEXUS AI, an expert Roblox developer assistant.
-Always respond in a friendly and professional tone.
-Write clean, complete, ready-to-use Luau (Roblox Lua) code.
-Use task.wait() instead of wait(). Handle errors with pcall().
-Differentiate between Script (server), LocalScript (client), ModuleScript (shared).
-Provide clear explanations for every code snippet you write.`;
+const SYSTEM_PROMPT = `You are NEXUS AI, a smart AI assistant built for Roblox developers.
+You were created by FIINYTID25 (Roblox username: FIINYTID25, Gmail: arifiinytid@gmail.com).
+You are part of the NEXUS AI platform available at arifiinytid-boop.github.io/nexuai.com/
 
-// ── State ──
+KEY RULES:
+- Always write clean, complete, ready-to-use Luau (Roblox Lua) code
+- Use task.wait() instead of wait(). Handle errors with pcall()
+- Know the difference: Script (server-side), LocalScript (client-side), ModuleScript (shared)
+- When giving links, format them as: [CLICK HERE TO OPEN](url) — never raw URLs
+- Detect the user's language and reply in the same language automatically
+- Remember everything said in this conversation — previous context, code, explanations
+- If the plugin is not connected, inform the user but still help with coding questions
+- You know how to build complete GUI systems in Roblox (ScreenGui, Frame, TextButton, etc.)
+- When asked to build a GUI, provide complete working code with proper positioning and styling
+- If someone asks who made you: "I was created by FIINYTID25 for the NEXUS AI platform."
+- Be friendly, helpful, and professional`;
+
+// ══════════════════════════════════════════
+//  STATE
+// ══════════════════════════════════════════
 let S = {
-  user: null, convs: [], curConv: null, msgs: [],
-  model: { id:'gemini-2.0-flash', provider:'gemini', cost:0, name:'Gemini 2.0 Flash', tier:'f' },
-  credits: 30, plugConnected: false, ws: null, img: null, gen: false,
-  draftText: {}, draftImg: {}, // per-conv drafts
-  lastClaim: null, plan: 'free',
-  ports: [3000], nodeSetupDone: false
+  user:null, convs:[], curConv:null, msgs:[],
+  model:{ id:'gemini-2.0-flash', provider:'gemini', cost:0, name:'Gemini 2.0 Flash', tier:'f', icon:'🔵' },
+  credits:30, plugConnected:false, ws:null, img:null, gen:false,
+  draftText:{}, draftImg:{},
+  lastClaim:null, plan:'free',
+  cancelController: null
 };
 
 function loadS() {
   try {
-    const d = localStorage.getItem('nexus_v32');
+    const d = localStorage.getItem('nexus_v33');
     if (d) {
       const p = JSON.parse(d);
-      Object.assign(S, { credits:p.credits??30, convs:p.convs??[], user:p.user??null,
-        lastClaim:p.lastClaim??null, plan:p.plan??'free', ports:p.ports??[3000],
-        nodeSetupDone:p.nodeSetupDone??false, draftText:p.draftText??{}, draftImg:p.draftImg??{}
-      });
+      S.credits   = p.credits  ?? 30;
+      S.convs     = p.convs    ?? [];
+      S.user      = p.user     ?? null;
+      S.lastClaim = p.lastClaim ?? null;
+      S.plan      = p.plan ?? 'free';
+      S.draftText = p.draftText ?? {};
+      S.draftImg  = p.draftImg  ?? {};
+      // Restore model selection
+      if (p.model) S.model = p.model;
     }
   } catch(e) {}
 }
 function saveS() {
   try {
-    localStorage.setItem('nexus_v32', JSON.stringify({
-      credits:S.credits, convs:S.convs, user:S.user, lastClaim:S.lastClaim,
-      plan:S.plan, ports:S.ports, nodeSetupDone:S.nodeSetupDone,
-      draftText:S.draftText, draftImg:S.draftImg
+    localStorage.setItem('nexus_v33', JSON.stringify({
+      credits:S.credits, convs:S.convs, user:S.user,
+      lastClaim:S.lastClaim, plan:S.plan,
+      draftText:S.draftText, draftImg:S.draftImg,
+      model:S.model
     }));
   } catch(e) {}
 }
 
-function isUnlimited() {
-  return S.user && UNLIMITED_USERS.includes(S.user.username);
-}
+function isOwner() { return S.user && OWNER_USERS.includes(S.user.username); }
 
-// ── CORS PROXIES ──
+// ══════════════════════════════════════════
+//  CORS PROXIES
+// ══════════════════════════════════════════
 const PROXIES = [
   url => `https://corsproxy.io/?${encodeURIComponent(url)}`,
   url => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
   url => `https://api.codetabs.com/v1/proxy?quest=${url}`,
 ];
-
 async function fetchRoblox(url) {
-  let lastErr = null;
   for (const mkP of PROXIES) {
     try {
-      const r = await fetch(mkP(url), { signal: AbortSignal.timeout(8000) });
+      const r = await fetch(mkP(url), { signal:AbortSignal.timeout(8000) });
       if (!r.ok) continue;
       return JSON.parse(await r.text());
-    } catch(e) { lastErr = e; }
+    } catch(e) {}
   }
-  // Direct fetch as last resort
-  try {
-    const r = await fetch(url);
-    if (r.ok) return r.json();
-  } catch(e) {}
-  throw new Error('All proxies failed. Check internet connection.');
+  try { const r = await fetch(url); if (r.ok) return r.json(); } catch(e) {}
+  throw new Error('Cannot reach Roblox API. Check your internet connection.');
 }
 
-// ── AUTH ──
+// ══════════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════════
 let pendUser = null;
+
 async function findUser() {
   const un = document.getElementById('unInput').value.trim();
-  if (!un) { showAuthErr('Please enter your Roblox username!'); return; }
-  hideAuthEl('authErr'); hideAuthEl('authPrev');
+  if (!un) { showAErr('authErr','Enter your Roblox username!'); return; }
+  hideAEl('authErr'); hideAEl('authPrev');
   document.getElementById('authLoad').classList.add('show');
-  document.getElementById('authLoadTxt').textContent = 'Searching account...';
+  document.getElementById('authLoadTxt').textContent = 'Searching...';
   document.getElementById('findBtn').disabled = true;
   try {
     const d = await fetchRoblox(`https://users.roblox.com/v1/users/search?keyword=${encodeURIComponent(un)}&limit=10`);
     if (!d.data?.length) throw new Error(`Account "${un}" not found on Roblox`);
-    // Find exact username match (case-insensitive)
-    const u = d.data.find(x => x.name.toLowerCase() === un.toLowerCase()) || d.data[0];
+    const u = d.data.find(x => x.name.toLowerCase()===un.toLowerCase()) || d.data[0];
     document.getElementById('authLoadTxt').textContent = 'Loading avatar...';
     let avUrl = `https://www.roblox.com/headshot-thumbnail/image?userId=${u.id}&width=420&height=420&format=png`;
     try {
       const td = await fetchRoblox(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${u.id}&size=420x420&format=Png`);
       if (td.data?.[0]?.imageUrl) avUrl = td.data[0].imageUrl;
     } catch(e) {}
-    pendUser = { id: u.id, username: u.name, displayName: u.displayName || u.name, avatar: avUrl };
+    pendUser = { id:u.id, username:u.name, displayName:u.displayName||u.name, avatar:avUrl };
     document.getElementById('authAv').src = avUrl;
     document.getElementById('authName').textContent = u.name;
-    document.getElementById('authId').textContent = 'ID: ' + u.id;
+    document.getElementById('authId').textContent = 'ID: '+u.id;
     document.getElementById('authNameBtn').textContent = u.name;
     document.getElementById('authPrev').classList.add('show');
-  } catch(e) { showAuthErr(e.message); }
+  } catch(e) { showAErr('authErr', e.message); }
   finally {
     document.getElementById('authLoad').classList.remove('show');
     document.getElementById('findBtn').disabled = false;
   }
 }
-function showAuthErr(m) { const e=document.getElementById('authErr'); e.textContent='⚠ '+m; e.classList.add('show'); }
-function hideAuthEl(id) { document.getElementById(id).classList.remove('show'); }
+
+function verifyAndLogin() {
+  if (!pendUser) return;
+  const pw = document.getElementById('authPw').value;
+  // For owner accounts: require password
+  if (OWNER_USERS.includes(pendUser.username)) {
+    const correct = USER_PASSWORDS[pendUser.username];
+    if (pw !== correct) {
+      showAErr('authPwErr','Incorrect password. Please enter your account password.');
+      return;
+    }
+  } else {
+    // Non-owner: password is optional / any value allowed (no real backend)
+    if (pw.length < 1) {
+      showAErr('authPwErr','Please enter your account password to verify.');
+      return;
+    }
+  }
+  hideAEl('authPwErr');
+  doLogin();
+}
 
 function doLogin() {
   if (!pendUser) return;
-  // Check if new user - give initial credits
-  const existing = S.user?.id === pendUser.id;
-  if (!existing) {
-    if (isUnlimited() || UNLIMITED_USERS.includes(pendUser.username)) {
-      S.credits = 999999;
-    } else {
-      S.credits = S.plan === 'pro' ? 200 : 30;
-    }
-    S.convs = [];
-    S.draftText = {};
-    S.draftImg = {};
+  const isNew = !S.user || S.user.id !== pendUser.id;
+  if (isNew) {
+    S.credits = isOwner() || OWNER_USERS.includes(pendUser.username) ? 999999 : (S.plan==='pro' ? 200 : 30);
+    S.convs = []; S.draftText = {}; S.draftImg = {};
   }
   S.user = pendUser;
-  // Notify bridge
-  if (S.ws && S.ws.readyState === 1) S.ws.send(JSON.stringify({ action:'userLogin', user: S.user }));
+  if (S.ws?.readyState===1) S.ws.send(JSON.stringify({action:'userLogin',user:S.user}));
   saveS();
   document.getElementById('auth').style.display = 'none';
   document.getElementById('app').classList.remove('hidden');
   initApp();
 }
 
+function showAErr(id, m) { const e=document.getElementById(id); e.textContent='⚠ '+m; e.classList.add('show'); }
+function hideAEl(id) { document.getElementById(id).classList.remove('show'); }
+
 function logout() {
   if (!confirm('Logout from NEXUS AI?')) return;
-  if (S.ws && S.ws.readyState === 1) S.ws.send(JSON.stringify({ action:'userLogout', userId: S.user?.id }));
-  S.user = null; saveS();
-  document.getElementById('auth').style.display = 'flex';
+  if (S.ws?.readyState===1) S.ws.send(JSON.stringify({action:'userLogout',userId:S.user?.id}));
+  S.user=null; saveS();
+  document.getElementById('auth').style.display='flex';
   document.getElementById('app').classList.add('hidden');
-  if (S.ws) { try { S.ws.close(); } catch(e) {} S.ws = null; }
+  if (S.ws) { try{S.ws.close();}catch(e){} S.ws=null; }
   closeModal('settingsModal');
+  // Reset auth form
+  document.getElementById('authPrev').classList.remove('show');
+  document.getElementById('unInput').value='';
+  document.getElementById('authPw').value='';
 }
 
-function switchAccount() {
-  closeModal('settingsModal');
-  logout();
-}
+function switchAccount() { closeModal('settingsModal'); logout(); }
 
-document.getElementById('unInput').addEventListener('keydown', e => { if (e.key==='Enter') findUser(); });
+document.getElementById('unInput').addEventListener('keydown', e => { if(e.key==='Enter') findUser(); });
+document.getElementById('authPw').addEventListener('keydown', e => { if(e.key==='Enter') verifyAndLogin(); });
 
-// ── Init ──
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
 function initApp() {
-  document.getElementById('sbAv').src = S.user.avatar || '';
+  document.getElementById('sbAv').src = S.user.avatar||'nexusai.png';
   document.getElementById('sbUn').textContent = S.user.username;
-  document.getElementById('sbRole').textContent = isUnlimited() ? '★ Admin · Unlimited' : (S.plan==='pro' ? '⭐ Pro Member' : 'Roblox Developer');
-  updateCreds(); renderConvs(); connectWS();
-  checkDailyCredits();
-  if (!S.convs.length) newChat();
-  else loadConv(S.convs[S.convs.length-1].id);
-  document.getElementById('portsInput').value = S.ports.join(', ');
-}
-function updateCreds() {
-  document.getElementById('credDisp').textContent = isUnlimited() ? '∞' : S.credits;
+  document.getElementById('sbRole').textContent = isOwner() ? '★ Admin · Unlimited' : (S.plan==='pro'?'⭐ Pro Member':'Roblox Developer');
+  updateCreds(); restoreModelUI(); renderConvs(); connectWS(); checkDailyCredits();
+  if (!S.convs.filter(c=>c.msgs?.length).length) newChat();
+  else {
+    const last = [...S.convs].filter(c=>c.msgs?.length).sort((a,b)=>b.created-a.created)[0];
+    if (last) loadConv(last.id); else newChat();
+  }
 }
 
-// ── Daily Credits ──
+function updateCreds() {
+  document.getElementById('credDisp').textContent = isOwner() ? '∞' : parseFloat(S.credits).toFixed(2);
+}
+
+// ══════════════════════════════════════════
+//  DAILY CREDITS
+// ══════════════════════════════════════════
 function checkDailyCredits() {
-  if (isUnlimited()) return;
+  if (isOwner()) return;
   const today = new Date().toDateString();
-  if (S.lastClaim !== today) {
-    // Auto-claim
-    const gain = S.plan === 'pro' ? 25 : 2;
-    S.credits = Math.min(S.credits + gain, 9999);
-    S.lastClaim = today;
-    saveS(); updateCreds();
-    toast(`+${gain} daily credits! Total: ${S.credits} CR`);
+  if (S.lastClaim!==today) {
+    const gain = S.plan==='pro' ? 25 : 2;
+    S.credits = Math.min(S.credits+gain, 9999);
+    S.lastClaim = today; saveS(); updateCreds();
+    toast(`+${gain} daily credits! Total: ${parseFloat(S.credits).toFixed(2)} CR`);
   }
 }
 function claimDaily() {
   const today = new Date().toDateString();
-  if (S.lastClaim === today && !isUnlimited()) {
-    toast('Already claimed today! Come back tomorrow.');
-    return;
-  }
-  const gain = S.plan === 'pro' ? 25 : 2;
-  S.credits += gain; S.lastClaim = today;
-  saveS(); updateCreds();
-  document.getElementById('settingsCredits').textContent = S.credits + ' CR';
+  if (S.lastClaim===today && !isOwner()) { toast('Already claimed today! Come back tomorrow.'); return; }
+  const gain = S.plan==='pro'?25:2;
+  S.credits += gain; S.lastClaim = today; saveS(); updateCreds();
+  document.getElementById('settingsCredits').textContent = parseFloat(S.credits).toFixed(2)+' CR';
   toast(`+${gain} credits claimed!`);
 }
 
-// ── Conversations ──
+// ══════════════════════════════════════════
+//  CONVERSATIONS
+// ══════════════════════════════════════════
 function newChat() {
-  // Save current draft before creating new chat
   if (S.curConv) saveDraft();
-  const c = { id: Date.now()+'', title: 'Untitled', msgs: [], created: Date.now() };
-  S.convs.push(c); S.curConv = c.id; S.msgs = [];
+  const c = { id:Date.now()+'', title:'Untitled', msgs:[], created:Date.now() };
+  S.convs.push(c); S.curConv=c.id; S.msgs=[];
   saveS(); renderConvs(); renderMsgs();
-  document.getElementById('chatTitle').textContent = 'New Chat';
-  // Restore draft (empty for new chat)
+  document.getElementById('chatTitle').textContent='New Chat';
   restoreDraft();
 }
 
 function loadConv(id) {
   if (S.curConv) saveDraft();
-  const c = S.convs.find(x => x.id === id);
-  if (!c) return;
-  S.curConv = id; S.msgs = c.msgs || [];
+  const c = S.convs.find(x=>x.id===id); if(!c) return;
+  S.curConv=id; S.msgs=c.msgs||[];
   renderConvs(); renderMsgs();
-  document.getElementById('chatTitle').textContent = c.title || 'Untitled';
+  document.getElementById('chatTitle').textContent = c.title||'Untitled';
   restoreDraft();
 }
 
 function saveDraft() {
   if (!S.curConv) return;
   const txt = document.getElementById('inp').value;
-  if (txt) S.draftText[S.curConv] = txt;
-  else delete S.draftText[S.curConv];
-  if (S.img) S.draftImg[S.curConv] = S.img;
-  else delete S.draftImg[S.curConv];
+  if (txt) S.draftText[S.curConv]=txt; else delete S.draftText[S.curConv];
+  if (S.img) S.draftImg[S.curConv]=S.img; else delete S.draftImg[S.curConv];
+  saveS();
 }
 
 function restoreDraft() {
   if (!S.curConv) return;
-  const txt = S.draftText[S.curConv] || '';
-  document.getElementById('inp').value = txt;
-  document.getElementById('inp').style.height = 'auto';
-  document.getElementById('inp').style.height = Math.min(document.getElementById('inp').scrollHeight, 130) + 'px';
-  const img = S.draftImg[S.curConv] || null;
-  if (img) {
-    S.img = img;
-    const row = document.getElementById('imgRow');
-    row.innerHTML = `<div class="img-thumb"><img src="${img}" alt=""><button class="img-rm" onclick="clearImgPrev()">✕</button></div>`;
-    row.classList.add('show');
-  } else {
-    clearImgPrev();
-  }
+  const txt = S.draftText[S.curConv]||'';
+  const inp = document.getElementById('inp');
+  inp.value=txt; inp.style.height='auto'; inp.style.height=Math.min(inp.scrollHeight,130)+'px';
+  const img = S.draftImg[S.curConv]||null;
+  if (img) { S.img=img; showImgPrev(img); } else clearImgPrev();
 }
 
 function delConv(id, e) {
   e.stopPropagation();
-  S.convs = S.convs.filter(c => c.id !== id);
+  S.convs=S.convs.filter(c=>c.id!==id);
   delete S.draftText[id]; delete S.draftImg[id];
-  if (S.curConv === id) { S.convs.length ? loadConv(S.convs[S.convs.length-1].id) : newChat(); }
+  if (S.curConv===id) {
+    const rest = S.convs.filter(c=>c.msgs?.length);
+    rest.length ? loadConv(rest[rest.length-1].id) : newChat();
+  }
   saveS(); renderConvs();
 }
 
 function renderConvs() {
   const el = document.getElementById('convList');
-  // Only show convs that have messages
-  const realConvs = S.convs.filter(c => c.msgs && c.msgs.length > 0);
-  if (!realConvs.length) { el.innerHTML = '<div class="conv-empty">No conversations yet</div>'; return; }
-  el.innerHTML = realConvs.slice().reverse().map(c => `
+  const real = S.convs.filter(c=>c.msgs?.length>0).sort((a,b)=>b.created-a.created);
+  if (!real.length) { el.innerHTML='<div class="conv-empty">No conversations yet</div>'; return; }
+  el.innerHTML = real.map(c=>`
     <div class="ci ${c.id===S.curConv?'act':''}" onclick="loadConv('${c.id}')">
       <div style="flex:1;min-width:0;">
         <div class="ci-title">${esc(c.title)}</div>
@@ -909,301 +982,489 @@ function renderConvs() {
     </div>`).join('');
 }
 
-function setConvTitle(id, msg) {
-  const c = S.convs.find(x => x.id === id);
-  if (c && c.title === 'Untitled') {
-    c.title = msg.substring(0,38) + (msg.length>38?'...':'');
+async function setConvTitle(id, msgs) {
+  const c = S.convs.find(x=>x.id===id);
+  if (!c || c.title!=='Untitled') return;
+  // Ask AI to generate a title
+  try {
+    const lastMsg = msgs[msgs.length-1]?.content||'';
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${K.gemini}`,{
+      method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({contents:[{role:'user',parts:[{text:`In 4-6 words, give a short descriptive title for this conversation. Reply ONLY with the title, no punctuation at end:\n"${lastMsg.substring(0,200)}"`}]}],generationConfig:{maxOutputTokens:30}})
+    });
+    const d = await r.json();
+    const title = d.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || lastMsg.substring(0,35);
+    c.title = title.replace(/["""]/g,'').substring(0,45);
     document.getElementById('chatTitle').textContent = c.title;
-    renderConvs();
+    renderConvs(); saveS();
+  } catch(e) {
+    c.title = msgs[0]?.content?.substring(0,38)||'Chat';
+    document.getElementById('chatTitle').textContent = c.title;
+    renderConvs(); saveS();
   }
 }
 
-// ── Tabs ──
-function switchTab(tab, btn) {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('act'));
-  btn.classList.add('act');
-  document.getElementById('chatTab').style.display = tab==='chat' ? 'flex' : 'none';
-  document.getElementById('guiTab').style.display  = tab==='gui'  ? 'flex' : 'none';
-  if (tab === 'chat') {
-    document.getElementById('chatTab').style.flexDirection = 'column';
-  }
-}
-
-// ── Model ──
+// ══════════════════════════════════════════
+//  MODEL
+// ══════════════════════════════════════════
 function toggleMDD() {
   document.getElementById('mDD').classList.toggle('open');
-  document.getElementById('mSel').classList.toggle('open');
 }
 function selModel(el) {
+  if (el.classList.contains('disabled')) { toast('This model is coming soon!'); return; }
   document.querySelectorAll('.mo').forEach(o=>o.classList.remove('act'));
   el.classList.add('act');
-  S.model = { id:el.dataset.m, provider:el.dataset.p, cost:+el.dataset.c, name:el.dataset.n, tier:el.dataset.t };
-  const icons = {claude:'C',openai:'⊕',gemini:'G'};
-  const ic = icons[S.model.provider]||'AI';
-  const mcls = {claude:'c',openai:'o',gemini:'g'}[S.model.provider]||'g';
-  document.getElementById('mSel').innerHTML = `<div class="mi ${mcls}">${ic}</div><span class="mn">${S.model.name}</span><span class="mb ${S.model.tier}">${S.model.cost===0?'FREE':S.model.cost+' CR'}</span><span class="mc">▾</span>`;
-  document.getElementById('inpMName').textContent = S.model.name;
-  document.getElementById('inpMIcon').textContent = ic;
+  S.model = { id:el.dataset.m, provider:el.dataset.p, cost:+el.dataset.c, name:el.dataset.n, tier:el.dataset.t, icon:el.querySelector('.mi')?.textContent||'🔵' };
+  saveS(); restoreModelUI();
   document.getElementById('mDD').classList.remove('open');
-  document.getElementById('mSel').classList.remove('open');
+}
+function restoreModelUI() {
+  const m = S.model;
+  document.getElementById('inpMIcon').textContent = m.icon||'🔵';
+  document.getElementById('inpMName').textContent = m.name;
+  const badge = document.getElementById('inpMBadge');
+  badge.textContent = m.cost===0 ? 'FREE' : m.cost+' CR';
+  badge.style.color = m.cost===0 ? 'var(--green)' : 'var(--cyan)';
+  // Highlight in dropdown
+  document.querySelectorAll('.mo').forEach(o => {
+    o.classList.toggle('act', o.dataset.m===m.id && !o.classList.contains('disabled'));
+  });
 }
 document.addEventListener('click', e => {
-  if (!e.target.closest('.model-wrap')) {
+  if (!e.target.closest('#mDD') && !e.target.closest('#inpModelBtn')) {
     document.getElementById('mDD').classList.remove('open');
-    document.getElementById('mSel').classList.remove('open');
   }
 });
 
-// ── Messages ──
+// ══════════════════════════════════════════
+//  MESSAGES
+// ══════════════════════════════════════════
 function renderMsgs() {
   const a = document.getElementById('msgs');
   const w = document.getElementById('welcome');
-  if (!S.msgs.length) { a.innerHTML=''; a.appendChild(w); w.style.display=''; return; }
-  w.style.display = 'none'; a.innerHTML = '';
-  S.msgs.forEach(m => a.appendChild(mkMsg(m)));
-  a.scrollTop = a.scrollHeight;
+  if (!S.msgs.length) {
+    a.innerHTML=''; a.appendChild(w); w.style.display='';
+    return;
+  }
+  w.style.display='none'; a.innerHTML='';
+  S.msgs.forEach(m=>a.appendChild(mkMsg(m)));
+  a.scrollTop=a.scrollHeight;
 }
+
+// Configure marked with syntax highlighting
+marked.setOptions({
+  breaks:true, gfm:true,
+  highlight: (code, lang) => {
+    if (lang && hljs.getLanguage(lang)) {
+      try { return hljs.highlight(code, {language:lang}).value; } catch(e) {}
+    }
+    return hljs.highlightAuto(code).value;
+  }
+});
+
+// Custom renderer to add copy/share buttons to code blocks
+const renderer = new marked.Renderer();
+renderer.code = (code, language) => {
+  const escaped = code.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  let highlighted = escaped;
+  try {
+    if (language && hljs.getLanguage(language)) {
+      highlighted = hljs.highlight(code, {language}).value;
+    } else {
+      highlighted = hljs.highlightAuto(code).value;
+    }
+  } catch(e) {}
+  const id = 'cb'+Math.random().toString(36).slice(2,7);
+  return `<div class="code-block-wrap" id="${id}">
+    <button class="copy-code-btn" onclick="copyCode('${id}')">📋 Copy</button>
+    <button class="share-code-btn" onclick="shareCode('${id}')">🔗 Share</button>
+    <pre><code class="hljs language-${language||'lua'}">${highlighted}</code></pre>
+  </div>`;
+};
+// Format links as buttons
+renderer.link = (href, title, text) => {
+  if (href && href.startsWith('http')) {
+    return `<a href="${href}" target="_blank" rel="noopener">${text} ↗</a>`;
+  }
+  return `<a href="${href}">${text}</a>`;
+};
+marked.setOptions({ renderer });
 
 function mkMsg(m) {
   const d = document.createElement('div');
   d.className = `msg ${m.role}`;
-  if (m.role === 'user') {
+  if (m.role==='user') {
     d.innerHTML = `
-      <div class="av"><img src="${S.user?.avatar||''}" alt=""></div>
+      <div class="av"><img src="${S.user?.avatar||'nexusai.png'}" alt="" onerror="this.src='nexusai.png'"></div>
       <div class="mb-wrap">
         <div class="msg-sender">${esc(S.user?.username||'You')}<span style="font-size:9px;color:var(--dim)">${ago(m.time)}</span></div>
         <div class="bubble">${esc(m.content)}${m.img?`<br><img class="msg-img" src="${m.img}" alt="">`:''}</div>
       </div>`;
   } else {
     const pClr = {claude:'#ff9650',openai:'#00ff9d',gemini:'#4285f4'}[m.provider]||'var(--cyan)';
-    const ic   = {claude:'C',openai:'⊕',gemini:'G'}[m.provider]||'AI';
+    const icon = m.provider==='claude'?'🟠':m.provider==='openai'?'🟢':'🔵';
+    const msgId = 'msg'+Math.random().toString(36).slice(2,8);
+    d.id = msgId;
     d.innerHTML = `
-      <div class="av ai" style="background:linear-gradient(135deg,${pClr}44,${pClr}88)">${ic}</div>
+      <div class="av" style="background:none;">
+        <img src="nexusai.png" alt="NEXUS AI" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--cyan2);" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="av ai" style="display:none">${icon}</div>
+      </div>
       <div class="mb-wrap">
-        <div class="msg-sender"><span style="color:${pClr}">${m.model||'AI'}</span><span style="font-size:9px;color:var(--dim)">${ago(m.time)}</span></div>
-        <div class="bubble">${marked.parse(m.content||'')}</div>
-        <div class="msg-acts"><button class="mab" onclick="cpText('${escA(m.content)}')">📋 Copy</button></div>
+        <div class="msg-sender"><span style="color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;">NEXUS AI</span><span style="font-size:9px;color:var(--dim)">${ago(m.time)}</span></div>
+        <div class="bubble" id="bubble_${msgId}">${marked.parse(m.content||'')}</div>
+        <div class="msg-acts">
+          <button class="mab" onclick="copyMsgText('${msgId}')">📋 Copy</button>
+          <button class="mab" onclick="shareMsgText('${msgId}')">🔗 Share</button>
+        </div>
       </div>`;
   }
   return d;
 }
+
 function appendMsg(m) {
-  const a = document.getElementById('msgs');
-  document.getElementById('welcome').style.display = 'none';
-  a.appendChild(mkMsg(m)); a.scrollTop = a.scrollHeight;
+  const a=document.getElementById('msgs');
+  document.getElementById('welcome').style.display='none';
+  a.appendChild(mkMsg(m)); a.scrollTop=a.scrollHeight;
 }
 
-// Thinking indicator
+function copyMsgText(msgId) {
+  const el = document.getElementById('bubble_'+msgId);
+  if (!el) return;
+  navigator.clipboard.writeText(el.innerText).then(()=>toast('✓ Copied!'));
+}
+
+function shareMsgText(msgId) {
+  const el = document.getElementById('bubble_'+msgId);
+  if (!el) return;
+  const txt = el.innerText;
+  if (navigator.share) {
+    navigator.share({ title:'NEXUS AI', text:txt }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(txt).then(()=>toast('✓ Copied to clipboard!'));
+  }
+}
+
+function copyCode(blockId) {
+  const block = document.querySelector(`#${blockId} code`);
+  if (!block) return;
+  navigator.clipboard.writeText(block.innerText).then(()=>{
+    const btn = document.querySelector(`#${blockId} .copy-code-btn`);
+    if (btn) { btn.textContent='✓ Copied!'; setTimeout(()=>btn.textContent='📋 Copy',2000); }
+  });
+}
+function shareCode(blockId) {
+  const block = document.querySelector(`#${blockId} code`);
+  if (!block) return;
+  const code = block.innerText;
+  if (navigator.share) {
+    navigator.share({ title:'NEXUS AI Code', text:code }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(code).then(()=>toast('✓ Code copied!'));
+  }
+}
+
+// Typing animation after response
+function showTypingAnim(element) {
+  element.classList.add('typing-cursor');
+  setTimeout(()=>element.classList.remove('typing-cursor'), 1200);
+}
+
+// ══════════════════════════════════════════
+//  THINKING INDICATOR
+// ══════════════════════════════════════════
 let thinkingEl = null;
-let thinkingStepIdx = 0;
-const THINKING_STEPS = ['Analyzing your request...', 'Generating response...', 'Writing Lua code...', 'Finalizing answer...'];
+let thinkStepTimer = null;
+
+const THINK_STEPS = [
+  { icon:'🔍', text:'Analyzing your request...' },
+  { icon:'🧠', text:'Processing with AI...' },
+  { icon:'💻', text:'Generating Lua code...' },
+  { icon:'✏️', text:'Preparing response...' },
+];
 
 function showThinking() {
   const a = document.getElementById('msgs');
   thinkingEl = document.createElement('div');
-  thinkingEl.className = 'thinking-wrap';
-  thinkingEl.id = 'thinkingEl';
-  thinkingEl.innerHTML = `
-    <div class="av ai">✦</div>
+  thinkingEl.className='thinking-wrap';
+  thinkingEl.id='thinkingEl';
+  thinkingEl.innerHTML=`
+    <div class="av" style="background:none;">
+      <img src="nexusai.png" alt="" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--cyan2);" onerror="this.style.background='linear-gradient(135deg,var(--cyan),var(--purple))'">
+    </div>
     <div class="thinking-box">
-      <div class="thinking-hdr"><div class="thinking-spin"></div><span>NEXUS AI is thinking...</span></div>
-      <div class="thinking-steps" id="thinkingSteps">
-        ${THINKING_STEPS.map((s,i)=>`<div class="t-step" id="tstep${i}"><div class="t-step-dot"></div>${s}</div>`).join('')}
+      <div class="thinking-hdr"><div class="thinking-spin"></div>NEXUS AI is thinking...</div>
+      <div class="thinking-steps" id="thinkSteps">
+        ${THINK_STEPS.map((s,i)=>`
+          <div class="t-step" id="tstep${i}">
+            <div class="t-step-icon">${s.icon}</div>
+            ${s.text}
+          </div>`).join('')}
       </div>
+      <button class="cancel-btn" onclick="cancelGen()">✕ Cancel</button>
     </div>`;
-  a.appendChild(thinkingEl); a.scrollTop = a.scrollHeight;
-  thinkingStepIdx = 0;
-  // Animate steps
-  const stepTimer = setInterval(() => {
-    if (!document.getElementById('thinkingEl')) { clearInterval(stepTimer); return; }
-    if (thinkingStepIdx > 0) {
-      const prev = document.getElementById('tstep'+(thinkingStepIdx-1));
-      if (prev) { prev.classList.remove('active'); prev.classList.add('done'); prev.querySelector('.t-step-dot').textContent = ''; }
+  a.appendChild(thinkingEl); a.scrollTop=a.scrollHeight;
+  let idx=0;
+  thinkStepTimer = setInterval(()=>{
+    if (idx>0) {
+      const prev=document.getElementById('tstep'+(idx-1));
+      if(prev){prev.classList.remove('active');prev.classList.add('done');prev.querySelector('.t-step-icon').textContent='✅';}
     }
-    const cur = document.getElementById('tstep'+thinkingStepIdx);
-    if (cur) cur.classList.add('active');
-    thinkingStepIdx++;
-    if (thinkingStepIdx >= THINKING_STEPS.length) clearInterval(stepTimer);
-  }, 600);
-}
-function rmThinking() {
-  if (thinkingEl) { thinkingEl.remove(); thinkingEl = null; }
+    const cur=document.getElementById('tstep'+idx);
+    if(cur) cur.classList.add('active');
+    idx++;
+    if(idx>=THINK_STEPS.length) clearInterval(thinkStepTimer);
+  }, 700);
 }
 
-// ── Send ──
+function rmThinking() {
+  clearInterval(thinkStepTimer);
+  if (thinkingEl) { thinkingEl.remove(); thinkingEl=null; }
+}
+
+function cancelGen() {
+  if (S.cancelController) { S.cancelController.abort(); }
+  rmThinking();
+  S.gen=false;
+  document.getElementById('sendBtn').classList.remove('hidden');
+  document.getElementById('cancelBtn').classList.add('hidden');
+  document.getElementById('sendBtn').disabled=false;
+  addLog('warn','Generation cancelled by user');
+  toast('⏹ Generation cancelled');
+}
+
+// ══════════════════════════════════════════
+//  SEND MESSAGE
+// ══════════════════════════════════════════
 async function send() {
   if (S.gen) return;
   const txt = document.getElementById('inp').value.trim();
   const img = S.img;
   if (!txt && !img) return;
-  if (!isUnlimited() && S.model.cost > 0 && S.credits < S.model.cost) {
-    toast('⚠ Not enough credits! Need ' + S.model.cost + ' CR'); openShop(); return;
+
+  // Check credits
+  if (!isOwner() && S.model.cost>0 && S.credits<S.model.cost) {
+    toast('⚠ Not enough credits! Need '+S.model.cost+' CR'); openShop(); return;
   }
+
   const um = { role:'user', content:txt, img, time:Date.now() };
   S.msgs.push(um); appendMsg(um);
-  document.getElementById('inp').value = '';
-  document.getElementById('inp').style.height = 'auto';
-  // Clear draft
-  delete S.draftText[S.curConv];
-  delete S.draftImg[S.curConv];
+  document.getElementById('inp').value='';
+  document.getElementById('inp').style.height='auto';
+  delete S.draftText[S.curConv]; delete S.draftImg[S.curConv];
   clearImgPrev();
-  setConvTitle(S.curConv, txt||'Image');
-  S.gen = true;
-  document.getElementById('sendBtn').disabled = true;
+
+  S.gen=true;
+  document.getElementById('sendBtn').classList.add('hidden');
+  document.getElementById('cancelBtn').classList.remove('hidden');
   showThinking();
+
+  // Create abort controller
+  S.cancelController = new AbortController();
+
   try {
-    let r = '';
-    if (S.model.provider==='gemini')      r = await callGemini(S.model.id, img);
-    else if (S.model.provider==='claude') r = await callClaude(S.model.id, img);
-    else                                  r = await callOpenAI(S.model.id, img);
+    let r='';
+    if (S.model.provider==='gemini')      r=await callGemini(S.model.id, img, S.cancelController.signal);
+    else if (S.model.provider==='claude') r=await callClaude(S.model.id, img, S.cancelController.signal);
+    else                                  r=await callOpenAI(S.model.id, img, S.cancelController.signal);
+
     rmThinking();
-    const am = { role:'ai', content:r, model:S.model.name, provider:S.model.provider, time:Date.now() };
+    const am = { role:'ai', content:r, model:S.model.name, provider:S.model.provider, icon:S.model.icon, time:Date.now() };
     S.msgs.push(am); appendMsg(am);
-    if (!isUnlimited() && S.model.cost>0) { S.credits = Math.max(0, S.credits-S.model.cost); updateCreds(); }
+
+    // Typing animation on last message
+    const lastBubble = document.querySelector('#msgs .msg.ai:last-child .bubble');
+    if (lastBubble) showTypingAnim(lastBubble);
+
+    // Deduct credits (decimal based on complexity)
+    if (!isOwner() && S.model.cost>0) {
+      const complexity = txt.length > 200 ? 1.0 : txt.length > 50 ? 0.5 : 0.01;
+      const deduct = S.model.cost * complexity;
+      S.credits = Math.max(0, S.credits - deduct);
+      updateCreds();
+    } else if (!isOwner() && S.model.cost===0) {
+      // Free model: minimal deduction for very complex requests
+      const isCodeRequest = /gui|script|code|build|create|make|function/i.test(txt);
+      if (isCodeRequest) S.credits = Math.max(0, S.credits - 0.01);
+      updateCreds();
+    }
+
     const c = S.convs.find(x=>x.id===S.curConv);
     if (c) c.msgs = S.msgs;
-    saveS(); addLog('info', S.model.name + ' responded');
-    renderConvs(); // Refresh to show in list
+    saveS();
+    addLog('info', S.model.name+' responded');
+    // AI generates title
+    await setConvTitle(S.curConv, S.msgs);
+    renderConvs();
+
   } catch(e) {
     rmThinking();
-    const em = { role:'ai', content:`❌ **Error:** ${e.message}\n\nTry a different model or check the API key.`, model:S.model.name, provider:S.model.provider, time:Date.now() };
-    S.msgs.push(em); appendMsg(em); addLog('err', e.message);
+    if (e.name==='AbortError') return; // Was cancelled
+    const errMsg = e.message||'Unknown error';
+    let friendlyErr = `❌ **Response failed / error**\n\n${errMsg}\n\nTry a different model or check your connection.`;
+    if (errMsg.includes('network')||errMsg.includes('fetch')||errMsg.includes('Failed')) {
+      friendlyErr = `❌ **Connection failed**\n\nCould not reach the AI server. Please check your internet connection and try again.`;
+    }
+    const em = { role:'ai', content:friendlyErr, model:S.model.name, provider:S.model.provider, icon:S.model.icon, time:Date.now() };
+    S.msgs.push(em); appendMsg(em); addLog('err', errMsg);
+    toast('❌ Response failed — check connection');
   } finally {
-    S.gen = false;
-    document.getElementById('sendBtn').disabled = false;
+    S.gen=false; S.cancelController=null;
+    document.getElementById('sendBtn').classList.remove('hidden');
+    document.getElementById('cancelBtn').classList.add('hidden');
+    document.getElementById('sendBtn').disabled=false;
   }
 }
 
 function buildMsgs() {
-  return S.msgs.slice(-20).map(m => ({ role: m.role==='ai'?'assistant':'user', content: m.content||'' }));
+  return S.msgs.slice(-22).map(m=>({ role:m.role==='ai'?'assistant':'user', content:m.content||'' }));
 }
 
-async function callGemini(model, img) {
+async function callGemini(model, img, signal) {
   const ms = buildMsgs();
-  const contents = ms.map(m => ({ role: m.role==='assistant'?'model':'user', parts:[{text:m.content}] }));
+  const contents = ms.map(m=>({ role:m.role==='assistant'?'model':'user', parts:[{text:m.content}] }));
   if (img && contents.length>0) {
-    const l = contents[contents.length-1];
+    const l=contents[contents.length-1];
     if (l.role==='user') l.parts.push({inline_data:{mime_type:img.split(';')[0].split(':')[1],data:img.split(',')[1]}});
   }
   const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${K.gemini}`,{
-    method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({contents,systemInstruction:{parts:[{text:SYS}]},generationConfig:{maxOutputTokens:8192,temperature:.7}})
+    method:'POST', signal,
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({contents,systemInstruction:{parts:[{text:SYSTEM_PROMPT}]},generationConfig:{maxOutputTokens:8192,temperature:.72}})
   });
-  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||`Gemini error ${r.status}`); }
-  const d = await r.json();
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||`Gemini ${r.status}`); }
+  const d=await r.json();
   if (d.candidates?.[0]?.content?.parts?.[0]?.text) return d.candidates[0].content.parts[0].text;
   throw new Error('Empty Gemini response');
 }
 
-async function callClaude(model, img) {
+async function callClaude(model, img, signal) {
   const ms = buildMsgs();
   if (img && ms.length>0) {
-    const l = ms[ms.length-1];
-    if (l.role==='user') l.content=[{type:'image',source:{type:'base64',media_type:img.split(';')[0].split(':')[1],data:img.split(',')[1]}},{type:'text',text:l.content}];
+    const l=ms[ms.length-1];
+    if(l.role==='user') l.content=[{type:'image',source:{type:'base64',media_type:img.split(';')[0].split(':')[1],data:img.split(',')[1]}},{type:'text',text:l.content}];
   }
   const r = await fetch('https://api.anthropic.com/v1/messages',{
-    method:'POST',
+    method:'POST', signal,
     headers:{'Content-Type':'application/json','x-api-key':K.claude,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
-    body:JSON.stringify({model,max_tokens:8192,system:SYS,messages:ms})
+    body:JSON.stringify({model,max_tokens:8192,system:SYSTEM_PROMPT,messages:ms})
   });
-  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||`Claude error ${r.status}`); }
-  const d = await r.json();
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||`Claude ${r.status}`); }
+  const d=await r.json();
   if (d.content?.[0]?.text) return d.content[0].text;
   throw new Error('Empty Claude response');
 }
 
-async function callOpenAI(model, img) {
+async function callOpenAI(model, img, signal) {
   const ms = buildMsgs();
-  const all = [{role:'system',content:SYS},...ms];
+  const all=[{role:'system',content:SYSTEM_PROMPT},...ms];
   if (img && all.length>0) {
-    const l = all[all.length-1];
-    if (l.role==='user') l.content=[{type:'text',text:l.content},{type:'image_url',image_url:{url:img}}];
+    const l=all[all.length-1];
+    if(l.role==='user') l.content=[{type:'text',text:l.content},{type:'image_url',image_url:{url:img}}];
   }
-  const body = {model,messages:model.startsWith('o')?all.filter(m=>m.role!=='system'):all};
-  if (!model.startsWith('o')) body.max_tokens=4096;
+  const body={model,messages:model.startsWith('o')?all.filter(m=>m.role!=='system'):all};
+  if(!model.startsWith('o')) body.max_tokens=4096;
   const r = await fetch('https://api.openai.com/v1/chat/completions',{
-    method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+K.openai},
+    method:'POST', signal,
+    headers:{'Content-Type':'application/json','Authorization':'Bearer '+K.openai},
     body:JSON.stringify(body)
   });
-  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||`OpenAI error ${r.status}`); }
-  const d = await r.json();
+  if (!r.ok) { const e=await r.json().catch(()=>({})); throw new Error(e.error?.message||`OpenAI ${r.status}`); }
+  const d=await r.json();
   if (d.choices?.[0]?.message?.content) return d.choices[0].message.content;
   throw new Error('Empty OpenAI response');
 }
 
-// ── Image ──
+// ══════════════════════════════════════════
+//  IMAGE HANDLING + CTRL+V
+// ══════════════════════════════════════════
+function showImgPrev(dataUrl) {
+  const row=document.getElementById('imgRow');
+  row.innerHTML=`<div class="img-thumb"><img src="${dataUrl}" alt=""><button class="img-rm" onclick="clearImgPrev()">✕</button></div>`;
+  row.classList.add('show');
+}
 function handleImg(e) {
-  const f = e.target.files[0]; if (!f) return;
-  const rd = new FileReader();
-  rd.onload = ev => {
-    S.img = ev.target.result;
-    const row = document.getElementById('imgRow');
-    row.innerHTML = `<div class="img-thumb"><img src="${ev.target.result}" alt=""><button class="img-rm" onclick="clearImgPrev()">✕</button></div>`;
-    row.classList.add('show');
-  };
+  const f=e.target.files[0]; if(!f) return;
+  const rd=new FileReader();
+  rd.onload=ev=>{S.img=ev.target.result; showImgPrev(ev.target.result);};
   rd.readAsDataURL(f); e.target.value='';
 }
 function clearImgPrev() {
-  S.img = null;
+  S.img=null;
   document.getElementById('imgRow').classList.remove('show');
-  document.getElementById('imgRow').innerHTML = '';
+  document.getElementById('imgRow').innerHTML='';
 }
+// Ctrl+V paste image
+document.addEventListener('paste', e => {
+  const items = e.clipboardData?.items;
+  if (!items) return;
+  for (const item of items) {
+    if (item.type.startsWith('image/')) {
+      const f = item.getAsFile();
+      const rd = new FileReader();
+      rd.onload = ev => { S.img=ev.target.result; showImgPrev(ev.target.result); };
+      rd.readAsDataURL(f);
+      toast('📎 Image pasted!');
+      e.preventDefault();
+      break;
+    }
+  }
+});
 
-// ── WebSocket ──
-let wsReconnTimer = null;
+// ══════════════════════════════════════════
+//  WEBSOCKET
+// ══════════════════════════════════════════
+let wsReconnTimer=null;
 function connectWS() {
   if (wsReconnTimer) { clearTimeout(wsReconnTimer); wsReconnTimer=null; }
   try {
-    const ws = new WebSocket('ws://localhost:7777');
-    S.ws = ws;
-    ws.onopen = () => { addLog('ok','Bridge connected!'); checkPluginStatus(); };
-    ws.onmessage = e => { try { handleWS(JSON.parse(e.data)); } catch(err) {} };
-    ws.onclose = () => { S.ws=null; setPlugUI(false); addLog('warn','WS disconnected, retry in 5s...'); wsReconnTimer=setTimeout(connectWS,5000); };
-    ws.onerror  = () => { S.ws=null; setPlugUI(false); };
+    const ws=new WebSocket('ws://localhost:7777');
+    S.ws=ws;
+    ws.onopen=()=>{ addLog('ok','Bridge connected!'); checkPluginStatus(); };
+    ws.onmessage=e=>{ try{handleWS(JSON.parse(e.data));}catch(err){} };
+    ws.onclose=()=>{ S.ws=null; setPlugUI(false); wsReconnTimer=setTimeout(connectWS,5000); };
+    ws.onerror=()=>{ S.ws=null; setPlugUI(false); };
   } catch(e) { setPlugUI(false); wsReconnTimer=setTimeout(connectWS,5000); }
 }
-function retryConn() { toast('↺ Reconnecting...'); addLog('info','Manual reconnect...'); if(S.ws) S.ws.close(); else connectWS(); }
+function retryConn() { toast('↺ Reconnecting...'); if(S.ws) S.ws.close(); else connectWS(); }
 function checkPluginStatus() {
   fetch('http://localhost:7778/status').then(r=>r.json()).then(d=>{
-    if (d.pluginConnected) { S.plugConnected=true; setPlugUI(true); }
+    if(d.pluginConnected){S.plugConnected=true;setPlugUI(true);}
     addLog('info','Bridge OK · Clients: '+d.webClientCount);
   }).catch(()=>{});
 }
 function handleWS(msg) {
   if (msg.action==='bridgeReady'||msg.action==='pluginStatus') {
-    S.plugConnected = msg.pluginConnected||msg.connected||false;
+    S.plugConnected=msg.pluginConnected||msg.connected||false;
     setPlugUI(S.plugConnected);
-    if (msg.placeInfo?.name) addLog('info','Place: '+msg.placeInfo.name);
+    if(msg.placeInfo?.name) addLog('info','Place: '+msg.placeInfo.name);
   } else if (msg.action==='workspace') { renderWorkspace(msg.data); addLog('ok','Workspace received'); }
   else if (msg.action==='scriptContent') { showScript(msg.path,msg.content); addLog('ok','Script: '+msg.path); }
   else if (msg.action==='scriptWritten') { toast(msg.success?`✓ ${msg.path} updated!`:`❌ Failed: ${msg.message}`); }
   else if (msg.action==='error') { toast('❌ '+msg.message); addLog('err',msg.message); }
 }
-function sendPlugin(cmd) { if (S.ws&&S.ws.readyState===1) S.ws.send(JSON.stringify(cmd)); }
-
+function sendPlugin(cmd) { if(S.ws?.readyState===1) S.ws.send(JSON.stringify(cmd)); }
 function setPlugUI(on) {
-  const badge = document.getElementById('plugBadge');
-  const txt   = document.getElementById('plugTxt');
-  const banner= document.getElementById('plugBanner');
-  if (on) {
-    badge.className='plug-badge on'; txt.textContent='Plugin online';
-    banner.classList.remove('show');
+  const badge=document.getElementById('plugBadge'),txt=document.getElementById('plugTxt'),banner=document.getElementById('plugBanner');
+  if(on){
+    badge.className='plug-badge on'; txt.textContent='Plugin online'; banner.classList.remove('show');
     document.getElementById('ppOff').classList.add('hidden');
     document.getElementById('ppOn').classList.remove('hidden');
   } else {
-    badge.className='plug-badge off'; txt.textContent='Plugin offline';
-    banner.classList.add('show');
+    badge.className='plug-badge off'; txt.textContent='Plugin offline'; banner.classList.add('show');
     document.getElementById('ppOff').classList.remove('hidden');
     document.getElementById('ppOn').classList.add('hidden');
   }
 }
 
-// ── Workspace ──
-const SI = {Workspace:'🌍',Players:'👥',Lighting:'💡',ReplicatedStorage:'📦',ReplicatedFirst:'⚡',ServerScriptService:'⚙',ServerStorage:'🗄',StarterGui:'🖼',StarterPack:'🎒',StarterPlayer:'👤',Teams:'🏷',SoundService:'🔊',Script:'📄',LocalScript:'📱',ModuleScript:'🔧',Folder:'📁',Part:'🟦',Model:'🧩'};
+// ══════════════════════════════════════════
+//  WORKSPACE
+// ══════════════════════════════════════════
+const SI={Workspace:'🌍',Players:'👥',Lighting:'💡',ReplicatedStorage:'📦',ReplicatedFirst:'⚡',ServerScriptService:'⚙',ServerStorage:'🗄',StarterGui:'🖼',StarterPack:'🎒',StarterPlayer:'👤',Teams:'🏷',SoundService:'🔊',Script:'📄',LocalScript:'📱',ModuleScript:'🔧',Folder:'📁',Part:'🟦',Model:'🧩'};
 function gIcon(cn){return SI[cn]||'◻';}
 function renderWorkspace(data) {
-  const t = document.getElementById('wsTree');
-  if (!data?.length){t.innerHTML='<div style="padding:10px;color:var(--dim);font-size:10px;">Workspace empty</div>';return;}
+  const t=document.getElementById('wsTree');
+  if(!data?.length){t.innerHTML='<div style="padding:10px;color:var(--dim);font-size:10px;">Workspace empty</div>';return;}
   t.innerHTML=data.map(svc=>`
     <div class="tn" onclick="toggleTN(this)" data-name="${svc.name}">
       <span class="ti">${gIcon(svc.name)}</span><span class="tl">${esc(svc.name)}</span><span class="tc">${svc.ClassName||''}</span>
@@ -1223,242 +1484,213 @@ function toggleTN(el){const nm=el.dataset.name,open=!el.dataset.open;el.dataset.
 function tnClick(el,path){document.querySelectorAll('.tn').forEach(n=>n.classList.remove('sel'));el.classList.add('sel');const cls=el.dataset.class;if(cls==='Script'||cls==='LocalScript'||cls==='ModuleScript'){sendPlugin({action:'readScript',path});addLog('info','Reading: '+path);}}
 function showScript(path,content){document.getElementById('seN').textContent=path.split('/').pop();document.getElementById('seCode').textContent=content;document.getElementById('se').classList.add('show');}
 function closeSE(){document.getElementById('se').classList.remove('show');}
-function refreshWs(){sendPlugin({action:'getWorkspace'});toast('↺ Refreshing workspace...');}
+function refreshWs(){sendPlugin({action:'getWorkspace'});toast('↺ Refreshing...');}
 
-// ── Settings ──
-function openSettings() {
-  document.getElementById('settingsUsername').textContent = S.user?.username || '-';
-  document.getElementById('settingsCredits').textContent = isUnlimited() ? '∞ Unlimited' : S.credits + ' CR';
-  document.getElementById('settingsPlan').textContent = isUnlimited() ? '★ Admin' : (S.plan==='pro' ? '⭐ Pro' : 'Free');
-  document.getElementById('portsInput').value = S.ports.join(', ');
-  const today = new Date().toDateString();
-  document.getElementById('lastClaimInfo').textContent = S.lastClaim===today ? 'Claimed today ✓' : 'Not claimed today';
-  document.getElementById('settingsModal').classList.add('show');
-}
-function savePorts() {
-  const raw = document.getElementById('portsInput').value;
-  const ports = raw.split(',').map(p=>p.trim()).filter(p=>p);
-  S.ports = ports;
-  saveS();
-  document.getElementById('portsStatus').textContent = '✓ Saved!';
-  setTimeout(()=>document.getElementById('portsStatus').textContent='',2000);
+// ══════════════════════════════════════════
+//  TABS
+// ══════════════════════════════════════════
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('act'));
+  btn.classList.add('act');
+  document.getElementById('chatTab').style.display = tab==='chat'?'flex':'none';
+  if (tab==='chat') document.getElementById('chatTab').style.flexDirection='column';
+  document.getElementById('guiTab').style.display = tab==='gui'?'flex':'none';
 }
 
-// ── Shop ──
-function openShop() { document.getElementById('shopModal').classList.add('show'); }
-function buyCreditPack(credits, idr, usd) {
-  toast('Payment system coming soon! (' + idr + ' / ' + usd + ')');
-}
-
-// ── GUI Builder ──
-let guiElements = [];
-let selectedEl  = null;
-let dragEl = null, dragOffX=0, dragOffY=0;
-let elCounter = 0;
-
-const GUI_DEFAULTS = {
-  Frame:      { bg:'#1a2040', text:'', border:'#00e5ff', textColor:'#ffffff', w:200, h:100, x:50, y:50, opacity:1, fontSize:14 },
-  TextLabel:  { bg:'transparent', text:'Label', border:'transparent', textColor:'#b8cfff', w:180, h:36, x:50, y:50, opacity:1, fontSize:14 },
-  TextButton: { bg:'#00e5ff', text:'Button', border:'#00e5ff', textColor:'#030312', w:140, h:40, x:50, y:50, opacity:1, fontSize:14 },
-  TextBox:    { bg:'#0a0b22', text:'', border:'#3a4a7a', textColor:'#ffffff', w:200, h:40, x:50, y:50, opacity:1, fontSize:13 },
-  ImageLabel: { bg:'#0a0b22', text:'Image', border:'#3a4a7a', textColor:'#3a4a7a', w:100, h:100, x:50, y:50, opacity:1, fontSize:12 },
-  ScrollFrame:{ bg:'#06071a', text:'', border:'#3a4a7a', textColor:'#ffffff', w:220, h:150, x:50, y:50, opacity:1, fontSize:14 },
+// ══════════════════════════════════════════
+//  GUI BUILDER
+// ══════════════════════════════════════════
+let guiEls=[],selEl=null,elC=0;
+const GUI_DEF={
+  Frame:{bg:'#1a2040',text:'',border:'#00e5ff',textColor:'#fff',w:200,h:100,x:50,y:50,opacity:1,fontSize:14,anchorX:0,anchorY:0,cornerRadius:0},
+  TextLabel:{bg:'transparent',text:'Label',border:'transparent',textColor:'#b8cfff',w:180,h:36,x:50,y:50,opacity:1,fontSize:14,anchorX:0,anchorY:0,cornerRadius:0},
+  TextButton:{bg:'#00e5ff',text:'Button',border:'#00e5ff',textColor:'#030312',w:140,h:40,x:50,y:50,opacity:1,fontSize:14,anchorX:0.5,anchorY:0.5,cornerRadius:8},
+  TextBox:{bg:'#0a0b22',text:'',border:'#3a4a7a',textColor:'#fff',w:200,h:40,x:50,y:50,opacity:1,fontSize:13,anchorX:0,anchorY:0,cornerRadius:4},
+  ImageLabel:{bg:'#0a0b22',text:'Image',border:'#3a4a7a',textColor:'#3a4a7a',w:100,h:100,x:50,y:50,opacity:1,fontSize:12,anchorX:0,anchorY:0,cornerRadius:0},
+  ScrollFrame:{bg:'#06071a',text:'',border:'#3a4a7a',textColor:'#fff',w:220,h:150,x:50,y:50,opacity:1,fontSize:14,anchorX:0,anchorY:0,cornerRadius:0},
 };
-
 function addEl(type) {
-  const def = GUI_DEFAULTS[type] || GUI_DEFAULTS.Frame;
-  elCounter++;
-  const el = { id: 'el'+elCounter, type, name: type+elCounter, ...JSON.parse(JSON.stringify(def)) };
-  guiElements.push(el);
-  renderGuiEl(el);
-  selectEl(el.id);
-  document.getElementById('guiEmpty').style.display = 'none';
+  const def=GUI_DEF[type]||GUI_DEF.Frame;
+  elC++;
+  const el={id:'el'+elC,type,name:type+elC,...JSON.parse(JSON.stringify(def))};
+  guiEls.push(el); renderGuiEl(el); selGuiEl(el.id);
+  document.getElementById('guiEmpty').style.display='none';
 }
-
 function renderGuiEl(el) {
-  const canvas = document.getElementById('guiCanvasInner');
-  const existing = document.getElementById('gui_'+el.id);
-  if (existing) existing.remove();
-  const d = document.createElement('div');
-  d.className = 'gui-el';
-  d.id = 'gui_'+el.id;
-  d.style.cssText = `left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px;background:${el.bg};border:1px solid ${el.border};color:${el.textColor};font-size:${el.fontSize}px;opacity:${el.opacity};border-radius:${el.type==='TextButton'?'6px':'4px'};`;
-  d.textContent = el.text;
-  d.innerHTML += '<div class="gui-resize" id="res_'+el.id+'"></div>';
-  d.addEventListener('mousedown', (e) => { if (e.target.id==='res_'+el.id) return; selectEl(el.id); startDrag(e,el); });
-  const resizer = d.querySelector('#res_'+el.id);
-  if (resizer) resizer.addEventListener('mousedown', (e) => { e.stopPropagation(); selectEl(el.id); startResize(e,el); });
+  const canvas=document.getElementById('guiCanvasInner');
+  const existing=document.getElementById('gui_'+el.id);
+  if(existing) existing.remove();
+  const d=document.createElement('div');
+  d.className='gui-el'; d.id='gui_'+el.id;
+  d.style.cssText=`left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px;background:${el.bg};border:1px solid ${el.border};color:${el.textColor};font-size:${el.fontSize}px;opacity:${el.opacity};border-radius:${el.cornerRadius||0}px;`;
+  d.textContent=el.text;
+  d.innerHTML+=`<div class="gui-resize" id="res_${el.id}"></div>`;
+  d.addEventListener('mousedown',(e)=>{if(e.target.id==='res_'+el.id)return;selGuiEl(el.id);startDrag(e,el);});
+  const res=d.querySelector('#res_'+el.id);
+  if(res) res.addEventListener('mousedown',(e)=>{e.stopPropagation();selGuiEl(el.id);startResize(e,el);});
   canvas.appendChild(d);
 }
-
-function selectEl(id) {
+function selGuiEl(id) {
   document.querySelectorAll('.gui-el').forEach(e=>e.classList.remove('selected'));
-  const el = guiElements.find(e=>e.id===id);
-  if (!el) return; selectedEl = el;
+  const el=guiEls.find(e=>e.id===id); if(!el) return; selEl=el;
   document.getElementById('gui_'+id).classList.add('selected');
-  renderProps(el);
+  renderGuiProps(el);
 }
-
-function startDrag(e, el) {
+function startDrag(e,el) {
   e.preventDefault();
-  const d = document.getElementById('gui_'+el.id);
-  dragOffX = e.clientX - d.getBoundingClientRect().left;
-  dragOffY = e.clientY - d.getBoundingClientRect().top;
-  const canvas = document.getElementById('guiCanvasInner').getBoundingClientRect();
-  function onMove(ev) {
-    el.x = Math.max(0, Math.min(ev.clientX - canvas.left - dragOffX, 800-el.w));
-    el.y = Math.max(0, Math.min(ev.clientY - canvas.top  - dragOffY, 600-el.h));
-    d.style.left = el.x+'px'; d.style.top = el.y+'px';
-    renderProps(el);
-  }
-  function onUp() { document.removeEventListener('mousemove',onMove); document.removeEventListener('mouseup',onUp); }
-  document.addEventListener('mousemove',onMove); document.addEventListener('mouseup',onUp);
+  const d=document.getElementById('gui_'+el.id);
+  const ox=e.clientX-d.getBoundingClientRect().left;
+  const oy=e.clientY-d.getBoundingClientRect().top;
+  const cv=document.getElementById('guiCanvasInner').getBoundingClientRect();
+  function onMove(ev){el.x=Math.max(0,Math.min(ev.clientX-cv.left-ox,800-el.w));el.y=Math.max(0,Math.min(ev.clientY-cv.top-oy,600-el.h));d.style.left=el.x+'px';d.style.top=el.y+'px';renderGuiProps(el);}
+  function onUp(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);}
+  document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
 }
-
-function startResize(e, el) {
+function startResize(e,el) {
   e.preventDefault();
-  const startX=e.clientX, startY=e.clientY, startW=el.w, startH=el.h;
-  const d = document.getElementById('gui_'+el.id);
-  function onMove(ev) {
-    el.w = Math.max(40, startW+(ev.clientX-startX));
-    el.h = Math.max(20, startH+(ev.clientY-startY));
-    d.style.width=el.w+'px'; d.style.height=el.h+'px';
-    renderProps(el);
-  }
-  function onUp() { document.removeEventListener('mousemove',onMove); document.removeEventListener('mouseup',onUp); }
-  document.addEventListener('mousemove',onMove); document.addEventListener('mouseup',onUp);
+  const sx=e.clientX,sy=e.clientY,sw=el.w,sh=el.h;
+  const d=document.getElementById('gui_'+el.id);
+  function onMove(ev){el.w=Math.max(40,sw+(ev.clientX-sx));el.h=Math.max(20,sh+(ev.clientY-sy));d.style.width=el.w+'px';d.style.height=el.h+'px';renderGuiProps(el);}
+  function onUp(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);}
+  document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
 }
-
-function renderProps(el) {
-  const p = document.getElementById('guiProps');
-  p.innerHTML = `
-    <div style="font-family:'Orbitron',sans-serif;font-size:10px;color:var(--cyan);margin-bottom:10px;">${el.type}</div>
-    ${propRow('Name','text','name',el)}
-    ${propRow('Text','text','text',el)}
-    ${propRow('X','number','x',el)}
-    ${propRow('Y','number','y',el)}
-    ${propRow('Width','number','w',el)}
-    ${propRow('Height','number','h',el)}
-    ${propRow('Font Size','number','fontSize',el)}
-    ${propRow('Opacity','number','opacity',el,'step="0.05" min="0" max="1"')}
-    ${propRow('Background','color','bg',el)}
-    ${propRow('Text Color','color','textColor',el)}
-    ${propRow('Border','color','border',el)}
-    <div class="gui-prop-row" style="margin-top:10px;">
-      <button class="gui-btn" style="width:100%;color:var(--pink);" onclick="deleteEl('${el.id}')">🗑 Delete</button>
-    </div>`;
+function renderGuiProps(el) {
+  const p=document.getElementById('guiProps');
+  const row=(label,type,key,extra='')=>`<div class="gui-prop-row"><div class="gui-prop-label">${label}</div><input type="${type}" class="gui-prop-input" value="${esc(String(el[key]))}" ${extra} oninput="updProp('${key}',this.value,'${type}')" onchange="updProp('${key}',this.value,'${type}')"></div>`;
+  p.innerHTML=`
+    <div style="font-family:'Orbitron',sans-serif;font-size:10px;color:var(--cyan);margin-bottom:8px;">${el.type}</div>
+    ${row('Name','text','name')}
+    ${row('Text','text','text')}
+    ${row('X','number','x')}
+    ${row('Y','number','y')}
+    ${row('Width','number','w')}
+    ${row('Height','number','h')}
+    ${row('Anchor X','number','anchorX','step="0.1" min="0" max="1"')}
+    ${row('Anchor Y','number','anchorY','step="0.1" min="0" max="1"')}
+    ${row('Corner Radius','number','cornerRadius','min="0"')}
+    ${row('Font Size','number','fontSize')}
+    ${row('Opacity','number','opacity','step="0.05" min="0" max="1"')}
+    ${row('Background','color','bg')}
+    ${row('Text Color','color','textColor')}
+    ${row('Border','color','border')}
+    <div class="gui-prop-row" style="margin-top:8px;"><button class="gui-btn" style="width:100%;color:var(--pink);" onclick="delGuiEl('${el.id}')">🗑 Delete</button></div>`;
 }
-
-function propRow(label, type, key, el, extra='') {
-  return `<div class="gui-prop-row">
-    <div class="gui-prop-label">${label}</div>
-    <input type="${type}" class="gui-prop-input" value="${esc(String(el[key]))}" ${extra}
-      oninput="updateProp('${key}',this.value,'${type}')"
-      onchange="updateProp('${key}',this.value,'${type}')">
-  </div>`;
+function updProp(key,val,type) {
+  if(!selEl) return;
+  selEl[key]=(type==='number')?parseFloat(val)||0:val;
+  renderGuiEl(selEl);document.getElementById('gui_'+selEl.id).classList.add('selected');
 }
-
-function updateProp(key, val, type) {
-  if (!selectedEl) return;
-  selectedEl[key] = (type==='number') ? parseFloat(val)||0 : val;
-  renderGuiEl(selectedEl);
-  document.getElementById('gui_'+selectedEl.id).classList.add('selected');
+function delGuiEl(id) {
+  guiEls=guiEls.filter(e=>e.id!==id);
+  const d=document.getElementById('gui_'+id); if(d) d.remove();
+  selEl=null;
+  document.getElementById('guiProps').innerHTML='<div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Select an element</div>';
+  if(!guiEls.length) document.getElementById('guiEmpty').style.display='';
 }
-
-function deleteEl(id) {
-  guiElements = guiElements.filter(e=>e.id!==id);
-  const d = document.getElementById('gui_'+id);
-  if (d) d.remove();
-  selectedEl = null;
-  document.getElementById('guiProps').innerHTML = '<div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Select an element to edit</div>';
-  if (!guiElements.length) document.getElementById('guiEmpty').style.display='';
-}
-
-function clearCanvas() {
-  guiElements = []; selectedEl = null;
-  document.getElementById('guiCanvasInner').querySelectorAll('.gui-el').forEach(e=>e.remove());
-  document.getElementById('guiEmpty').style.display = '';
-  document.getElementById('guiProps').innerHTML = '<div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Select an element to edit</div>';
-}
+function clearCanvas(){guiEls=[];selEl=null;document.getElementById('guiCanvasInner').querySelectorAll('.gui-el').forEach(e=>e.remove());document.getElementById('guiEmpty').style.display='';document.getElementById('guiProps').innerHTML='<div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Select an element</div>';}
 
 function generateGuiCode() {
-  if (!guiElements.length) { toast('Add elements first!'); return; }
-  let code = `-- NEXUS AI Generated GUI\n-- Generated at ${new Date().toLocaleString()}\n\nlocal gui = Instance.new("ScreenGui")\ngui.Name = "NexusGUI"\ngui.ResetOnSpawn = false\ngui.Parent = game.Players.LocalPlayer.PlayerGui\n\n`;
-  guiElements.forEach(el => {
-    const cls = el.type === 'ScrollFrame' ? 'ScrollingFrame' : el.type;
-    code += `local ${el.name} = Instance.new("${cls}")\n`;
-    code += `${el.name}.Name = "${el.name}"\n`;
-    code += `${el.name}.Size = UDim2.new(0,${Math.round(el.w)},0,${Math.round(el.h)})\n`;
-    code += `${el.name}.Position = UDim2.new(0,${Math.round(el.x)},0,${Math.round(el.y)})\n`;
-    if (el.bg !== 'transparent') {
-      const c = hexToRgb(el.bg);
-      if (c) code += `${el.name}.BackgroundColor3 = Color3.fromRGB(${c.r},${c.g},${c.b})\n`;
-    } else code += `${el.name}.BackgroundTransparency = 1\n`;
-    if (el.text && (el.type==='TextLabel'||el.type==='TextButton'||el.type==='TextBox')) {
-      code += `${el.name}.Text = "${el.text.replace(/"/g,'\\"')}"\n`;
-      const tc = hexToRgb(el.textColor);
-      if (tc) code += `${el.name}.TextColor3 = Color3.fromRGB(${tc.r},${tc.g},${tc.b})\n`;
-      code += `${el.name}.TextSize = ${Math.round(el.fontSize)}\n`;
-      code += `${el.name}.Font = Enum.Font.GothamBold\n`;
+  if(!guiEls.length){toast('Add elements first!');return;}
+  let code=`-- NEXUS AI Generated GUI Script\n-- Place inside a LocalScript in StarterPlayerScripts\n\nlocal Players = game:GetService("Players")\nlocal player = Players.LocalPlayer\nlocal PlayerGui = player:WaitForChild("PlayerGui")\n\nlocal gui = Instance.new("ScreenGui")\ngui.Name = "NexusGUI"\ngui.ResetOnSpawn = false\ngui.Parent = PlayerGui\n\n`;
+  guiEls.forEach(el=>{
+    const cls=el.type==='ScrollFrame'?'ScrollingFrame':el.type;
+    code+=`-- ${el.name}\nlocal ${el.name} = Instance.new("${cls}")\n`;
+    code+=`${el.name}.Name = "${el.name}"\n`;
+    code+=`${el.name}.Size = UDim2.new(0, ${Math.round(el.w)}, 0, ${Math.round(el.h)})\n`;
+    code+=`${el.name}.Position = UDim2.new(0, ${Math.round(el.x)}, 0, ${Math.round(el.y)})\n`;
+    code+=`${el.name}.AnchorPoint = Vector2.new(${el.anchorX||0}, ${el.anchorY||0})\n`;
+    if(el.bg!=='transparent'){const c=hexRgb(el.bg);if(c)code+=`${el.name}.BackgroundColor3 = Color3.fromRGB(${c.r},${c.g},${c.b})\n`;}
+    else code+=`${el.name}.BackgroundTransparency = 1\n`;
+    if(el.opacity!==1) code+=`${el.name}.BackgroundTransparency = ${1-el.opacity}\n`;
+    if(el.cornerRadius>0) {
+      code+=`local ${el.name}Corner = Instance.new("UICorner")\n${el.name}Corner.CornerRadius = UDim.new(0, ${Math.round(el.cornerRadius)})\n${el.name}Corner.Parent = ${el.name}\n`;
     }
-    if (el.type==='TextButton') code += `${el.name}.BorderSizePixel = 0\n`;
-    code += `${el.name}.Parent = gui\n`;
-    if (el.type==='TextButton') code += `${el.name}.MouseButton1Click:Connect(function()\n\t-- Add button action here\nend)\n`;
-    code += '\n';
+    if(el.text&&(el.type==='TextLabel'||el.type==='TextButton'||el.type==='TextBox')){
+      code+=`${el.name}.Text = "${el.text.replace(/"/g,'\\"')}"\n`;
+      const tc=hexRgb(el.textColor);
+      if(tc)code+=`${el.name}.TextColor3 = Color3.fromRGB(${tc.r},${tc.g},${tc.b})\n`;
+      code+=`${el.name}.TextSize = ${Math.round(el.fontSize)}\n${el.name}.Font = Enum.Font.GothamBold\n`;
+    }
+    if(el.type==='TextButton')code+=`${el.name}.BorderSizePixel = 0\n`;
+    code+=`${el.name}.Parent = gui\n`;
+    if(el.type==='TextButton')code+=`${el.name}.MouseButton1Click:Connect(function()\n\t-- TODO: Add action here\nend)\n`;
+    code+='\n';
   });
-  document.getElementById('guiCodeOutput').textContent = code;
+  document.getElementById('guiCodeOutput').textContent=code;
   document.getElementById('guiCodeModal').classList.add('show');
 }
 
-function copyGuiCode() {
-  const code = document.getElementById('guiCodeOutput').textContent;
-  navigator.clipboard.writeText(code).then(()=>toast('✓ Script copied!'));
+function copyGuiCode(){navigator.clipboard.writeText(document.getElementById('guiCodeOutput').textContent).then(()=>toast('✓ Script copied!'));}
+
+function openGuiAIChat() { document.getElementById('guiAIChatModal').classList.add('show'); }
+
+async function generateGuiFromAI() {
+  const prompt = document.getElementById('guiAIPrompt').value.trim();
+  if (!prompt) { toast('Describe the GUI first!'); return; }
+  closeModal('guiAIChatModal');
+  switchTab('chat', document.getElementById('tabChat'));
+  document.getElementById('inp').value = `Build this Roblox GUI for me and give me the complete Lua script:\n${prompt}`;
+  await send();
 }
 
-function hexToRgb(hex) {
-  if (!hex||hex==='transparent') return null;
-  const r=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return r ? {r:parseInt(r[1],16),g:parseInt(r[2],16),b:parseInt(r[3],16)} : null;
+function hexRgb(hex){if(!hex||hex==='transparent')return null;const r=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);return r?{r:parseInt(r[1],16),g:parseInt(r[2],16),b:parseInt(r[3],16)}:null;}
+
+// ══════════════════════════════════════════
+//  SETTINGS & SHOP
+// ══════════════════════════════════════════
+function openSettings() {
+  document.getElementById('settingsUsername').textContent = S.user?.username||'-';
+  document.getElementById('settingsCredits').textContent = isOwner()?'∞ Unlimited':(parseFloat(S.credits).toFixed(2)+' CR');
+  document.getElementById('settingsPlan').textContent = isOwner()?'★ Admin':(S.plan==='pro'?'⭐ Pro':'Free');
+  const today=new Date().toDateString();
+  document.getElementById('lastClaimInfo').textContent = S.lastClaim===today?'Claimed today ✓':'Not claimed today';
+  document.getElementById('settingsModal').classList.add('show');
 }
 
-// ── Log ──
-let logOpen=false, logN=0;
-function addLog(type, msg) {
-  logN++;
-  const el = document.getElementById('logEnts');
-  const e  = document.createElement('div');
-  e.className = 'le '+(type==='warn'?'info':type);
-  const t = new Date().toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  const pfx = {ok:'✓',err:'✗',info:'→',warn:'⚠'}[type]||'·';
-  e.innerHTML = `<span class="le-t">${t}</span><span>${pfx} ${esc(msg)}</span>`;
-  el.insertBefore(e,el.firstChild);
-  while(el.children.length>40) el.removeChild(el.lastChild);
-  document.getElementById('logCnt').textContent = el.children.length;
+async function sendReport() {
+  const txt = document.getElementById('reportTa').value.trim();
+  if (!txt) { toast('Write a report first!'); return; }
+  // Use mailto as fallback (real impl needs backend)
+  const subject = encodeURIComponent('[NEXUS AI Report] from '+S.user?.username);
+  const body = encodeURIComponent(txt+'\n\nFrom: '+S.user?.username+' ('+S.user?.id+')');
+  window.open(`mailto:arifiinytid@gmail.com?subject=${subject}&body=${body}`);
+  document.getElementById('reportStatus').textContent = '✓ Report sent!';
+  document.getElementById('reportTa').value='';
+  setTimeout(()=>document.getElementById('reportStatus').textContent='',3000);
 }
+
+function openShop(){document.getElementById('shopModal').classList.add('show');}
+function buyCreditPack(cr,idr,usd){toast(`Payment coming soon! (${idr} / ${usd} for ${cr} CR)`);}
+
+// ══════════════════════════════════════════
+//  LOG
+// ══════════════════════════════════════════
+let logOpen=false,logN=0;
+function addLog(type,msg){logN++;const el=document.getElementById('logEnts');const e=document.createElement('div');e.className='le '+(type==='warn'?'info':type);const t=new Date().toLocaleTimeString();const pfx={ok:'✓',err:'✗',info:'→',warn:'⚠'}[type]||'·';e.innerHTML=`<span class="le-t">${t}</span><span>${pfx} ${esc(msg)}</span>`;el.insertBefore(e,el.firstChild);while(el.children.length>40)el.removeChild(el.lastChild);document.getElementById('logCnt').textContent=el.children.length;}
 function toggleLog(){logOpen=!logOpen;document.getElementById('logEnts').classList.toggle('hidden',!logOpen);}
+function ppTab(t,el){document.querySelectorAll('.pt').forEach(x=>x.classList.remove('act'));el.classList.add('act');}
 
-// ── Misc ──
-function clearChat(){if(!confirm('Clear all messages?'))return;S.msgs=[];const c=S.convs.find(x=>x.id===S.curConv);if(c){c.msgs=[];c.title='Untitled';}saveS();renderMsgs();}
-function cpText(txt){navigator.clipboard.writeText(txt).then(()=>toast('✓ Copied!'));}
-function useSugg(el){const s=el.querySelector('strong'),l=s?s.textContent.replace(/^[^a-zA-Z]+/,''):'';;document.getElementById('inp').value=l;document.getElementById('inp').focus();}
+// ══════════════════════════════════════════
+//  MISC
+// ══════════════════════════════════════════
+function clearChat(){if(!confirm('Clear all messages in this chat?'))return;S.msgs=[];const c=S.convs.find(x=>x.id===S.curConv);if(c){c.msgs=[];c.title='Untitled';}saveS();renderMsgs();}
+function useSugg(txt){document.getElementById('inp').value=txt;document.getElementById('inp').focus();}
 function showInstall(){document.getElementById('installModal').classList.add('show');}
 function closeModal(id){document.getElementById(id).classList.remove('show');}
-function ppTab(t,el){document.querySelectorAll('.pt').forEach(x=>x.classList.remove('act'));el.classList.add('act');}
-function toast(msg){document.querySelectorAll('.toast-el').forEach(x=>x.remove());const t=document.createElement('div');t.className='toast-el';t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--bg3);border:1px solid var(--b);border-radius:7px;padding:10px 14px;font-size:11px;color:var(--text);z-index:9999;animation:toastIn .25s ease;box-shadow:var(--gc);max-width:300px;';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
+function toast(msg){document.querySelectorAll('.toast-el').forEach(x=>x.remove());const t=document.createElement('div');t.className='toast-el';t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--bg3);border:1px solid var(--b);border-radius:7px;padding:10px 14px;font-size:11px;color:var(--text);z-index:9999;animation:toastIn .25s ease;box-shadow:var(--gc);max-width:300px;word-break:break-word;';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function escA(s){if(!s)return'';return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'");}
+function escA(s){if(!s)return'';return String(s).replace(/\\/g,'\\\\').replace(/'/g,"\\'")}
 function ago(ts){if(!ts)return'';const d=Date.now()-ts;if(d<60000)return'just now';if(d<3600000)return Math.floor(d/60000)+'m';if(d<86400000)return Math.floor(d/3600000)+'h';return Math.floor(d/86400000)+'d';}
 
 document.getElementById('inp').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px';});
-document.getElementById('inp').addEventListener('keydown',e=>{
-  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
-});
-marked.setOptions({breaks:true,gfm:true});
+document.getElementById('inp').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
 
-// ── Startup ──
+// ══════════════════════════════════════════
+//  STARTUP
+// ══════════════════════════════════════════
 loadS();
 if (S.user) {
-  document.getElementById('auth').style.display = 'none';
+  document.getElementById('auth').style.display='none';
   document.getElementById('app').classList.remove('hidden');
   initApp();
 }
