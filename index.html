@@ -804,7 +804,7 @@ async function findUser() {
     document.getElementById('authLoadTxt').textContent = 'Loading avatar...';
     let avUrl = `https://www.roblox.com/headshot-thumbnail/image?userId=${u.id}&width=420&height=420&format=png`;
     try {
-      const td = await fetchRoblox(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${u.id}&size=420x420&format=Png`);
+      const td = await fetchRoblox(`https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds=${u.id}&size=420x420&format=png`);
       if (td.data?.[0]?.imageUrl) avUrl = td.data[0].imageUrl;
     } catch(e) {}
     pendUser = { id:u.id, username:u.name, displayName:u.displayName||u.name, avatar:avUrl };
