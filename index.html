@@ -997,7 +997,7 @@ async function setConvTitle(id, msgs) {
   // Ask AI to generate a title
   try {
     const lastMsg = msgs[msgs.length-1]?.content||'';
-    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${K.gemini}`,{
+    const r = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${K.gemini}`,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({contents:[{role:'user',parts:[{text:`In 4-6 words, give a short descriptive title for this conversation. Reply ONLY with the title, no punctuation at end:\n"${lastMsg.substring(0,200)}"`}]}],generationConfig:{maxOutputTokens:30}})
     });
