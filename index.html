@@ -1751,7 +1751,7 @@ function showInstall(){document.getElementById('installModal').classList.add('sh
 function closeModal(id){document.getElementById(id).classList.remove('show');}
 function toast(msg){document.querySelectorAll('.toast-el').forEach(x=>x.remove());const t=document.createElement('div');t.className='toast-el';t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--bg3);border:1px solid var(--b);border-radius:7px;padding:10px 14px;font-size:11px;color:var(--text);z-index:9999;animation:toastIn .25s ease;box-shadow:var(--gc);max-width:300px;word-break:break-word;';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3500);}
 function esc(s){if(!s)return'';return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function escA(s){if(!s)return'';var r=String(s);r=r.split('\').join('\\');r=r.split("'").join("\'");return r;}
+function escA(s){if(!s)return'';return String(s).replace(/\\/g, '\\\\').replace(/'/g,"\\'");}
 function ago(ts){if(!ts)return'';const d=Date.now()-ts;if(d<60000)return'just now';if(d<3600000)return Math.floor(d/60000)+'m';if(d<86400000)return Math.floor(d/3600000)+'h';return Math.floor(d/86400000)+'d';}
 
 document.getElementById('inp').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px';});
