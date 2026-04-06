@@ -1,1 +1,285 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NEXUS AI — Login</title>
+<link rel="icon" href="nexusai.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#030312;--bg2:#06071a;--bg3:#0a0b22;--cyan:#00e5ff;--cyan2:rgba(0,229,255,.35);--purple:#8800ff;--pink:#ff2d6b;--green:#00ffaa;--yellow:#ffd600;--text:#b8cfff;--dim:#3a4a7a;--b:rgba(0,229,255,.12);--gc:0 0 30px rgba(0,229,255,.2);--gp:0 0 30px rgba(136,0,255,.2);--r:8px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:13px;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0,229,255,.015)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.015)1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
+.page{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#0e003a 0%,var(--bg) 65%);}
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.box{position:relative;width:440px;background:var(--bg2);border:1px solid var(--b);border-radius:16px;padding:38px 32px 30px;text-align:center;box-shadow:var(--gc),var(--gp);animation:boxIn .5s cubic-bezier(.16,1,.3,1);z-index:1;}
+.box::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);border-radius:2px;}
+@keyframes boxIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
+.logo{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:2px;}
+.tag{font-size:9px;color:var(--dim);letter-spacing:3px;text-transform:uppercase;margin-bottom:6px;}
+.version{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:rgba(0,229,255,.06);border:1px solid var(--b);border-radius:20px;font-size:9px;color:var(--cyan);margin-bottom:24px;}
+.vdot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pd 1.8s infinite;}
+@keyframes pd{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* LANG SELECTOR */
+.lang-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:20px;}
+.lang-select{background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;cursor:pointer;}
+.lang-select:focus{border-color:var(--cyan2);}
+.lang-label{font-size:10px;color:var(--dim);}
+
+.step-label{font-size:11px;color:var(--dim);margin-bottom:14px;line-height:1.6;}
+.inp{width:100%;background:rgba(0,229,255,.04);border:1px solid var(--b);border-radius:var(--r);padding:12px 14px;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:.2s;margin-bottom:10px;}
+.inp:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.07);}
+.inp::placeholder{color:var(--dim);}
+.inp-pw{width:100%;background:rgba(255,45,107,.04);border:1px solid rgba(255,45,107,.18);border-radius:var(--r);padding:12px 14px;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:.2s;margin-bottom:10px;}
+.inp-pw:focus{border-color:var(--pink);}
+.inp-pw::placeholder{color:var(--dim);}
+.btn{width:100%;background:linear-gradient(135deg,var(--cyan),var(--purple));color:white;border:none;border-radius:var(--r);padding:12px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:1px;margin-bottom:8px;}
+.btn:hover{opacity:.85;transform:translateY(-1px);box-shadow:var(--gc);}
+.btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+.prev{display:none;flex-direction:column;align-items:center;gap:8px;margin-top:8px;padding:16px;background:rgba(0,229,255,.03);border:1px solid var(--b);border-radius:var(--r);}
+.prev.show{display:flex;}
+.av{width:76px;height:76px;border-radius:50%;border:2px solid var(--cyan);box-shadow:0 0 20px rgba(0,229,255,.3);object-fit:cover;background:var(--bg3);}
+.un{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:white;}
+.uid{font-size:9px;color:var(--dim);}
+.err{display:none;color:var(--pink);font-size:10px;padding:8px 12px;background:rgba(255,45,107,.07);border-radius:5px;border:1px solid rgba(255,45,107,.18);margin-top:5px;text-align:left;}
+.err.show{display:block;}
+.ld{display:none;align-items:center;justify-content:center;gap:8px;color:var(--dim);font-size:10px;margin-top:8px;}
+.ld.show{display:flex;}
+.spin{width:14px;height:14px;border:2px solid var(--b);border-top-color:var(--cyan);border-radius:50%;animation:spin .7s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.footer{margin-top:20px;font-size:9px;color:var(--dim);text-align:center;line-height:1.8;}
+.footer span{color:var(--cyan);}
+
+/* Particle animation */
+.p{position:absolute;border-radius:50%;pointer-events:none;animation:float linear infinite;}
+@keyframes float{0%{transform:translateY(100vh) translateX(0) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.4}100%{transform:translateY(-10vh) translateX(30px) scale(1.2);opacity:0}}
+
+@media(max-width:480px){.box{width:95vw;padding:28px 18px;}.logo{font-size:22px;}}
+</style>
+</head>
+<body>
+<div class="particles" id="particles"></div>
+<div class="page">
+  <div class="box">
+    <div class="logo">NEXUS AI</div>
+    <div class="tag">Roblox Dev Intelligence</div>
+    <div class="version"><div class="vdot"></div> v3.4 · Online</div>
+
+    <!-- Language selector -->
+    <div class="lang-row">
+      <span class="lang-label">🌐</span>
+      <select class="lang-select" id="langSel" onchange="setLang(this.value)">
+        <option value="en">🇺🇸 English</option>
+        <option value="id">🇮🇩 Bahasa Indonesia</option>
+        <option value="ja">🇯🇵 日本語</option>
+        <option value="ko">🇰🇷 한국어</option>
+        <option value="zh">🇨🇳 中文</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="pt">🇧🇷 Português</option>
+        <option value="ru">🇷🇺 Русский</option>
+        <option value="ar">🇸🇦 العربية</option>
+        <option value="th">🇹🇭 ภาษาไทย</option>
+        <option value="vi">🇻🇳 Tiếng Việt</option>
+        <option value="tr">🇹🇷 Türkçe</option>
+      </select>
+    </div>
+
+    <div class="step-label" id="stepLabel">Login with your Roblox username</div>
+    <input type="text" id="unInput" class="inp" placeholder="Your Roblox username..." autocomplete="off" spellcheck="false">
+    <button class="btn" id="findBtn" onclick="findUser()">FIND ROBLOX ACCOUNT</button>
+    <div class="ld" id="ld"><div class="spin"></div><span id="ldTxt">Searching...</span></div>
+    <div class="err" id="err"></div>
+
+    <div class="prev" id="prev">
+      <img class="av" id="avImg" src="" alt="">
+      <div class="un" id="unName"></div>
+      <div class="uid" id="unId"></div>
+      <div style="width:100%;">
+        <input type="password" id="pwInput" class="inp-pw" placeholder="Account password (to verify)..." autocomplete="new-password">
+        <div class="err" id="pwErr"></div>
+      </div>
+      <button class="btn" onclick="doLogin()" id="loginBtn">✓ LOGIN</button>
+    </div>
+
+    <div class="footer">
+      Made by <span>NEXUS STUDIO</span> · YouTube: <span>FIINYT_ID</span><br>
+      <span style="font-size:8px;color:var(--dim);">nexusai-com.vercel.app</span>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── Particles ──
+(function(){
+  var p=document.getElementById('particles');
+  for(var i=0;i<18;i++){
+    var d=document.createElement('div');d.className='p';
+    var sz=Math.random()*4+1;
+    d.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;background:rgba('+(Math.random()>.5?'0,229,255':'136,0,255')+','+(Math.random()*.4+.1)+');animation-duration:'+(Math.random()*12+8)+'s;animation-delay:'+(Math.random()*10)+'s;';
+    p.appendChild(d);
+  }
+})();
+
+// ── Constants ──
+var OWNER_USERS=['FIINYTID25','fiinytid25'];
+var OWNER_PW='arif1n12';
+var pendUser=null;
+
+// ── Language ──
+var LANG_TEXTS={
+  en:{step:'Login with your Roblox username',find:'FIND ROBLOX ACCOUNT',searching:'Searching...',loading:'Loading avatar...',login:'✓ LOGIN',pw:'Account password (to verify)...'},
+  id:{step:'Login dengan username Roblox kamu',find:'CARI AKUN ROBLOX',searching:'Mencari...',loading:'Memuat avatar...',login:'✓ MASUK',pw:'Password akun Roblox kamu...'},
+  ja:{step:'Robloxのユーザー名でログイン',find:'Robloxアカウントを検索',searching:'検索中...',loading:'アバター読み込み中...',login:'✓ ログイン',pw:'Robloxアカウントのパスワード...'},
+  ko:{step:'Roblox 사용자 이름으로 로그인',find:'Roblox 계정 찾기',searching:'검색 중...',loading:'아바타 로딩 중...',login:'✓ 로그인',pw:'Roblox 계정 비밀번호...'},
+  zh:{step:'使用 Roblox 用户名登录',find:'查找 Roblox 账号',searching:'搜索中...',loading:'加载头像...',login:'✓ 登录',pw:'Roblox 账号密码...'},
+  es:{step:'Inicia sesión con tu usuario de Roblox',find:'BUSCAR CUENTA ROBLOX',searching:'Buscando...',loading:'Cargando avatar...',login:'✓ INGRESAR',pw:'Contraseña de tu cuenta Roblox...'},
+  fr:{step:'Connexion avec votre nom Roblox',find:'TROUVER COMPTE ROBLOX',searching:'Recherche...',loading:'Chargement avatar...',login:'✓ CONNEXION',pw:'Mot de passe Roblox...'},
+  de:{step:'Login mit deinem Roblox-Benutzernamen',find:'ROBLOX-KONTO SUCHEN',searching:'Suche...',loading:'Avatar laden...',login:'✓ ANMELDEN',pw:'Roblox Kontopasswort...'},
+  pt:{step:'Login com seu usuário Roblox',find:'ENCONTRAR CONTA ROBLOX',searching:'Buscando...',loading:'Carregando avatar...',login:'✓ ENTRAR',pw:'Senha da conta Roblox...'},
+  ru:{step:'Войдите с именем Roblox',find:'НАЙТИ АККАУНТ ROBLOX',searching:'Поиск...',loading:'Загрузка аватара...',login:'✓ ВОЙТИ',pw:'Пароль от Roblox...'},
+  ar:{step:'تسجيل الدخول باسم مستخدم Roblox',find:'البحث عن حساب ROBLOX',searching:'جارٍ البحث...',loading:'تحميل الصورة الرمزية...',login:'✓ دخول',pw:'كلمة مرور Roblox...'},
+  th:{step:'เข้าสู่ระบบด้วยชื่อผู้ใช้ Roblox',find:'ค้นหาบัญชี ROBLOX',searching:'กำลังค้นหา...',loading:'กำลังโหลดอวตาร...',login:'✓ เข้าสู่ระบบ',pw:'รหัสผ่านบัญชี Roblox...'},
+  vi:{step:'Đăng nhập bằng tên người dùng Roblox',find:'TÌM TÀI KHOẢN ROBLOX',searching:'Đang tìm...',loading:'Đang tải avatar...',login:'✓ ĐĂNG NHẬP',pw:'Mật khẩu tài khoản Roblox...'},
+  tr:{step:'Roblox kullanıcı adıyla giriş yap',find:'ROBLOX HESABINI BUL',searching:'Aranıyor...',loading:'Avatar yükleniyor...',login:'✓ GİRİŞ YAP',pw:'Roblox hesap şifresi...'},
+};
+var curLang='en';
+function setLang(l){
+  curLang=l;
+  localStorage.setItem('nexus_lang',l);
+  var t=LANG_TEXTS[l]||LANG_TEXTS.en;
+  document.getElementById('stepLabel').textContent=t.step;
+  document.getElementById('findBtn').textContent=t.find;
+  document.getElementById('pwInput').placeholder=t.pw;
+  if(pendUser)document.getElementById('loginBtn').textContent=t.login;
+}
+// Init language from saved
+(function(){
+  var saved=localStorage.getItem('nexus_lang')||'en';
+  document.getElementById('langSel').value=saved;
+  setLang(saved);
+})();
+
+// ── Roblox API with proxies ──
+async function fetchRoblox(url){
+  var proxies=['https://corsproxy.io/?','https://api.allorigins.win/raw?url='];
+  for(var i=0;i<proxies.length;i++){
+    try{
+      var r=await fetch(proxies[i]+encodeURIComponent(url),{signal:AbortSignal.timeout(7000)});
+      if(!r.ok)continue;
+      return JSON.parse(await r.text());
+    }catch(e){}
+  }
+  try{var r=await fetch(url);if(r.ok)return await r.json();}catch(e){}
+  throw new Error('Cannot reach Roblox API');
+}
+
+async function findUser(){
+  var un=document.getElementById('unInput').value.trim();
+  if(!un){showErr('err','⚠ Enter your Roblox username!');return;}
+  hideEl('err');hideEl('prev');
+  show('ld');
+  var t=LANG_TEXTS[curLang]||LANG_TEXTS.en;
+  document.getElementById('ldTxt').textContent=t.searching;
+  document.getElementById('findBtn').disabled=true;
+  try{
+    var d=await fetchRoblox('https://users.roblox.com/v1/users/search?keyword='+encodeURIComponent(un)+'&limit=10');
+    if(!d.data||!d.data.length)throw new Error('Account "'+un+'" not found on Roblox');
+    var u=d.data.find(function(x){return x.name.toLowerCase()===un.toLowerCase();})||d.data[0];
+    document.getElementById('ldTxt').textContent=t.loading;
+    // Get avatar
+    var avUrl='https://www.roblox.com/headshot-thumbnail/image?userId='+u.id+'&width=420&height=420&format=png';
+    try{
+      var td=await fetchRoblox('https://thumbnails.roblox.com/v1/users/avatar-headshot?userIds='+u.id+'&size=420x420&format=Png');
+      if(td.data&&td.data[0]&&td.data[0].imageUrl)avUrl=td.data[0].imageUrl;
+    }catch(e){}
+    pendUser={id:u.id,username:u.name,displayName:u.displayName||u.name,avatar:avUrl};
+    document.getElementById('avImg').src=avUrl;
+    document.getElementById('unName').textContent=u.name;
+    document.getElementById('unId').textContent='ID: '+u.id;
+    document.getElementById('loginBtn').textContent=(LANG_TEXTS[curLang]||LANG_TEXTS.en).login+' '+u.name;
+    show('prev');
+    document.getElementById('pwInput').focus();
+  }catch(e){showErr('err',e.message);}
+  finally{hide('ld');document.getElementById('findBtn').disabled=false;}
+}
+
+async function doLogin(){
+  if(!pendUser)return;
+  var pw=document.getElementById('pwInput').value;
+  if(!pw){showErr('pwErr','⚠ Enter your password to verify identity.');return;}
+  if(OWNER_USERS.indexOf(pendUser.username)!==-1){
+    if(pw!==OWNER_PW){showErr('pwErr','⚠ Incorrect password.');return;}
+  }else{
+    if(pw.length<1){showErr('pwErr','⚠ Enter your password.');return;}
+  }
+  hideEl('pwErr');
+
+  // Load existing data for this user (try to sync from server)
+  var existing=null;
+  try{
+    var r=await fetch('/api/sync?user='+encodeURIComponent(pendUser.username.toLowerCase()));
+    if(r.ok){var d=await r.json();if(d&&d.credits!==undefined)existing=d;}
+  }catch(e){}
+
+  // Build user session
+  var isOwner=OWNER_USERS.indexOf(pendUser.username)!==-1;
+  var defaultData={
+    credits:isOwner?999999:30,
+    convs:[],plan:'free',lastClaim:null,
+    draftText:{},draftAttach:{},
+    model:{id:'gemini-2.0-flash',provider:'gemini',cost:0,label:'Gemini 2.0 Flash'},
+    language:curLang,
+    roles:isOwner?['owner']:[]
+  };
+
+  var userData=existing||defaultData;
+  // Always update avatar (don't reset)
+  userData.avatar=pendUser.avatar;
+
+  // Save to localStorage
+  var session={
+    user:{id:pendUser.id,username:pendUser.username,displayName:pendUser.displayName,avatar:pendUser.avatar},
+    data:userData,
+    loginTime:Date.now()
+  };
+  localStorage.setItem('nexus_session',JSON.stringify(session));
+  localStorage.setItem('nexus_lang',curLang);
+
+  // Try to save to server (async, don't wait)
+  try{
+    fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({user:pendUser.username.toLowerCase(),data:userData})});
+  }catch(e){}
+
+  // Redirect to main app
+  window.location.href='/index.html';
+}
+
+function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.classList.add('show');}}
+function hideEl(id){var e=document.getElementById(id);if(e)e.classList.remove('show');}
+function show(id){document.getElementById(id).classList.add('show');}
+function hide(id){document.getElementById(id).classList.remove('show');}
+
+document.getElementById('unInput').addEventListener('keydown',function(e){if(e.key==='Enter')findUser();});
+document.getElementById('pwInput').addEventListener('keydown',function(e){if(e.key==='Enter')doLogin();});
+
+// Check if already logged in
+(function(){
+  try{
+    var s=localStorage.getItem('nexus_session');
+    if(s){
+      var p=JSON.parse(s);
+      if(p&&p.user&&p.loginTime&&(Date.now()-p.loginTime)<86400000*7){
+        window.location.href='/index.html';
+      }
+    }
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
