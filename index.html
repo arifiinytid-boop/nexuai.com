@@ -691,24 +691,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 
 <script>
 
-// NexusWebControl.js - Dibuat untuk FIINYTID25
-const API_URL = "/api/control";
-
-// Fungsi mengirim perintah (Map, GUI, Script)
-async function sendNexusCommand(action, details = {}) {
-    console.log(`Sending action: ${action} to Roblox...`);
-    await fetch(API_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            action: action,
-            name: details.name || "NexusObj",
-            color: details.color || [255, 255, 255],
-            code: details.code || ""
-        })
-    });
-}
-
 // Fungsi mengambil Log Console dari Roblox
 async function refreshRobloxLogs() {
     try {
@@ -1501,6 +1483,35 @@ function buildMsgs(){
 // ═══════════════════════════════════════
 //  API CALLERS
 // ═══════════════════════════════════════
+
+// Fungsi ini memanggil Gemini menggunakan model dan sys yang sedang aktif
+async function sendCommand(customModel, customSys) {
+    const promptInput = document.getElementById('ai-prompt');
+    const statusMsg = document.getElementById('status-msg');
+    const promptValue = promptInput.value;
+
+    if (!promptValue) return alert("Ketik perintah dulu, FIINYTID25!");
+
+    try {
+        statusMsg.style.display = 'block';
+        statusMsg.innerText = "Meminta NEXUS AI memikirkan script...";
+
+        // Cek apakah ada parameter custom, jika tidak, gunakan variabel global 'model' dan 'sys' dari website kamu
+        const finalModel = customModel || (typeof model !== 'undefined' ? model : 'gemini-1.5-pro');
+        const baseSys = customSys || (typeof sys !== 'undefined' ? sys : 'Kamu adalah AI Asisten.');
+
+        // Gabungkan sys prompt utama dengan instruksi wajib untuk Roblox
+        const robloxSys = baseSys + "\n\nPENTING: Kamu adalah NEXUS AI Cloud Controller. Buatkan script Lua untuk Roblox Studio sesuai permintaan user. Berikan HANYA kode Lua di dalam format ```lua ... ``` tanpa teks atau penjelasan lain.";
+        
+        // Memanggil Gemini dengan format dinamis
+        const aiResponse = await callGemini(finalModel, [], null, robloxSys + "\nPermintaan User: " + promptValue);
+        
+        // Ekstrak kode Lua dari balasan AI (Pastikan baris kode Regex ini tidak terpotong saat di-copy)
+        let scriptCode = aiResponse;
+        const luaMatch = aiResponse.match(/
+
+Plugin Lua yang sudah kamu buat di Roblox **tidak perlu diubah lagi**. Logikanya sudah benar membaca `data.code` saat aksinya `inject_script`. Semangat mengerjakan Mount Sakura dan sistem AI-nya, ya!
+  
 async function callGemini(model,attachments,signal,sys){
   if(!K.gemini) throw new Error('Gemini API key not configured on server (/api/main)');
   var ms=buildMsgs();
