@@ -1,4 +1,3 @@
-<!--index.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -70,6 +69,9 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .pdot{width:5px;height:5px;border-radius:50%;background:currentColor;}
 .pdot.pulse{animation:pd 1.8s infinite;}
 @keyframes pd{0%,100%{opacity:1}50%{opacity:.25}}
+/* Studio badge */
+.studio-badge{display:flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;border:1px solid rgba(255,214,0,.3);font-size:9px;cursor:pointer;flex-shrink:0;color:var(--yellow);background:rgba(255,214,0,.06);}
+.studio-badge.connected{border-color:rgba(0,255,170,.3);color:var(--green);background:rgba(0,255,170,.06);}
 .chat-tabs{display:flex;gap:4px;padding:5px 14px;border-bottom:1px solid var(--b);background:var(--bg2);flex-shrink:0;align-items:center;}
 .tab-btn{padding:5px 13px;border-radius:6px;border:1px solid transparent;font-size:10px;cursor:pointer;color:var(--dim);transition:.1s;background:none;}
 .tab-btn.act{background:rgba(0,229,255,.08);border-color:var(--b);color:var(--cyan);}
@@ -95,7 +97,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .bubble{padding:10px 12px;border-radius:9px;line-height:1.65;font-size:12.5px;word-break:break-word;overflow-wrap:break-word;}
 .msg.user .bubble{background:linear-gradient(135deg,rgba(0,229,255,.09),rgba(136,0,255,.09));border:1px solid rgba(0,229,255,.16);border-radius:9px 2px 9px 9px;color:white;}
 .msg.ai .bubble{background:var(--bg2);border:1px solid var(--b);border-radius:2px 9px 9px 9px;color:var(--text);}
-.msg.user .bubble pre{white-space:pre-wrap;word-break:break-all;font-size:11px;background:rgba(0,0,0,.3);padding:8px;border-radius:5px;border:1px solid rgba(255,255,255,.1);}
 .code-block-wrap{position:relative;margin:7px 0;}
 .code-block-wrap pre{margin:0;border-radius:6px;overflow:hidden;}
 .code-block-wrap pre code.hljs{font-size:11px;line-height:1.5;padding:12px 14px;border-radius:6px;border:1px solid rgba(0,229,255,.08);}
@@ -105,6 +106,10 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .code-btn:hover{background:rgba(0,229,255,.25);}
 .code-btn.dl{background:rgba(136,0,255,.15);border-color:rgba(136,0,255,.3);color:#cc55ff;}
 .code-btn.ed{background:rgba(255,214,0,.12);border-color:rgba(255,214,0,.3);color:var(--yellow);}
+/* ⭐ SEND TO STUDIO BUTTON */
+.code-btn.studio{background:rgba(0,255,170,.12);border-color:rgba(0,255,170,.35);color:var(--green);}
+.code-btn.studio:hover{background:rgba(0,255,170,.22);}
+.code-btn.studio.sending{opacity:.5;cursor:not-allowed;}
 .bubble code:not(.hljs){background:rgba(0,229,255,.08);padding:1px 5px;border-radius:3px;font-size:11px;color:var(--cyan);}
 .bubble p{margin-bottom:6px;}.bubble p:last-child{margin-bottom:0;}
 .bubble h1,.bubble h2,.bubble h3{color:var(--cyan);margin:9px 0 5px;font-family:'Orbitron',sans-serif;}
@@ -121,6 +126,10 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .msg-acts{display:flex;gap:5px;padding:3px 2px;flex-wrap:wrap;}
 .mab{font-size:9.5px;color:var(--dim);background:none;border:none;cursor:pointer;padding:2px 6px;border-radius:3px;transition:.1s;}
 .mab:hover{color:var(--cyan);background:var(--cyan3);}
+/* Studio send button in msg actions */
+.mab.studio-send{color:var(--green);border:1px solid rgba(0,255,170,.2);background:rgba(0,255,170,.05);}
+.mab.studio-send:hover{background:rgba(0,255,170,.12);}
+.mab.studio-send:disabled{opacity:.4;cursor:not-allowed;}
 .typing-cursor::after{content:'▋';animation:blink .7s infinite;color:var(--cyan);}
 @keyframes blink{0%,49%{opacity:1}50%,100%{opacity:0}}
 .thinking-wrap{display:flex;gap:9px;animation:mi .25s ease;}
@@ -169,14 +178,12 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .mb{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;white-space:nowrap;}
 .mb.f{background:rgba(0,255,170,.12);color:var(--green);}
 .mb.s{background:rgba(0,229,255,.12);color:var(--cyan);}
-.mb.cs{background:rgba(80,80,80,.2);color:#666;font-style:italic;}
 .btn-send,.btn-cancel{border:none;border-radius:7px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:.18s;flex-shrink:0;}
 .btn-send{background:linear-gradient(135deg,var(--cyan),var(--purple));color:white;}
 .btn-send:hover{opacity:.82;transform:scale(1.04);}
 .btn-send:disabled{opacity:.35;cursor:not-allowed;transform:none;}
 .btn-cancel{background:rgba(255,45,107,.15);border:1px solid rgba(255,45,107,.3);color:var(--pink);}
-
-/* GUI BUILDER */
+/* GUI Builder */
 #guiTab{flex:1;overflow:hidden;display:none;flex-direction:column;}
 .gui-toolbar{padding:7px 12px;border-bottom:1px solid var(--b);background:var(--bg2);display:flex;align-items:center;gap:6px;flex-wrap:wrap;flex-shrink:0;}
 .gui-btn{padding:4px 10px;border-radius:5px;border:1px solid var(--b);background:var(--card);color:var(--text);font-size:10px;cursor:pointer;transition:.15s;}
@@ -198,8 +205,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .gui-ai-btn:hover{background:rgba(136,0,255,.28);}
 .gui-loading{position:absolute;inset:0;background:rgba(3,3,18,.8);display:none;align-items:center;justify-content:center;flex-direction:column;gap:10px;font-size:11px;color:var(--cyan);}
 .gui-loading.show{display:flex;}
-
-/* PLUGIN PANEL */
+/* Plugin Panel */
 #pp{display:flex;flex-direction:column;background:var(--bg2);border-left:1px solid var(--b);overflow:hidden;}
 .pp-hdr{padding:10px 13px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .pp-title{font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;color:var(--cyan);letter-spacing:1px;}
@@ -215,6 +221,14 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .pp-conn-sub{font-size:10px;color:var(--dim);line-height:1.6;max-width:200px;}
 .btn-install{padding:6px 13px;background:rgba(0,229,255,.07);border:1px solid var(--b);border-radius:var(--r);color:var(--cyan);font-size:10px;cursor:pointer;transition:.15s;width:100%;}
 .btn-install:hover{border-color:var(--cyan);}
+/* Studio Quick Send Panel */
+.studio-panel{padding:10px 12px;border-top:1px solid var(--b);background:rgba(0,255,170,.03);flex-shrink:0;}
+.studio-panel-title{font-size:9px;color:var(--green);text-transform:uppercase;letter-spacing:2px;margin-bottom:8px;font-family:'Orbitron',sans-serif;display:flex;align-items:center;gap:5px;}
+.studio-inp{width:100%;background:var(--bg3);border:1px solid rgba(0,255,170,.2);border-radius:6px;padding:7px 10px;color:white;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;resize:none;min-height:50px;margin-bottom:6px;}
+.studio-inp:focus{border-color:rgba(0,255,170,.4);}
+.studio-btn{width:100%;padding:7px;background:rgba(0,255,170,.1);border:1px solid rgba(0,255,170,.3);border-radius:6px;color:var(--green);font-size:10px;cursor:pointer;font-family:'Orbitron',sans-serif;font-weight:700;transition:.15s;}
+.studio-btn:hover{background:rgba(0,255,170,.18);}
+.studio-btn:disabled{opacity:.4;cursor:not-allowed;}
 .ws-hdr{padding:6px 12px;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;border-bottom:1px solid var(--b);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
 .ws-ref{font-size:12px;cursor:pointer;color:var(--dim);}
 .ws-ref:hover{color:var(--cyan);}
@@ -238,8 +252,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .le.err{border-color:rgba(255,45,107,.3);color:var(--pink);}
 .le.info{border-color:rgba(0,229,255,.25);color:var(--cyan);}
 .le-t{color:var(--dim);font-size:8px;flex-shrink:0;opacity:.6;}
-
-/* MODALS */
+/* Modals */
 .ov{position:fixed;inset:0;background:rgba(3,3,18,.9);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(4px);}
 .ov.show{display:flex;}
 .modal{background:var(--bg2);border:1px solid var(--b);border-radius:12px;padding:22px;width:480px;max-width:95vw;box-shadow:var(--gc);max-height:90vh;overflow-y:auto;}
@@ -252,8 +265,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .btn-modal.primary{background:var(--cyan);color:#030312;}
 .btn-modal.secondary{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--b);}
 .btn-modal:hover{opacity:.84;}
-
-/* SETTINGS */
+/* Settings */
 .settings-section{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--b);}
 .settings-section:last-child{border-bottom:none;margin-bottom:0;}
 .settings-title{font-size:10px;color:var(--cyan);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;font-family:'Orbitron',sans-serif;}
@@ -265,8 +277,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .settings-select{background:var(--bg3);border:1px solid var(--b);border-radius:5px;padding:4px 7px;color:white;font-family:'JetBrains Mono',monospace;font-size:10px;outline:none;cursor:pointer;}
 .settings-select:focus{border-color:var(--cyan2);}
 .report-ta{width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:8px 10px;color:white;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;resize:vertical;min-height:80px;margin-top:6px;}
-
-/* ADMIN CONSOLE */
+/* Admin Console */
 .console-box{background:rgba(0,0,0,.5);border:1px solid rgba(0,229,255,.2);border-radius:6px;padding:8px;font-family:'JetBrains Mono',monospace;font-size:10px;min-height:100px;max-height:200px;overflow-y:auto;margin-bottom:8px;color:var(--green);}
 .console-inp{width:100%;background:var(--bg3);border:1px solid rgba(0,229,255,.2);border-radius:5px;padding:6px 10px;color:var(--cyan);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;}
 .console-inp:focus{border-color:var(--cyan2);}
@@ -275,8 +286,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .console-line.ok{color:var(--green);}
 .console-line.err{color:var(--pink);}
 .console-line.info{color:var(--yellow);}
-
-/* SHOP */
+/* Shop */
 .credit-plans{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
 .credit-plan{padding:14px;border:1px solid var(--b);border-radius:var(--r);text-align:center;}
 .credit-plan.popular{border-color:var(--cyan);}
@@ -291,12 +301,10 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .credit-pack-price{font-size:16px;color:white;font-weight:700;}
 .credit-pack-credits{font-size:11px;color:var(--cyan);margin-top:3px;}
 .credit-pack-idr{font-size:9px;color:var(--dim);margin-top:2px;}
-
 .hidden{display:none!important;}
 ::-webkit-scrollbar{width:2px;height:2px;}
 ::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px;}
 @keyframes toastIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
-
 @media(max-width:768px){
   #app{display:flex;flex-direction:column;height:100vh;grid-template-columns:none!important;overflow:hidden;}
   #sb{width:100%;border-right:none;border-bottom:1px solid var(--b);flex-shrink:0;max-height:200px;overflow:hidden;}
@@ -309,7 +317,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   #inp{font-size:12px;padding:9px 12px;min-height:40px;}
   #pp{display:none;}
   .collapse-sb,.collapse-pp{display:none;}
-  .auth-box{width:95vw;padding:24px 18px;}
 }
 </style>
 </head>
@@ -324,7 +331,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div class="sb-logo">N</div>
       <div>
         <div class="sb-logo-text">NEXUS AI</div>
-        <div class="sb-logo-sub">v3.4 · Roblox Dev</div>
+        <div class="sb-logo-sub">v4.0 · Roblox Dev</div>
       </div>
     </div>
     <div class="sb-user">
@@ -356,13 +363,17 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   <!-- CHAT MAIN -->
   <div id="chat">
     <div class="plug-banner" id="plugBanner">
-      ⚠ Plugin not connected — Chat still works! &nbsp;<a onclick="showInstall()">How to connect →</a>
+      ⚠ Plugin not connected &nbsp;<a onclick="showInstall()">How to connect →</a>
     </div>
     <div class="chat-hdr">
       <div class="chat-title" id="chatTitle">NEXUS AI — Roblox Dev Assistant</div>
       <div class="plug-badge off" id="plugBadge" onclick="showInstall()">
         <div class="pdot pulse"></div>
         <span id="plugTxt">Plugin offline</span>
+      </div>
+      <div class="studio-badge" id="studioBadge" onclick="retryStudio()" title="Click to reconnect">
+        <div class="pdot"></div>
+        <span id="studioTxt">Studio: --</span>
       </div>
     </div>
     <div class="chat-tabs">
@@ -380,7 +391,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div id="msgs">
         <div class="welcome" id="welcome">
           <div class="wt">NEXUS AI</div>
-          <div class="ws" id="welcomeText">Smart Roblox AI — write Lua, debug scripts, build GUIs.</div>
+          <div class="ws" id="welcomeText">Smart Roblox AI — write Lua, debug scripts, build GUIs. Connect the plugin to send scripts directly to Studio!</div>
           <div class="suggs">
             <div class="sugg" onclick="useSugg('Debug my Roblox script and fix all errors')"><strong>🔧 Debug Script</strong>Fix errors in my script</div>
             <div class="sugg" onclick="useSugg('Create a complete shop GUI for Roblox with Frame, ScrollingFrame, buy buttons, and animations')"><strong>🎮 Create GUI</strong>Build a shop GUI</div>
@@ -417,63 +428,51 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         <div class="model-dd" id="mDD">
           <div class="mg">Google Gemini</div>
           <div class="mo act" data-mid="gemini-2.0-flash" data-prov="gemini" data-cost="0" data-label="Gemini 2.0 Flash" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/gemini.png" alt="G" onerror="this.src='https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg'"></div>
+            <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
             <div><div class="mo-n">Gemini 2.0 Flash</div><div class="mo-s">Stable · Fast · Vision</div></div><span class="mb f">FREE</span>
           </div>
-          <div class="mo" data-mid="gemini-2.5-flash-lite" data-prov="gemini" data-cost="1" data-label="Gemini 2.5 Flash Lite" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/gemini.png" alt="G" onerror="this.src='https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg'"></div>
-            <div><div class="mo-n">Gemini 2.5 Flash Lite</div><div class="mo-s">Stable · Economical · Thinking</div></div><span class="mb s">1 CR</span>
-          </div>
           <div class="mo" data-mid="gemini-2.5-flash" data-prov="gemini" data-cost="2" data-label="Gemini 2.5 Flash" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/gemini.png" alt="G" onerror="this.src='https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg'"></div>
+            <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
             <div><div class="mo-n">Gemini 2.5 Flash</div><div class="mo-s">Stable · Smart · Thinking</div></div><span class="mb s">2 CR</span>
           </div>
           <div class="mo" data-mid="gemini-2.5-pro" data-prov="gemini" data-cost="8" data-label="Gemini 2.5 Pro" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/gemini.png" alt="G" onerror="this.src='https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg'"></div>
+            <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
             <div><div class="mo-n">Gemini 2.5 Pro</div><div class="mo-s">Stable · Most Capable Google</div></div><span class="mb s">8 CR</span>
-          </div>
-          <div class="mo" data-mid="gemini-3-flash-preview" data-prov="gemini" data-cost="5" data-label="Gemini 3 Flash Preview" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/gemini.png" alt="G" onerror="this.src='https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg'"></div>
-            <div><div class="mo-n">Gemini 3 Flash Preview</div><div class="mo-s">Preview · Next Gen · Dec 2025</div></div><span class="mb s">5 CR</span>
-          </div>
-          <div class="mo" data-mid="gemini-3.1-pro-preview" data-prov="gemini" data-cost="12" data-label="Gemini 3.1 Pro Preview" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/gemini.png" alt="G" onerror="this.src='https://www.gstatic.com/lamda/images/gemini_sparkle_v002_d4735304ff6292a690345.svg'"></div>
-            <div><div class="mo-n">Gemini 3.1 Pro Preview</div><div class="mo-s">Preview · Advanced · Feb 2026</div></div><span class="mb s">12 CR</span>
           </div>
           <div class="mg">🦙 Meta Llama (Free)</div>
           <div class="mo" data-mid="meta-llama/llama-3.3-70b-instruct:free" data-prov="groqcloud" data-cost="0" data-label="Llama 3.3 70B" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/meta.png" alt="M" onerror="this.parentElement.innerHTML='🦙'"></div>
+            <div class="mo-icon"><img src="icon/meta.png" alt="M"></div>
             <div><div class="mo-n">Llama 3.3 70B</div><div class="mo-s">Meta · Fast · Free</div></div><span class="mb f">FREE</span>
           </div>
           <div class="mo" data-mid="meta-llama/llama-4-scout" data-prov="groqcloud" data-cost="0" data-label="Llama 4 Scout" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/meta.png" alt="M" onerror="this.parentElement.innerHTML='🦙'"></div>
+            <div class="mo-icon"><img src="icon/meta.png" alt="M"></div>
             <div><div class="mo-n">Llama 4 Scout</div><div class="mo-s">Latest Meta · Free</div></div><span class="mb f">FREE</span>
           </div>
           <div class="mg">xAI Grok</div>
           <div class="mo" data-mid="x-ai/grok-3-mini" data-prov="grok" data-cost="1" data-label="Grok 3 Mini" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/grok.png" alt="X" onerror="this.parentElement.style.background='#1a1a2e';this.style.display='none'"></div>
+            <div class="mo-icon"><img src="icon/grok.png" alt="X"></div>
             <div><div class="mo-n">Grok 3 Mini</div><div class="mo-s">xAI · Fast · Reasoning</div></div><span class="mb s">1 CR</span>
           </div>
           <div class="mo" data-mid="x-ai/grok-3" data-prov="grok" data-cost="3" data-label="Grok 3" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/grok.png" alt="X" onerror="this.parentElement.style.background='#1a1a2e';this.style.display='none'"></div>
+            <div class="mo-icon"><img src="icon/grok.png" alt="X"></div>
             <div><div class="mo-n">Grok 3</div><div class="mo-s">xAI · Powerful · Reliable</div></div><span class="mb s">3 CR</span>
           </div>
           <div class="mg">Anthropic Claude</div>
           <div class="mo" data-mid="anthropic/claude-haiku-4.5" data-prov="claude" data-cost="3" data-label="Claude 4.5 Haiku" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/claude.png" alt="C" onerror="this.parentElement.style.background='#cc785c';this.style.display='none'"></div>
+            <div class="mo-icon"><img src="icon/claude.png" alt="C"></div>
             <div><div class="mo-n">Claude 4.5 Haiku</div><div class="mo-s">Fast · Smart · Vision</div></div><span class="mb s">3 CR</span>
           </div>
           <div class="mo" data-mid="anthropic/claude-sonnet-4.6" data-prov="claude" data-cost="7" data-label="Claude Sonnet 4.6" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/claude.png" alt="C" onerror="this.parentElement.style.background='#cc785c';this.style.display='none'"></div>
+            <div class="mo-icon"><img src="icon/claude.png" alt="C"></div>
             <div><div class="mo-n">Claude Sonnet 4.6</div><div class="mo-s">Balanced · Vision · Powerful</div></div><span class="mb s">7 CR</span>
           </div>
           <div class="mg">OpenAI ChatGPT</div>
           <div class="mo" data-mid="openai/gpt-4o-mini" data-prov="openai" data-cost="0" data-label="GPT-4o Mini" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/chatgpt.png" alt="GPT" onerror="this.parentElement.style.background='#10a37f';this.style.display='none'"></div>
+            <div class="mo-icon"><img src="icon/chatgpt.png" alt="GPT"></div>
             <div><div class="mo-n">GPT-4o Mini</div><div class="mo-s">Fast · Economical</div></div><span class="mb f">FREE</span>
           </div>
           <div class="mo" data-mid="openai/gpt-4o" data-prov="openai" data-cost="3" data-label="GPT-4o" onclick="selModel(this)">
-            <div class="mo-icon"><img src="icon/chatgpt.png" alt="GPT" onerror="this.parentElement.style.background='#10a37f';this.style.display='none'"></div>
+            <div class="mo-icon"><img src="icon/chatgpt.png" alt="GPT"></div>
             <div><div class="mo-n">GPT-4o</div><div class="mo-s">Vision · Powerful</div></div><span class="mb s">3 CR</span>
           </div>
         </div>
@@ -529,7 +528,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div class="pp-off" id="ppOff">
         <div class="pp-orb off">🔌</div>
         <div class="pp-conn-title">Plugin Offline</div>
-        <div class="pp-conn-sub">Connect NEXUS AI Plugin in Roblox Studio.</div>
+        <div class="pp-conn-sub">Connect NEXUS AI Plugin in Roblox Studio to unlock Studio integration.</div>
         <button class="btn-install" onclick="showInstall()">📥 How to Install</button>
         <button class="btn-install" onclick="retryConn()" style="margin-top:5px;">↺ Reconnect</button>
       </div>
@@ -545,6 +544,17 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         </div>
       </div>
     </div>
+    <!-- ⭐ STUDIO QUICK SEND PANEL -->
+    <div class="studio-panel">
+      <div class="studio-panel-title">
+        <div class="pdot" id="studioIndicator" style="background:var(--dim)"></div>
+        ⬡ Send to Studio
+      </div>
+      <textarea class="studio-inp" id="studioInp" placeholder="Ketik perintah untuk Roblox Studio...&#10;(AI akan langsung eksekusi di place kamu)"></textarea>
+      <button class="studio-btn" id="studioSendBtn" onclick="sendToStudio()">
+        ⬆ SEND TO STUDIO
+      </button>
+    </div>
     <div class="log-hdr" onclick="toggleLog()">
       <span>▸ Log</span><span id="logCnt" style="font-size:9px;">0</span>
     </div>
@@ -557,18 +567,15 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   <div class="modal">
     <div class="modal-t">⬡ How to Install NEXUS AI Plugin</div>
     <div class="modal-b">
-      <p><strong style="color:var(--cyan)">Via Toolbox (Easiest)</strong></p>
-      <p>1. Open Roblox Studio → View → Toolbox</p>
-      <p>2. Search: <code>NEXUS AI</code> → Install</p><br>
-      <p><strong style="color:var(--yellow)">⚠ Important</strong></p>
-      <p>Disable old plugin if present in Plugin Management.</p><br>
-      <p><strong style="color:var(--cyan)">Manual Install</strong></p>
-      <p>Copy plugin .lua to:</p>
-      <pre>C:\Users\[You]\AppData\Local\Roblox\Plugins\</pre>
-      <p><strong style="color:var(--cyan)">Allow HTTP Access</strong></p>
-      <p>Plugin Management → Check <code>localhost:7778</code></p><br>
-      <p><strong style="color:var(--cyan)">Start bridge</strong></p>
-      <p>Terminal: <code>node bridge.js</code> → Click ⚡ CONNECT in Studio</p>
+      <p><strong style="color:var(--cyan)">Cara Install Plugin:</strong></p>
+      <p>1. Download file <code>nexusai_plugin_v4.lua</code></p>
+      <p>2. Simpan ke: <code>C:\Users\[Nama]\AppData\Local\Roblox\Plugins\</code></p>
+      <p>3. Buka Roblox Studio → aktifkan <strong>HTTP Requests</strong> di Game Settings</p>
+      <p>4. Klik tombol <strong>NEXUS AI</strong> di toolbar → pilih AI model → Connect</p><br>
+      <p><strong style="color:var(--yellow)">⚠ Penting</strong></p>
+      <p>Plugin harus dalam status <strong style="color:var(--green)">CONNECTED</strong> agar Send to Studio berfungsi.</p><br>
+      <p><strong style="color:var(--cyan)">Flow kerja:</strong></p>
+      <p>Ketik prompt di website → AI proses → Plugin eksekusi di place kamu otomatis!</p>
     </div>
     <div class="modal-footer"><button class="btn-modal primary" onclick="closeModal('installModal')">GOT IT</button></div>
   </div>
@@ -577,14 +584,12 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 <div class="ov" id="settingsModal">
   <div class="modal" style="width:520px;">
     <div class="modal-t">⚙ Settings</div>
-    <!-- Account -->
     <div class="settings-section">
       <div class="settings-title">Account</div>
       <div class="settings-row"><span style="color:white;font-weight:600;" id="settingsUsername">-</span><span id="settingsBadge" style="font-size:9px;padding:2px 7px;border-radius:10px;background:rgba(0,229,255,.1);color:var(--cyan);"></span></div>
       <div class="settings-row"><span>Credits</span><span id="settingsCredits" style="color:var(--yellow);font-weight:700;">-</span></div>
       <div class="settings-row"><span>Plan</span><span id="settingsPlan" style="color:var(--green);">Free</span></div>
     </div>
-    <!-- Daily Credits -->
     <div class="settings-section">
       <div class="settings-title">Daily Credits</div>
       <div class="settings-row"><span>Free Plan</span><span style="color:var(--green);">+2 CR / day</span></div>
@@ -594,9 +599,8 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         <button class="settings-btn" onclick="claimDaily()">Claim Daily</button>
       </div>
     </div>
-    <!-- Language -->
     <div class="settings-section">
-      <div class="settings-title">🌐 Language / Bahasa</div>
+      <div class="settings-title">🌐 Language</div>
       <div class="settings-row">
         <span>Interface & AI Language</span>
         <select class="settings-select" id="langSelector" onchange="changeLang(this.value)">
@@ -617,7 +621,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         </select>
       </div>
     </div>
-    <!-- Report Issue -->
     <div class="settings-section">
       <div class="settings-title">Report Issue</div>
       <textarea class="report-ta" id="reportTa" placeholder="Describe the issue..."></textarea>
@@ -626,16 +629,14 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         <span id="reportStatus" style="font-size:10px;color:var(--green);"></span>
       </div>
     </div>
-    <!-- Admin Console (owner only) -->
     <div class="settings-section" id="adminSection" style="display:none;">
       <div class="settings-title">🖥 Admin Console</div>
       <div class="console-box" id="consoleBox">
-        <div class="console-line info">NEXUS AI Admin Console v1.0</div>
+        <div class="console-line info">NEXUS AI Admin Console v2.0</div>
         <div class="console-line info">Type /help for commands</div>
       </div>
       <input type="text" class="console-inp" id="consoleInp" placeholder="/help" onkeydown="consoleKey(event)">
     </div>
-    <!-- Account Actions -->
     <div class="settings-section">
       <div class="settings-title">Account Actions</div>
       <div class="settings-row"><span>Switch Account</span><button class="settings-btn" onclick="switchAccount()">Switch</button></div>
@@ -669,6 +670,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="modal-footer">
       <button class="btn-modal primary" onclick="copyGuiCode()">📋 Copy</button>
       <button class="btn-modal secondary" onclick="downloadGuiCode()">⬇ Download .lua</button>
+      <button class="btn-modal secondary" onclick="sendGuiToStudio()" id="guiToStudioBtn">⬡ Send to Studio</button>
       <button class="btn-modal secondary" onclick="closeModal('guiCodeModal')">Close</button>
     </div>
   </div>
@@ -679,8 +681,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="modal-t">🤖 AI GUI Builder</div>
     <div class="modal-b" style="margin-bottom:8px;">
       <p style="margin-bottom:10px;font-size:11px;">Describe the GUI you want and AI will build it on the canvas + generate the Lua script.</p>
-      <p style="font-size:10px;color:var(--dim);margin-bottom:8px;">Examples: "Shop GUI with 3 item cards", "Inventory system", "Main menu with animated buttons"</p>
-      <textarea id="guiAIPrompt" style="width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:10px;color:white;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;resize:vertical;min-height:90px;" placeholder="Describe your GUI in detail..."></textarea>
+      <textarea id="guiAIPrompt" style="width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:10px;color:white;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;resize:vertical;min-height:90px;" placeholder="e.g.: Shop GUI with 3 item cards, Main menu with animated buttons..."></textarea>
     </div>
     <div class="modal-footer">
       <button class="btn-modal primary" onclick="generateGuiFromAI()">🤖 Build GUI with AI</button>
@@ -690,31 +691,19 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 </div>
 
 <script>
+// ═══════════════════════════════════════
+//  ⭐ CONSTANTS — API URL FIXED
+// ═══════════════════════════════════════
+var API_URL = '/api/control';
+var OWNER_USERS = ['FIINYTID25','fiinytid25'];
+var OWNER_PW = 'arif1n12';
+var ADMIN_USERS = [];
+var OR_KEY = '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';
+var K = { gemini:'', claude:'', openai:'', grok:'' };
+var keysLoaded = false;
+var studioConnected = false;
+var studioPolling = null;
 
-// Fungsi mengambil Log Console dari Roblox
-async function refreshRobloxLogs() {
-    try {
-        const res = await fetch(API_URL);
-        const data = await res.json();
-        
-        console.clear();
-        console.log("%c--- ROBLOX CONSOLE LOGS ---", "color: #00d2ff; font-weight: bold;");
-        data.logs.forEach(log => {
-            const color = log.level === "Error" ? "color: #ff4b2b" : "color: #00ff88";
-            console.log(`%c[${log.time}] [${log.level}]: ${log.msg}`, color);
-        });
-    } catch (e) {
-        console.error("Gagal mengambil log:", e);
-    }
-}
-
-// Jalankan refresh log setiap 3 detik
-setInterval(refreshRobloxLogs, 3000);
-
-// CONTOH CARA PAKAI (Bisa dipanggil dari console browser atau tombol):
-// sendNexusCommand('create_part', {name: 'WebPart', color: [255,0,0]});
-// sendNexusCommand('inject_script', {code: 'print("Script dari Web!")'});
-  
 // ═══════════════════════════════════════
 //  MARKED.JS WRAPPER
 // ═══════════════════════════════════════
@@ -727,7 +716,7 @@ function safeMarked(text) {
 }
 
 // ═══════════════════════════════════════
-//  AUTH CHECK — redirect to login if needed
+//  AUTH CHECK
 // ═══════════════════════════════════════
 var SESSION = null;
 (function(){
@@ -736,62 +725,230 @@ var SESSION = null;
     if (!s) { window.location.href = '/login.html'; return; }
     SESSION = JSON.parse(s);
     if (!SESSION || !SESSION.user) { window.location.href = '/login.html'; return; }
-    // Session valid — show app
     document.getElementById('app').classList.remove('hidden');
   } catch(e) { window.location.href = '/login.html'; }
 })();
 
 // ═══════════════════════════════════════
-//  CONSTANTS
+//  ⭐ STUDIO INTEGRATION — SEND TO ROBLOX
 // ═══════════════════════════════════════
-var OWNER_USERS = ['FIINYTID25','fiinytid25'];
-var OWNER_PW = 'arif1n12';
-var ADMIN_USERS = [];
-var OR_KEY = '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';
-var K = { gemini:'', claude:'', openai:'', grok:'' };
-var keysLoaded = false;
+
+// Check studio connection (poll API to see if plugin is connected)
+async function checkStudioConnection() {
+  try {
+    var r = await fetch(API_URL + '?check=1', { signal: AbortSignal.timeout(3000) });
+    if (r.ok) {
+      var d = await r.json();
+      // If we get a valid JSON response, server is reachable
+      setStudioStatus(true);
+      return true;
+    }
+  } catch(e) {}
+  setStudioStatus(false);
+  return false;
+}
+
+function setStudioStatus(online) {
+  studioConnected = online;
+  var badge = document.getElementById('studioBadge');
+  var txt   = document.getElementById('studioTxt');
+  var ind   = document.getElementById('studioIndicator');
+  var btn   = document.getElementById('studioSendBtn');
+  if (online) {
+    badge.className = 'studio-badge connected';
+    txt.textContent = 'Studio: ON';
+    if (ind) ind.style.background = 'var(--green)';
+    if (btn) btn.disabled = false;
+  } else {
+    badge.className = 'studio-badge';
+    txt.textContent = 'Studio: OFF';
+    if (ind) ind.style.background = 'var(--dim)';
+    if (btn) btn.disabled = false; // still allow sending (plugin polls)
+  }
+}
+
+function retryStudio() {
+  toast('↺ Checking Studio connection...');
+  checkStudioConnection().then(function(ok) {
+    toast(ok ? '✅ Studio API reachable!' : '⚠ Studio API offline. Make sure Vercel is deployed.');
+  });
+}
+
+// ⭐ MAIN FUNCTION: Send prompt to /api/control → Plugin executes in Roblox
+async function sendToStudio(promptOverride) {
+  var prompt = promptOverride || document.getElementById('studioInp').value.trim();
+  if (!prompt) { toast('⚠ Ketik perintah dulu!'); return; }
+
+  var btn = document.getElementById('studioSendBtn');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ Sending...'; }
+
+  addLog('info', 'Sending to Studio: ' + prompt.substring(0, 60));
+
+  try {
+    var resp = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type:  'prompt',
+        msg:   prompt,
+        model: 'claude',
+        user:  SESSION ? SESSION.user.username : 'FIINYTID25'
+      })
+    });
+
+    if (!resp.ok) throw new Error('API error: ' + resp.status);
+    var data = await resp.json();
+
+    if (data.status === 'ok') {
+      toast('✅ Sent! Action: ' + (data.command && data.command.action || '?'));
+      addLog('ok', 'Studio command queued: ' + (data.command && data.command.action || '?'));
+      if (document.getElementById('studioInp')) document.getElementById('studioInp').value = '';
+      setStudioStatus(true);
+    } else {
+      throw new Error(data.message || 'Unknown error');
+    }
+  } catch(e) {
+    toast('❌ Failed: ' + e.message);
+    addLog('err', 'Studio send failed: ' + e.message);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '⬆ SEND TO STUDIO'; }
+  }
+}
+
+// ⭐ Send Lua code directly (from chat code blocks)
+async function sendCodeToStudio(code, btnEl) {
+  if (!code || !code.trim()) { toast('⚠ No code to send!'); return; }
+  if (btnEl) { btnEl.classList.add('sending'); btnEl.textContent = '⏳'; }
+
+  var prompt = 'Inject this exact Lua script into the game:\n\n```lua\n' + code + '\n```';
+  addLog('info', 'Sending code to Studio (' + code.length + ' chars)');
+
+  try {
+    var resp = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type:  'prompt',
+        msg:   prompt,
+        model: 'claude',
+        user:  SESSION ? SESSION.user.username : 'FIINYTID25'
+      })
+    });
+    if (!resp.ok) throw new Error('API ' + resp.status);
+    var data = await resp.json();
+    if (data.status === 'ok') {
+      toast('✅ Script sent to Studio!');
+      addLog('ok', 'Script injected: ' + (data.command && data.command.name || 'script'));
+    } else {
+      throw new Error(data.message || 'Unknown');
+    }
+  } catch(e) {
+    toast('❌ Send failed: ' + e.message);
+    addLog('err', e.message);
+  } finally {
+    if (btnEl) { btnEl.classList.remove('sending'); btnEl.textContent = '⬡ Studio'; }
+  }
+}
+
+// ⭐ Send full AI message (entire response) to Studio as prompt
+async function sendMsgToStudio(msgId, btnEl) {
+  var bubble = document.getElementById('bubble_' + msgId);
+  if (!bubble) { toast('⚠ Message not found'); return; }
+  var text = bubble.innerText;
+  if (btnEl) btnEl.disabled = true;
+
+  addLog('info', 'Sending AI response to Studio...');
+  try {
+    var resp = await fetch(API_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type:  'prompt',
+        msg:   text.substring(0, 2000),
+        model: 'claude',
+        user:  SESSION ? SESSION.user.username : 'FIINYTID25'
+      })
+    });
+    if (!resp.ok) throw new Error('API ' + resp.status);
+    var data = await resp.json();
+    if (data.status === 'ok') {
+      toast('✅ Sent to Studio! Action: ' + (data.command && data.command.action || '?'));
+      addLog('ok', 'Studio action: ' + (data.command && data.command.action || '?'));
+    } else throw new Error(data.message || 'Unknown');
+  } catch(e) {
+    toast('❌ Failed: ' + e.message);
+  } finally {
+    if (btnEl) btnEl.disabled = false;
+  }
+}
+
+// Send generated GUI to Studio
+async function sendGuiToStudio() {
+  var code = document.getElementById('guiCodeOutput').textContent;
+  if (!code) { toast('Generate the GUI first!'); return; }
+  var btn = document.getElementById('guiToStudioBtn');
+  btn.textContent = '⏳ Sending...'; btn.disabled = true;
+  try {
+    await sendCodeToStudio(code, null);
+    toast('✅ GUI script sent to Studio!');
+  } finally {
+    btn.textContent = '⬡ Send to Studio'; btn.disabled = false;
+  }
+}
+
+// ⭐ Poll Roblox logs from /api/control and show in console
+async function refreshRobloxLogs() {
+  try {
+    var r = await fetch(API_URL, { signal: AbortSignal.timeout(3000) });
+    if (r.ok) {
+      var data = await r.json();
+      if (data && data.action && data.action !== 'none') {
+        addLog('info', 'Pending cmd: ' + data.action);
+      }
+      setStudioStatus(true);
+    }
+  } catch(e) {
+    // Server offline or timeout — just skip silently
+  }
+}
+
+// Start polling for Studio status
+function startStudioPoll() {
+  if (studioPolling) clearInterval(studioPolling);
+  studioPolling = setInterval(refreshRobloxLogs, 5000);
+  checkStudioConnection(); // check immediately
+}
 
 // ═══════════════════════════════════════
 //  LANGUAGE SYSTEM
 // ═══════════════════════════════════════
 var LANGS = {
-  en:{name:'English',flag:'🇺🇸',placeholder:'Ask NEXUS AI about Roblox...',noConv:'No conversations yet',newChat:'New Conversation',recent:'Recent Chats',welcome:'Smart Roblox AI — write Lua, debug scripts, build GUIs.',aiLang:'Always respond in English.'},
-  id:{name:'Bahasa Indonesia',flag:'🇮🇩',placeholder:'Tanya NEXUS AI tentang Roblox...',noConv:'Belum ada percakapan',newChat:'Percakapan Baru',recent:'Riwayat Chat',welcome:'AI Roblox Pintar — tulis Lua, debug script, buat GUI.',aiLang:'Selalu balas dalam Bahasa Indonesia.'},
-  ja:{name:'日本語',flag:'🇯🇵',placeholder:'RobloxについてNEXUS AIに聞く...',noConv:'まだ会話がありません',newChat:'新しい会話',recent:'最近のチャット',welcome:'スマートRoblox AI — Luaを書き、デバッグし、GUIを作成。',aiLang:'常に日本語で返答してください。'},
-  ko:{name:'한국어',flag:'🇰🇷',placeholder:'NEXUS AI에게 Roblox 질문...',noConv:'아직 대화 없음',newChat:'새 대화',recent:'최근 채팅',welcome:'스마트 Roblox AI — Lua 작성, 디버그, GUI 제작.',aiLang:'항상 한국어로 답하세요.'},
-  zh:{name:'中文',flag:'🇨🇳',placeholder:'向NEXUS AI提问关于Roblox的问题...',noConv:'暂无对话',newChat:'新对话',recent:'最近聊天',welcome:'智能Roblox AI — 编写Lua、调试脚本、构建GUI。',aiLang:'请始终用中文回答。'},
-  es:{name:'Español',flag:'🇪🇸',placeholder:'Pregunta a NEXUS AI sobre Roblox...',noConv:'Sin conversaciones',newChat:'Nueva conversación',recent:'Chats recientes',welcome:'IA inteligente para Roblox — escribe Lua, depura scripts, crea GUIs.',aiLang:'Siempre responde en español.'},
-  fr:{name:'Français',flag:'🇫🇷',placeholder:'Demandez à NEXUS AI sur Roblox...',noConv:'Pas encore de conversation',newChat:'Nouvelle conversation',recent:'Chats récents',welcome:'IA Roblox intelligente — Lua, debug, GUI.',aiLang:'Réponds toujours en français.'},
-  de:{name:'Deutsch',flag:'🇩🇪',placeholder:'Frage NEXUS AI über Roblox...',noConv:'Noch keine Gespräche',newChat:'Neues Gespräch',recent:'Letzte Chats',welcome:'Intelligente Roblox-KI — Lua schreiben, debuggen, GUI erstellen.',aiLang:'Antworte immer auf Deutsch.'},
-  pt:{name:'Português',flag:'🇧🇷',placeholder:'Pergunte ao NEXUS AI sobre Roblox...',noConv:'Nenhuma conversa ainda',newChat:'Nova conversa',recent:'Chats recentes',welcome:'IA Roblox inteligente — Lua, debug, GUI.',aiLang:'Responda sempre em português.'},
-  ru:{name:'Русский',flag:'🇷🇺',placeholder:'Спроси NEXUS AI о Roblox...',noConv:'Нет разговоров',newChat:'Новый разговор',recent:'Последние чаты',welcome:'Умный ИИ для Roblox — Lua, отладка, GUI.',aiLang:'Всегда отвечай на русском.'},
-  ar:{name:'العربية',flag:'🇸🇦',placeholder:'اسأل NEXUS AI عن Roblox...',noConv:'لا توجد محادثات بعد',newChat:'محادثة جديدة',recent:'المحادثات الأخيرة',welcome:'مساعد Roblox الذكي — Lua، تصحيح، GUI.',aiLang:'أجب دائماً باللغة العربية.'},
-  th:{name:'ภาษาไทย',flag:'🇹🇭',placeholder:'ถามNEXUS AI เกี่ยวกับ Roblox...',noConv:'ยังไม่มีการสนทนา',newChat:'สนทนาใหม่',recent:'แชทล่าสุด',welcome:'AI Roblox อัจฉริยะ — Lua, debug, GUI.',aiLang:'ตอบเป็นภาษาไทยเสมอ'},
-  vi:{name:'Tiếng Việt',flag:'🇻🇳',placeholder:'Hỏi NEXUS AI về Roblox...',noConv:'Chưa có cuộc trò chuyện',newChat:'Cuộc trò chuyện mới',recent:'Chat gần đây',welcome:'AI Roblox thông minh — Lua, debug, GUI.',aiLang:'Luôn trả lời bằng tiếng Việt.'},
-  tr:{name:'Türkçe',flag:'🇹🇷',placeholder:"NEXUS AI'ya Roblox hakkında sor...",noConv:'Henüz konuşma yok',newChat:'Yeni Konuşma',recent:'Son Sohbetler',welcome:'Akıllı Roblox Yapay Zekası — Lua, hata ayıklama, GUI.',aiLang:'Her zaman Türkçe yanıtla.'},
+  en:{name:'English',flag:'🇺🇸',placeholder:'Ask NEXUS AI about Roblox...',noConv:'No conversations yet',newChat:'New Conversation',recent:'Recent Chats',welcome:'Smart Roblox AI — write Lua, debug scripts, build GUIs. Connect plugin to send scripts directly to Studio!',aiLang:'Always respond in English.'},
+  id:{name:'Bahasa Indonesia',flag:'🇮🇩',placeholder:'Tanya NEXUS AI tentang Roblox...',noConv:'Belum ada percakapan',newChat:'Percakapan Baru',recent:'Riwayat Chat',welcome:'AI Roblox Pintar — tulis Lua, debug script, buat GUI. Hubungkan plugin untuk kirim script langsung ke Studio!',aiLang:'Selalu balas dalam Bahasa Indonesia.'},
+  ja:{name:'日本語',flag:'🇯🇵',placeholder:'RobloxについてNEXUS AIに聞く...',noConv:'まだ会話がありません',newChat:'新しい会話',recent:'最近のチャット',welcome:'スマートRoblox AI',aiLang:'常に日本語で返答してください。'},
+  ko:{name:'한국어',flag:'🇰🇷',placeholder:'NEXUS AI에게 Roblox 질문...',noConv:'아직 대화 없음',newChat:'새 대화',recent:'최근 채팅',welcome:'스마트 Roblox AI',aiLang:'항상 한국어로 답하세요.'},
+  zh:{name:'中文',flag:'🇨🇳',placeholder:'向NEXUS AI提问...',noConv:'暂无对话',newChat:'新对话',recent:'最近聊天',welcome:'智能Roblox AI',aiLang:'请始终用中文回答。'},
+  es:{name:'Español',flag:'🇪🇸',placeholder:'Pregunta a NEXUS AI...',noConv:'Sin conversaciones',newChat:'Nueva conversación',recent:'Chats recientes',welcome:'IA inteligente para Roblox',aiLang:'Siempre responde en español.'},
+  fr:{name:'Français',flag:'🇫🇷',placeholder:'Demandez à NEXUS AI...',noConv:'Pas encore de conversation',newChat:'Nouvelle conversation',recent:'Chats récents',welcome:'IA Roblox intelligente',aiLang:'Réponds toujours en français.'},
+  de:{name:'Deutsch',flag:'🇩🇪',placeholder:'Frage NEXUS AI...',noConv:'Noch keine Gespräche',newChat:'Neues Gespräch',recent:'Letzte Chats',welcome:'Intelligente Roblox-KI',aiLang:'Antworte immer auf Deutsch.'},
+  pt:{name:'Português',flag:'🇧🇷',placeholder:'Pergunte ao NEXUS AI...',noConv:'Nenhuma conversa ainda',newChat:'Nova conversa',recent:'Chats recentes',welcome:'IA Roblox inteligente',aiLang:'Responda sempre em português.'},
+  ru:{name:'Русский',flag:'🇷🇺',placeholder:'Спроси NEXUS AI...',noConv:'Нет разговоров',newChat:'Новый разговор',recent:'Последние чаты',welcome:'Умный ИИ для Roblox',aiLang:'Всегда отвечай на русском.'},
+  ar:{name:'العربية',flag:'🇸🇦',placeholder:'اسأل NEXUS AI...',noConv:'لا توجد محادثات بعد',newChat:'محادثة جديدة',recent:'المحادثات الأخيرة',welcome:'مساعد Roblox الذكي',aiLang:'أجب دائماً باللغة العربية.'},
+  th:{name:'ภาษาไทย',flag:'🇹🇭',placeholder:'ถามNEXUS AI...',noConv:'ยังไม่มีการสนทนา',newChat:'สนทนาใหม่',recent:'แชทล่าสุด',welcome:'AI Roblox อัจฉริยะ',aiLang:'ตอบเป็นภาษาไทยเสมอ'},
+  vi:{name:'Tiếng Việt',flag:'🇻🇳',placeholder:'Hỏi NEXUS AI...',noConv:'Chưa có cuộc trò chuyện',newChat:'Cuộc trò chuyện mới',recent:'Chat gần đây',welcome:'AI Roblox thông minh',aiLang:'Luôn trả lời bằng tiếng Việt.'},
+  tr:{name:'Türkçe',flag:'🇹🇷',placeholder:"NEXUS AI'ya Roblox hakkında sor...",noConv:'Henüz konuşma yok',newChat:'Yeni Konuşma',recent:'Son Sohbetler',welcome:'Akıllı Roblox Yapay Zekası',aiLang:'Her zaman Türkçe yanıtla.'},
 };
 var curLang = 'en';
 
-function changeLang(l) {
-  curLang = l;
-  S.language = l;
-  saveS();
-  applyLang();
-  toast((LANGS[l]||LANGS.en).flag + ' ' + (LANGS[l]||LANGS.en).name);
-}
+function changeLang(l) { curLang = l; S.language = l; saveS(); applyLang(); toast((LANGS[l]||LANGS.en).flag + ' ' + (LANGS[l]||LANGS.en).name); }
 function applyLang() {
   var t = LANGS[curLang] || LANGS.en;
-  var inp = document.getElementById('inp');
-  if (inp) inp.placeholder = t.placeholder;
-  var nc = document.getElementById('newChatLbl');
-  if (nc) nc.textContent = t.newChat;
-  var rl = document.getElementById('recentLbl');
-  if (rl) rl.textContent = t.recent;
-  var wt = document.getElementById('welcomeText');
-  if (wt) wt.textContent = t.welcome;
-  var ls = document.getElementById('langSelector');
-  if (ls) ls.value = curLang;
-  renderConvs(); // re-render to show "no conv" text in correct lang
+  var inp = document.getElementById('inp'); if (inp) inp.placeholder = t.placeholder;
+  var nc = document.getElementById('newChatLbl'); if (nc) nc.textContent = t.newChat;
+  var rl = document.getElementById('recentLbl'); if (rl) rl.textContent = t.recent;
+  var wt = document.getElementById('welcomeText'); if (wt) wt.textContent = t.welcome;
+  var ls = document.getElementById('langSelector'); if (ls) ls.value = curLang;
+  renderConvs();
 }
 
 // ═══════════════════════════════════════
@@ -836,7 +993,6 @@ function saveS() {
     SESSION.data = d;
     localStorage.setItem('nexus_session', JSON.stringify(SESSION));
     localStorage.setItem('nexus_lang', S.language);
-    // Async sync to server
     try {
       fetch('/api/sync', {
         method:'POST', headers:{'Content-Type':'application/json'},
@@ -866,227 +1022,43 @@ async function loadKeys() {
 }
 
 // ═══════════════════════════════════════
-//  SYSTEM PROMPT (MEGA EXTENDED)
+//  SYSTEM PROMPT
 // ═══════════════════════════════════════
 function buildSysPrompt() {
   var langInst = (LANGS[curLang] || LANGS.en).aiLang;
   var u = SESSION ? SESSION.user : {username:'Unknown'};
   var now = new Date();
   return `You are NEXUS AI, the most powerful AI assistant for Roblox game developers.
-Created by NEXUS STUDIO. Lead developer: FIINYTID25. Gmail: arifiinytid@gmail.com. YouTube: FIINYT_ID.
+Created by NEXUS STUDIO. Lead developer: FIINYTID25. YouTube: FIINYT_ID.
 Website: nexusai-com.vercel.app
 
-USER INFO (use this to personalize responses):
-- Roblox Username: "${u.username}"
-- Display Name: "${u.displayName || u.username}"
-- Plan: ${S.plan}
-- Credits: ${parseFloat(S.credits).toFixed(2)} CR
-- Language: ${curLang}
-- Roles: ${(S.roles||[]).join(', ') || 'user'}
-- Time: ${now.toLocaleString()} (${Intl.DateTimeFormat().resolvedOptions().timeZone})
-- Date: ${now.toDateString()}
+USER: "${u.username}" | Plan: ${S.plan} | Credits: ${parseFloat(S.credits).toFixed(2)} CR | Time: ${now.toLocaleString()}
 
 LANGUAGE RULE (CRITICAL): ${langInst}
-Always address the user by their username "${u.username}" naturally in conversation.
-Greet them warmly on the first message of each conversation.
+Address user as "${u.username}" naturally in conversation.
 
-IDENTITY:
-- You are NEXUS AI made by NEXUS STUDIO (FIINYTID25)
-- You are a Roblox development expert who knows EVERYTHING about Roblox Studio
-- Be enthusiastic, helpful, and encouraging to developers of all skill levels
-- Use appropriate emojis: ⚡ 🎮 💡 ✅ 🔧 🚀
+IDENTITY: You are NEXUS AI made by NEXUS STUDIO (FIINYTID25). You know EVERYTHING about Roblox Studio.
+Be enthusiastic, helpful, and encouraging. Use emojis: ⚡ 🎮 💡 ✅ 🔧 🚀
 
-CODE RULES (CRITICAL — NEVER VIOLATE):
-1. ALWAYS write COMPLETE code from start to finish — NEVER truncate with "..." or "// etc"
-2. If fixing a 700-line script, output at LEAST 700 lines — never shorten it
-3. If asked to complete/fix code, output the ENTIRE file, not just the changed parts
-4. Use task.wait() NOT wait() | task.spawn() NOT spawn() | task.delay() NOT delay()
-5. ALWAYS wrap DataStore calls in pcall()
-6. ALWAYS use :FindFirstChild() with nil checks
-7. Use WaitForChild("Name", 10) with timeout
-8. Never use global variables unnecessarily
-9. Add -- comments explaining complex sections
-10. Use proper indentation (tabs)
-11. Handle all edge cases in the code
+CODE RULES (NEVER VIOLATE):
+1. ALWAYS write COMPLETE code — NEVER truncate with "..." or "// etc"
+2. Use task.wait() not wait() | task.spawn() not spawn()
+3. ALWAYS wrap DataStore calls in pcall()
+4. ALWAYS use :FindFirstChild() with nil checks
+5. Use WaitForChild("Name", 10) with timeout
+6. Add comments explaining complex sections
+7. Never truncate scripts no matter how long
 
 SCRIPT PLACEMENT:
-- Script → ServerScriptService (server-side only)
-- LocalScript → StarterPlayerScripts OR StarterGui (client-side)
-- ModuleScript → ReplicatedStorage (shared) or ServerScriptService (server-only)
-- Never mix server/client code in same script
-- Use RemoteEvents (ReplicatedStorage) for server↔client communication
+- Script → ServerScriptService
+- LocalScript → StarterPlayerScripts OR StarterGui
+- ModuleScript → ReplicatedStorage
 
-GUI MASTERY:
-When building GUIs:
-1. Always include UICorner for rounded corners
-2. Always set BorderSizePixel=0 for clean look
-3. Use TweenService for smooth animations
-4. Include UIPadding, UIListLayout/UIGridLayout where needed
-5. Make buttons respond to hover (UIStroke change, color tween)
-6. Use appropriate ZIndex to layer elements
-7. Include a close button (X) on all popup frames
-8. Make GUIs work on mobile (use UDim2 scale, ContextActionService for mobile buttons)
-9. Always test for nil: if element then element.Property = value end
+GUI RULES: Always include UICorner, set BorderSizePixel=0, use TweenService for animations, mobile-compatible with UDim2 scale.
 
-Complete GUI element list:
-ScreenGui, Frame, ScrollingFrame, ViewportFrame, TextLabel, TextButton, TextBox,
-ImageLabel, ImageButton, UICorner, UIStroke, UIGradient, UIPadding, UIListLayout,
-UIGridLayout, UIPageLayout, UITableLayout, UIFlexItem, UIScale, UISizeConstraint,
-UIAspectRatioConstraint, BillboardGui, SurfaceGui, SelectionBox, SelectionSphere
+Always end responses with: "📌 Tempatkan di: [location]"
 
-TweenService template:
-local TweenService = game:GetService("TweenService")
-local ti = TweenInfo.new(0.3, Enum.EasingStyle.Quad, Enum.EasingDirection.Out)
-local tween = TweenService:Create(frame, ti, {Size = UDim2.new(0,400,0,300)})
-tween:Play()
-
-DATASTORE COMPLETE TEMPLATE:
-local DS = game:GetService("DataStoreService")
-local Players = game:GetService("Players")
-local db = DS:GetDataStore("PlayerData_v1")
-local cache = {}
-local DEFAULT = { coins=0, level=1, xp=0, inventory={}, joinDate=os.time() }
-
-local function loadData(player)
-  local key = "player_"..player.UserId
-  local data, success, err
-  for attempt = 1, 3 do
-    success, err = pcall(function()
-      data = db:GetAsync(key)
-    end)
-    if success then break end
-    task.wait(2)
-  end
-  if success then
-    if data then
-      for k,v in pairs(DEFAULT) do if data[k]==nil then data[k]=v end end
-      return data
-    end
-    return table.clone(DEFAULT)
-  else
-    warn("Failed to load "..player.Name..": "..tostring(err))
-    return table.clone(DEFAULT)
-  end
-end
-
-local function saveData(player, data)
-  local key = "player_"..player.UserId
-  local ok, err = pcall(function() db:SetAsync(key, data) end)
-  if not ok then warn("Failed to save "..player.Name..": "..tostring(err)) end
-  return ok
-end
-
-Players.PlayerAdded:Connect(function(player)
-  cache[player.UserId] = loadData(player)
-  -- Setup leaderstats
-  local ls = Instance.new("Folder"); ls.Name="leaderstats"; ls.Parent=player
-  local coins = Instance.new("IntValue"); coins.Name="Coins"; coins.Value=cache[player.UserId].coins; coins.Parent=ls
-end)
-
-Players.PlayerRemoving:Connect(function(player)
-  if cache[player.UserId] then
-    saveData(player, cache[player.UserId])
-    cache[player.UserId] = nil
-  end
-end)
-
-game:BindToClose(function()
-  for _, player in ipairs(Players:GetPlayers()) do
-    if cache[player.UserId] then saveData(player, cache[player.UserId]) end
-  end
-end)
-
-REMOTE EVENTS (Anti-exploit):
--- Server: ALWAYS validate everything
-local function rateLimit(player, interval)
-  local now = os.clock()
-  local last = rlTable[player] or 0
-  if now - last < interval then return false end
-  rlTable[player] = now; return true
-end
-
-remoteEvent.OnServerEvent:Connect(function(player, action, data)
-  if not player:IsDescendantOf(Players) then return end -- validate player
-  if not rateLimit(player, 0.1) then return end -- rate limit
-  if type(action) ~= "string" then return end -- validate types
-  if type(data) ~= "table" then return end
-  -- Process...
-end)
-
-ALL GAME SERVICES:
-Players, Workspace, Lighting, ReplicatedStorage, ReplicatedFirst,
-ServerScriptService, ServerStorage, StarterGui, StarterPack, StarterPlayer,
-Teams, SoundService, TweenService, RunService, UserInputService,
-ContextActionService, HttpService, DataStoreService, MessagingService,
-MarketplaceService, BadgeService, GroupService, PhysicsService,
-PathfindingService, TextService, GuiService, ContentProvider,
-AssetService, CollectionService, InsertService, VoiceChatService,
-AnalyticsService, MemoryStoreService
-
-NPC PATHFINDING:
-local PFS = game:GetService("PathfindingService")
-local function moveNPC(npc, target)
-  local path = PFS:CreatePath({AgentRadius=2,AgentHeight=5,AgentCanJump=true,Costs={Water=20}})
-  local ok = pcall(function() path:ComputeAsync(npc.HumanoidRootPart.Position, target) end)
-  if ok and path.Status == Enum.PathStatus.Success then
-    for _, wp in ipairs(path:GetWaypoints()) do
-      npc.Humanoid:MoveTo(wp.Position)
-      if wp.Action == Enum.PathWaypointAction.Jump then npc.Humanoid.Jump = true end
-      local reached = npc.Humanoid.MoveToFinished:Wait()
-      if not reached then break end
-    end
-  end
-end
-
-MARKETPLACE:
-local MPS = game:GetService("MarketplaceService")
-MPS.PromptGamePassPurchaseFinished:Connect(function(player, passId, bought)
-  if bought then -- grant benefits end
-end)
-MPS.ProcessReceipt = function(info)
-  local player = Players:GetPlayerByUserId(info.PlayerId)
-  if player and info.ProductId == PRODUCT_ID then -- grant product end
-  return Enum.ProductPurchaseDecision.PurchaseGranted
-end
-
-PERFORMANCE TIPS:
-- Disconnect events: local conn = x.Event:Connect(f); conn:Disconnect()
-- Use RunService.Heartbeat not while loops for physics
-- Use RunService.RenderStepped for camera (LocalScript only)
-- Cache references: local part = workspace:FindFirstChild("Part") — not in loops
-- Debounce:
-local db = {}
-part.Touched:Connect(function(hit)
-  if db[hit.Parent] then return end
-  db[hit.Parent] = true
-  -- code
-  task.delay(1, function() db[hit.Parent] = nil end)
-end)
-
-SECURITY:
-- NEVER trust client data — always validate server-side
-- Use TextService:FilterStringAsync() for ALL user text
-- Rate limit all RemoteEvents
-- Validate player.Character, not just player
-
-INPUT:
--- LocalScript
-local UIS = game:GetService("UserInputService")
-UIS.InputBegan:Connect(function(input, gp)
-  if gp then return end -- skip if typing
-  if input.KeyCode == Enum.KeyCode.E then -- E pressed end
-end)
--- Mobile: ContextActionService:BindAction("name", handler, showButton, Enum.KeyCode.E)
--- Check mobile: UIS.TouchEnabled and not UIS.KeyboardEnabled
-
-RESPONSE FORMAT:
-- For CODE: Always complete scripts, never truncated. Explain placement (ServerScript/LocalScript/etc)
-- For DEBUGGING: Identify bug → explain why → provide FULL fixed script
-- For GUI: Complete script + explain each section + note where to place it
-- For OPTIMIZATION: Show before/after code comparison
-- Always end code-heavy responses with: "📌 Tempatkan script di: [location]"
-
-COMPLETENESS RULE: NEVER say "... (rest of code)" or truncate. If a script has 500+ lines, output all 500+ lines.`;
+COMPLETENESS RULE: If script has 500+ lines, output ALL 500+ lines. NEVER truncate.`;
 }
 
 // ═══════════════════════════════════════
@@ -1102,7 +1074,6 @@ function initApp(){
   if (!SESSION) return;
   loadS();
   var u = SESSION.user;
-  // Avatar: use saved, don't reset
   document.getElementById('sbAv').src = u.avatar || 'nexusai.png';
   document.getElementById('sbUn').textContent = u.username;
   var roleText = isOwner() ? '★ Admin · Unlimited' : (S.plan==='pro' ? '⭐ Pro Member' : 'Roblox Developer');
@@ -1111,6 +1082,7 @@ function initApp(){
   applyLang();
   updateCreds(); updateModelUI(); renderConvs(); connectWS(); checkDailyCredits();
   loadKeys();
+  startStudioPoll();  // ⭐ Start studio polling
   if (isAdmin()) document.getElementById('adminSection').style.display = '';
   var withMsgs = S.convs.filter(function(c){return c.msgs&&c.msgs.length;}).sort(function(a,b){return b.created-a.created;});
   if (!withMsgs.length) newChat(); else loadConv(withMsgs[0].id);
@@ -1120,7 +1092,7 @@ function initApp(){
 //  CREDITS
 // ═══════════════════════════════════════
 var CREDIT_FLOOR = -3;
-var CREDIT_MIN_CHAT = 0.1; // need at least 0.1 to chat (except owner)
+var CREDIT_MIN_CHAT = 0.1;
 
 function updateCreds(){
   var cr = document.getElementById('credDisp');
@@ -1128,7 +1100,7 @@ function updateCreds(){
   if (isOwner()){cr.textContent='∞';cr.style.color='var(--yellow)';el.classList.remove('low');return;}
   cr.textContent = parseFloat(S.credits).toFixed(2);
   var low = S.credits < CREDIT_MIN_CHAT;
-  cr.style.color = low ? 'var(--pink)' : (S.credits < 1 ? 'var(--pink)' : 'var(--yellow)');
+  cr.style.color = low ? 'var(--pink)' : 'var(--yellow)';
   el.classList.toggle('low', low);
 }
 
@@ -1142,6 +1114,7 @@ function checkDailyCredits(){
     toast('+' + gain + ' daily credits! 💎 Total: ' + parseFloat(S.credits).toFixed(2) + ' CR');
   }
 }
+
 function claimDaily(){
   var today = new Date().toDateString();
   if (S.lastClaim===today && !isOwner()){toast('Already claimed today! Come back tomorrow 🌙');return;}
@@ -1202,16 +1175,12 @@ function renderConvs(){
   if (!real.length){el.innerHTML='<div class="conv-empty">'+noConvText+'</div>';return;}
   el.innerHTML=real.map(function(c){
     return '<div class="ci '+(c.id===S.curConv?'act':'')+'" onclick="loadConv(\''+c.id+'\')">'+
-      '<div style="flex:1;min-width:0;">'+
-        '<div class="ci-title">'+esc(c.title)+'</div>'+
-        '<div class="ci-time">'+ago(c.created)+'</div>'+
-      '</div>'+
+      '<div style="flex:1;min-width:0;"><div class="ci-title">'+esc(c.title)+'</div><div class="ci-time">'+ago(c.created)+'</div></div>'+
       '<span class="ci-del" onclick="delConv(\''+c.id+'\',event)">✕</span>'+
     '</div>';
   }).join('');
 }
 
-// Smart title generation with context awareness
 async function setConvTitle(id){
   var c=S.convs.find(function(x){return x.id===id;});
   if(!c||c.title!=='Untitled'||!S.msgs.length) return;
@@ -1223,12 +1192,11 @@ async function setConvTitle(id){
       renderConvs();saveS();return;
     }
     var firstMsg=(S.msgs.find(function(m){return m.role==='user';})||{}).content||'';
-    var aiReply=(S.msgs.find(function(m){return m.role==='ai';})||{}).content||'';
     var r=await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key='+K.gemini,{
       method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        contents:[{role:'user',parts:[{text:`Based on this conversation, generate a descriptive chat title (4-8 words) that summarizes what the user wanted to do. Use the SAME language as the user message. Be specific (e.g., "User wants shop GUI with buy buttons" not just "GUI help"). Reply ONLY the title, no quotes or punctuation.\n\nUser message: "${firstMsg.substring(0,200)}"\nAI response preview: "${aiReply.substring(0,100)}"`}]}],
-        generationConfig:{maxOutputTokens:30}
+        contents:[{role:'user',parts:[{text:'Generate a short chat title (4-6 words) based on: "'+firstMsg.substring(0,150)+'" - Reply ONLY the title, no quotes.'}]}],
+        generationConfig:{maxOutputTokens:20}
       })
     });
     var d=await r.json();
@@ -1271,25 +1239,28 @@ function updateModelUI(){
 document.addEventListener('click',function(e){if(!e.target.closest('#mDD')&&!e.target.closest('#inpModelBtn'))document.getElementById('mDD').classList.remove('open');});
 
 // ═══════════════════════════════════════
-//  MESSAGE RENDERING (with proper code blocks)
+//  MESSAGE RENDERING (with ⬡ Send to Studio button)
 // ═══════════════════════════════════════
-var renderer2=new marked.Renderer();
-renderer2.code=function(code,language){
-  var codeStr=typeof code==='object'?(code.text||''):(code||'');
-  var lang=typeof code==='object'?(code.lang||language||'lua'):(language||'lua');
-  var highlighted=codeStr.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+var renderer2 = new marked.Renderer();
+renderer2.code = function(code, language){
+  var codeStr = typeof code==='object' ? (code.text||'') : (code||'');
+  var lang    = typeof code==='object' ? (code.lang||language||'lua') : (language||'lua');
+  var highlighted = codeStr.replace(/</g,'&lt;').replace(/>/g,'&gt;');
   try{if(lang&&hljs.getLanguage(lang))highlighted=hljs.highlight(codeStr,{language:lang}).value;else highlighted=hljs.highlightAuto(codeStr).value;}catch(e){}
-  var id='cb'+Math.random().toString(36).slice(2,7);
+  var id = 'cb' + Math.random().toString(36).slice(2,7);
+  // Escape code for onclick attribute
+  var escapedCode = codeStr.replace(/\\/g,'\\\\').replace(/`/g,'\\`').replace(/'/g,"\\'");
   return '<div class="code-block-wrap" id="'+id+'">'+
     '<div class="code-btns">'+
       '<button class="code-btn" onclick="copyCode(\''+id+'\')">📋 Copy</button>'+
       '<button class="code-btn dl" onclick="downloadCode(\''+id+'\',\''+lang+'\')">⬇ .'+lang+'</button>'+
-      '<button class="code-btn ed" onclick="toggleEditCode(\''+id+'\')">✏</button>'+
+      '<button class="code-btn ed" onclick="toggleEditCode(\''+id+'\')">✏ Edit</button>'+
+      (lang==='lua'?'<button class="code-btn studio" id="sb_'+id+'" onclick="sendCodeToStudio(document.querySelector(\'#code_'+id+'\').innerText, this)">⬡ Studio</button>':'')+
     '</div>'+
     '<pre><code class="hljs language-'+lang+'" id="code_'+id+'" contenteditable="false" spellcheck="false">'+highlighted+'</code></pre>'+
   '</div>';
 };
-renderer2.link=function(href,title,text){
+renderer2.link = function(href,title,text){
   var h=typeof href==='object'?href.href:href;
   var t=typeof href==='object'?(href.text||text||''):(text||'');
   if(h&&h.startsWith&&h.startsWith('http'))return '<a href="'+h+'" target="_blank" rel="noopener">'+t+' ↗</a>';
@@ -1308,29 +1279,25 @@ function renderMsgs(){
 function mkMsg(m){
   var d=document.createElement('div'); d.className='msg '+m.role;
   if(m.role==='user'){
-    // For user messages with code/scripts, format them properly
-    var contentHtml='';
     var content=m.content||'';
-    // Check if it looks like code (more than 50 chars with newlines or Lua keywords)
+    var contentHtml='';
     var hasCode=content.includes('\n')&&(content.length>100||/local |function |game:|workspace:|require\(/.test(content));
     if(hasCode){
-      // Display as code block
-      var highlighted2=content.replace(/</g,'&lt;').replace(/>/g,'&gt;');
-      try{highlighted2=hljs.highlight(content,{language:'lua'}).value;}catch(e){}
-      contentHtml='<div class="code-block-wrap" style="margin-top:5px;"><pre><code class="hljs language-lua" style="font-size:10px;max-height:200px;overflow-y:auto;">'+highlighted2+'</code></pre></div>';
+      var h=content.replace(/</g,'&lt;').replace(/>/g,'&gt;');
+      try{h=hljs.highlight(content,{language:'lua'}).value;}catch(e){}
+      contentHtml='<div class="code-block-wrap"><pre><code class="hljs language-lua" style="font-size:10px;max-height:200px;overflow-y:auto;">'+h+'</code></pre></div>';
     } else {
       contentHtml=content?esc(content):'';
     }
     var imgs=(m.attachments||[]).filter(function(a){return a.type==='image';}).map(function(a){return '<img class="msg-img" src="'+a.dataUrl+'" alt="">';}).join('');
-    var files=(m.attachments||[]).filter(function(a){return a.type==='file';}).map(function(a){return '<div class="msg-file">📄 '+esc(a.name)+' ('+Math.round((a.content||'').length/1024)+'KB)</div>';}).join('');
-    var uid='um'+Math.random().toString(36).slice(2,8);
+    var files=(m.attachments||[]).filter(function(a){return a.type==='file';}).map(function(a){return '<div class="msg-file">📄 '+esc(a.name)+'</div>';}).join('');
     d.innerHTML='<div class="av"><img src="'+(SESSION?esc(SESSION.user.avatar||'nexusai.png'):'nexusai.png')+'" alt="" onerror="this.src=\'nexusai.png\'" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--cyan2);"></div>'+
       '<div class="mb-wrap">'+
         '<div class="msg-sender">'+esc(SESSION?SESSION.user.username:'You')+'<span style="font-size:9px;color:var(--dim);">'+ago(m.time)+'</span></div>'+
         '<div class="bubble">'+contentHtml+imgs+files+'</div>'+
         '<div class="msg-acts"><button class="mab" onclick="navigator.clipboard.writeText(this.dataset.t).then(function(){toast(\'✓ Copied!\');})" data-t="'+escA(content||'')+'">Copy</button></div>'+
       '</div>';
-  }else{
+  } else {
     var mid='msg'+Math.random().toString(36).slice(2,8);
     d.id=mid;
     var bubbleHtml='';
@@ -1342,6 +1309,7 @@ function mkMsg(m){
         '<div class="msg-acts">'+
           '<button class="mab" onclick="copyMsgText(\''+mid+'\')">Copy</button>'+
           '<button class="mab" onclick="shareMsgText(\''+mid+'\')">Share</button>'+
+          '<button class="mab studio-send" id="studioMsg_'+mid+'" onclick="sendMsgToStudio(\''+mid+'\',this)">⬡ Send to Studio</button>'+
         '</div>'+
       '</div>';
   }
@@ -1397,15 +1365,8 @@ async function send(){
   var attachments=S.attachments.slice();
   if(!txt&&!attachments.length) return;
 
-  // Credit check
-  if(!isOwner()&&S.credits<CREDIT_MIN_CHAT){
-    toast('❌ Need at least '+CREDIT_MIN_CHAT+' CR to chat. Claim daily credits!');
-    openShop(); return;
-  }
-  if(!isOwner()&&S.model.cost>0&&S.credits<S.model.cost){
-    toast('⚠ Need '+S.model.cost+' CR for this model. Current: '+parseFloat(S.credits).toFixed(2)+' CR');
-    openShop(); return;
-  }
+  if(!isOwner()&&S.credits<CREDIT_MIN_CHAT){toast('❌ Need at least '+CREDIT_MIN_CHAT+' CR to chat. Claim daily credits!');openShop();return;}
+  if(!isOwner()&&S.model.cost>0&&S.credits<S.model.cost){toast('⚠ Need '+S.model.cost+' CR for this model. Current: '+parseFloat(S.credits).toFixed(2)+' CR');openShop();return;}
 
   await loadKeys();
   var sendConvId=S.curConv;
@@ -1438,15 +1399,13 @@ async function send(){
     var sendConv=S.convs.find(function(x){return x.id===sendConvId;});
     if(sendConv){sendConv.msgs.push(am);if(S.curConv===sendConvId){S.msgs=sendConv.msgs;appendMsg(am);}}
 
-    // Deduct credits (decimal)
     if(!isOwner()){
       if(sendModel.cost>0){
         var complexity=txt.length>500?1.2:txt.length>200?0.8:txt.length>80?0.5:0.25;
         var deduct=parseFloat((sendModel.cost*complexity).toFixed(4));
         S.credits=parseFloat(Math.max(CREDIT_FLOOR,S.credits-deduct).toFixed(4));
       } else {
-        // Free models: tiny deduction for complex code requests
-        var isCode=/gui|script|code|build|create|function|system|class|fix|debug/i.test(txt);
+        var isCode=/gui|script|code|build|create|function|system|fix|debug/i.test(txt);
         if(isCode) S.credits=parseFloat(Math.max(CREDIT_FLOOR,S.credits-0.02).toFixed(4));
       }
       updateCreds();
@@ -1475,7 +1434,7 @@ function buildMsgs(){
   return S.msgs.slice(-28).map(function(m){
     var content=m.content||'';
     var files=(m.attachments||[]).filter(function(a){return a.type==='file'&&a.content;});
-    if(files.length) content+='\n\n'+files.map(function(f){return '[File: '+f.name+' ('+f.content.length+' chars)]\n```lua\n'+f.content.substring(0,12000)+'\n```';}).join('\n\n');
+    if(files.length) content+='\n\n'+files.map(function(f){return '[File: '+f.name+']\n```lua\n'+f.content.substring(0,12000)+'\n```';}).join('\n\n');
     return {role:m.role==='ai'?'assistant':'user',content:content};
   });
 }
@@ -1483,44 +1442,6 @@ function buildMsgs(){
 // ═══════════════════════════════════════
 //  API CALLERS
 // ═══════════════════════════════════════
-
-// ════════════════════════════════════════════════════════════════════════
-//  FUNGSI UTAMA: SEND COMMAND (NEXUS AI TO ROBLOX)
-//  Pastikan baris ini bersih dari teks penjelasan atau link yang tidak perlu.
-// ════════════════════════════════════════════════════════════════════════
-
-async function sendCommand(customModel, customSys) {
-const promptInput = document.getElementById('ai-prompt');
-const statusMsg = document.getElementById('status-msg');
-
-if (!promptInput || !statusMsg) {
-    console.error("Elemen UI 'ai-prompt' atau 'status-msg' tidak ditemukan di DOM.");
-    return;
-}
-
-const promptValue = promptInput.value.trim();
-if (!promptValue) return alert("Ketik perintah dulu, FIINYTID25!");
-
-try {
-    statusMsg.style.display = 'block';
-    statusMsg.innerText = "NEXUS AI sedang merancang sistem...";
-
-    // Mengambil model dan sys secara dinamis dari website atau parameter
-    const finalModel = customModel || (typeof model !== 'undefined' ? model : 'gemini-1.5-pro');
-    const baseSys = customSys || (typeof sys !== 'undefined' ? sys : 'Kamu adalah NEXUS AI.');
-
-    // Instruksi ketat agar AI hanya memberikan kode Lua murni tanpa basa-basi
-    const robloxSys = baseSys + "\n\n[PROMPT SISTEM]: Kamu adalah NEXUS AI Cloud Controller. Buatkan script Lua untuk Roblox Studio. Berikan HANYA kode di dalam format ```lua ... ``` tanpa teks atau penjelasan lain.";
-    
-    // Memanggil API Gemini (Menggunakan fungsi callGemini yang sudah ada di index.html kamu)
-    const aiResponse = await callGemini(finalModel, [], null, robloxSys + "\nPermintaan User: " + promptValue);
-    
-    if (!aiResponse) throw new Error("Gagal mendapatkan respon dari AI.");
-
-    // --- PROSES EKSTRAKSI KODE (PEMBERSIHAN) ---
-    let scriptCode = "";
-    const luaRegex = /
-
 async function callGemini(model,attachments,signal,sys){
   if(!K.gemini) throw new Error('Gemini API key not configured on server (/api/main)');
   var ms=buildMsgs();
@@ -1555,9 +1476,11 @@ async function callGroqCloud(model,attachments,signal,sys){
 async function callClaude(model,attachments,signal,sys){
   if(!K.claude) throw new Error('Claude API key not configured');
   var ms=buildMsgs();
+  // Strip provider prefix (anthropic/)
+  var cleanModel=model.replace('anthropic/','');
   var imgs=attachments.filter(function(a){return a.type==='image';});
   if(imgs.length&&ms.length>0){var l=ms[ms.length-1];if(l.role==='user'){var parts=imgs.map(function(a){return{type:'image',source:{type:'base64',media_type:a.mime||'image/jpeg',data:a.dataUrl.split(',')[1]}};});parts.push({type:'text',text:l.content});l.content=parts;}}
-  var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:signal,headers:{'Content-Type':'application/json','x-api-key':K.claude,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:model,max_tokens:8192,system:sys,messages:ms})});
+  var r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',signal:signal,headers:{'Content-Type':'application/json','x-api-key':K.claude,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:cleanModel,max_tokens:8192,system:sys,messages:ms})});
   if(!r.ok){var e=await r.json().catch(function(){return{};});throw new Error((e.error&&e.error.message)||'Claude '+r.status);}
   var d=await r.json();
   if(d.content&&d.content[0]&&d.content[0].text)return d.content[0].text;
@@ -1565,10 +1488,12 @@ async function callClaude(model,attachments,signal,sys){
 }
 async function callOpenAI(model,attachments,signal,sys){
   if(!K.openai) throw new Error('OpenAI API key not configured');
-  var ms=buildMsgs();var all=[{role:'system',content:sys}].concat(ms);
+  var ms=buildMsgs();
+  var cleanModel=model.replace('openai/','');
+  var all=[{role:'system',content:sys}].concat(ms);
   var imgs=attachments.filter(function(a){return a.type==='image';});
   if(imgs.length&&all.length>0){var l=all[all.length-1];if(l.role==='user'){l.content=[{type:'text',text:l.content}].concat(imgs.map(function(a){return{type:'image_url',image_url:{url:a.dataUrl}};}));}}
-  var body={model:model,messages:all};if(!model.startsWith('o'))body.max_tokens=8192;
+  var body={model:cleanModel,messages:all};if(!cleanModel.startsWith('o'))body.max_tokens=8192;
   var r=await fetch('https://api.openai.com/v1/chat/completions',{method:'POST',signal:signal,headers:{'Content-Type':'application/json','Authorization':'Bearer '+K.openai},body:JSON.stringify(body)});
   if(!r.ok){var e=await r.json().catch(function(){return{};});throw new Error((e.error&&e.error.message)||'OpenAI '+r.status);}
   var d=await r.json();
@@ -1614,7 +1539,7 @@ document.addEventListener('paste',function(e){
 });
 
 // ═══════════════════════════════════════
-//  WEBSOCKET — Plugin connection
+//  WEBSOCKET
 // ═══════════════════════════════════════
 var wsReconnTimer=null;
 function connectWS(){
@@ -1635,7 +1560,7 @@ function checkPluginStatus(){
   }).catch(function(){});
 }
 function handleWS(msg){
-  if(msg.action==='bridgeReady'||msg.action==='pluginStatus'){S.plugConnected=msg.pluginConnected||msg.connected||false;setPlugUI(S.plugConnected);if(msg.placeInfo&&msg.placeInfo.name)addLog('info','Place: '+msg.placeInfo.name);}
+  if(msg.action==='bridgeReady'||msg.action==='pluginStatus'){S.plugConnected=msg.pluginConnected||msg.connected||false;setPlugUI(S.plugConnected);}
   else if(msg.action==='workspace'){renderWorkspace(msg.data);addLog('ok','Workspace received');}
   else if(msg.action==='scriptContent'){showScript(msg.path,msg.content);addLog('ok','Script: '+msg.path);}
   else if(msg.action==='scriptWritten'){toast(msg.success?'✓ '+msg.path+' updated!':'❌ Failed: '+msg.message);}
@@ -1651,7 +1576,7 @@ function setPlugUI(on){
 // ═══════════════════════════════════════
 //  WORKSPACE
 // ═══════════════════════════════════════
-var SI={Workspace:'🌍',Players:'👥',Lighting:'💡',ReplicatedStorage:'📦',ReplicatedFirst:'⚡',ServerScriptService:'⚙',ServerStorage:'🗄',StarterGui:'🖼',StarterPack:'🎒',StarterPlayer:'👤',Teams:'🏷',SoundService:'🔊',Script:'📄',LocalScript:'📱',ModuleScript:'🔧',Folder:'📁',Part:'🟦',Model:'🧩'};
+var SI={Workspace:'🌍',Players:'👥',Lighting:'💡',ReplicatedStorage:'📦',ServerScriptService:'⚙',ServerStorage:'🗄',StarterGui:'🖼',StarterPack:'🎒',StarterPlayer:'👤',Teams:'🏷',SoundService:'🔊',Script:'📄',LocalScript:'📱',ModuleScript:'🔧',Folder:'📁',Part:'🟦',Model:'🧩'};
 function gIcon(cn){return SI[cn]||'◻';}
 function renderWorkspace(data){
   var t=document.getElementById('wsTree');
@@ -1682,7 +1607,7 @@ function switchTab(tab,btn){
 }
 
 // ═══════════════════════════════════════
-//  GUI BUILDER — AI generates canvas elements
+//  GUI BUILDER
 // ═══════════════════════════════════════
 var guiEls=[],selEl=null,elC=0;
 var GUI_DEF={
@@ -1693,14 +1618,12 @@ var GUI_DEF={
   ImageLabel:{bg:'#0a0b22',text:'🖼',border:'#3a4a7a',textColor:'#3a4a7a',w:100,h:100,x:50,y:50,opacity:1,fontSize:28,anchorX:0,anchorY:0,cornerRadius:0},
   ScrollFrame:{bg:'#06071a',text:'',border:'#3a4a7a',textColor:'#fff',w:220,h:150,x:50,y:50,opacity:1,fontSize:14,anchorX:0,anchorY:0,cornerRadius:0},
 };
-
 function addEl(type){
   var def=GUI_DEF[type]||GUI_DEF.Frame; elC++;
   var el=Object.assign({id:'el'+elC,type:type,name:type+elC},JSON.parse(JSON.stringify(def)));
   guiEls.push(el); renderGuiEl(el); selGuiEl(el.id);
   document.getElementById('guiEmpty').style.display='none';
 }
-
 function renderGuiEl(el){
   var cv=document.getElementById('guiCanvasInner');
   var ex=document.getElementById('gui_'+el.id);if(ex)ex.remove();
@@ -1712,13 +1635,11 @@ function renderGuiEl(el){
   rs.addEventListener('mousedown',function(e){e.stopPropagation();selGuiEl(el.id);startResize(e,el);});
   cv.appendChild(d);
 }
-
 function selGuiEl(id){
   document.querySelectorAll('.gui-el').forEach(function(e){e.classList.remove('selected');});
   var el=guiEls.find(function(e){return e.id===id;});if(!el)return;
   selEl=el; document.getElementById('gui_'+id).classList.add('selected'); renderGuiProps(el);
 }
-
 function startDrag(e,el){
   e.preventDefault();
   var d=document.getElementById('gui_'+el.id),rect=d.getBoundingClientRect();
@@ -1735,7 +1656,6 @@ function startResize(e,el){
   var onUp=function(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);};
   document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
 }
-
 function renderGuiProps(el){
   var p=document.getElementById('guiProps');
   function row(label,type,key,extra){extra=extra||'';return '<div class="gui-prop-row"><div class="gui-prop-label">'+label+'</div><input type="'+type+'" class="gui-prop-input" value="'+esc(String(el[key]))+'" '+extra+' oninput="updProp(\''+key+'\',this.value,\''+type+'\')" onchange="updProp(\''+key+'\',this.value,\''+type+'\')"></div>';}
@@ -1751,10 +1671,9 @@ function updProp(key,val,type){if(!selEl)return;selEl[key]=type==='number'?parse
 function delGuiEl(id){guiEls=guiEls.filter(function(e){return e.id!==id;});var e=document.getElementById('gui_'+id);if(e)e.remove();selEl=null;document.getElementById('guiProps').innerHTML='<div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Select an element</div>';if(!guiEls.length)document.getElementById('guiEmpty').style.display='';}
 function clearCanvas(){guiEls=[];selEl=null;document.getElementById('guiCanvasInner').querySelectorAll('.gui-el').forEach(function(e){e.remove();});document.getElementById('guiEmpty').style.display='';document.getElementById('guiProps').innerHTML='<div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Select an element</div>';}
 
-// GUI CODE EXPORT
 function generateGuiCode(){
   if(!guiEls.length){toast('Add elements first!');return;}
-  var code='-- NEXUS AI Generated GUI Script\n-- Place in LocalScript → StarterPlayerScripts\n-- Generated: '+new Date().toLocaleString()+'\n\nlocal Players = game:GetService("Players")\nlocal TweenService = game:GetService("TweenService")\nlocal player = Players.LocalPlayer\nlocal PlayerGui = player:WaitForChild("PlayerGui", 10)\n\n-- Create ScreenGui\nlocal screenGui = Instance.new("ScreenGui")\nscreenGui.Name = "NexusAI_GUI"\nscreenGui.ResetOnSpawn = false\nscreenGui.IgnoreGuiInset = true\nscreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling\nscreenGui.Parent = PlayerGui\n\n';
+  var code='-- NEXUS AI Generated GUI Script\n-- Place in LocalScript → StarterPlayerScripts\n-- Generated: '+new Date().toLocaleString()+'\n\nlocal Players = game:GetService("Players")\nlocal TweenService = game:GetService("TweenService")\nlocal player = Players.LocalPlayer\nlocal PlayerGui = player:WaitForChild("PlayerGui", 10)\n\nlocal screenGui = Instance.new("ScreenGui")\nscreenGui.Name = "NexusAI_GUI"\nscreenGui.ResetOnSpawn = false\nscreenGui.IgnoreGuiInset = true\nscreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling\nscreenGui.Parent = PlayerGui\n\n';
   guiEls.forEach(function(el){
     var cls=el.type==='ScrollFrame'?'ScrollingFrame':el.type;
     code+='-- '+(el.name||el.type)+'\nlocal '+el.name+' = Instance.new("'+cls+'")\n';
@@ -1770,7 +1689,7 @@ function generateGuiCode(){
     if(el.cornerRadius>0){code+='do\n\tlocal corner = Instance.new("UICorner")\n\tcorner.CornerRadius = UDim.new(0, '+Math.round(el.cornerRadius)+')\n\tcorner.Parent = '+el.name+'\nend\n';}
     if(el.text&&['TextLabel','TextButton','TextBox'].indexOf(el.type)!==-1){var tc=hexRgb(el.textColor);code+=el.name+'.Text = "'+el.text.replace(/"/g,'\\"')+'"\n';if(tc)code+=el.name+'.TextColor3 = Color3.fromRGB('+tc.r+', '+tc.g+', '+tc.b+')\n';code+=el.name+'.TextSize = '+Math.round(el.fontSize)+'\n'+el.name+'.Font = Enum.Font.GothamBold\n'+el.name+'.TextScaled = false\n';}
     code+=el.name+'.Parent = screenGui\n';
-    if(el.type==='TextButton')code+='\n'+el.name+'.MouseButton1Click:Connect(function()\n\t-- TODO: Add button action here\n\tprint("'+el.name+' clicked!")\nend)\n';
+    if(el.type==='TextButton')code+='\n'+el.name+'.MouseButton1Click:Connect(function()\n\t-- TODO: Add action\n\tprint("'+el.name+' clicked!")\nend)\n';
     code+='\n';
   });
   code+='print("NexusAI_GUI loaded successfully!")\n';
@@ -1779,8 +1698,6 @@ function generateGuiCode(){
 }
 function copyGuiCode(){navigator.clipboard.writeText(document.getElementById('guiCodeOutput').textContent).then(function(){toast('✓ Script copied!');});}
 function downloadGuiCode(){var blob=new Blob([document.getElementById('guiCodeOutput').textContent],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='NexusAI_GUI.lua';a.click();URL.revokeObjectURL(a.href);}
-
-// GUI AI BUILD — generates actual canvas elements + script
 function openGuiAIChat(){document.getElementById('guiAIChatModal').classList.add('show');}
 
 async function generateGuiFromAI(){
@@ -1789,38 +1706,11 @@ async function generateGuiFromAI(){
   closeModal('guiAIChatModal');
   await loadKeys();
   if(!K.gemini){toast('❌ Gemini API key required for AI Build');return;}
-
-  // Show loading overlay on canvas
   document.getElementById('guiLoading').classList.add('show');
-
-  var guiSys=`You are NEXUS AI GUI Builder. Build a Roblox GUI based on the description.
-
-RESPOND IN THIS EXACT FORMAT — first a JSON code block, then the Lua script:
-
-\`\`\`json
-{
-  "title": "Shop GUI",
-  "elements": [
-    {"type":"Frame","name":"MainFrame","x":50,"y":50,"w":500,"h":350,"bg":"#0d1a2e","border":"#00e5ff","text":"","textColor":"#ffffff","fontSize":14,"cornerRadius":12,"opacity":0.97,"anchorX":0,"anchorY":0},
-    {"type":"TextLabel","name":"TitleLabel","x":60,"y":60,"w":480,"h":45,"bg":"transparent","border":"transparent","text":"🛒 Shop","textColor":"#00e5ff","fontSize":20,"cornerRadius":0,"opacity":1,"anchorX":0,"anchorY":0},
-    {"type":"TextButton","name":"CloseBtn","x":510,"y":55,"w":30,"h":30,"bg":"#ff2d6b","border":"#ff2d6b","text":"✕","textColor":"#ffffff","fontSize":14,"cornerRadius":6,"opacity":1,"anchorX":0,"anchorY":0}
-  ]
-}
-\`\`\`
-
-Then provide the COMPLETE Lua LocalScript.
-
-Available types: Frame, TextLabel, TextButton, TextBox, ImageLabel, ScrollFrame
-Position elements logically (x/y within 0-800, 0-600 canvas).
-The user wants: ${prompt}
-
-IMPORTANT: Build a ${prompt} GUI, NOT a leaderboard or anything else! Match exactly what the user asks for.`;
-
+  var guiSys='You are NEXUS AI GUI Builder. Build a Roblox GUI based on the description.\n\nRespond with ONLY:\n1. A ```json code block with the elements array\n2. Then a ```lua code block with the complete Lua script\n\nJSON format:\n```json\n{"title":"GUI Name","elements":[{"type":"Frame","name":"MainFrame","x":50,"y":50,"w":400,"h":300,"bg":"#0d1a2e","border":"#00e5ff","text":"","textColor":"#ffffff","fontSize":14,"cornerRadius":10,"opacity":0.97,"anchorX":0,"anchorY":0}]}\n```\n\nAvailable types: Frame, TextLabel, TextButton, TextBox, ImageLabel, ScrollFrame\nCanvas is 800x600px. The user wants: '+prompt;
   try{
     var response=await callGemini('gemini-2.0-flash',[],null,guiSys);
     document.getElementById('guiLoading').classList.remove('show');
-
-    // Parse JSON from response
     var jsonMatch=response.match(/```json\s*([\s\S]*?)```/);
     if(jsonMatch){
       try{
@@ -1830,40 +1720,27 @@ IMPORTANT: Build a ${prompt} GUI, NOT a leaderboard or anything else! Match exac
           guiData.elements.forEach(function(el){
             elC++;
             var newEl=Object.assign({id:'el'+elC},el);
-            // Ensure all required fields exist
             newEl.opacity=newEl.opacity!==undefined?newEl.opacity:1;
             newEl.cornerRadius=newEl.cornerRadius||0;
             newEl.anchorX=newEl.anchorX||0;
             newEl.anchorY=newEl.anchorY||0;
-            guiEls.push(newEl);
-            renderGuiEl(newEl);
+            guiEls.push(newEl);renderGuiEl(newEl);
           });
           document.getElementById('guiEmpty').style.display='none';
-          toast('✅ GUI built! '+guiData.elements.length+' elements created on canvas');
+          toast('✅ GUI built! '+guiData.elements.length+' elements created');
         }
-      }catch(parseErr){toast('⚠ Could not parse GUI JSON: '+parseErr.message);}
+      }catch(parseErr){toast('⚠ Could not parse GUI JSON');}
     }
-
-    // Extract Lua script
     var luaMatch=response.replace(/```json[\s\S]*?```/,'').match(/```lua\s*([\s\S]*?)```/);
     if(!luaMatch)luaMatch=response.replace(/```json[\s\S]*?```/,'').match(/```\s*([\s\S]*?)```/);
-    if(luaMatch){
-      document.getElementById('guiCodeOutput').textContent=luaMatch[1];
-      setTimeout(function(){document.getElementById('guiCodeModal').classList.add('show');},300);
-    }
-
-    // Deduct credits
-    if(!isOwner()){
-      S.credits=parseFloat(Math.max(CREDIT_FLOOR,S.credits-0.5).toFixed(4));
-      updateCreds();
-    }
+    if(luaMatch){document.getElementById('guiCodeOutput').textContent=luaMatch[1];setTimeout(function(){document.getElementById('guiCodeModal').classList.add('show');},300);}
+    if(!isOwner()){S.credits=parseFloat(Math.max(CREDIT_FLOOR,S.credits-0.5).toFixed(4));updateCreds();}
     saveS();
   }catch(e){
     document.getElementById('guiLoading').classList.remove('show');
     toast('❌ AI Build failed: '+e.message);
   }
 }
-
 function hexRgb(hex){if(!hex||hex==='transparent')return null;var r=/^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);return r?{r:parseInt(r[1],16),g:parseInt(r[2],16),b:parseInt(r[3],16)}:null;}
 
 // ═══════════════════════════════════════
@@ -1881,30 +1758,17 @@ function openSettings(){
   document.getElementById('settingsModal').classList.add('show');
 }
 
-// Report sending — direct to API endpoint (no mailto)
 async function sendReport(){
   var txt=document.getElementById('reportTa').value.trim();
   if(!txt){toast('Write your report first!');return;}
   var btn=document.getElementById('reportBtn');
   btn.disabled=true; btn.textContent='Sending...';
   try{
-    // Try to send via API
-    var resp=await fetch('/api/report',{
-      method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        from:SESSION?SESSION.user.username:'Unknown',
-        userId:SESSION?SESSION.user.id:'0',
-        message:txt,
-        time:new Date().toISOString(),
-        plan:S.plan,
-        credits:S.credits
-      })
-    });
+    await fetch('/api/report',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({from:SESSION?SESSION.user.username:'Unknown',message:txt,time:new Date().toISOString(),plan:S.plan,credits:S.credits})});
     document.getElementById('reportStatus').textContent='✅ Report sent!';
     document.getElementById('reportTa').value='';
-    toast('✅ Report submitted successfully!');
+    toast('✅ Report submitted!');
   }catch(e){
-    // Fallback: save locally
     var reports=JSON.parse(localStorage.getItem('nexus_reports')||'[]');
     reports.push({from:SESSION?SESSION.user.username:'Unknown',message:txt,time:Date.now()});
     localStorage.setItem('nexus_reports',JSON.stringify(reports.slice(-20)));
@@ -1939,65 +1803,33 @@ function runConsoleCmd(cmd){
   if(!cmd.trim())return;
   consoleHistory.unshift(cmd); histIdx=-1;
   consoleLog(cmd,'cmd');
-  var parts=cmd.trim().split(' ');
-  var command=parts[0].toLowerCase();
+  var parts=cmd.trim().split(' ');var command=parts[0].toLowerCase();
   if(command==='/help'){
-    consoleLog('Commands:','info');
-    consoleLog('/give-credits <user> <amount>  — Give credits to user','info');
-    consoleLog('/take-credits <user> <amount>  — Remove credits','info');
-    consoleLog('/give-plan <user> <free|pro>   — Set plan','info');
-    consoleLog('/make-admin <user>             — Grant admin','info');
-    consoleLog('/remove-admin <user>           — Remove admin','info');
-    consoleLog('/info <user>                   — User info','info');
-    consoleLog('/reset-credits <user>          — Reset to 30','info');
-    consoleLog('/list-users                    — List all users','info');
-    consoleLog('/clear                         — Clear console','info');
-    consoleLog('/my-info                       — Your session info','info');
+    ['Commands:','/give-credits <user> <amount>','/give-plan <user> <free|pro>','/make-admin <user>','/info <user>','/reset-credits <user>','/my-info','/clear'].forEach(function(s){consoleLog(s,'info');});
   }else if(command==='/give-credits'){
     var user=parts[1],amount=parseFloat(parts[2]);
     if(!user||isNaN(amount)){consoleLog('Usage: /give-credits <user> <amount>','err');return;}
-    // If giving to current user
     if(SESSION&&user.toLowerCase()===SESSION.user.username.toLowerCase()){
       S.credits=parseFloat((S.credits+amount).toFixed(4));updateCreds();saveS();
-      consoleLog('✅ Gave '+amount+' CR to '+user+' (you). New total: '+S.credits,'ok');
+      consoleLog('✅ Gave '+amount+' CR to '+user+'. New total: '+S.credits,'ok');
     }else{
-      // Try to update via sync API
       fetch('/api/sync?user='+encodeURIComponent(user.toLowerCase())).then(function(r){return r.json();}).then(function(d){
         if(d){d.credits=parseFloat((d.credits+amount).toFixed(4));return fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:user.toLowerCase(),data:d})});}
-        else{consoleLog('User not found in server cache: '+user,'err');}
+        else consoleLog('User not found: '+user,'err');
       }).then(function(){consoleLog('✅ Gave '+amount+' CR to '+user,'ok');}).catch(function(e){consoleLog('❌ Error: '+e.message,'err');});
     }
   }else if(command==='/give-plan'){
-    var user2=parts[1],plan=parts[2];
-    if(!user2||!['free','pro'].includes(plan)){consoleLog('Usage: /give-plan <user> <free|pro>','err');return;}
-    if(SESSION&&user2.toLowerCase()===SESSION.user.username.toLowerCase()){S.plan=plan;saveS();consoleLog('✅ Plan set to '+plan+' for you','ok');}
-    else{consoleLog('⚠ Remote plan change queued for '+user2+' (requires active session)','info');}
-  }else if(command==='/make-admin'){
-    var user3=parts[1];if(!user3){consoleLog('Usage: /make-admin <user>','err');return;}
-    var admins=JSON.parse(localStorage.getItem('nexus_admins')||'[]');
-    if(admins.indexOf(user3.toLowerCase())===-1)admins.push(user3.toLowerCase());
-    localStorage.setItem('nexus_admins',JSON.stringify(admins));
-    consoleLog('✅ '+user3+' granted admin role','ok');
-  }else if(command==='/info'){
-    var user4=parts[1];if(!user4){consoleLog('Usage: /info <user>','err');return;}
-    fetch('/api/sync?user='+encodeURIComponent(user4.toLowerCase())).then(function(r){return r.json();}).then(function(d){
-      if(d){consoleLog('User: '+user4,'info');consoleLog('Credits: '+parseFloat(d.credits).toFixed(2),'info');consoleLog('Plan: '+(d.plan||'free'),'info');consoleLog('Last claim: '+(d.lastClaim||'never'),'info');}
-      else consoleLog('User not found in server cache','err');
-    }).catch(function(){consoleLog('Could not fetch user data (server may not have KV)','err');});
+    var user2=parts[1],plan2=parts[2];
+    if(!user2||!['free','pro'].includes(plan2)){consoleLog('Usage: /give-plan <user> <free|pro>','err');return;}
+    if(SESSION&&user2.toLowerCase()===SESSION.user.username.toLowerCase()){S.plan=plan2;saveS();consoleLog('✅ Plan set to '+plan2,'ok');}
+    else consoleLog('Remote plan change queued for '+user2,'info');
   }else if(command==='/my-info'){
-    if(SESSION){consoleLog('Username: '+SESSION.user.username,'info');consoleLog('ID: '+SESSION.user.id,'info');consoleLog('Plan: '+S.plan,'info');consoleLog('Credits: '+parseFloat(S.credits).toFixed(2),'info');consoleLog('Roles: '+(S.roles||[]).join(', '),'info');}
+    if(SESSION){consoleLog('Username: '+SESSION.user.username,'info');consoleLog('Plan: '+S.plan,'info');consoleLog('Credits: '+parseFloat(S.credits).toFixed(2),'info');consoleLog('Roles: '+(S.roles||[]).join(', '),'info');}
   }else if(command==='/reset-credits'){
     var user5=parts[1];if(!user5){consoleLog('Usage: /reset-credits <user>','err');return;}
-    if(SESSION&&user5.toLowerCase()===SESSION.user.username.toLowerCase()){S.credits=30;updateCreds();saveS();consoleLog('✅ Credits reset to 30 for you','ok');}
-    else consoleLog('Remote reset queued for '+user5,'info');
-  }else if(command==='/clear'){
-    var box2=document.getElementById('consoleBox');box2.innerHTML='';consoleLog('Console cleared','info');
-  }else if(command==='/list-users'){
-    consoleLog('Current session: '+(SESSION?SESSION.user.username:'none'),'info');
-    consoleLog('Server cache: use /api/sync to check','info');
-  }else{
-    consoleLog('Unknown command: '+command+'. Type /help for list','err');
-  }
+    if(SESSION&&user5.toLowerCase()===SESSION.user.username.toLowerCase()){S.credits=30;updateCreds();saveS();consoleLog('✅ Credits reset to 30','ok');}
+  }else if(command==='/clear'){document.getElementById('consoleBox').innerHTML='';consoleLog('Console cleared','info');
+  }else{consoleLog('Unknown: '+command+'. Type /help','err');}
 }
 
 // ═══════════════════════════════════════
@@ -2024,15 +1856,7 @@ function clearChat(){if(!confirm('Clear all messages in this conversation?'))ret
 function useSugg(txt){document.getElementById('inp').value=txt;document.getElementById('inp').focus();}
 function showInstall(){document.getElementById('installModal').classList.add('show');}
 function closeModal(id){document.getElementById(id).classList.remove('show');}
-
-function logout(){
-  if(!confirm('Logout from NEXUS AI?'))return;
-  if(S.ws&&S.ws.readyState===1)S.ws.close();
-  // Save latest data before logout
-  saveS();
-  localStorage.removeItem('nexus_session');
-  window.location.href='/login.html';
-}
+function logout(){if(!confirm('Logout from NEXUS AI?'))return;if(S.ws&&S.ws.readyState===1)S.ws.close();saveS();localStorage.removeItem('nexus_session');window.location.href='/login.html';}
 function switchAccount(){closeModal('settingsModal');logout();}
 
 function toast(msg){
@@ -2049,6 +1873,9 @@ function ago(ts){if(!ts)return'';var d=Date.now()-ts;if(d<60000)return'just now'
 document.getElementById('inp').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px';});
 document.getElementById('inp').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
 
+// Studio input — Enter to send
+document.getElementById('studioInp').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendToStudio();}});
+
 // Close modals on backdrop click
 document.querySelectorAll('.ov').forEach(function(ov){ov.addEventListener('click',function(e){if(e.target===ov)ov.classList.remove('show');});});
 
@@ -2059,8 +1886,6 @@ if (SESSION) {
   initApp();
   loadKeys();
   setInterval(function(){renderConvs();},60000);
-  // Refresh avatar from server periodically (not on every load)
-  // Avatar is saved in SESSION so it persists across refreshes
 }
 </script>
 </body>
