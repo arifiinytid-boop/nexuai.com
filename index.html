@@ -1484,34 +1484,43 @@ function buildMsgs(){
 //  API CALLERS
 // ═══════════════════════════════════════
 
-// Fungsi ini memanggil Gemini menggunakan model dan sys yang sedang aktif
+// ════════════════════════════════════════════════════════════════════════
+//  FUNGSI UTAMA: SEND COMMAND (NEXUS AI TO ROBLOX)
+//  Pastikan baris ini bersih dari teks penjelasan atau link yang tidak perlu.
+// ════════════════════════════════════════════════════════════════════════
+
 async function sendCommand(customModel, customSys) {
-    const promptInput = document.getElementById('ai-prompt');
-    const statusMsg = document.getElementById('status-msg');
-    const promptValue = promptInput.value;
+const promptInput = document.getElementById('ai-prompt');
+const statusMsg = document.getElementById('status-msg');
 
-    if (!promptValue) return alert("Ketik perintah dulu, FIINYTID25!");
+if (!promptInput || !statusMsg) {
+    console.error("Elemen UI 'ai-prompt' atau 'status-msg' tidak ditemukan di DOM.");
+    return;
+}
 
-    try {
-        statusMsg.style.display = 'block';
-        statusMsg.innerText = "Meminta NEXUS AI memikirkan script...";
+const promptValue = promptInput.value.trim();
+if (!promptValue) return alert("Ketik perintah dulu, FIINYTID25!");
 
-        // Cek apakah ada parameter custom, jika tidak, gunakan variabel global 'model' dan 'sys' dari website kamu
-        const finalModel = customModel || (typeof model !== 'undefined' ? model : 'gemini-1.5-pro');
-        const baseSys = customSys || (typeof sys !== 'undefined' ? sys : 'Kamu adalah AI Asisten.');
+try {
+    statusMsg.style.display = 'block';
+    statusMsg.innerText = "NEXUS AI sedang merancang sistem...";
 
-        // Gabungkan sys prompt utama dengan instruksi wajib untuk Roblox
-        const robloxSys = baseSys + "\n\nPENTING: Kamu adalah NEXUS AI Cloud Controller. Buatkan script Lua untuk Roblox Studio sesuai permintaan user. Berikan HANYA kode Lua di dalam format ```lua ... ``` tanpa teks atau penjelasan lain.";
-        
-        // Memanggil Gemini dengan format dinamis
-        const aiResponse = await callGemini(finalModel, [], null, robloxSys + "\nPermintaan User: " + promptValue);
-        
-        // Ekstrak kode Lua dari balasan AI (Pastikan baris kode Regex ini tidak terpotong saat di-copy)
-        let scriptCode = aiResponse;
-        const luaMatch = aiResponse.match(/
+    // Mengambil model dan sys secara dinamis dari website atau parameter
+    const finalModel = customModel || (typeof model !== 'undefined' ? model : 'gemini-1.5-pro');
+    const baseSys = customSys || (typeof sys !== 'undefined' ? sys : 'Kamu adalah NEXUS AI.');
 
-Plugin Lua yang sudah kamu buat di Roblox **tidak perlu diubah lagi**. Logikanya sudah benar membaca `data.code` saat aksinya `inject_script`. Semangat mengerjakan Mount Sakura dan sistem AI-nya, ya!
-  
+    // Instruksi ketat agar AI hanya memberikan kode Lua murni tanpa basa-basi
+    const robloxSys = baseSys + "\n\n[PROMPT SISTEM]: Kamu adalah NEXUS AI Cloud Controller. Buatkan script Lua untuk Roblox Studio. Berikan HANYA kode di dalam format ```lua ... ``` tanpa teks atau penjelasan lain.";
+    
+    // Memanggil API Gemini (Menggunakan fungsi callGemini yang sudah ada di index.html kamu)
+    const aiResponse = await callGemini(finalModel, [], null, robloxSys + "\nPermintaan User: " + promptValue);
+    
+    if (!aiResponse) throw new Error("Gagal mendapatkan respon dari AI.");
+
+    // --- PROSES EKSTRAKSI KODE (PEMBERSIHAN) ---
+    let scriptCode = "";
+    const luaRegex = /
+
 async function callGemini(model,attachments,signal,sys){
   if(!K.gemini) throw new Error('Gemini API key not configured on server (/api/main)');
   var ms=buildMsgs();
