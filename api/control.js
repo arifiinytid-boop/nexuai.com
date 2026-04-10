@@ -1,13 +1,11 @@
 // ============================================================
 //  NEXUS AI - API CONTROL V4 ULTIMATE
 //  File: api/control.js
-//  Deploy ke Vercel. Set env vars sesuai main.js:
-//    CLAUDE_API_KEY   → untuk Claude
-//    OPENAI_API_KEY   → untuk ChatGPT
-//    GEMINI_API_KEY   → untuk Gemini
-//    GROK_API_KEY     → untuk Grok (xAI)
-//    DEEPSEEK_KEY     → untuk DeepSeek
-//    MISTRAL_KEY      → untuk Mistral
+//  Deploy ke Vercel. Set env vars:
+//    ANTHROPIC_API_KEY  → untuk Claude
+//    OPENAI_API_KEY     → untuk ChatGPT
+//    GEMINI_API_KEY     → untuk Gemini
+//    GROK_API_KEY       → untuk Grok (xAI)
 // ============================================================
 
 import { readFileSync, writeFileSync, existsSync } from 'fs';
@@ -140,7 +138,7 @@ async function callClaude(prompt) {
       'anthropic-version': '2023-06-01'
     },
     body: JSON.stringify({
-      model: 'claude-3-5-sonnet-20240620',
+      model: 'claude-sonnet-4-5',
       max_tokens: 4096,
       system: SYSTEM_PROMPT,
       messages: [{ role: 'user', content: prompt }]
@@ -174,7 +172,6 @@ async function callOpenAI(prompt) {
 }
 
 async function callGemini(prompt) {
-  // FIXED: Removed the literal '+model+' string which caused the HTTP 300/400 errors.
   const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent?key=${process.env.GEMINI_API_KEY}`;
   const resp = await fetch(url, {
     method: 'POST',
@@ -211,15 +208,16 @@ async function callGrok(prompt) {
   return d.choices[0].message.content.trim();
 }
 
-async function callDeepseek(prompt) {
-  const resp = await fetch('https://api.deepseek.com/chat/completions', {
+async function callMeta(prompt) {
+  // Meta Llama via OpenAI-compatible endpoint (Together.ai / Groq)
+  const resp = await fetch('https://api.together.xyz/v1/chat/completions', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.DEEPSEEK_KEY}`
+      'Authorization': `Bearer ${process.env.META_API_KEY}`
     },
     body: JSON.stringify({
-      model: 'deepseek-chat', 
+      model: 'meta-llama/Llama-3.3-70B-Instruct-Turbo',
       messages: [
         { role: 'system', content: SYSTEM_PROMPT },
         { role: 'user', content: prompt }
@@ -227,28 +225,7 @@ async function callDeepseek(prompt) {
       max_tokens: 4096
     })
   });
-  if (!resp.ok) throw new Error(`DeepSeek error ${resp.status}: ${await resp.text()}`);
-  const d = await resp.json();
-  return d.choices[0].message.content.trim();
-}
-
-async function callMistral(prompt) {
-  const resp = await fetch('https://api.mistral.ai/v1/chat/completions', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${process.env.MISTRAL_KEY}`
-    },
-    body: JSON.stringify({
-      model: 'mistral-large-latest',
-      messages: [
-        { role: 'system', content: SYSTEM_PROMPT },
-        { role: 'user', content: prompt }
-      ],
-      max_tokens: 4096
-    })
-  });
-  if (!resp.ok) throw new Error(`Mistral error ${resp.status}: ${await resp.text()}`);
+  if (!resp.ok) throw new Error(`Meta error ${resp.status}: ${await resp.text()}`);
   const d = await resp.json();
   return d.choices[0].message.content.trim();
 }
@@ -259,8 +236,7 @@ async function callAI(prompt, model = 'claude') {
   if (m === 'chatgpt' || m === 'openai' || m === 'gpt') return await callOpenAI(prompt);
   if (m === 'gemini')  return await callGemini(prompt);
   if (m === 'grok')    return await callGrok(prompt);
-  if (m === 'deepseek') return await callDeepseek(prompt);
-  if (m === 'mistral')  return await callMistral(prompt);
+  if (m === 'meta' || m === 'llama') return await callMeta(prompt);
   return await callClaude(prompt); // default
 }
 
@@ -270,5 +246,74 @@ async function callAI(prompt, model = 'claude') {
 function extractJSON(raw) {
   let s = raw.trim();
   // Remove markdown fences
-  s = s.replace(/^
-http://googleusercontent.com/immersive_entry_chip/0
+  s = s.replace(/^```(?:json)?\s*/i, '').replace(/\s*```\s*$/i, '').trim();
+  // Find first { to last }
+  const start = s.indexOf('{');
+  const end   = s.lastIndexOf('}');
+  if (start !== -1 && end !== -1) s = s.slice(start, end + 1);
+  return s;
+}
+
+// ──────────────────────────────────────────────
+//  MAIN HANDLER
+// ──────────────────────────────────────────────
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // ── GET: Plugin polling for pending command ──
+  if (req.method === 'GET') {
+    return res.status(200).json(getCommand());
+  }
+
+  // ── POST ──
+  if (req.method === 'POST') {
+    const body = req.body || {};
+
+    // Reset / execution-done signal
+    if (body.action === 'none' || body.type === 'reset') {
+      setCommand({ action: 'none' });
+      return res.status(200).json({ status: 'reset' });
+    }
+
+    // Process AI prompt
+    if (body.type === 'prompt') {
+      const userPrompt = body.msg;
+      const model      = body.model || 'claude';
+      const user       = body.user  || 'unknown';
+
+      if (!userPrompt) return res.status(400).json({ error: 'msg is required' });
+
+      try {
+        const rawText  = await callAI(userPrompt, model);
+        const jsonText = extractJSON(rawText);
+        const command  = JSON.parse(jsonText);
+
+        setCommand(command);
+        addLog({ user, model, prompt: userPrompt, action: command.action });
+
+        return res.status(200).json({ status: 'ok', command, model });
+      } catch (err) {
+        console.error('AI Error:', err);
+        addLog({ user, model, prompt: userPrompt, error: err.message });
+        return res.status(500).json({ status: 'error', message: err.message });
+      }
+    }
+
+    // Get logs
+    if (body.type === 'get_logs') {
+      try {
+        const logs = existsSync(LOG_FILE) ? JSON.parse(readFileSync(LOG_FILE, 'utf8')) : [];
+        return res.status(200).json({ logs });
+      } catch (_) {
+        return res.status(200).json({ logs: [] });
+      }
+    }
+
+    return res.status(400).json({ error: 'Unknown request type' });
+  }
+
+  return res.status(405).json({ error: 'Method not allowed' });
+}
