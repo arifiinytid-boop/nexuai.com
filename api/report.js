@@ -1,70 +1,94 @@
-// api/report.js — Send report email to arifiinytid@gmail.com
-// Setup env vars in Vercel: GMAIL_USER, GMAIL_PASS (App Password)
-// Get app password: myaccount.google.com/security → 2FA → App passwords
+// api/report.js — NEXUS AI Report Handler
+// Stores reports in /tmp and optionally emails via Resend
 
-module.exports = async (req, res) => {
+import { readFileSync, writeFileSync, existsSync } from 'fs';
+
+const REPORT_FILE = '/tmp/nexus_reports.json';
+
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') { res.status(200).end(); return; }
-  if (req.method !== 'POST') { res.status(405).json({ error: 'Method not allowed' }); return; }
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
-  try {
-    const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-    const { from, userId, message, time, plan, credits, type } = body || {};
-
-    if (!message || !from) { res.status(400).json({ error: 'Missing required fields' }); return; }
-
-    const subject = `[NEXUS AI] Report dari ${from} — ${type || 'General'}`;
-    const emailBody = `
-NEXUS AI — Laporan Pengguna
-============================
-Dari       : ${from}
-User ID    : ${userId || 'N/A'}
-Plan       : ${plan || 'free'}
-Credits    : ${credits || 0} CR
-Waktu      : ${time || new Date().toISOString()}
-Tipe       : ${type || 'General'}
-
-Pesan:
-${message}
-
-============================
-Dikirim otomatis dari nexusai-com.vercel.app
-`.trim();
-
-    // Try nodemailer first
-    let sent = false;
+  // GET reports (admin only)
+  if (req.method === 'GET') {
+    const token = req.query.token;
+    if (token !== process.env.ADMIN_TOKEN) {
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
     try {
-      const nodemailer = require('nodemailer');
-      const transporter = nodemailer.createTransport({
-        service: 'gmail',
-        auth: {
-          user: process.env.GMAIL_USER || 'arifiinytid@gmail.com',
-          pass: process.env.GMAIL_PASS || '',
-        },
-      });
+      const reports = existsSync(REPORT_FILE)
+        ? JSON.parse(readFileSync(REPORT_FILE, 'utf8'))
+        : [];
+      return res.status(200).json({ reports });
+    } catch (_) {
+      return res.status(200).json({ reports: [] });
+    }
+  }
 
-      await transporter.sendMail({
-        from: `"NEXUS AI Report" <${process.env.GMAIL_USER || 'arifiinytid@gmail.com'}>`,
-        to: 'arifiinytid@gmail.com',
-        subject,
-        text: emailBody,
-        html: `<pre style="font-family:monospace;font-size:13px;">${emailBody}</pre>`,
-      });
-      sent = true;
-    } catch (mailErr) {
-      console.error('Nodemailer error:', mailErr.message);
+  // POST new report
+  if (req.method === 'POST') {
+    const body = req.body || {};
+    const { from, message, time, plan, credits, userId } = body;
+
+    if (!message || !from) {
+      return res.status(400).json({ error: 'from and message required' });
     }
 
-    // Fallback: log to Vercel console (visible in dashboard)
-    console.log('=== NEXUS AI REPORT ===');
-    console.log(emailBody);
-    console.log('=======================');
+    // Save to /tmp
+    const report = {
+      id: Date.now().toString(36),
+      from: String(from).substring(0, 50),
+      userId: userId || '0',
+      message: String(message).substring(0, 2000),
+      plan: plan || 'free',
+      credits: credits || 0,
+      time: time || new Date().toISOString(),
+      savedAt: Date.now()
+    };
 
-    res.json({ success: true, sent, message: sent ? 'Email sent!' : 'Saved to logs' });
-  } catch (e) {
-    console.error('Report error:', e);
-    res.status(500).json({ error: e.message });
+    try {
+      let reports = [];
+      if (existsSync(REPORT_FILE)) {
+        reports = JSON.parse(readFileSync(REPORT_FILE, 'utf8'));
+      }
+      reports.unshift(report);
+      if (reports.length > 500) reports = reports.slice(0, 500);
+      writeFileSync(REPORT_FILE, JSON.stringify(reports));
+    } catch (e) {
+      console.error('Failed to save report:', e.message);
+    }
+
+    // Optional: send email via Resend if configured
+    const resendKey = process.env.RESEND_API_KEY;
+    if (resendKey) {
+      try {
+        await fetch('https://api.resend.com/emails', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${resendKey}` },
+          body: JSON.stringify({
+            from: 'NEXUS AI <reports@nexusai.com>',
+            to: ['arifiinytid@gmail.com'],
+            subject: `[NEXUS AI Report] from ${from}`,
+            html: `
+              <h2>New Report from NEXUS AI</h2>
+              <p><strong>User:</strong> ${from} (ID: ${userId})</p>
+              <p><strong>Plan:</strong> ${plan} | <strong>Credits:</strong> ${credits}</p>
+              <p><strong>Time:</strong> ${time}</p>
+              <hr>
+              <p><strong>Message:</strong></p>
+              <p>${String(message).replace(/\n/g, '<br>')}</p>
+            `
+          })
+        });
+      } catch (emailErr) {
+        console.error('Email failed (non-critical):', emailErr.message);
+      }
+    }
+
+    return res.status(200).json({ status: 'ok', id: report.id });
   }
-};
+
+  return res.status(405).json({ error: 'Method not allowed' });
+}
