@@ -498,17 +498,17 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
             <div><div class="mo-n">Gemini 2.0 Flash</div><div class="mo-s">Stable · Fast · Vision</div></div>
             <span class="mb f">FREE</span>
           </div>
-          <div class="mo" data-mid="gemini-2.5-flash-lite" data-prov="gemini" data-cost="1" data-label="Gemini 2.5 Flash Lite" onclick="selModel(this)">
+          <div class="mo" data-mid="gemini-2.5-flash-lite-preview-06-17" data-prov="gemini" data-cost="1" data-label="Gemini 2.5 Flash Lite" onclick="selModel(this)">
             <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
             <div><div class="mo-n">Gemini 2.5 Flash Lite</div><div class="mo-s">Fast · Thinking</div></div>
             <span class="mb s">1 CR</span>
           </div>
-          <div class="mo" data-mid="gemini-2.5-flash" data-prov="gemini" data-cost="2" data-label="Gemini 2.5 Flash" onclick="selModel(this)">
+          <div class="mo" data-mid="gemini-2.5-flash-preview-05-20" data-prov="gemini" data-cost="2" data-label="Gemini 2.5 Flash" onclick="selModel(this)">
             <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
             <div><div class="mo-n">Gemini 2.5 Flash</div><div class="mo-s">Smart · Thinking</div></div>
             <span class="mb s">2 CR</span>
           </div>
-          <div class="mo" data-mid="gemini-2.5-pro" data-prov="gemini" data-cost="5" data-label="Gemini 2.5 Pro" onclick="selModel(this)">
+          <div class="mo" data-mid="gemini-2.5-pro-preview-06-05" data-prov="gemini" data-cost="5" data-label="Gemini 2.5 Pro" onclick="selModel(this)">
             <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
             <div><div class="mo-n">Gemini 2.5 Pro</div><div class="mo-s">Most Capable Google</div></div>
             <span class="mb s">5 CR</span>
@@ -1085,13 +1085,17 @@ ATURAN KEAMANAN:
 
 ${connected ? `
 STUDIO TERHUBUNG: Place "${u.username}" sedang terbuka di Roblox Studio.
-Saat kamu buat script/GUI, akan otomatis di-inject ke place mereka!
+PENTING: Setiap kali user minta buat sesuatu, SELALU output kode Lua LENGKAP dalam code block \`\`\`lua.
+Kode akan OTOMATIS di-inject ke place mereka! Jadi:
+- Buat shop GUI → output LocalScript lengkap dalam \`\`\`lua ... \`\`\`
+- Buat sistem koin → output Script lengkap dalam \`\`\`lua ... \`\`\`
+- Buat animasi → output Script lengkap dalam \`\`\`lua ... \`\`\`
+JANGAN potong kode. JANGAN tulis "-- lanjutan". Output SEMUA baris.
 Kamu TAHU apa yang sudah dibangun berdasarkan history chat ini.
 ` : `
-STUDIO BELUM TERHUBUNG: Beritahu user untuk:
-1. Klik tombol "NEXUS AI" di toolbar Roblox Studio
-2. Klik "CONNECT TO CLOUD"
-3. Setelah connected, AI bisa langsung build di place mereka
+STUDIO BELUM TERHUBUNG. Beritahu user:
+"Untuk script langsung masuk ke place, klik NEXUS AI di toolbar Roblox Studio → CONNECT TO CLOUD"
+Tetap berikan kode Lua lengkap meski belum connected, agar user bisa copy manual.
 `}
 
 ATURAN KELENGKAPAN KODE:
@@ -1482,6 +1486,117 @@ function cancelGen(){
 // ═══════════════════════════════════════
 //  SEND MESSAGE
 // ═══════════════════════════════════════
+// ═══════════════════════════════════════
+//  AUTO INJECT TO STUDIO (Core Feature)
+// ═══════════════════════════════════════
+
+// Parse semua code block Lua dari respons AI
+function parseLuaBlocks(text) {
+  var blocks = [];
+  // Match ```lua ... ``` atau ``` ... ``` yang mengandung Lua syntax
+  var re = /```(?:lua)?\s*([\s\S]*?)```/g;
+  var m;
+  while ((m = re.exec(text)) !== null) {
+    var code = m[1].trim();
+    // Filter: hanya yang ada syntax Lua (bukan JSON/CSS dll)
+    if (code.length > 30 && (
+      /local\s+\w+|function\s+\w+|game:|workspace:|Instance\.new|:GetService|script\.|Players\.|Humanoid|TweenService|DataStore|RemoteEvent|BindableEvent/.test(code)
+    )) {
+      blocks.push(code);
+    }
+  }
+  return blocks;
+}
+
+// Tentukan parent yang tepat berdasarkan isi kode
+function detectScriptParent(code) {
+  if (/Players\.LocalPlayer|PlayerGui|LocalPlayer|StarterGui|ScreenGui/.test(code)) {
+    return { parent: 'StarterGui', type: 'LocalScript' };
+  }
+  if (/StarterPlayerScripts|PlayerScripts/.test(code)) {
+    return { parent: 'StarterPlayerScripts', type: 'LocalScript' };
+  }
+  if (/DataStoreService|RemoteEvent|RemoteFunction|game\.Players\.PlayerAdded/.test(code)) {
+    return { parent: 'ServerScriptService', type: 'Script' };
+  }
+  if (/ModuleScript|return\s+{/.test(code)) {
+    return { parent: 'ReplicatedStorage', type: 'ModuleScript' };
+  }
+  // Default: cek apakah LocalScript atau Script
+  if (/local player = |Players\.LocalPlayer/.test(code)) {
+    return { parent: 'StarterGui', type: 'LocalScript' };
+  }
+  return { parent: 'ServerScriptService', type: 'Script' };
+}
+
+// Buat nama script dari konteks prompt
+function makeScriptName(userPrompt, index) {
+  var keywords = [
+    ['shop', 'ShopSystem'], ['gui', 'GuiScript'], ['coin', 'CoinSystem'],
+    ['health', 'HealthBar'], ['leaderboard', 'LeaderboardSystem'],
+    ['datastore', 'DataManager'], ['animation', 'AnimationScript'],
+    ['tool', 'ToolScript'], ['npc', 'NPCScript'], ['door', 'DoorScript'],
+    ['checkpoint', 'CheckpointSystem'], ['speed', 'SpeedScript'],
+    ['jump', 'JumpScript'], ['kill', 'KillBrick'], ['spawn', 'SpawnSystem'],
+    ['inventory', 'InventorySystem'], ['quest', 'QuestSystem'],
+    ['chat', 'ChatScript'], ['admin', 'AdminScript'], ['anticheat', 'AntiCheat'],
+    ['music', 'MusicSystem'], ['sound', 'SoundScript'],
+  ];
+  var lower = (userPrompt || '').toLowerCase();
+  for (var i = 0; i < keywords.length; i++) {
+    if (lower.includes(keywords[i][0])) {
+      return keywords[i][1] + (index > 0 ? '_' + (index+1) : '');
+    }
+  }
+  return 'NexusAI_Script' + (index > 0 ? '_' + (index+1) : '');
+}
+
+// Main function: parse respons AI → inject ke Studio
+async function autoInjectToStudio(aiResponse, userPrompt) {
+  if (!studioConnected) return;
+
+  var blocks = parseLuaBlocks(aiResponse);
+  if (blocks.length === 0) return;
+
+  // Log di chat bahwa akan inject
+  addStudioLog('Mengirim ' + blocks.length + ' script ke Studio...');
+
+  var injected = 0;
+  for (var i = 0; i < blocks.length; i++) {
+    var code = blocks[i];
+    var info = detectScriptParent(code);
+    var scriptName = makeScriptName(userPrompt, i);
+
+    var cmd = {
+      action: 'inject_script',
+      name:   scriptName,
+      parent: info.parent,
+      script_type: info.type,
+      code:   code,
+      _user:  SESSION ? SESSION.user.username : 'web',
+    };
+
+    var result = await sendToStudio(cmd);
+    if (result && result.status === 'ok') {
+      injected++;
+      addStudioLog('Script "' + scriptName + '" → ' + info.parent);
+    }
+
+    // Delay kecil antar inject
+    if (blocks.length > 1) await new Promise(function(r){setTimeout(r,400);});
+  }
+
+  if (injected > 0) {
+    toast(injected + ' script berhasil dikirim ke Studio!');
+  }
+}
+
+// Tambah log kecil di area chat (tidak ganggu UI)
+function addStudioLog(msg) {
+  // Console log saja, tidak perlu UI tambahan
+  console.log('[NEXUS STUDIO]', msg);
+}
+
 async function send(){
   if(S.gen) return;
   var txt=document.getElementById('inp').value.trim();
@@ -1537,6 +1652,12 @@ async function send(){
     saveS();
     await setConvTitle(sendConvId);
     renderConvs();
+
+    // ⭐ AUTO INJECT KE STUDIO setelah AI jawab
+    if (studioConnected) {
+      toast('Script terdeteksi, mengirim ke Studio...');
+      await autoInjectToStudio(r, txt);
+    }
   }catch(e){
     rmThinking();
     if(e.name==='AbortError') return;
