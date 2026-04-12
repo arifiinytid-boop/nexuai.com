@@ -350,7 +350,13 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   <!-- ══════ SIDEBAR ══════ -->
   <div id="sb">
     <div class="sb-head">
-      <div class="sb-logo">N</div>
+      <div class="sb-logo" style="overflow:hidden;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17a2 2 0 0 1-2 2H10a2 2 0 0 1-2-2v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/>
+          <line x1="10" y1="17" x2="10" y2="21"/><line x1="14" y1="17" x2="14" y2="21"/>
+          <line x1="9" y1="21" x2="15" y2="21"/>
+        </svg>
+      </div>
       <div>
         <div class="sb-logo-text">NEXUS AI</div>
         <div class="sb-logo-sub">v5.0 · Roblox Dev</div>
@@ -384,7 +390,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="convs" id="convList"><div class="conv-empty" id="noConvLbl">Belum ada percakapan</div></div>
     <div class="sb-footer">
       Made by <span style="color:var(--cyan)">NEXUS STUDIO</span><br>
-      YouTube: <span style="color:rgba(0,229,255,.6)">FIINYT_ID</span>
+      YouTube: <span style="color:rgba(0,229,255,.6)">NEXUS STUDIO</span>
     </div>
   </div>
 
@@ -395,6 +401,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <svg width="11" height="11" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span id="plugBannerTxt">Plugin belum terhubung —</span>
       <a onclick="showInstall()">Cara connect →</a>
+      <a onclick="retryStudio()" style="margin-left:8px;color:var(--green);">Reconnect</a>
     </div>
 
     <!-- Header -->
@@ -522,12 +529,12 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
           </div>
           <div class="mo" data-mid="gemini-3.1-flash-lite-preview" data-prov="gemini" data-cost="6" data-label="Gemini 3.1 Flash Lite" onclick="selModel(this)">
             <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
-            <div><div class="mo-n">Gemini 3.1 Flash Lite</div><div class="mo-s">Preview · Most Capable Google · Thinking</div></div>
+            <div><div class="mo-n">Gemini 3.1 Flash Lite</div><div class="mo-s">Preview · Thinking</div></div>
             <span class="mb s">6 CR</span>
           </div>
           <div class="mo" data-mid="gemini-3.1-pro-preview" data-prov="gemini" data-cost="12" data-label="Gemini 3.1 Pro" onclick="selModel(this)">
             <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
-            <div><div class="mo-n">Gemini 3.1 Pro</div><div class="mo-s">Pro · Super Fast · Paid</div></div>
+            <div><div class="mo-n">Gemini 3.1 Pro</div><div class="mo-s">Pro · Super Capable</div></div>
             <span class="mb s">12 CR</span>
           </div>
           <div class="mg">Meta Llama (Free)</div>
@@ -625,7 +632,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         </button>
         <div style="margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
           <!-- Model selector untuk GUI Builder -->
-          <div style="position:relative;">
+          <div style="position:relative;z-index:998;">
             <div class="inp-model" id="guiModelBtn" onclick="toggleGuiMDD()" style="max-width:140px;" title="Model AI untuk GUI Builder">
               <img id="guiMIcon" src="" alt="" onerror="this.style.display='none'" style="width:14px;height:14px;border-radius:3px;">
               <span class="inp-model-name" id="guiMName">Gemini 2.0 Flash</span>
@@ -633,17 +640,17 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
               <svg width="8" height="8" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="color:var(--dim);flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
             </div>
             <!-- GUI Model Dropdown -->
-            <div class="model-dd" id="guiMDD" style="bottom:calc(100% + 4px);left:0;right:auto;min-width:220px;">
+            <div class="model-dd" id="guiMDD" style="position:absolute;bottom:calc(100% + 4px);left:0;right:auto;min-width:220px;z-index:999;">
               <div class="mg">Google Gemini</div>
               <div class="mo act" data-gmid="gemini-2.0-flash" data-gprov="gemini" data-gcost="0" data-glabel="Gemini 2.0 Flash" onclick="selGuiModel(this)">
                 <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
                 <div><div class="mo-n">Gemini 2.0 Flash</div><div class="mo-s">Fast · Free</div></div><span class="mb f">FREE</span>
               </div>
-              <div class="mo" data-gmid="gemini-2.5-flash-preview-05-20" data-gprov="gemini" data-gcost="2" data-glabel="Gemini 2.5 Flash" onclick="selGuiModel(this)">
+              <div class="mo" data-gmid="gemini-2.5-flash" data-gprov="gemini" data-gcost="2" data-glabel="Gemini 2.5 Flash" onclick="selGuiModel(this)">
                 <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
                 <div><div class="mo-n">Gemini 2.5 Flash</div><div class="mo-s">Smart · Thinking</div></div><span class="mb s">2 CR</span>
               </div>
-              <div class="mo" data-gmid="gemini-2.5-pro-preview-06-05" data-gprov="gemini" data-gcost="5" data-glabel="Gemini 2.5 Pro" onclick="selGuiModel(this)">
+              <div class="mo" data-gmid="gemini-2.5-pro" data-gprov="gemini" data-gcost="5" data-glabel="Gemini 2.5 Pro" onclick="selGuiModel(this)">
                 <div class="mo-icon"><img src="icon/gemini.png" alt="G"></div>
                 <div><div class="mo-n">Gemini 2.5 Pro</div><div class="mo-s">Most Capable</div></div><span class="mb s">5 CR</span>
               </div>
@@ -678,6 +685,12 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
           <button class="gui-gen-btn" onclick="generateGuiCode()">
             <svg width="11" height="11" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             Export Script
+          </button>
+          <button class="gui-gen-btn" id="guiToPlaceBtn" onclick="sendGuiToPlace()" 
+            style="background:linear-gradient(135deg,var(--green),var(--cyan));opacity:0.5;cursor:not-allowed;" 
+            title="Hubungkan plugin dulu">
+            <svg width="11" height="11" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:4px"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            <span id="guiToPlaceTxt">Kirim ke Place</span>
           </button>
         </div>
       </div>
@@ -796,6 +809,35 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         <div class="console-line info">Ketik /help untuk melihat perintah</div>
       </div>
       <input type="text" class="console-inp" id="consoleInp" placeholder="/help" onkeydown="consoleKey(event)">
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Redeem Code</div>
+      <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
+        <div style="font-size:10px;color:var(--dim);">Dapatkan code di Discord: <a href="https://discord.gg/TeefZk37" target="_blank" style="color:var(--cyan);">discord.gg/TeefZk37</a></div>
+        <div style="display:flex;gap:8px;width:100%;"><input type="text" id="redeemInput" class="settings-select" style="flex:1;padding:6px 10px;" placeholder="Masukkan kode..."><button class="settings-btn" onclick="redeemCode()" id="redeemBtn">Redeem</button></div>
+        <span id="redeemStatus" style="font-size:10px;color:var(--green);"></span>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Personalisasi</div>
+      <div class="settings-row"><span>Tema Warna</span>
+        <select class="settings-select" id="themeSelect" onchange="applyTheme(this.value)">
+          <option value="cyan">Cyan (Default)</option><option value="purple">Purple</option>
+          <option value="green">Green</option><option value="pink">Pink</option><option value="gold">Gold</option>
+        </select>
+      </div>
+      <div class="settings-row"><span>Animasi UI</span>
+        <select class="settings-select" id="animSelect" onchange="setAnimSpeed(this.value)">
+          <option value="normal">Normal</option><option value="fast">Cepat</option><option value="off">Mati</option>
+        </select>
+      </div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Download Plugin</div>
+      <div class="settings-row" style="flex-direction:column;gap:5px;align-items:flex-start;">
+        <div style="font-size:10px;color:var(--dim);">Instal NEXUS AI Plugin di Roblox Studio</div>
+        <button class="settings-btn" onclick="window.open('https://discord.gg/TeefZk37','_blank')">Download via Discord</button>
+      </div>
     </div>
     <div class="settings-section">
       <div class="settings-title">Akun</div>
@@ -931,6 +973,7 @@ async function checkStudio() {
 
 function setStudioStatus(online) {
   studioConnected = online;
+  setTimeout(updateGuiPlaceBtn, 100);
   var badge = document.getElementById('studioBadge');
   var txt   = document.getElementById('studioTxt');
   var dot   = document.getElementById('studioDot');
@@ -990,11 +1033,11 @@ function startStudioPoll() {
 //  LANGUAGE
 // ═══════════════════════════════════════
 var LANGS = {
-  id: { lang:'Bahasa Indonesia', placeholder:'Tanya NEXUS AI tentang Roblox...', noConv:'Belum ada percakapan', newChat:'Percakapan Baru', recent:'Riwayat Chat', welcome:'AI Roblox cerdas — tulis Lua, debug script, buat GUI. Connect plugin untuk kirim script langsung ke Studio!', aiLang:'Selalu balas dalam Bahasa Indonesia. Gunakan bahasa yang santai dan mudah dipahami.' },
-  en: { lang:'English', placeholder:'Ask NEXUS AI about Roblox...', noConv:'No conversations yet', newChat:'New Conversation', recent:'Recent Chats', welcome:'Smart Roblox AI — write Lua, debug scripts, build GUIs. Connect plugin to send scripts directly to Studio!', aiLang:'Always respond in English.' },
-  ja: { lang:'日本語', placeholder:'RobloxについてNEXUS AIに聞く...', noConv:'まだ会話がありません', newChat:'新しい会話', recent:'最近のチャット', welcome:'スマートRoblox AI', aiLang:'常に日本語で返答してください。' },
-  ko: { lang:'한국어', placeholder:'NEXUS AI에게 질문...', noConv:'아직 대화 없음', newChat:'새 대화', recent:'최근 채팅', welcome:'스마트 Roblox AI', aiLang:'항상 한국어로 답하세요.' },
-  zh: { lang:'中文', placeholder:'向NEXUS AI提问...', noConv:'暂无对话', newChat:'新对话', recent:'最近聊天', welcome:'智能Roblox AI', aiLang:'请始终用中文回答。' },
+  id: { lang:'Bahasa Indonesia', placeholder:'Tanya NEXUS AI tentang Roblox...', noConv:'Belum ada percakapan', newChat:'Percakapan Baru', recent:'Riwayat Chat', welcome:'AI Roblox cerdas — tulis Lua, debug script, buat GUI. Connect plugin untuk kirim script langsung ke Studio!', aiLang:'Selalu balas dalam Bahasa Indonesia. Gunakan bahasa yang santai dan mudah dipahami.', clearConfirm:'Hapus semua pesan di percakapan ini?', sending:'Mengirim...', thinking:'NEXUS AI sedang bekerja...', cancel:'Batal', studioOn:'Studio: ON', studioOff:'Studio: OFF', connect:'Reconnect', guiSendPlace:'Kirim ke Place' },
+  en: { lang:'English', placeholder:'Ask NEXUS AI about Roblox...', noConv:'No conversations yet', newChat:'New Conversation', recent:'Recent Chats', welcome:'Smart Roblox AI — write Lua, debug scripts, build GUIs. Connect plugin to send scripts directly to Studio!', aiLang:'Always respond in English.', clearConfirm:'Clear all messages?', sending:'Sending...', thinking:'NEXUS AI is working...', cancel:'Cancel', studioOn:'Studio: ON', studioOff:'Studio: OFF', connect:'Reconnect', guiSendPlace:'Send to Place' },
+  ja: { lang:'日本語', placeholder:'RobloxについてNEXUS AIに聞く...', noConv:'まだ会話がありません', newChat:'新しい会話', recent:'最近のチャット', welcome:'スマートRoblox AI', aiLang:'常に日本語で返答してください。', clearConfirm:'このチャットを削除しますか？', sending:'送信中...', thinking:'NEXUS AIが作業中...', cancel:'キャンセル', studioOn:'Studio: ON', studioOff:'Studio: OFF', connect:'再接続', guiSendPlace:'Placeに送信' },
+  ko: { lang:'한국어', placeholder:'NEXUS AI에게 질문...', noConv:'아직 대화 없음', newChat:'새 대화', recent:'최근 채팅', welcome:'스마트 Roblox AI', aiLang:'항상 한국어로 답하세요.', clearConfirm:'모든 메시지를 삭제할까요?', sending:'전송 중...', thinking:'NEXUS AI 작업 중...', cancel:'취소', studioOn:'Studio: ON', studioOff:'Studio: OFF', connect:'재연결', guiSendPlace:'Place에 전송' },
+  zh: { lang:'中文', placeholder:'向NEXUS AI提问...', noConv:'暂无对话', newChat:'新对话', recent:'最近聊天', welcome:'智能Roblox AI', aiLang:'请始终用中文回答。', clearConfirm:'清除所有消息？', sending:'发送中...', thinking:'NEXUS AI工作中...', cancel:'取消', studioOn:'Studio: ON', studioOff:'Studio: OFF', connect:'重新连接', guiSendPlace:'发送到Place' },
 };
 var curLang = 'id';
 
@@ -1006,6 +1049,14 @@ function applyLang() {
   var rl = document.getElementById('recentLbl'); if (rl) rl.textContent = t.recent;
   var wt = document.getElementById('welcomeText'); if (wt) wt.textContent = t.welcome;
   var ls = document.getElementById('langSelector'); if (ls) ls.value = curLang;
+  // Update studio texts
+  var st = document.getElementById('studioTxt');
+  if (st) st.textContent = studioConnected ? (t.studioOn||'Studio: ON') : (t.studioOff||'Studio: OFF');
+  // Update cancel btn
+  var cb = document.getElementById('cancelBtn');
+  // Update GUI send to place button
+  var gtp = document.getElementById('guiToPlaceTxt');
+  if (gtp) gtp.textContent = t.guiSendPlace || 'Kirim ke Place';
   renderConvs();
 }
 
@@ -1031,6 +1082,8 @@ function loadS() {
     S.draftText = d.draftText || {};
     S.draftAttach = d.draftAttach || {};
     S.language  = d.language || localStorage.getItem('nexus_lang') || 'id';
+    S.theme = d.theme || 'cyan';
+    S.animSpeed = d.animSpeed || 'normal';
     S.roles     = d.roles    || (isOwner() ? ['owner'] : []);
     if (d.model && d.model.id) S.model = d.model;
     curLang = S.language;
@@ -1043,7 +1096,7 @@ function saveS() {
     var d = {
       credits:S.credits, convs:S.convs, lastClaim:S.lastClaim,
       plan:S.plan, draftText:S.draftText, draftAttach:S.draftAttach,
-      model:S.model, language:S.language, roles:S.roles,
+      model:S.model, language:S.language, roles:S.roles, theme:S.theme, animSpeed:S.animSpeed,
       avatar:SESSION.user.avatar
     };
     SESSION.data = d;
@@ -1087,7 +1140,7 @@ function buildSysPrompt() {
   var connected = studioConnected;
 
   return `Kamu adalah NEXUS AI, asisten AI terkuat untuk developer game Roblox.
-Dibuat oleh NEXUS STUDIO. Lead developer: FIINYTID25. YouTube: FIINYT_ID.
+Dibuat oleh NEXUS STUDIO. Lead developer: FIINYTID25. YouTube: NEXUS STUDIO.
 Website: nexusai-com.vercel.app
 
 USER: "${u.username}" | Plan: ${S.plan} | Credits: ${parseFloat(S.credits).toFixed(2)} CR | Time: ${now.toLocaleString()}
@@ -1207,6 +1260,8 @@ function initApp(){
   updateCreds(); updateModelUI(); renderConvs(); checkDailyCredits();
   loadKeys();
   startStudioPoll();
+  if (S.theme && S.theme !== 'cyan') applyTheme(S.theme);
+  if (S.animSpeed && S.animSpeed !== 'normal') setAnimSpeed(S.animSpeed);
   if (isAdmin()) document.getElementById('adminSection').style.display = '';
   var withMsgs = S.convs.filter(function(c){return c.msgs&&c.msgs.length;}).sort(function(a,b){return b.created-a.created;});
   if (!withMsgs.length) newChat(); else loadConv(withMsgs[0].id);
@@ -1231,12 +1286,20 @@ function updateCreds(){
 function checkDailyCredits(){
   if (isOwner()) return;
   var today = new Date().toDateString();
-  if (S.lastClaim !== today){
-    var gain = S.plan==='pro' ? 25 : 2;
-    S.credits = parseFloat(Math.min(S.credits+gain, 9999).toFixed(4));
-    S.lastClaim = today; saveS(); updateCreds();
-    toast('+' + gain + ' credits harian! Total: ' + parseFloat(S.credits).toFixed(2) + ' CR');
+  // Only give credits if lastClaim is null or different day
+  // Extra guard: check localStorage directly to avoid double-grant on reload
+  var lsKey = 'nexus_lastclaim_' + (SESSION ? SESSION.user.username : 'u');
+  var lsClaim = localStorage.getItem(lsKey);
+  if (S.lastClaim === today || lsClaim === today) {
+    S.lastClaim = today; // sync state
+    return;
   }
+  var gain = S.plan==='pro' ? 25 : 2;
+  S.credits = parseFloat(Math.min(S.credits+gain, 9999).toFixed(4));
+  S.lastClaim = today;
+  localStorage.setItem(lsKey, today);
+  saveS(); updateCreds();
+  toast('+' + gain + ' credits harian! Total: ' + parseFloat(S.credits).toFixed(2) + ' CR');
 }
 
 function claimDaily(){
@@ -1491,7 +1554,7 @@ function toggleEditCode(id){var code=document.getElementById('code_'+id);if(!cod
 // ═══════════════════════════════════════
 //  THINKING UI (like Claude's style)
 // ═══════════════════════════════════════
-var thinkEl=null,thinkTimer=null,thinkingEnabled=true;
+var thinkEl=null,thinkTimer=null,thinkingEnabled=true,lastUserPrompt="";
 function toggleThinking(){
   thinkingEnabled=!thinkingEnabled;
   var btn=document.getElementById('thinkToggle');
@@ -1499,32 +1562,79 @@ function toggleThinking(){
   document.getElementById('thinkLabel').textContent=thinkingEnabled?'Think: ON':'Think: OFF';
   toast(thinkingEnabled?'Thinking mode ON':'Fast mode');
 }
+// Dynamic thinking steps based on user prompt
+function getThinkSteps(prompt) {
+  var lower = (prompt||'').toLowerCase();
+  var steps = [];
+  if (/gui|shop|menu|hud|bar|frame|button/.test(lower)) {
+    steps = [
+      'Membaca struktur place...',
+      'Merancang komponen GUI...',
+      'Menulis LocalScript...',
+      'Menyiapkan RemoteEvents...',
+      'Finalisasi kode...'
+    ];
+  } else if (/script|sistem|system|coin|data|store/.test(lower)) {
+    steps = [
+      'Menganalisis kebutuhan...',
+      'Merancang arsitektur server...',
+      'Menulis server Script...',
+      'Menulis client LocalScript...',
+      'Validasi dan keamanan...'
+    ];
+  } else if (/debug|fix|error|perbaiki/.test(lower)) {
+    steps = [
+      'Membaca script...',
+      'Mencari error...',
+      'Menganalisis penyebab...',
+      'Memperbaiki kode...',
+      'Verifikasi solusi...'
+    ];
+  } else if (/loading|animasi|effect/.test(lower)) {
+    steps = [
+      'Merancang animasi...',
+      'Menulis kode TweenService...',
+      'Menyusun sequence...',
+      'Finalisasi...'
+    ];
+  } else {
+    steps = [
+      'Menganalisis pertanyaan...',
+      'Memproses dengan AI...',
+      'Menyusun jawaban...',
+      'Finalisasi respons...'
+    ];
+  }
+  return steps;
+}
 var THINK_STEPS=[
   {txt:'Menganalisis permintaan...'},
   {txt:'Memproses dengan AI...'},
   {txt:'Menulis kode...'},
   {txt:'Menyiapkan respons...'}
 ];
-function showThinking(){
+function showThinking(promptText){
   var a=document.getElementById('msgs');
   thinkEl=document.createElement('div');
+  var steps = getThinkSteps(promptText||lastUserPrompt||'');
   if(thinkingEnabled){
     thinkEl.className='thinking-wrap';
     thinkEl.innerHTML=
       '<div class="av"><img src="nexusai.png" alt="" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--cyan2);"></div>'+
       '<div class="thinking-box">'+
-        '<div class="thinking-hdr"><div class="tspin"></div>NEXUS AI berpikir...</div>'+
+        '<div class="thinking-hdr"><div class="tspin"></div>NEXUS AI sedang bekerja...</div>'+
         '<div class="t-steps">'+
-          THINK_STEPS.map(function(s,i){return '<div class="t-step" id="ts'+i+'"><div class="t-step-ic"></div>'+s.txt+'</div>';}).join('')+
+          steps.map(function(s,i){return '<div class="t-step" id="ts'+i+'"><div class="t-step-ic"></div>'+s+'</div>';}).join('')+
         '</div>'+
         '<button class="cancel-btn" onclick="cancelGen()">Batal</button>'+
       '</div>';
     var idx=0;
+    var maxSteps=steps.length;
     thinkTimer=setInterval(function(){
       if(idx>0){var p=document.getElementById('ts'+(idx-1));if(p){p.classList.remove('active');p.classList.add('done');}}
       var c=document.getElementById('ts'+idx);if(c)c.classList.add('active');
-      idx++;if(idx>=THINK_STEPS.length)clearInterval(thinkTimer);
-    },700);
+      idx++;if(idx>=maxSteps)clearInterval(thinkTimer);
+    },650);
   } else {
     thinkEl.className='thinking-fast';
     thinkEl.innerHTML=
@@ -1573,22 +1683,32 @@ function parseLuaBlocks(text) {
 
 // Tentukan parent yang tepat berdasarkan isi kode
 function detectScriptParent(code) {
-  if (/Players\.LocalPlayer|PlayerGui|LocalPlayer|StarterGui|ScreenGui/.test(code)) {
-    return { parent: 'StarterGui', type: 'LocalScript' };
+  // Loading screen → ReplicatedFirst
+  if (/ReplicatedFirst|loading.?screen|LoadingScreen|loadingScreen/i.test(code) && 
+      /ScreenGui|Frame|ImageLabel|progress/i.test(code)) {
+    return { parent: 'ReplicatedFirst', type: 'LocalScript' };
   }
-  if (/StarterPlayerScripts|PlayerScripts/.test(code)) {
-    return { parent: 'StarterPlayerScripts', type: 'LocalScript' };
-  }
-  if (/DataStoreService|RemoteEvent|RemoteFunction|game\.Players\.PlayerAdded/.test(code)) {
-    return { parent: 'ServerScriptService', type: 'Script' };
-  }
-  if (/ModuleScript|return\s+{/.test(code)) {
+  // ModuleScript
+  if (/^\s*local\s+\w+\s*=\s*{}|return\s+{/.test(code) || /ModuleScript/.test(code)) {
     return { parent: 'ReplicatedStorage', type: 'ModuleScript' };
   }
-  // Default: cek apakah LocalScript atau Script
-  if (/local player = |Players\.LocalPlayer/.test(code)) {
+  // Server script
+  if (/DataStoreService|game\.Players\.PlayerAdded|game\.Players\.PlayerRemoving/.test(code)) {
+    return { parent: 'ServerScriptService', type: 'Script' };
+  }
+  // StarterPlayerScripts
+  if (/StarterPlayerScripts|PlayerScripts|UserInputService|ContextActionService/.test(code)) {
+    return { parent: 'StarterPlayerScripts', type: 'LocalScript' };
+  }
+  // GUI LocalScript
+  if (/Players\.LocalPlayer|PlayerGui|LocalPlayer|StarterGui|ScreenGui|Frame.*Parent/.test(code)) {
     return { parent: 'StarterGui', type: 'LocalScript' };
   }
+  // RemoteEvent/Function → ReplicatedStorage
+  if (/RemoteEvent|RemoteFunction|BindableEvent/.test(code) && !/OnServerEvent|OnClientEvent/.test(code)) {
+    return { parent: 'ReplicatedStorage', type: 'Script' };
+  }
+  // Default server
   return { parent: 'ServerScriptService', type: 'Script' };
 }
 
@@ -1637,6 +1757,7 @@ async function autoInjectToStudio(aiResponse, userPrompt) {
       script_type: info.type,
       code:   code,
       _user:  SESSION ? SESSION.user.username : 'web',
+      _target_user: SESSION ? SESSION.user.username.toLowerCase() : '',
     };
 
     var result = await sendToStudio(cmd);
@@ -1680,7 +1801,8 @@ async function send(){
   S.gen=true;
   document.getElementById('sendBtn').classList.add('hidden');
   document.getElementById('cancelBtn').classList.remove('hidden');
-  showThinking();
+  lastUserPrompt=txt;
+  showThinking(txt);
   S.cancelCtrl=new AbortController();
 
   try{
@@ -1984,6 +2106,47 @@ function generateGuiCode(){
   document.getElementById('guiCodeModal').classList.add('show');
 }
 function copyGuiCode(){navigator.clipboard.writeText(document.getElementById('guiCodeOutput').textContent).then(function(){toast('Script disalin!');});}
+
+async function sendGuiToPlace() {
+  if (!studioConnected) { toast('Hubungkan plugin dulu!'); return; }
+  var code = document.getElementById('guiCodeOutput').textContent;
+  if (!code || code.length < 10) { generateGuiCode(); return; }
+  var btn = document.getElementById('guiToPlaceBtn');
+  btn.style.opacity = '0.5'; btn.style.cursor = 'not-allowed';
+  var scriptName = 'GuiScript_' + Date.now().toString(36);
+  var cmd = {
+    action: 'inject_script',
+    name: scriptName,
+    parent: 'StarterGui',
+    script_type: 'LocalScript',
+    code: code,
+    _user: SESSION ? SESSION.user.username : 'web',
+    _target_user: SESSION ? SESSION.user.username.toLowerCase() : '',
+  };
+  var result = await sendToStudio(cmd);
+  if (result && result.status === 'ok') {
+    toast('GUI berhasil dikirim ke place!');
+    closeModal('guiCodeModal');
+  } else {
+    toast('Gagal kirim, coba lagi');
+  }
+}
+
+// Update GUI to place button state based on studio connection
+function updateGuiPlaceBtn() {
+  var btn = document.getElementById('guiToPlaceBtn');
+  var txt = document.getElementById('guiToPlaceTxt');
+  if (!btn) return;
+  if (studioConnected) {
+    btn.style.opacity = '1'; btn.style.cursor = 'pointer';
+    if (txt) txt.textContent = 'Kirim ke Place';
+    btn.title = 'Kirim GUI ke place kamu';
+  } else {
+    btn.style.opacity = '0.4'; btn.style.cursor = 'not-allowed';
+    if (txt) txt.textContent = 'Kirim ke Place';
+    btn.title = 'Hubungkan plugin dulu';
+  }
+}
 function downloadGuiCode(){var blob=new Blob([document.getElementById('guiCodeOutput').textContent],{type:'text/plain'});var a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='NexusAI_GUI.lua';a.click();URL.revokeObjectURL(a.href);}
 function openGuiAIChat(){
   document.getElementById('guiModalModelLabel').textContent = guiModel.label;
@@ -2082,6 +2245,11 @@ function hexRgb(hex){if(!hex||hex==='transparent')return null;var r=/^#?([a-f\d]
 // ═══════════════════════════════════════
 function openSettings(){
   document.getElementById('settingsUsername').textContent=SESSION?SESSION.user.username:'-';
+  // Restore theme/anim selectors
+  var ts = document.getElementById('themeSelect');
+  if (ts && S.theme) ts.value = S.theme;
+  var as_ = document.getElementById('animSelect');
+  if (as_ && S.animSpeed) as_.value = S.animSpeed;
   var badge=document.getElementById('settingsBadge');
   if(badge){badge.textContent=isOwner()?'Admin':(S.plan==='pro'?'Pro':'Free');badge.style.background=isOwner()?'rgba(255,214,0,.15)':(S.plan==='pro'?'rgba(0,229,255,.1)':'rgba(0,255,170,.08)');badge.style.color=isOwner()?'var(--yellow)':(S.plan==='pro'?'var(--cyan)':'var(--green)');}
   document.getElementById('settingsCredits').textContent=isOwner()?'Unlimited':parseFloat(S.credits).toFixed(2)+' CR';
@@ -2156,13 +2324,96 @@ function runConsoleCmd(cmd){
 // ═══════════════════════════════════════
 //  MISC
 // ═══════════════════════════════════════
+// ═══════════════════════════════════════
+//  REDEEM CODES
+// ═══════════════════════════════════════
+var REDEEM_CODES = {
+  // Codes are checked server-side in production
+  // Local demo codes:
+  'NEXUS2026': {credits: 50, expires: '2026-12-31'},
+  'DISCORD100': {credits: 100, expires: '2026-12-31'},
+};
+
+async function redeemCode() {
+  var code = (document.getElementById('redeemInput').value || '').trim().toUpperCase();
+  if (!code) { document.getElementById('redeemStatus').textContent = 'Masukkan kode dulu!'; return; }
+  var btn = document.getElementById('redeemBtn');
+  btn.disabled = true; btn.textContent = '...';
+  // Check local codes
+  var local = REDEEM_CODES[code];
+  if (local) {
+    var now = new Date().toISOString().split('T')[0];
+    if (local.expires < now) {
+      document.getElementById('redeemStatus').textContent = 'Kode sudah expired!';
+      document.getElementById('redeemStatus').style.color = 'var(--pink)';
+    } else {
+      // Check if already redeemed
+      var redeemedKey = 'nexus_redeemed_' + (SESSION ? SESSION.user.username : 'u');
+      var redeemed = JSON.parse(localStorage.getItem(redeemedKey) || '[]');
+      if (redeemed.includes(code)) {
+        document.getElementById('redeemStatus').textContent = 'Kode sudah pernah digunakan!';
+        document.getElementById('redeemStatus').style.color = 'var(--pink)';
+      } else {
+        S.credits = parseFloat((S.credits + local.credits).toFixed(4));
+        redeemed.push(code); localStorage.setItem(redeemedKey, JSON.stringify(redeemed));
+        updateCreds(); saveS();
+        document.getElementById('redeemStatus').textContent = '+' + local.credits + ' CR berhasil ditambahkan!';
+        document.getElementById('redeemStatus').style.color = 'var(--green)';
+        document.getElementById('redeemInput').value = '';
+        toast('+' + local.credits + ' CR dari kode ' + code + '!');
+      }
+    }
+  } else {
+    document.getElementById('redeemStatus').textContent = 'Kode tidak valid!';
+    document.getElementById('redeemStatus').style.color = 'var(--pink)';
+  }
+  btn.disabled = false; btn.textContent = 'Redeem';
+  setTimeout(function(){ document.getElementById('redeemStatus').textContent = ''; }, 4000);
+}
+
+// ═══════════════════════════════════════
+//  THEME SYSTEM
+// ═══════════════════════════════════════
+var THEMES = {
+  cyan:   { '--cyan':'#00e5ff', '--purple':'#8800ff', '--green':'#00ffaa', '--pink':'#ff2d6b' },
+  purple: { '--cyan':'#bb86fc', '--purple':'#6200ea', '--green':'#03dac6', '--pink':'#cf6679' },
+  green:  { '--cyan':'#00ffaa', '--purple':'#00e5ff', '--green':'#69f0ae', '--pink':'#ff5252' },
+  pink:   { '--cyan':'#ff80ab', '--purple':'#ea80fc', '--green':'#b9f6ca', '--pink':'#ff5252' },
+  gold:   { '--cyan':'#ffd600', '--purple':'#ff6d00', '--green':'#00e676', '--pink':'#ff1744' },
+};
+function applyTheme(name) {
+  var t = THEMES[name] || THEMES.cyan;
+  var root = document.documentElement;
+  Object.keys(t).forEach(function(k){ root.style.setProperty(k, t[k]); });
+  S.theme = name; saveS(); toast('Tema: ' + name);
+}
+function setAnimSpeed(v) {
+  var sheet = document.documentElement.style;
+  if (v === 'fast') { sheet.setProperty('--anim-speed','0.08s'); }
+  else if (v === 'off') { sheet.setProperty('--anim-speed','0s'); }
+  else { sheet.setProperty('--anim-speed','0.15s'); }
+  S.animSpeed = v; saveS();
+}
+
 function switchTab(tab,btn){
   document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('act');});btn.classList.add('act');
   document.getElementById('chatTab').style.display=tab==='chat'?'flex':'none';
   if(tab==='chat')document.getElementById('chatTab').style.flexDirection='column';
   document.getElementById('guiTab').style.display=tab==='gui'?'flex':'none';
 }
-function clearChat(){if(!confirm('Hapus semua pesan di percakapan ini?'))return;S.msgs=[];var c=S.convs.find(function(x){return x.id===S.curConv;});if(c){c.msgs=[];c.title='Untitled';}saveS();renderMsgs();}
+function clearChat(){
+  var lc=LANGS[curLang]||LANGS.id; if(!confirm(lc.clearConfirm||'Hapus semua pesan?')) return;
+  S.msgs=[];
+  var c=S.convs.find(function(x){return x.id===S.curConv;});
+  if(c){c.msgs=[];c.title='Untitled';}
+  // Ensure curConv is still valid - don't reset it
+  if(!S.curConv){
+    var c2={id:Date.now()+'',title:'Untitled',msgs:[],created:Date.now()};
+    S.convs.push(c2); S.curConv=c2.id;
+  }
+  saveS(); renderMsgs();
+  document.getElementById('chatTitle').textContent='Chat Baru';
+}
 function useSugg(txt){document.getElementById('inp').value=txt;document.getElementById('inp').focus();}
 function showInstall(){document.getElementById('installModal').classList.add('show');}
 function closeModal(id){document.getElementById(id).classList.remove('show');}
