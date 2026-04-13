@@ -1,4 +1,3 @@
-<!--login.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,7 +6,6 @@
 <title>NEXUS AI — Login</title>
 <link rel="icon" href="nexusai.png" type="image/png">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
 :root{--bg:#030312;--bg2:#06071a;--bg3:#0a0b22;--cyan:#00e5ff;--cyan2:rgba(0,229,255,.35);--purple:#8800ff;--pink:#ff2d6b;--green:#00ffaa;--yellow:#ffd600;--text:#b8cfff;--dim:#3a4a7a;--b:rgba(0,229,255,.12);--gc:0 0 30px rgba(0,229,255,.2);--gp:0 0 30px rgba(136,0,255,.2);--r:8px;}
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -26,11 +24,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .lang-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px;}
 .lang-select{background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;cursor:pointer;}
 .lang-select:focus{border-color:var(--cyan2);}
-.lang-label{font-size:10px;color:var(--dim);}
 .step-label{font-size:11px;color:var(--dim);margin-bottom:14px;line-height:1.6;}
-.inp{width:100%;background:rgba(0,229,255,.04);border:1px solid var(--b);border-radius:var(--r);padding:12px 14px;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:.2s;margin-bottom:10px;}
-.inp:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.07);}
-.inp::placeholder{color:var(--dim);}
 .btn{width:100%;background:linear-gradient(135deg,var(--cyan),var(--purple));color:white;border:none;border-radius:var(--r);padding:12px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:1px;margin-bottom:8px;}
 .btn:hover{opacity:.85;transform:translateY(-1px);box-shadow:var(--gc);}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
@@ -38,28 +32,21 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .btn-google:hover{background:#f8f9fa;box-shadow:0 2px 8px rgba(0,0,0,.3);}
 .btn-google:disabled{opacity:.5;cursor:not-allowed;}
 .btn-google svg{flex-shrink:0;}
-.divider{display:flex;align-items:center;gap:10px;margin:12px 0;color:var(--dim);font-size:10px;}
-.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--b);}
-.prev{display:none;flex-direction:column;align-items:center;gap:8px;margin-top:8px;padding:16px;background:rgba(0,229,255,.03);border:1px solid var(--b);border-radius:var(--r);}
-.prev.show{display:flex;}
-.av{width:76px;height:76px;border-radius:50%;border:2px solid var(--cyan);box-shadow:0 0 20px rgba(0,229,255,.3);object-fit:cover;background:var(--bg3);}
-.un{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:white;}
-.uid{font-size:9px;color:var(--dim);}
-.err{display:none;color:var(--pink);font-size:10px;padding:8px 12px;background:rgba(255,45,107,.07);border-radius:5px;border:1px solid rgba(255,45,107,.18);margin-top:5px;text-align:left;}
-.err.show{display:block;}
-.ld{display:none;align-items:center;justify-content:center;gap:8px;color:var(--dim);font-size:10px;margin-top:8px;}
-.ld.show{display:flex;}
-.spin{width:14px;height:14px;border:2px solid var(--b);border-top-color:var(--cyan);border-radius:50%;animation:spin .7s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg)}}
 .google-user-preview{display:none;padding:12px;background:rgba(0,229,255,.04);border:1px solid var(--b);border-radius:var(--r);text-align:center;margin-bottom:10px;}
 .google-user-preview.show{display:block;}
-.google-av{width:52px;height:52px;border-radius:50%;border:2px solid var(--cyan);margin:0 auto 8px;}
+.google-av{width:52px;height:52px;border-radius:50%;border:2px solid var(--cyan);margin:0 auto 8px;display:block;}
 .google-name{font-size:13px;color:white;font-weight:600;}
 .google-email{font-size:10px;color:var(--dim);margin-top:2px;}
+.err{display:none;color:var(--pink);font-size:10px;padding:8px 12px;background:rgba(255,45,107,.07);border-radius:5px;border:1px solid rgba(255,45,107,.18);margin-bottom:8px;text-align:left;}
+.err.show{display:block;}
+.ld{display:none;align-items:center;justify-content:center;gap:8px;color:var(--dim);font-size:10px;margin-bottom:8px;}
+.ld.show{display:flex;}
+.spin{width:14px;height:14px;border:2px solid var(--b);border-top-color:var(--cyan);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
 .footer{margin-top:20px;font-size:9px;color:var(--dim);text-align:center;line-height:1.8;}
 .footer span{color:var(--cyan);}
 .p{position:absolute;border-radius:50%;pointer-events:none;animation:float linear infinite;}
-@keyframes float{0%{transform:translateY(100vh) translateX(0) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.4}100%{transform:translateY(-10vh) translateX(30px) scale(1.2);opacity:0}}
+@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.4}100%{transform:translateY(-10vh) scale(1.2);opacity:0}}
 @media(max-width:480px){.box{width:95vw;padding:28px 18px;}.logo{font-size:22px;}}
 </style>
 </head>
@@ -70,10 +57,9 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="logo">NEXUS AI</div>
     <div class="tag">Roblox Dev Intelligence</div>
     <div class="version"><div class="vdot"></div> v5.0 Online</div>
+
     <div class="lang-row">
-      <span class="lang-label">
-        <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-      </span>
+      <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="color:var(--dim);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
       <select class="lang-select" id="langSel" onchange="setLang(this.value)">
         <option value="id">Bahasa Indonesia</option>
         <option value="en">English</option>
@@ -87,290 +73,365 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         <option value="ru">Русский</option>
       </select>
     </div>
-    <!-- STEP 1: Google Login -->
-    <div id="panelGoogle" class="tab-panel show">
+
+    <!-- PANEL 1: Google Login -->
+    <div id="panelGoogle" style="display:block;">
       <div class="step-label" id="stepLabel">Login dengan akun Google kamu</div>
       <div class="google-user-preview" id="googlePreview">
-        <img class="google-av" id="googleAvImg" src="" alt="" onerror="this.style.display='none'">
+        <img class="google-av" id="googleAvImg" src="" alt="" onerror="this.style.opacity='.3'">
         <div class="google-name" id="googleName">-</div>
         <div class="google-email" id="googleEmail">-</div>
       </div>
       <div class="err" id="googleErr"></div>
-      <div class="ld" id="googleLd"><div class="spin"></div><span>Menghubungi Google...</span></div>
+      <div class="ld" id="googleLd"><div class="spin"></div><span id="googleLdTxt">Menghubungi Google...</span></div>
       <button class="btn-google" id="googleSignInBtn" onclick="googleSignIn()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-        Lanjutkan dengan Google
+        <span id="googleBtnTxt">Lanjutkan dengan Google</span>
       </button>
     </div>
-    <!-- STEP 2: Roblox Link -->
-    <div id="panelRoblox" class="tab-panel" style="display:none;">
+
+    <!-- PANEL 2: Roblox Link (setelah Google login) -->
+    <div id="panelRoblox" style="display:none;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:8px;background:rgba(0,229,255,.05);border-radius:8px;border:1px solid var(--b);">
-        <img id="googleSmallAv" src="" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--cyan2);" onerror="this.style.display='none'">
-        <div>
-          <div style="font-size:11px;color:white;" id="googleSmallName">-</div>
+        <img id="googleSmallAv" src="" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--cyan2);" onerror="this.style.opacity='.3'">
+        <div style="min-width:0;text-align:left;">
+          <div style="font-size:11px;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="googleSmallName">-</div>
           <div style="font-size:9px;color:var(--dim);" id="googleSmallEmail">-</div>
         </div>
-        <button onclick="logoutGoogle()" style="margin-left:auto;background:none;border:1px solid var(--b);border-radius:4px;color:var(--dim);font-size:9px;padding:2px 8px;cursor:pointer;">Ganti</button>
+        <button onclick="logoutGoogle()" style="margin-left:auto;flex-shrink:0;background:none;border:1px solid var(--b);border-radius:4px;color:var(--dim);font-size:9px;padding:2px 8px;cursor:pointer;">Ganti</button>
       </div>
       <div class="step-label" id="stepRobloxLabel">Hubungkan akun Roblox kamu (opsional)</div>
       <div class="err" id="robloxErr"></div>
       <div class="ld" id="robloxLd"><div class="spin"></div><span>Menghubungkan ke Roblox...</span></div>
-      <button class="btn" id="robloxLoginBtn" onclick="startRobloxOAuth()" style="background:linear-gradient(135deg,#e63737,#c0392b);">
-        <svg width="16" height="16" viewBox="0 0 400 400" fill="white" style="display:inline;vertical-align:middle;margin-right:8px"><path d="M94 306L44 56l262 68-50 250L94 306zm108-158c-22 0-40 18-40 40s18 40 40 40 40-18 40-40-18-40-40-40z"/></svg>
-        Hubungkan Roblox
+      <button class="btn" id="robloxLoginBtn" onclick="startRobloxOAuth()" style="background:linear-gradient(135deg,#e63737,#c0392b);display:flex;align-items:center;justify-content:center;gap:8px;">
+        <img src="icon/roblox.png" alt="R" style="width:16px;height:16px;object-fit:contain;" onerror="this.style.display='none'">
+        <span id="robloxBtnTxt">Hubungkan Roblox</span>
       </button>
-      <button onclick="skipRoblox()" style="width:100%;background:none;border:1px solid var(--b);border-radius:var(--r);padding:10px;color:var(--dim);font-size:10px;cursor:pointer;margin-top:6px;">
+      <button id="skipBtn" onclick="skipRoblox()" style="width:100%;background:none;border:1px solid var(--b);border-radius:var(--r);padding:10px;color:var(--dim);font-size:10px;cursor:pointer;margin-top:6px;font-family:'JetBrains Mono',monospace;">
         Lewati — masuk tanpa Roblox
       </button>
       <div style="font-size:9px;color:var(--dim);text-align:center;margin-top:8px;line-height:1.6;">
-        Roblox dibutuhkan untuk AI inject script ke place kamu
+        Roblox diperlukan untuk inject script langsung ke place kamu
       </div>
     </div>
+
     <div class="footer">
       Made by <span>NEXUS STUDIO</span> · YouTube: <span>NEXUS STUDIO</span><br>
       <span style="font-size:8px;color:var(--dim);">nexusai-com.vercel.app</span>
     </div>
   </div>
 </div>
+
 <script>
+'use strict';
+
+// ── Particles ──
 (function(){
-  var p=document.getElementById('particles');
-  for(var i=0;i<18;i++){
-    var d=document.createElement('div');d.className='p';
-    var sz=Math.random()*4+1;
-    d.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;background:rgba('+( Math.random()>.5?'0,229,255':'136,0,255')+','+(Math.random()*.4+.1)+');animation-duration:'+(Math.random()*12+8)+'s;animation-delay:'+(Math.random()*10)+'s;';
+  var p = document.getElementById('particles');
+  for (var i = 0; i < 18; i++) {
+    var d = document.createElement('div'); d.className = 'p';
+    var sz = Math.random() * 4 + 1;
+    d.style.cssText = 'width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;background:rgba('+(Math.random()>.5?'0,229,255':'136,0,255')+','+(Math.random()*.4+.1)+');animation-duration:'+(Math.random()*12+8)+'s;animation-delay:'+(Math.random()*10)+'s;';
     p.appendChild(d);
   }
 })();
 
-var OWNER_USERS=['FIINYTID25','fiinytid25'];
+// ── Config ──
+var OWNER_USERS = ['FIINYTID25', 'fiinytid25'];
 var GOOGLE_CLIENT_ID = '';
 var ROBLOX_CLIENT_ID = '';
+var curLang = localStorage.getItem('nexus_lang') || 'id';
 
-async function loadConfig(){
-  try{
+async function loadConfig() {
+  try {
     var r = await fetch('/api/main');
-    if(r.ok){
+    if (r.ok) {
       var d = await r.json();
-      GOOGLE_CLIENT_ID = d.gmail_key || d.gmail || '';
+      GOOGLE_CLIENT_ID = d.gmail_key || '';
       ROBLOX_CLIENT_ID = d.roblox_client_id || '';
     }
-  }catch(e){}
+  } catch(e) {}
 }
-loadConfig();
 
-var curLang='id';
+// ── Language ──
 var LOGIN_LANGS = {
-  id:{ step:'Login dengan akun Google kamu', step2:'Hubungkan akun Roblox (opsional)', googleBtn:'Lanjutkan dengan Google', skip:'Lewati', linkRoblox:'Hubungkan Roblox', gConnecting:'Menghubungi Google...', rConnecting:'Menghubungkan ke Roblox...' },
-  en:{ step:'Sign in with your Google account', step2:'Link your Roblox account (optional)', googleBtn:'Continue with Google', skip:'Skip', linkRoblox:'Link Roblox', gConnecting:'Connecting to Google...', rConnecting:'Connecting to Roblox...' },
-  ja:{ step:'Googleアカウントでログイン', step2:'Robloxアカウントを連携（任意）', googleBtn:'Googleで続ける', skip:'スキップ', linkRoblox:'Robloxを連携', gConnecting:'Googleに接続中...', rConnecting:'Robloxに接続中...' },
-  ko:{ step:'Google 계정으로 로그인', step2:'Roblox 계정 연결 (선택)', googleBtn:'Google로 계속', skip:'건너뛰기', linkRoblox:'Roblox 연결', gConnecting:'Google 연결 중...', rConnecting:'Roblox 연결 중...' },
-  zh:{ step:'使用Google账号登录', step2:'关联Roblox账号（可选）', googleBtn:'使用Google继续', skip:'跳过', linkRoblox:'关联Roblox', gConnecting:'连接Google中...', rConnecting:'连接Roblox中...' },
+  id: { step:'Login dengan akun Google kamu', step2:'Hubungkan akun Roblox (opsional)', googleBtn:'Lanjutkan dengan Google', skip:'Lewati — masuk tanpa Roblox', linkRoblox:'Hubungkan Roblox', gConnecting:'Menghubungi Google...', rConnecting:'Menghubungkan ke Roblox...' },
+  en: { step:'Sign in with your Google account', step2:'Link your Roblox account (optional)', googleBtn:'Continue with Google', skip:'Skip — enter without Roblox', linkRoblox:'Link Roblox', gConnecting:'Connecting to Google...', rConnecting:'Connecting to Roblox...' },
+  ja: { step:'Googleアカウントでログイン', step2:'Robloxアカウントを連携（任意）', googleBtn:'Googleで続ける', skip:'スキップ', linkRoblox:'Robloxを連携', gConnecting:'Googleに接続中...', rConnecting:'Robloxに接続中...' },
+  ko: { step:'Google 계정으로 로그인', step2:'Roblox 계정 연결 (선택)', googleBtn:'Google로 계속', skip:'건너뛰기', linkRoblox:'Roblox 연결', gConnecting:'Google 연결 중...', rConnecting:'Roblox 연결 중...' },
+  zh: { step:'使用Google账号登录', step2:'关联Roblox账号（可选）', googleBtn:'使用Google继续', skip:'跳过', linkRoblox:'关联Roblox', gConnecting:'连接Google中...', rConnecting:'连接Roblox中...' },
+  es: { step:'Inicia sesión con Google', step2:'Vincular cuenta Roblox (opcional)', googleBtn:'Continuar con Google', skip:'Omitir', linkRoblox:'Vincular Roblox', gConnecting:'Conectando con Google...', rConnecting:'Conectando con Roblox...' },
+  fr: { step:'Se connecter avec Google', step2:'Lier le compte Roblox (optionnel)', googleBtn:'Continuer avec Google', skip:'Passer', linkRoblox:'Lier Roblox', gConnecting:'Connexion Google...', rConnecting:'Connexion Roblox...' },
+  de: { step:'Mit Google anmelden', step2:'Roblox-Konto verknüpfen (optional)', googleBtn:'Mit Google fortfahren', skip:'Überspringen', linkRoblox:'Roblox verknüpfen', gConnecting:'Google verbinden...', rConnecting:'Roblox verbinden...' },
+  pt: { step:'Entrar com Google', step2:'Vincular conta Roblox (opcional)', googleBtn:'Continuar com Google', skip:'Pular', linkRoblox:'Vincular Roblox', gConnecting:'Conectando ao Google...', rConnecting:'Conectando ao Roblox...' },
+  ru: { step:'Войти через Google', step2:'Связать Roblox (необязательно)', googleBtn:'Продолжить с Google', skip:'Пропустить', linkRoblox:'Связать Roblox', gConnecting:'Подключение к Google...', rConnecting:'Подключение к Roblox...' },
 };
-function setLang(l){
-  curLang=l; localStorage.setItem('nexus_lang',l);
-  var t=LOGIN_LANGS[l]||LOGIN_LANGS.id;
-  var sl=document.getElementById('stepLabel'); if(sl)sl.textContent=t.step;
-  var sl2=document.getElementById('stepRobloxLabel'); if(sl2)sl2.textContent=t.step2;
-  var gb=document.getElementById('googleSignInBtn');
-  if(gb){ var svgs=gb.querySelectorAll('svg'); gb.textContent=t.googleBtn; svgs.forEach(function(s){gb.insertBefore(s,gb.firstChild);}); }
-  var skipBtn=document.querySelector('#panelRoblox button[onclick="skipRoblox()"]');
-  if(skipBtn)skipBtn.textContent=t.skip;
-  var rb=document.getElementById('robloxLoginBtn');
-  if(rb){ var rsvgs=rb.querySelectorAll('svg'); rb.textContent=t.linkRoblox; rsvgs.forEach(function(s){rb.insertBefore(s,rb.firstChild);}); }
-}
-(function(){ var s=localStorage.getItem('nexus_lang')||'id'; document.getElementById('langSel').value=s; setLang(s); })();
 
-function showRobloxPanel(googleUser){
-  document.getElementById('panelGoogle').style.display='none';
-  var rp = document.getElementById('panelRoblox');
-  rp.style.display='block';
-  var av=document.getElementById('googleSmallAv'); if(av)av.src=googleUser.picture||'';
-  var nm=document.getElementById('googleSmallName'); if(nm)nm.textContent=googleUser.name||googleUser.email;
-  var em=document.getElementById('googleSmallEmail'); if(em)em.textContent=googleUser.email||'';
+function setLang(l) {
+  curLang = l;
+  localStorage.setItem('nexus_lang', l);
+  var t = LOGIN_LANGS[l] || LOGIN_LANGS.id;
+  var el;
+  el = document.getElementById('stepLabel');       if(el) el.textContent = t.step;
+  el = document.getElementById('stepRobloxLabel'); if(el) el.textContent = t.step2;
+  el = document.getElementById('googleBtnTxt');    if(el) el.textContent = t.googleBtn;
+  el = document.getElementById('googleLdTxt');     if(el) el.textContent = t.gConnecting;
+  el = document.getElementById('robloxBtnTxt');    if(el) el.textContent = t.linkRoblox;
+  el = document.getElementById('skipBtn');         if(el) el.textContent = t.skip;
 }
-function logoutGoogle(){
+
+// Init lang
+document.getElementById('langSel').value = curLang;
+setLang(curLang);
+
+// ── Show/hide panels ──
+function showPanel(id) {
+  document.getElementById('panelGoogle').style.display = id === 'google' ? 'block' : 'none';
+  document.getElementById('panelRoblox').style.display = id === 'roblox' ? 'block' : 'none';
+}
+
+function showRobloxPanel(googleUser) {
+  var av  = document.getElementById('googleSmallAv');
+  var nm  = document.getElementById('googleSmallName');
+  var em  = document.getElementById('googleSmallEmail');
+  if(av) av.src = googleUser.picture || '';
+  if(nm) nm.textContent = googleUser.name || googleUser.email || '';
+  if(em) em.textContent = googleUser.email || '';
+  showPanel('roblox');
+}
+
+function logoutGoogle() {
   localStorage.removeItem('nexus_google_tmp');
-  document.getElementById('panelRoblox').style.display='none';
-  document.getElementById('panelGoogle').style.display='block';
+  document.getElementById('googleErr').classList.remove('show');
+  document.getElementById('googleSignInBtn').disabled = false;
+  document.getElementById('googleLd').classList.remove('show');
   document.getElementById('googlePreview').classList.remove('show');
-  document.getElementById('googleSignInBtn').disabled=false;
-}
-function skipRoblox(){
-  var gTmp = JSON.parse(localStorage.getItem('nexus_google_tmp')||'null');
-  if(!gTmp) return;
-  finishLogin(gTmp, null);
+  showPanel('google');
 }
 
-async function finishLogin(gUser, robloxUser){
-  var username = robloxUser ? robloxUser.username :
-    (gUser.name||gUser.email.split('@')[0]).replace(/\s+/g,'_');
-  var isOwner = OWNER_USERS.indexOf(username) !== -1 ||
-    OWNER_USERS.indexOf(robloxUser && robloxUser.username) !== -1;
-  var existing = null;
-  try{
-    var sr=await fetch('/api/sync?user='+encodeURIComponent(username.toLowerCase()));
-    if(sr.ok){var sd=await sr.json();if(sd&&sd.credits!==undefined)existing=sd;}
-  }catch(e){}
-  var userData = existing || {
-    credits:isOwner?999999:30, convs:[], plan:'free', lastClaim:null,
-    draftText:{}, draftAttach:{},
-    model:{id:'gemini-2.0-flash',provider:'gemini',cost:0,label:'Gemini 2.0 Flash'},
-    language:localStorage.getItem('nexus_lang')||'id',
-    roles:isOwner?['owner']:[], loginMethod: robloxUser?'roblox_oauth':'google'
-  };
-  userData.avatar = (robloxUser&&robloxUser.avatar) || gUser.picture || '';
-  userData.googleEmail = gUser.email;
-  if(robloxUser) userData.robloxId = robloxUser.id;
-  var session = {
-    user:{
-      id: robloxUser ? robloxUser.id : gUser.id,
-      username: username,
-      displayName: robloxUser ? robloxUser.displayName : (gUser.name||username),
-      avatar: userData.avatar,
-      email: gUser.email,
-    },
-    data: userData, loginTime: Date.now()
-  };
-  localStorage.setItem('nexus_session', JSON.stringify(session));
-  localStorage.setItem('nexus_lang', localStorage.getItem('nexus_lang')||'id');
-  localStorage.removeItem('nexus_google_tmp');
-  try{fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:username.toLowerCase(),data:userData})});}catch(e){}
-  window.location.replace('/');
+function showErr(id, msg) {
+  var el = document.getElementById(id);
+  if (el) { el.textContent = msg; el.classList.add('show'); }
 }
 
-function googleSignIn(){
+// ── Google Sign In ──
+function googleSignIn() {
   var errEl = document.getElementById('googleErr');
   errEl.classList.remove('show');
-  if(!GOOGLE_CLIENT_ID){
-    errEl.textContent = 'Google Client ID belum dikonfigurasi.';
+  if (!GOOGLE_CLIENT_ID) {
+    errEl.textContent = 'Google Client ID belum dikonfigurasi. Tambahkan GMAIL_KEY di Vercel.';
     errEl.classList.add('show');
     return;
   }
   localStorage.setItem('nexus_lang', curLang);
-  localStorage.setItem('nexus_google_state', Date.now().toString());
   document.getElementById('googleLd').classList.add('show');
   document.getElementById('googleSignInBtn').disabled = true;
+
   var redirectUri = encodeURIComponent(window.location.origin + '/api/google-callback');
-  var state = encodeURIComponent('nexus_' + Date.now());
-  var scope = encodeURIComponent('openid email profile');
-  var oauthUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
-    + '?client_id=' + encodeURIComponent(GOOGLE_CLIENT_ID)
+  var state       = encodeURIComponent('nexus_' + Date.now());
+  var scope       = encodeURIComponent('openid email profile');
+  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth'
+    + '?client_id='     + encodeURIComponent(GOOGLE_CLIENT_ID)
     + '&response_type=code'
-    + '&redirect_uri=' + redirectUri
-    + '&scope=' + scope
-    + '&state=' + state
+    + '&redirect_uri='  + redirectUri
+    + '&scope='         + scope
+    + '&state='         + state
     + '&access_type=offline'
     + '&prompt=select_account';
-  window.location.href = oauthUrl;
 }
 
-function startRobloxOAuth(){
-  var btn=document.getElementById('robloxLoginBtn');
-  var ldEl=document.getElementById('robloxLd');
-  var errEl=document.getElementById('robloxErr');
-  if(errEl)errEl.classList.remove('show');
-  if(!ROBLOX_CLIENT_ID){
-    if(errEl){ errEl.textContent='ROBLOX_CLIENT_ID belum dikonfigurasi.'; errEl.classList.add('show'); }
-    return;
-  }
-  if(btn){ btn.disabled=true; }
-  if(ldEl){ ldEl.classList.add('show'); }
+// ── Skip Roblox ──
+function skipRoblox() {
+  var gTmp = null;
+  try { gTmp = JSON.parse(localStorage.getItem('nexus_google_tmp') || 'null'); } catch(e) {}
+  if (!gTmp) { showPanel('google'); return; }
+  finishLogin(gTmp, null);
+}
+
+// ── Finish Login ──
+async function finishLogin(gUser, robloxUser) {
+  var username = robloxUser
+    ? robloxUser.username
+    : (gUser.name || gUser.email.split('@')[0]).replace(/\s+/g, '_').replace(/[^a-zA-Z0-9_]/g, '');
+  var isOwner = OWNER_USERS.indexOf(username) !== -1 || OWNER_USERS.indexOf(robloxUser && robloxUser.username) !== -1;
+
+  var existing = null;
+  try {
+    var sr = await fetch('/api/sync?user=' + encodeURIComponent(username.toLowerCase()));
+    if (sr.ok) { var sd = await sr.json(); if (sd && sd.credits !== undefined) existing = sd; }
+  } catch(e) {}
+
+  var userData = existing || {
+    credits: isOwner ? 999999 : 30, convs: [], plan: 'free', lastClaim: null,
+    draftText: {}, draftAttach: {},
+    model: { id:'gemini-2.0-flash', provider:'gemini', cost:0, label:'Gemini 2.0 Flash' },
+    language: curLang, roles: isOwner ? ['owner'] : [], loginMethod: robloxUser ? 'roblox_oauth' : 'google'
+  };
+
+  userData.avatar      = (robloxUser && robloxUser.avatar) || gUser.picture || '';
+  userData.googleEmail = gUser.email;
+  if (robloxUser) userData.robloxId = robloxUser.id;
+
+  var session = {
+    user: {
+      id:          robloxUser ? robloxUser.id : gUser.id,
+      username:    username,
+      displayName: robloxUser ? (robloxUser.displayName || robloxUser.username) : (gUser.name || username),
+      avatar:      userData.avatar,
+      email:       gUser.email || '',
+    },
+    data: userData,
+    loginTime: Date.now()
+  };
+
+  localStorage.setItem('nexus_session', JSON.stringify(session));
   localStorage.setItem('nexus_lang', curLang);
+  localStorage.removeItem('nexus_google_tmp');
+
+  try { fetch('/api/sync', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ user: username.toLowerCase(), data: userData }) }); } catch(e) {}
+
+  window.location.replace('/');
+}
+
+// ── Roblox OAuth ──
+function startRobloxOAuth() {
+  var btn   = document.getElementById('robloxLoginBtn');
+  var ldEl  = document.getElementById('robloxLd');
+  var errEl = document.getElementById('robloxErr');
+  errEl.classList.remove('show');
+
+  if (!ROBLOX_CLIENT_ID) {
+    errEl.textContent = 'ROBLOX_CLIENT_ID belum dikonfigurasi di Vercel.';
+    errEl.classList.add('show');
+    return;
+  }
+  btn.disabled = true;
+  ldEl.classList.add('show');
+  localStorage.setItem('nexus_lang', curLang);
+
   var redirectUri = encodeURIComponent(window.location.origin + '/api/auth');
-  var scope = encodeURIComponent('openid profile');
-  var state = encodeURIComponent(curLang + '_' + Date.now());
-  var oauthUrl = 'https://authorize.roblox.com/?client_id=' + ROBLOX_CLIENT_ID
+  var state       = encodeURIComponent(curLang + '_' + Date.now());
+  window.location.href = 'https://authorize.roblox.com/?client_id=' + ROBLOX_CLIENT_ID
     + '&response_type=code&redirect_uri=' + redirectUri
-    + '&scope=' + scope + '&state=' + state;
-  window.location.href = oauthUrl;
+    + '&scope=' + encodeURIComponent('openid profile') + '&state=' + state;
 }
 
-async function handleOAuthCallback(){
+// ── Handle Roblox OAuth Callback ──
+async function handleRobloxCallback() {
   var params = new URLSearchParams(window.location.search);
-  var code=params.get('code'), error=params.get('error');
-  var errEl=document.getElementById('robloxErr'), ldEl=document.getElementById('robloxLd');
-  if(error){ if(errEl){errEl.textContent='Login dibatalkan: '+error;errEl.classList.add('show');} window.history.replaceState({},'',' /login'); return; }
-  if(!code) return;
-  if(ldEl) ldEl.classList.add('show');
-  var btn=document.getElementById('robloxLoginBtn'); if(btn) btn.disabled=true;
-  window.history.replaceState({},'','/login');
-  try{
-    var r=await fetch('/api/auth?code='+encodeURIComponent(code));
-    if(!r.ok) throw new Error('Auth failed: '+r.status);
-    var data=await r.json();
-    if(data.error) throw new Error(data.error);
-    var rUser=data.user;
-    var isOwner=OWNER_USERS.indexOf(rUser.username)!==-1;
-    var existing=null;
-    try{ var sr=await fetch('/api/sync?user='+encodeURIComponent(rUser.username.toLowerCase())); if(sr.ok){var sd=await sr.json();if(sd&&sd.credits!==undefined)existing=sd;} }catch(e){}
-    var userData=existing||{ credits:isOwner?999999:30,convs:[],plan:'free',lastClaim:null,draftText:{},draftAttach:{},model:{id:'gemini-2.0-flash',provider:'gemini',cost:0,label:'Gemini 2.0 Flash'},language:localStorage.getItem('nexus_lang')||'id',roles:isOwner?['owner']:[],loginMethod:'roblox_oauth' };
-    userData.avatar=rUser.avatar||'';
-    var session={ user:{id:rUser.id,username:rUser.username,displayName:rUser.displayName||rUser.username,avatar:rUser.avatar||''},data:userData,loginTime:Date.now() };
-    localStorage.setItem('nexus_session',JSON.stringify(session));
-    try{fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:rUser.username.toLowerCase(),data:userData})});}catch(e){}
-    window.location.replace('/');
-  }catch(e){
-    if(ldEl) ldEl.classList.remove('show');
-    if(btn) btn.disabled=false;
-    if(errEl){errEl.textContent='Login gagal: '+e.message;errEl.classList.add('show');}
-  }
-}
+  var code   = params.get('code');
+  var error  = params.get('error');
+  var errEl  = document.getElementById('robloxErr');
+  var ldEl   = document.getElementById('robloxLd');
 
-function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.classList.add('show');}}
+  window.history.replaceState({}, '', '/login');
 
-// ═══ CHECK CALLBACKS ON PAGE LOAD ═══
-(function(){
-  var params = new URLSearchParams(window.location.search);
-
-  // Handle google_user — redirect dari api/google-callback
-  var googleUserParam = params.get('google_user');
-  if(googleUserParam){
-    try{
-      var gUser = JSON.parse(atob(decodeURIComponent(googleUserParam)));
-      window.history.replaceState({},'','/login');
-      localStorage.setItem('nexus_google_tmp', JSON.stringify(gUser));
-      document.getElementById('googleAvImg').src = gUser.picture||'';
-      document.getElementById('googleName').textContent = gUser.name||gUser.email;
-      document.getElementById('googleEmail').textContent = gUser.email||'';
-      document.getElementById('googlePreview').classList.add('show');
-      showRobloxPanel(gUser);
-    }catch(e){ showErr('googleErr','Gagal parse data Google: '+e.message); }
-    return;
-  }
-
-  // Handle google_error
-  var googleErrorParam = params.get('google_error');
-  if(googleErrorParam){
-    window.history.replaceState({},'','/login');
-    showErr('googleErr','Login Google gagal: '+decodeURIComponent(googleErrorParam));
-    return;
-  }
-
-  // Handle Roblox OAuth callback
-  var code=params.get('code'), error=params.get('error');
-  var state=params.get('state')||'';
-  if(code||error){
-    var isGoogle = state.startsWith('nexus_') || localStorage.getItem('nexus_google_state');
-    if(isGoogle){
-      // Old flow fallback — tidak dipakai lagi tapi tetap handle
-      window.history.replaceState({},'','/login');
+  if (error) {
+    // Check if we have google user - show roblox panel with error
+    var gTmp = null;
+    try { gTmp = JSON.parse(localStorage.getItem('nexus_google_tmp') || 'null'); } catch(e) {}
+    if (gTmp) {
+      showRobloxPanel(gTmp);
+      errEl.textContent = 'Login Roblox dibatalkan: ' + error;
+      errEl.classList.add('show');
     } else {
-      loadConfig().then(function(){ handleOAuthCallback(); });
+      showPanel('google');
     }
     return;
   }
-})();
+  if (!code) return;
 
-(function(){
-  try{
-    var s=localStorage.getItem('nexus_session');
-    if(!s) return;
-    var p=JSON.parse(s);
-    if(!p||!p.user||!p.user.username||!p.loginTime){ localStorage.removeItem('nexus_session'); return; }
-    if((Date.now()-p.loginTime)>=86400000*7){ localStorage.removeItem('nexus_session'); return; }
-    window.location.replace('/');
-  }catch(e){ localStorage.removeItem('nexus_session'); }
+  // Get google user to show panel
+  var gTmp2 = null;
+  try { gTmp2 = JSON.parse(localStorage.getItem('nexus_google_tmp') || 'null'); } catch(e) {}
+  if (gTmp2) showRobloxPanel(gTmp2);
+
+  ldEl.classList.add('show');
+  document.getElementById('robloxLoginBtn').disabled = true;
+
+  try {
+    var r = await fetch('/api/auth?code=' + encodeURIComponent(code));
+    if (!r.ok) throw new Error('Auth gagal: ' + r.status);
+    var data = await r.json();
+    if (data.error) throw new Error(data.error);
+
+    var rUser    = data.user;
+    var gUserFin = gTmp2 || { id: rUser.id, name: rUser.displayName || rUser.username, email: '', picture: rUser.avatar || '' };
+    await finishLogin(gUserFin, rUser);
+  } catch(e) {
+    ldEl.classList.remove('show');
+    document.getElementById('robloxLoginBtn').disabled = false;
+    errEl.textContent = 'Login Roblox gagal: ' + e.message;
+    errEl.classList.add('show');
+  }
+}
+
+// ══════════════════════════════════════════
+//  MAIN INIT — handle semua callback params
+// ══════════════════════════════════════════
+(async function init() {
+  var params = new URLSearchParams(window.location.search);
+
+  // Cek session valid dulu
+  try {
+    var s = localStorage.getItem('nexus_session');
+    if (s) {
+      var p = JSON.parse(s);
+      if (p && p.user && p.user.username && p.loginTime && (Date.now() - p.loginTime) < 86400000 * 7) {
+        window.location.replace('/');
+        return;
+      }
+      localStorage.removeItem('nexus_session');
+    }
+  } catch(e) { localStorage.removeItem('nexus_session'); }
+
+  // Load config
+  await loadConfig();
+
+  // 1. Handle google_user — redirect dari api/google-callback (PALING UTAMA)
+  var googleUserParam = params.get('google_user');
+  if (googleUserParam) {
+    window.history.replaceState({}, '', '/login');
+    try {
+      var gUser = JSON.parse(atob(decodeURIComponent(googleUserParam)));
+      if (!gUser || !gUser.id) throw new Error('Invalid user data');
+      localStorage.setItem('nexus_google_tmp', JSON.stringify(gUser));
+      // Show preview
+      var avImg = document.getElementById('googleAvImg');
+      if(avImg) avImg.src = gUser.picture || '';
+      var nmEl = document.getElementById('googleName');
+      if(nmEl) nmEl.textContent = gUser.name || gUser.email || '';
+      var emEl = document.getElementById('googleEmail');
+      if(emEl) emEl.textContent = gUser.email || '';
+      document.getElementById('googlePreview').classList.add('show');
+      showRobloxPanel(gUser);
+    } catch(e) {
+      showErr('googleErr', 'Gagal memproses data Google: ' + e.message);
+      showPanel('google');
+    }
+    return;
+  }
+
+  // 2. Handle google_error
+  var googleErrorParam = params.get('google_error');
+  if (googleErrorParam) {
+    window.history.replaceState({}, '', '/login');
+    showErr('googleErr', 'Login Google gagal: ' + decodeURIComponent(googleErrorParam));
+    showPanel('google');
+    return;
+  }
+
+  // 3. Handle Roblox OAuth callback (code param, state TIDAK dimulai dengan nexus_)
+  var code  = params.get('code');
+  var error = params.get('error');
+  var state = params.get('state') || '';
+  if ((code || error) && !state.startsWith('nexus_')) {
+    handleRobloxCallback();
+    return;
+  }
+
+  // Default: show Google panel
+  showPanel('google');
 })();
 </script>
 </body>
