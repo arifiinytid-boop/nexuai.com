@@ -334,6 +334,27 @@ async function handleGoogleCallback(){
   }
   if(!code) return;
 
+var googleUserParam = params.get('google_user');
+var googleErrorParam = params.get('google_error');
+if (googleUserParam) {
+  try {
+    var gUser = JSON.parse(atob(decodeURIComponent(googleUserParam)));
+    localStorage.setItem('nexus_google_tmp', JSON.stringify(gUser));
+    window.history.replaceState({}, '', '/login');
+    document.getElementById('googleAvImg').src = gUser.picture || '';
+    document.getElementById('googleName').textContent = gUser.name || gUser.email;
+    document.getElementById('googleEmail').textContent = gUser.email || '';
+    document.getElementById('googlePreview').classList.add('show');
+    showRobloxPanel(gUser);
+  } catch(e) {
+    showErr('googleErr', 'Gagal parse data Google: ' + e.message);
+  }
+}
+if (googleErrorParam) {
+  window.history.replaceState({}, '', '/login');
+  showErr('googleErr', 'Login Google gagal: ' + decodeURIComponent(googleErrorParam));
+}
+
   // Clean URL first
   window.history.replaceState({}, '', '/login');
   document.getElementById('googleLd').classList.add('show');
