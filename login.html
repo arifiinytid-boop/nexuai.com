@@ -27,19 +27,10 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .lang-select{background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;cursor:pointer;}
 .lang-select:focus{border-color:var(--cyan2);}
 .lang-label{font-size:10px;color:var(--dim);}
-.login-tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--bg3);border-radius:var(--r);padding:3px;}
-.login-tab{flex:1;padding:7px;border-radius:5px;font-size:10px;cursor:pointer;color:var(--dim);border:none;background:none;font-family:'JetBrains Mono',monospace;transition:.15s;}
-.login-tab.act{background:var(--bg2);color:var(--cyan);box-shadow:0 1px 4px rgba(0,0,0,.4);}
-.login-tab:hover:not(.act){color:var(--text);}
-.tab-panel{display:none;}
-.tab-panel.show{display:block;}
 .step-label{font-size:11px;color:var(--dim);margin-bottom:14px;line-height:1.6;}
 .inp{width:100%;background:rgba(0,229,255,.04);border:1px solid var(--b);border-radius:var(--r);padding:12px 14px;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:.2s;margin-bottom:10px;}
 .inp:focus{border-color:var(--cyan);box-shadow:0 0 0 2px rgba(0,229,255,.07);}
 .inp::placeholder{color:var(--dim);}
-.inp-pw{width:100%;background:rgba(255,45,107,.04);border:1px solid rgba(255,45,107,.18);border-radius:var(--r);padding:12px 14px;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;outline:none;transition:.2s;margin-bottom:10px;}
-.inp-pw:focus{border-color:var(--pink);}
-.inp-pw::placeholder{color:var(--dim);}
 .btn{width:100%;background:linear-gradient(135deg,var(--cyan),var(--purple));color:white;border:none;border-radius:var(--r);padding:12px;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;cursor:pointer;transition:.2s;letter-spacing:1px;margin-bottom:8px;}
 .btn:hover{opacity:.85;transform:translateY(-1px);box-shadow:var(--gc);}
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none;}
@@ -79,7 +70,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="logo">NEXUS AI</div>
     <div class="tag">Roblox Dev Intelligence</div>
     <div class="version"><div class="vdot"></div> v5.0 Online</div>
-
     <div class="lang-row">
       <span class="lang-label">
         <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
@@ -97,7 +87,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         <option value="ru">Русский</option>
       </select>
     </div>
-
     <!-- STEP 1: Google Login -->
     <div id="panelGoogle" class="tab-panel show">
       <div class="step-label" id="stepLabel">Login dengan akun Google kamu</div>
@@ -113,8 +102,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         Lanjutkan dengan Google
       </button>
     </div>
-
-    <!-- STEP 2: Roblox Link (setelah Google) -->
+    <!-- STEP 2: Roblox Link -->
     <div id="panelRoblox" class="tab-panel" style="display:none;">
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:8px;background:rgba(0,229,255,.05);border-radius:8px;border:1px solid var(--b);">
         <img id="googleSmallAv" src="" style="width:28px;height:28px;border-radius:50%;border:1.5px solid var(--cyan2);" onerror="this.style.display='none'">
@@ -135,20 +123,16 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         Lewati — masuk tanpa Roblox
       </button>
       <div style="font-size:9px;color:var(--dim);text-align:center;margin-top:8px;line-height:1.6;">
-        Roblox dibutuhkan untuk AI inject script ke place kamu<br>
-        Akun tersimpan — tinggal klik untuk login berikutnya
+        Roblox dibutuhkan untuk AI inject script ke place kamu
       </div>
     </div>
-
     <div class="footer">
       Made by <span>NEXUS STUDIO</span> · YouTube: <span>NEXUS STUDIO</span><br>
       <span style="font-size:8px;color:var(--dim);">nexusai-com.vercel.app</span>
     </div>
   </div>
 </div>
-
 <script>
-// Particles
 (function(){
   var p=document.getElementById('particles');
   for(var i=0;i<18;i++){
@@ -160,11 +144,9 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 })();
 
 var OWNER_USERS=['FIINYTID25','fiinytid25'];
-var OWNER_PW='arif1n12';
 var GOOGLE_CLIENT_ID = '';
-var ROBLOX_CLIENT_ID = ''; // Set ROBLOX_CLIENT_ID in Vercel env vars
+var ROBLOX_CLIENT_ID = '';
 
-// Load config from server
 async function loadConfig(){
   try{
     var r = await fetch('/api/main');
@@ -177,19 +159,6 @@ async function loadConfig(){
 }
 loadConfig();
 
-// Language
-var LANG_TEXTS={
-  id:{step:'Login dengan username Roblox kamu',find:'CARI AKUN ROBLOX',searching:'Mencari...',loading:'Memuat avatar...',login:'LOGIN',pw:'Password untuk verifikasi...'},
-  en:{step:'Login with your Roblox account',robloxBtn:'LOGIN WITH ROBLOX',searching:'Connecting to Roblox...',login:'LOGIN',pw:'Password to verify...'},
-  ja:{step:'Robloxのユーザー名でログイン',find:'アカウントを検索',searching:'検索中...',loading:'読み込み中...',login:'ログイン',pw:'パスワード...'},
-  ko:{step:'Roblox 사용자 이름으로 로그인',find:'계정 찾기',searching:'검색 중...',loading:'로딩 중...',login:'로그인',pw:'비밀번호...'},
-  zh:{step:'使用Roblox用户名登录',find:'查找账号',searching:'搜索中...',loading:'加载中...',login:'登录',pw:'密码...'},
-  es:{step:'Login con tu usuario Roblox',find:'BUSCAR CUENTA',searching:'Buscando...',loading:'Cargando...',login:'INGRESAR',pw:'Contraseña...'},
-  fr:{step:'Connexion Roblox',find:'TROUVER COMPTE',searching:'Recherche...',loading:'Chargement...',login:'CONNEXION',pw:'Mot de passe...'},
-  de:{step:'Roblox Login',find:'KONTO SUCHEN',searching:'Suche...',loading:'Laden...',login:'ANMELDEN',pw:'Passwort...'},
-  pt:{step:'Login Roblox',find:'ENCONTRAR CONTA',searching:'Buscando...',loading:'Carregando...',login:'ENTRAR',pw:'Senha...'},
-  ru:{step:'Войти через Roblox',find:'НАЙТИ АККАУНТ',searching:'Поиск...',loading:'Загрузка...',login:'ВОЙТИ',pw:'Пароль...'},
-};
 var curLang='id';
 var LOGIN_LANGS = {
   id:{ step:'Login dengan akun Google kamu', step2:'Hubungkan akun Roblox (opsional)', googleBtn:'Lanjutkan dengan Google', skip:'Lewati', linkRoblox:'Hubungkan Roblox', gConnecting:'Menghubungi Google...', rConnecting:'Menghubungkan ke Roblox...' },
@@ -197,43 +166,25 @@ var LOGIN_LANGS = {
   ja:{ step:'Googleアカウントでログイン', step2:'Robloxアカウントを連携（任意）', googleBtn:'Googleで続ける', skip:'スキップ', linkRoblox:'Robloxを連携', gConnecting:'Googleに接続中...', rConnecting:'Robloxに接続中...' },
   ko:{ step:'Google 계정으로 로그인', step2:'Roblox 계정 연결 (선택)', googleBtn:'Google로 계속', skip:'건너뛰기', linkRoblox:'Roblox 연결', gConnecting:'Google 연결 중...', rConnecting:'Roblox 연결 중...' },
   zh:{ step:'使用Google账号登录', step2:'关联Roblox账号（可选）', googleBtn:'使用Google继续', skip:'跳过', linkRoblox:'关联Roblox', gConnecting:'连接Google中...', rConnecting:'连接Roblox中...' },
-  es:{ step:'Inicia sesión con Google', step2:'Vincular cuenta Roblox (opcional)', googleBtn:'Continuar con Google', skip:'Omitir', linkRoblox:'Vincular Roblox', gConnecting:'Conectando con Google...', rConnecting:'Conectando con Roblox...' },
-  fr:{ step:'Se connecter avec Google', step2:'Lier le compte Roblox (optionnel)', googleBtn:'Continuer avec Google', skip:'Passer', linkRoblox:'Lier Roblox', gConnecting:'Connexion à Google...', rConnecting:'Connexion à Roblox...' },
-  de:{ step:'Mit Google anmelden', step2:'Roblox-Konto verknüpfen (optional)', googleBtn:'Mit Google fortfahren', skip:'Überspringen', linkRoblox:'Roblox verknüpfen', gConnecting:'Google wird verbunden...', rConnecting:'Roblox wird verbunden...' },
-  pt:{ step:'Entrar com Google', step2:'Vincular conta Roblox (opcional)', googleBtn:'Continuar com Google', skip:'Pular', linkRoblox:'Vincular Roblox', gConnecting:'Conectando ao Google...', rConnecting:'Conectando ao Roblox...' },
-  ru:{ step:'Войти через Google', step2:'Связать аккаунт Roblox (необязательно)', googleBtn:'Продолжить с Google', skip:'Пропустить', linkRoblox:'Связать Roblox', gConnecting:'Подключение к Google...', rConnecting:'Подключение к Roblox...' },
 };
 function setLang(l){
   curLang=l; localStorage.setItem('nexus_lang',l);
   var t=LOGIN_LANGS[l]||LOGIN_LANGS.id;
   var sl=document.getElementById('stepLabel'); if(sl)sl.textContent=t.step;
   var sl2=document.getElementById('stepRobloxLabel'); if(sl2)sl2.textContent=t.step2;
-  // Google button text
   var gb=document.getElementById('googleSignInBtn');
-  if(gb){
-    var svgs=gb.querySelectorAll('svg');
-    gb.textContent=t.googleBtn;
-    svgs.forEach(function(s){gb.insertBefore(s,gb.firstChild);});
-  }
-  // Skip button
+  if(gb){ var svgs=gb.querySelectorAll('svg'); gb.textContent=t.googleBtn; svgs.forEach(function(s){gb.insertBefore(s,gb.firstChild);}); }
   var skipBtn=document.querySelector('#panelRoblox button[onclick="skipRoblox()"]');
   if(skipBtn)skipBtn.textContent=t.skip;
-  // Roblox link button
   var rb=document.getElementById('robloxLoginBtn');
-  if(rb){
-    var rsvgs=rb.querySelectorAll('svg');
-    rb.textContent=t.linkRoblox;
-    rsvgs.forEach(function(s){rb.insertBefore(s,rb.firstChild);});
-  }
+  if(rb){ var rsvgs=rb.querySelectorAll('svg'); rb.textContent=t.linkRoblox; rsvgs.forEach(function(s){rb.insertBefore(s,rb.firstChild);}); }
 }
 (function(){ var s=localStorage.getItem('nexus_lang')||'id'; document.getElementById('langSel').value=s; setLang(s); })();
 
-// Show Roblox panel after Google login
 function showRobloxPanel(googleUser){
   document.getElementById('panelGoogle').style.display='none';
   var rp = document.getElementById('panelRoblox');
   rp.style.display='block';
-  // Show small Google user info
   var av=document.getElementById('googleSmallAv'); if(av)av.src=googleUser.picture||'';
   var nm=document.getElementById('googleSmallName'); if(nm)nm.textContent=googleUser.name||googleUser.email;
   var em=document.getElementById('googleSmallEmail'); if(em)em.textContent=googleUser.email||'';
@@ -246,15 +197,15 @@ function logoutGoogle(){
   document.getElementById('googleSignInBtn').disabled=false;
 }
 function skipRoblox(){
-  // Login with Google account only, no Roblox
   var gTmp = JSON.parse(localStorage.getItem('nexus_google_tmp')||'null');
   if(!gTmp) return;
   finishLogin(gTmp, null);
 }
+
 async function finishLogin(gUser, robloxUser){
-  var username = robloxUser ? robloxUser.username : 
+  var username = robloxUser ? robloxUser.username :
     (gUser.name||gUser.email.split('@')[0]).replace(/\s+/g,'_');
-  var isOwner = OWNER_USERS.indexOf(username) !== -1 || 
+  var isOwner = OWNER_USERS.indexOf(username) !== -1 ||
     OWNER_USERS.indexOf(robloxUser && robloxUser.username) !== -1;
   var existing = null;
   try{
@@ -288,26 +239,21 @@ async function finishLogin(gUser, robloxUser){
   window.location.replace('/');
 }
 
-// Google Sign In — uses redirect flow (works in all browsers/apps)
 function googleSignIn(){
   var errEl = document.getElementById('googleErr');
   errEl.classList.remove('show');
-
   if(!GOOGLE_CLIENT_ID){
-    errEl.textContent = 'Google Client ID belum dikonfigurasi. Tambahkan GMAIL_KEY di Vercel.';
+    errEl.textContent = 'Google Client ID belum dikonfigurasi.';
     errEl.classList.add('show');
     return;
   }
-  // Save state before redirect
   localStorage.setItem('nexus_lang', curLang);
   localStorage.setItem('nexus_google_state', Date.now().toString());
   document.getElementById('googleLd').classList.add('show');
   document.getElementById('googleSignInBtn').disabled = true;
-
-  // Use redirect-based OAuth (works in WebView/desktop app too)
   var redirectUri = encodeURIComponent(window.location.origin + '/api/google-callback');
-  var state       = encodeURIComponent('nexus_' + Date.now());
-  var scope       = encodeURIComponent('openid email profile');
+  var state = encodeURIComponent('nexus_' + Date.now());
+  var scope = encodeURIComponent('openid email profile');
   var oauthUrl = 'https://accounts.google.com/o/oauth2/v2/auth'
     + '?client_id=' + encodeURIComponent(GOOGLE_CLIENT_ID)
     + '&response_type=code'
@@ -319,222 +265,112 @@ function googleSignIn(){
   window.location.href = oauthUrl;
 }
 
-// Handle Google OAuth callback
-async function handleGoogleCallback(){
-  var params = new URLSearchParams(window.location.search);
-  var code  = params.get('code');
-  var error = params.get('error');
-  var errEl = document.getElementById('googleErr');
-
-  if(error){
-    errEl.textContent = 'Login Google dibatalkan: ' + error;
-    errEl.classList.add('show');
-    window.history.replaceState({}, '', '/login');
-    return;
-  }
-  if(!code) return;
-
-var googleUserParam = params.get('google_user');
-var googleErrorParam = params.get('google_error');
-if (googleUserParam) {
-  try {
-    var gUser = JSON.parse(atob(decodeURIComponent(googleUserParam)));
-    localStorage.setItem('nexus_google_tmp', JSON.stringify(gUser));
-    window.history.replaceState({}, '', '/login');
-    document.getElementById('googleAvImg').src = gUser.picture || '';
-    document.getElementById('googleName').textContent = gUser.name || gUser.email;
-    document.getElementById('googleEmail').textContent = gUser.email || '';
-    document.getElementById('googlePreview').classList.add('show');
-    showRobloxPanel(gUser);
-  } catch(e) {
-    showErr('googleErr', 'Gagal parse data Google: ' + e.message);
-  }
-}
-if (googleErrorParam) {
-  window.history.replaceState({}, '', '/login');
-  showErr('googleErr', 'Login Google gagal: ' + decodeURIComponent(googleErrorParam));
-}
-
-  // Clean URL first
-  window.history.replaceState({}, '', '/login');
-  document.getElementById('googleLd').classList.add('show');
-  document.getElementById('googleSignInBtn').disabled = true;
-
-  try{
-    // Exchange code via backend
-    var r = await fetch('/api/google-callback?code=' + encodeURIComponent(code));
-    if(!r.ok) throw new Error('Google auth failed: ' + r.status);
-    var data = await r.json();
-    if(data.error) throw new Error(data.error);
-
-    var gUser = data.user; // { id, name, email, picture }
-    if(!gUser || !gUser.id) throw new Error('Could not get Google user info');
-
-    // Show Google preview
-    document.getElementById('googleAvImg').src = gUser.picture || '';
-    document.getElementById('googleName').textContent = gUser.name || gUser.email;
-    document.getElementById('googleEmail').textContent = gUser.email || '';
-    document.getElementById('googlePreview').classList.add('show');
-
-    // Save Google user temporarily
-    localStorage.setItem('nexus_google_tmp', JSON.stringify(gUser));
-
-    // Show Roblox linking panel
-    showRobloxPanel(gUser);
-  }catch(e){
-    document.getElementById('googleLd').classList.remove('show');
-    document.getElementById('googleSignInBtn').disabled = false;
-    errEl.textContent = 'Error: ' + e.message;
-    errEl.classList.add('show');
-  }
-}
-
-// Real Roblox OAuth flow
 function startRobloxOAuth(){
   var btn=document.getElementById('robloxLoginBtn');
   var ldEl=document.getElementById('robloxLd');
   var errEl=document.getElementById('robloxErr');
   if(errEl)errEl.classList.remove('show');
-
   if(!ROBLOX_CLIENT_ID){
-    // Show error if not configured
-    if(errEl){ errEl.textContent='ROBLOX_CLIENT_ID belum dikonfigurasi di Vercel. Hubungi admin.'; errEl.classList.add('show'); }
+    if(errEl){ errEl.textContent='ROBLOX_CLIENT_ID belum dikonfigurasi.'; errEl.classList.add('show'); }
     return;
   }
   if(btn){ btn.disabled=true; }
   if(ldEl){ ldEl.classList.add('show'); }
-
-  // Save lang preference before redirect
   localStorage.setItem('nexus_lang', curLang);
-  localStorage.setItem('nexus_oauth_state', curLang);
-
-  // Build Roblox OAuth URL
   var redirectUri = encodeURIComponent(window.location.origin + '/api/auth');
   var scope = encodeURIComponent('openid profile');
   var state = encodeURIComponent(curLang + '_' + Date.now());
   var oauthUrl = 'https://authorize.roblox.com/?client_id=' + ROBLOX_CLIENT_ID
-    + '&response_type=code'
-    + '&redirect_uri=' + redirectUri
-    + '&scope=' + scope
-    + '&state=' + state;
-
-  // Redirect to Roblox OAuth
+    + '&response_type=code&redirect_uri=' + redirectUri
+    + '&scope=' + scope + '&state=' + state;
   window.location.href = oauthUrl;
 }
 
-// Handle OAuth callback result (called after redirect back from Roblox)
 async function handleOAuthCallback(){
   var params = new URLSearchParams(window.location.search);
-  var code  = params.get('code');
-  var error = params.get('error');
-  var errEl = document.getElementById('robloxErr');
-  var ldEl  = document.getElementById('robloxLd');
-
-  if(error){
-    if(errEl){ errEl.textContent='Login dibatalkan: '+error; errEl.classList.add('show'); }
-    // Clean URL
-    window.history.replaceState({}, '', '/login');
-    return;
-  }
+  var code=params.get('code'), error=params.get('error');
+  var errEl=document.getElementById('robloxErr'), ldEl=document.getElementById('robloxLd');
+  if(error){ if(errEl){errEl.textContent='Login dibatalkan: '+error;errEl.classList.add('show');} window.history.replaceState({},'',' /login'); return; }
   if(!code) return;
-
-  // Show loading
   if(ldEl) ldEl.classList.add('show');
-  var btn = document.getElementById('robloxLoginBtn');
-  if(btn) btn.disabled=true;
-  // Clean URL immediately
-  window.history.replaceState({}, '', '/login');
-
+  var btn=document.getElementById('robloxLoginBtn'); if(btn) btn.disabled=true;
+  window.history.replaceState({},'','/login');
   try{
-    // Exchange code via our backend
-    var r = await fetch('/api/auth?code='+encodeURIComponent(code));
-    if(!r.ok){ throw new Error('Auth failed: '+r.status); }
-    var data = await r.json();
-    if(data.error){ throw new Error(data.error); }
-
-    // data should have: { id, username, displayName, avatar }
-    var rUser = data.user;
-    var isOwner = OWNER_USERS.indexOf(rUser.username) !== -1;
-    var existing = null;
-    try{
-      var sr = await fetch('/api/sync?user='+encodeURIComponent(rUser.username.toLowerCase()));
-      if(sr.ok){ var sd = await sr.json(); if(sd&&sd.credits!==undefined) existing=sd; }
-    }catch(e){}
-    var userData = existing || {
-      credits:isOwner?999999:30, convs:[], plan:'free', lastClaim:null,
-      draftText:{}, draftAttach:{},
-      model:{id:'gemini-2.0-flash',provider:'gemini',cost:0,label:'Gemini 2.0 Flash'},
-      language:localStorage.getItem('nexus_lang')||'id',
-      roles:isOwner?['owner']:[], loginMethod:'roblox_oauth'
-    };
-    userData.avatar = rUser.avatar || '';
-    var session = {
-      user:{ id:rUser.id, username:rUser.username, displayName:rUser.displayName||rUser.username, avatar:rUser.avatar||'' },
-      data: userData, loginTime: Date.now()
-    };
-    localStorage.setItem('nexus_session', JSON.stringify(session));
-    try{ fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:rUser.username.toLowerCase(),data:userData})}); }catch(e){}
+    var r=await fetch('/api/auth?code='+encodeURIComponent(code));
+    if(!r.ok) throw new Error('Auth failed: '+r.status);
+    var data=await r.json();
+    if(data.error) throw new Error(data.error);
+    var rUser=data.user;
+    var isOwner=OWNER_USERS.indexOf(rUser.username)!==-1;
+    var existing=null;
+    try{ var sr=await fetch('/api/sync?user='+encodeURIComponent(rUser.username.toLowerCase())); if(sr.ok){var sd=await sr.json();if(sd&&sd.credits!==undefined)existing=sd;} }catch(e){}
+    var userData=existing||{ credits:isOwner?999999:30,convs:[],plan:'free',lastClaim:null,draftText:{},draftAttach:{},model:{id:'gemini-2.0-flash',provider:'gemini',cost:0,label:'Gemini 2.0 Flash'},language:localStorage.getItem('nexus_lang')||'id',roles:isOwner?['owner']:[],loginMethod:'roblox_oauth' };
+    userData.avatar=rUser.avatar||'';
+    var session={ user:{id:rUser.id,username:rUser.username,displayName:rUser.displayName||rUser.username,avatar:rUser.avatar||''},data:userData,loginTime:Date.now() };
+    localStorage.setItem('nexus_session',JSON.stringify(session));
+    try{fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:rUser.username.toLowerCase(),data:userData})});}catch(e){}
     window.location.replace('/');
   }catch(e){
     if(ldEl) ldEl.classList.remove('show');
     if(btn) btn.disabled=false;
-    if(errEl){ errEl.textContent='Login gagal: '+e.message; errEl.classList.add('show'); }
+    if(errEl){errEl.textContent='Login gagal: '+e.message;errEl.classList.add('show');}
   }
 }
 
 function showErr(id,msg){var e=document.getElementById(id);if(e){e.textContent=msg;e.classList.add('show');}}
-function hideEl(id){var e=document.getElementById(id);if(e)e.classList.remove('show');}
-function show(id){var e=document.getElementById(id);if(e)e.classList.add('show');}
-function hide(id){var e=document.getElementById(id);if(e)e.classList.remove('show');}
 
-// Roblox OAuth — no username input needed
-
-// Check for OAuth callbacks
+// ═══ CHECK CALLBACKS ON PAGE LOAD ═══
 (function(){
   var params = new URLSearchParams(window.location.search);
-  var code  = params.get('code');
-  var error = params.get('error');
-  if(code || error){
-    // Determine which callback based on state or referrer
-    var state = params.get('state') || '';
-    // Check if this is from Google (state starts with 'nexus_') or Roblox
-    var isGoogle = state.startsWith('nexus_') || 
-      document.referrer.includes('accounts.google.com') ||
-      localStorage.getItem('nexus_google_state');
-    loadConfig().then(function(){
-      if(isGoogle){
-        handleGoogleCallback();
-      } else {
-        handleOAuthCallback();
-      }
-    });
+
+  // Handle google_user — redirect dari api/google-callback
+  var googleUserParam = params.get('google_user');
+  if(googleUserParam){
+    try{
+      var gUser = JSON.parse(atob(decodeURIComponent(googleUserParam)));
+      window.history.replaceState({},'','/login');
+      localStorage.setItem('nexus_google_tmp', JSON.stringify(gUser));
+      document.getElementById('googleAvImg').src = gUser.picture||'';
+      document.getElementById('googleName').textContent = gUser.name||gUser.email;
+      document.getElementById('googleEmail').textContent = gUser.email||'';
+      document.getElementById('googlePreview').classList.add('show');
+      showRobloxPanel(gUser);
+    }catch(e){ showErr('googleErr','Gagal parse data Google: '+e.message); }
+    return;
+  }
+
+  // Handle google_error
+  var googleErrorParam = params.get('google_error');
+  if(googleErrorParam){
+    window.history.replaceState({},'','/login');
+    showErr('googleErr','Login Google gagal: '+decodeURIComponent(googleErrorParam));
+    return;
+  }
+
+  // Handle Roblox OAuth callback
+  var code=params.get('code'), error=params.get('error');
+  var state=params.get('state')||'';
+  if(code||error){
+    var isGoogle = state.startsWith('nexus_') || localStorage.getItem('nexus_google_state');
+    if(isGoogle){
+      // Old flow fallback — tidak dipakai lagi tapi tetap handle
+      window.history.replaceState({},'','/login');
+    } else {
+      loadConfig().then(function(){ handleOAuthCallback(); });
+    }
     return;
   }
 })();
 
 (function(){
-  // Prevent redirect loop: only redirect if session is fully valid
   try{
     var s=localStorage.getItem('nexus_session');
-    if(!s) return; // No session, stay on login
+    if(!s) return;
     var p=JSON.parse(s);
-    // Validate all required fields exist
-    if(!p||!p.user||!p.user.username||!p.loginTime) {
-      localStorage.removeItem('nexus_session'); // Clear bad session
-      return;
-    }
-    // Check not expired (7 days)
-    if((Date.now()-p.loginTime)>=86400000*7) {
-      localStorage.removeItem('nexus_session');
-      return;
-    }
-    // Session valid — redirect to app
-    // Use replace to prevent back-button loop
+    if(!p||!p.user||!p.user.username||!p.loginTime){ localStorage.removeItem('nexus_session'); return; }
+    if((Date.now()-p.loginTime)>=86400000*7){ localStorage.removeItem('nexus_session'); return; }
     window.location.replace('/');
-  }catch(e){
-    // Bad JSON — clear it
-    localStorage.removeItem('nexus_session');
-  }
+  }catch(e){ localStorage.removeItem('nexus_session'); }
 })();
 </script>
 </body>
