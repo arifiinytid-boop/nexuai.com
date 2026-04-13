@@ -2491,39 +2491,38 @@ var REDEEM_CODES = {
 
 async function redeemCode() {
   var code = (document.getElementById('redeemInput').value || '').trim().toUpperCase();
-  if (!code) { document.getElementById('redeemStatus').textContent = 'Masukkan kode dulu!'; return; }
+  var statusEl = document.getElementById('redeemStatus');
+  if (!code) { statusEl.textContent = 'Masukkan kode dulu!'; statusEl.style.color = 'var(--pink)'; return; }
   var btn = document.getElementById('redeemBtn');
   btn.disabled = true; btn.textContent = '...';
-  // Check local codes
-  var local = REDEEM_CODES[code];
-  if (local) {
-    var now = new Date().toISOString().split('T')[0];
-    if (local.expires < now) {
-      document.getElementById('redeemStatus').textContent = 'Kode sudah expired!';
-      document.getElementById('redeemStatus').style.color = 'var(--pink)';
+  statusEl.textContent = ''; 
+  try {
+    var r = await fetch('/api/redeem', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code, user: SESSION ? SESSION.user.username.toLowerCase() : 'unknown' })
+    });
+    var data = await r.json();
+    if (!r.ok || data.error) {
+      statusEl.textContent = data.error || 'Kode tidak valid!';
+      statusEl.style.color = 'var(--pink)';
     } else {
-      // Check if already redeemed
-      var redeemedKey = 'nexus_redeemed_' + (SESSION ? SESSION.user.username : 'u');
-      var redeemed = JSON.parse(localStorage.getItem(redeemedKey) || '[]');
-      if (redeemed.includes(code)) {
-        document.getElementById('redeemStatus').textContent = 'Kode sudah pernah digunakan!';
-        document.getElementById('redeemStatus').style.color = 'var(--pink)';
-      } else {
-        S.credits = parseFloat((S.credits + local.credits).toFixed(4));
-        redeemed.push(code); localStorage.setItem(redeemedKey, JSON.stringify(redeemed));
-        updateCreds(); saveS();
-        document.getElementById('redeemStatus').textContent = '+' + local.credits + ' CR berhasil ditambahkan!';
-        document.getElementById('redeemStatus').style.color = 'var(--green)';
-        document.getElementById('redeemInput').value = '';
-        toast('+' + local.credits + ' CR dari kode ' + code + '!');
-      }
+      if (data.credits > 0) { S.credits = parseFloat((S.credits + data.credits).toFixed(4)); updateCreds(); }
+      if (data.plan) S.plan = data.plan;
+      saveS();
+      document.getElementById('redeemInput').value = '';
+      statusEl.textContent = data.message || ('+' + data.credits + ' CR berhasil!');
+      statusEl.style.color = 'var(--green)';
+      toast(data.message || ('+' + data.credits + ' CR dari kode ' + code + '!'));
+      var sc = document.getElementById('settingsCredits'); if(sc) sc.textContent = isOwner()?'Unlimited':parseFloat(S.credits).toFixed(2)+' CR';
+      var sp = document.getElementById('settingsPlan'); if(sp) sp.textContent = isOwner()?'Admin':(S.plan==='pro'?'Pro':'Free');
     }
-  } else {
-    document.getElementById('redeemStatus').textContent = 'Kode tidak valid!';
-    document.getElementById('redeemStatus').style.color = 'var(--pink)';
+  } catch(e) {
+    statusEl.textContent = 'Gagal: ' + e.message;
+    statusEl.style.color = 'var(--pink)';
   }
   btn.disabled = false; btn.textContent = 'Redeem';
-  setTimeout(function(){ document.getElementById('redeemStatus').textContent = ''; }, 4000);
+  setTimeout(function(){ statusEl.textContent = ''; }, 5000);
 }
 
 // ═══════════════════════════════════════
