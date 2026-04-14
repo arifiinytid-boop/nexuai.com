@@ -326,30 +326,124 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 @keyframes toastIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
 
 /* ── MOBILE ── */
-@media(max-width:768px){
-  #app{display:flex;flex-direction:column;height:100vh;grid-template-columns:none!important;overflow:hidden;}
-  #sb{width:100%;border-right:none;border-bottom:1px solid var(--b);flex-shrink:0;max-height:200px;overflow:hidden;}
-  .sb-head{padding:8px 12px 6px;}
-  .sb-user{padding:6px 10px;}
-  .creds{margin:5px 10px;padding:6px 8px;}
-  .cred-v{font-size:15px;}
-  .btn-nc{margin:0 10px 4px;padding:6px 10px;}
-  .convs{max-height:40px;padding:2px 5px;}
-  .sb-footer{display:none;}
-  #chat{flex:1;display:flex;flex-direction:column;min-height:0;overflow:hidden;}
-  #msgs{flex:1;overflow-y:auto;padding:8px 10px;gap:8px;}
-  .mb-wrap{max-width:92%;}
-  .bubble{font-size:12px;padding:8px 10px;}
-  .inp-area{padding:6px 8px;flex-shrink:0;}
-  #inp{font-size:12px;padding:8px 10px;min-height:38px;}
-  .inp-model{max-width:130px;}
-  .collapse-sb{display:none;}
-  .chat-title{font-size:10px;}
-  .chat-tabs{padding:4px 10px;}
-  .tab-btn{font-size:9px;}
-  .plug-banner{font-size:9px;padding:4px 10px;}
-  .model-dd{left:8px;right:8px;}
-  .modal{padding:16px;max-height:85vh;}
+@media (max-width: 768px) {
+  #app {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    grid-template-columns: none !important;
+    overflow: hidden;
+  }
+  
+  #sb {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--b);
+    flex-shrink: 0;
+    max-height: 200px;
+    overflow: hidden;
+  }
+  
+  .sb-head {
+    padding: 8px 12px 6px;
+  }
+  
+  .sb-user {
+    padding: 6px 10px;
+  }
+  
+  .creds {
+    margin: 5px 10px;
+    padding: 6px 8px;
+  }
+  
+  .cred-v {
+    font-size: 15px;
+  }
+  
+  .btn-nc {
+    margin: 0 10px 4px;
+    padding: 6px 10px;
+  }
+  
+  .convs {
+    max-height: 40px;
+    padding: 2px 5px;
+  }
+  
+  .sb-footer {
+    display: none;
+  }
+  
+  #chat {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+  
+  #msgs {
+    flex: 1;
+    overflow-y: auto;
+    padding: 8px 10px;
+    gap: 8px; /* Pastikan #msgs memiliki display: flex; atau display: grid; agar gap berfungsi */
+  }
+  
+  .mb-wrap {
+    max-width: 92%;
+  }
+  
+  .bubble {
+    font-size: 12px;
+    padding: 8px 10px;
+  }
+  
+  .inp-area {
+    padding: 6px 8px;
+    flex-shrink: 0;
+  }
+  
+  #inp {
+    font-size: 12px;
+    padding: 8px 10px;
+    min-height: 38px;
+  }
+  
+  .inp-model {
+    max-width: 130px;
+  }
+  
+  .collapse-sb {
+    display: none;
+  }
+  
+  .chat-title {
+    font-size: 10px;
+  }
+  
+  .chat-tabs {
+    padding: 4px 10px;
+  }
+  
+  .tab-btn {
+    font-size: 9px;
+  }
+  
+  .plug-banner {
+    font-size: 9px;
+    padding: 4px 10px;
+  }
+  
+  .model-dd {
+    left: 8px;
+    right: 8px;
+  }
+  
+  .modal {
+    padding: 16px;
+    max-height: 85vh;
+  }
 }
   
 </style>
@@ -1219,53 +1313,87 @@ var S = {
   cancelCtrl:null, gen:false
 };
 
-function loadS() {
+// Tambahkan kata kunci 'async' di sini
+async function loadS() {
   if (!SESSION) return;
+  
   // Load data dari server terlebih dahulu
-try {
-  var sr = await fetch('/api/sync?user=' + encodeURIComponent(SESSION.user.username.toLowerCase()));
-  if (sr.ok) { var sd = await sr.json(); if (sd && sd.credits !== undefined) { SESSION.data = Object.assign(SESSION.data || {}, sd); localStorage.setItem('nexus_session', JSON.stringify(SESSION)); } }
-} catch(e) {}
+  try {
+    var sr = await fetch('/api/sync?user=' + encodeURIComponent(SESSION.user.username.toLowerCase()));
+    if (sr.ok) { 
+      var sd = await sr.json(); 
+      if (sd && sd.credits !== undefined) { 
+        SESSION.data = Object.assign(SESSION.data || {}, sd); 
+        localStorage.setItem('nexus_session', JSON.stringify(SESSION)); 
+      } 
+    }
+  } catch(e) {
+    console.error("Gagal memuat data dari server:", e); // Sebaiknya jangan biarkan catch kosong agar mudah di-debug
+  }
+  
   try {
     var d = SESSION.data || {};
-    S.credits   = d.credits  !== undefined ? parseFloat(d.credits)  : 30;
-    S.convs     = d.convs    || [];
-    S.lastClaim = d.lastClaim || null;
-    S.plan      = d.plan     || 'free';
-    S.draftText = d.draftText || {};
+    S.credits     = d.credits !== undefined ? parseFloat(d.credits) : 30;
+    S.convs       = d.convs || [];
+    S.lastClaim   = d.lastClaim || null;
+    S.plan        = d.plan || 'free';
+    S.draftText   = d.draftText || {};
     S.draftAttach = d.draftAttach || {};
-    S.language  = d.language || localStorage.getItem('nexus_lang') || 'id';
-    S.theme = d.theme || 'cyan';
-    S.animSpeed = d.animSpeed || 'normal';
-    S.roles     = d.roles    || (isOwner() ? ['owner'] : []);
+    S.language    = d.language || localStorage.getItem('nexus_lang') || 'id';
+    S.theme       = d.theme || 'cyan';
+    S.animSpeed   = d.animSpeed || 'normal';
+    S.roles       = d.roles || (isOwner() ? ['owner'] : []);
+    
     if (d.model && d.model.id) S.model = d.model;
+    
     curLang = S.language;
-  } catch(e) {}
+  } catch(e) {
+    console.error("Gagal memuat data sesi:", e);
+  }
 }
 
 function saveS() {
   if (!SESSION) return;
   try {
     var d = {
-      credits:S.credits, convs:S.convs, lastClaim:S.lastClaim,
-      plan:S.plan, draftText:S.draftText, draftAttach:S.draftAttach,
-      model:S.model, language:S.language, roles:S.roles, theme:S.theme, animSpeed:S.animSpeed,
-      avatar:SESSION.user.avatar
+      credits: S.credits, 
+      convs: S.convs, 
+      lastClaim: S.lastClaim,
+      plan: S.plan, 
+      draftText: S.draftText, 
+      draftAttach: S.draftAttach,
+      model: S.model, 
+      language: S.language, 
+      roles: S.roles, 
+      theme: S.theme, 
+      animSpeed: S.animSpeed,
+      avatar: SESSION.user.avatar
     };
     SESSION.data = d;
     localStorage.setItem('nexus_session', JSON.stringify(SESSION));
     localStorage.setItem('nexus_lang', S.language);
+    
     try {
+      // Perhatikan: Karena fetch ini tidak menggunakan await, ia akan berjalan di latar belakang (fire-and-forget)
       fetch('/api/sync', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({user:SESSION.user.username.toLowerCase(), data:d})
-      });
+        method: 'POST', 
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({user: SESSION.user.username.toLowerCase(), data: d})
+      }).catch(err => console.error("Gagal sinkronisasi ke server:", err)); 
     } catch(e) {}
-  } catch(e) {}
+    
+  } catch(e) {
+    console.error("Gagal menyimpan data:", e);
+  }
 }
 
-function isOwner() { return SESSION && OWNER_USERS.indexOf(SESSION.user.username) !== -1; }
-function isAdmin() { return isOwner() || (SESSION && S.roles && S.roles.indexOf('admin') !== -1); }
+function isOwner() { 
+  return SESSION && OWNER_USERS.indexOf(SESSION.user.username) !== -1; 
+}
+
+function isAdmin() { 
+  return isOwner() || (SESSION && S.roles && S.roles.indexOf('admin') !== -1); 
+}
 
 // ═══════════════════════════════════════
 //  LOAD API KEYS
