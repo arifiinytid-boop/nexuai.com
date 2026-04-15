@@ -1052,12 +1052,6 @@ async function loadKeys() {
 // ═══════════════════════════════════════
 //  SYSTEM PROMPT — EXPANDED AI RULES
 // ═══════════════════════════════════════
-  // Taruh DI ATAS fungsi buildSysPrompt()
-var TICK3 = '\`\`\`'; // tiga backtick, aman di luar template
-
-// Lalu di dalam buildSysPrompt, ganti:
-// \`\`\`lua  →  ${TICK3}lua
-// \`\`\`     →  ${TICK3}
   
 function buildSysPrompt() {
   var t = LANGS[curLang] || LANGS.id;
