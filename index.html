@@ -636,7 +636,6 @@ var MODEL_LIST = [
   {id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite',sub:'Fast · Thinking',icon:'icon/gemini.png'},
   {id:'gemini-2.5-flash',prov:'gemini',cost:2,label:'Gemini 2.5 Flash',sub:'Smart · Thinking',icon:'icon/gemini.png'},
   {id:'gemini-3-flash-preview',prov:'gemini',cost:3,label:'Gemini 3 Flash',sub:'Extra Fast · Thinking',icon:'icon/gemini.png'},
-  {id:'gemini-3.1-flash-lite-preview',prov:'gemini',cost:6,label:'Gemini 3.1 Flash Lite',sub:'Most Copable · Thinking',icon:'icon/gemini.png'},
   {id:'gemini-2.5-pro',prov:'gemini',cost:5,label:'Gemini 2.5 Pro',sub:'Coming Soon',icon:'icon/gemini.png',soon:true},
   {id:'gemini-3.1-pro-preview',prov:'gemini',cost:12,label:'Gemini 3.1 Pro',sub:'Coming Soon',icon:'icon/gemini.png',soon:true},
   {group:'Meta Llama'},
@@ -960,7 +959,12 @@ async function loadS() {
     S.language    = d.language || localStorage.getItem('nexus_lang') || 'id';
     S.theme       = d.theme || 'cyan';
     S.roles       = d.roles || (isOwner() ? ['owner'] : []);
-    if (d.model && d.model.id) S.model = d.model;
+    if (d.model && d.model.id) {
+      // Validate the saved model is still in the active list (not COMING SOON)
+      var savedModelValid = MODEL_LIST.find(function(m){ return m.id === d.model.id && !m.group && !m.soon; });
+      if (savedModelValid) S.model = d.model;
+      else S.model = {id:'gemini-2.5-flash-lite',provider:'gemini',cost:1,label:'Gemini 2.5 Flash Lite'};
+    }
     curLang = S.language;
   } catch(e) { console.warn('loadS parse error:', e.message); }
 }
