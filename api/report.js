@@ -72,7 +72,7 @@ export default async function handler(req, res) {
     const resendKey = process.env.RESEND_API_KEY;
     if (resendKey) {
       const avatarHtml = avatar
-        ? `<img src="${avatar}" style="width:60px;height:60px;border-radius:50%;border:2px solid #00e5ff;object-fit:cover;display:block;margin:0 auto 10px;" alt="${from}" onerror="this.style.display='none'">`
+        ? `<img src="${avatarRealUrl}" style="width:60px;height:60px;border-radius:50%;border:2px solid #00e5ff;object-fit:cover;display:block;margin:0 auto 10px;" alt="${from}" onerror="this.style.display='none'">`
         : `<div style="width:60px;height:60px;border-radius:50%;background:linear-gradient(135deg,#00e5ff,#8800ff);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:700;color:white;margin:0 auto 10px;">${from.charAt(0).toUpperCase()}</div>`;
 
       const subject = isPayment
