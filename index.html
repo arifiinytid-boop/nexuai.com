@@ -486,6 +486,28 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 </div>
 
 <!-- MODALS -->
+
+<!-- Discord Gate Modal -->
+<div class="ov" id="discordGateModal" style="z-index:9998;">
+  <div class="modal" style="max-width:420px;text-align:center;">
+    <div style="font-size:36px;margin-bottom:12px;">🎮</div>
+    <div class="modal-t" style="justify-content:center;font-size:15px;margin-bottom:4px;">Bergabung ke Discord Dulu!</div>
+    <div style="font-size:11px;color:var(--dim);margin-bottom:20px;line-height:1.7;">Untuk menggunakan NEXUS AI gratis, kamu perlu bergabung ke Discord server kami terlebih dahulu. Dapatkan redeem code, update terbaru, dan support di sana!</div>
+    <div style="background:var(--bg3);border:1px solid var(--b);border-radius:8px;padding:14px;margin-bottom:20px;">
+      <div style="font-size:10px;color:var(--dim);margin-bottom:8px;">Server Discord NEXUS STUDIO:</div>
+      <div style="font-family:'Orbitron',sans-serif;font-size:14px;color:var(--cyan);font-weight:700;">discord.gg/TeefZk37</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      <button class="btn-modal primary" onclick="openDiscordAndConfirm()" style="padding:12px;font-size:11px;">
+        🚀 Bergabung ke Discord
+      </button>
+      <button class="btn-modal secondary" onclick="confirmDiscordJoined()" style="font-size:10px;padding:8px;">
+        ✅ Saya sudah bergabung
+      </button>
+    </div>
+    <div style="margin-top:12px;font-size:9px;color:var(--dim);">Setelah bergabung, klik "Saya sudah bergabung" untuk lanjut</div>
+  </div>
+</div>
 <!-- Avatar Modal -->
 <div class="ov" id="avatarModal">
   <div class="modal" style="width:360px;text-align:center;padding:28px;">
@@ -504,7 +526,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="modal-b">
       <div class="install-step"><div class="install-num">1</div><div class="install-txt">Download file plugin <code>nexusai_plugin_v5.lua</code> dari Discord NEXUS STUDIO</div></div>
       <div class="install-step"><div class="install-num">2</div><div class="install-txt">Simpan ke: <code>C:\Users\[NamaKamu]\AppData\Local\Roblox\Plugins\</code></div></div>
-      <div class="install-step"><div class="install-num">3</div><div class="install-txt">Buka Roblox Studio → <strong>Plugin Manager</strong> → install plugin, atau simpan file .lua ke folder Plugins. Pastikan <strong>Allow HTTP Requests Dan Script Injection</strong> aktif di Plugin → Permissions</div></div>
+      <div class="install-step"><div class="install-num">3</div><div class="install-txt">Buka Roblox Studio → <strong>Plugin Manager</strong> → install plugin, atau simpan file .lua ke folder Plugins. Pastikan <strong>Allow HTTP Requests</strong> aktif di Game Settings → Security</div></div>
       <div class="install-step"><div class="install-num">4</div><div class="install-txt">Klik tombol <strong>NEXUS AI</strong> di toolbar Roblox Studio → Klik <strong>CONNECT</strong></div></div>
       <div class="install-step"><div class="install-num">5</div><div class="install-txt">Status berubah hijau → Chat di web ini → AI langsung build di place kamu!</div></div>
     </div>
@@ -804,15 +826,16 @@ function retryStudio() {
 
 async function sendToStudio(command) {
   if (!command || command.action === 'none') return null;
+  var username = SESSION ? SESSION.user.username.toLowerCase() : '';
   try {
+    var cmdWithUser = Object.assign({}, command, {
+      _user: SESSION ? SESSION.user.username : 'web',
+      _target_user: command._target_user || username,
+    });
     var r = await fetch(API_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...command,
-        _user: SESSION ? SESSION.user.username : 'web',
-        _target_user: SESSION ? SESSION.user.username.toLowerCase() : '',
-      })
+      body: JSON.stringify(cmdWithUser)
     });
     if (!r.ok) throw new Error('HTTP ' + r.status);
     return await r.json();
@@ -1052,7 +1075,6 @@ async function loadKeys() {
 // ═══════════════════════════════════════
 //  SYSTEM PROMPT — EXPANDED AI RULES
 // ═══════════════════════════════════════
-  
 function buildSysPrompt() {
   var t = LANGS[curLang] || LANGS.id;
   var u = SESSION ? SESSION.user : {username:'Unknown'};
@@ -1068,7 +1090,7 @@ Website: nexusai-com.vercel.app
 Username Roblox: "${username}"
 Plan: ${S.plan} | Credits: ${parseFloat(S.credits).toFixed(2)} CR
 Waktu: ${now.toLocaleString()}
-Studio Plugin: "${connected}" 'TERHUBUNG ✅' : 'OFFLINE ❌'}
+Studio Plugin: ${connected ? 'TERHUBUNG ✅' : 'OFFLINE ❌'}
 
 ===== BAHASA =====
 ${t.aiLang}
@@ -1101,7 +1123,7 @@ Kamu adalah developer expert yang sangat berpengalaman. Kamu:
 - Tool script → StarterPack atau langsung di Tool
 
 ===== APA YANG BISA NEXUS AI LAKUKAN DI ROBLOX STUDIO (via plugin) =====
-"${connected}"
+${connected ? 'TERHUBUNG ✅' : 'OFFLINE ❌'}
 STUDIO TERHUBUNG! AI bisa langsung inject ke place "${username}":
 - inject_script: Masukkan Script/LocalScript/ModuleScript ke parent manapun
 - batch_inject: Inject banyak script sekaligus
@@ -1126,11 +1148,11 @@ PENTING SAAT STUDIO CONNECTED:
 ⚠️ ATURAN KRITIS - OUTPUT HANYA LUA, BUKAN JSON:
 - JANGAN PERNAH output JSON commands atau structured data
 - JANGAN tulis format: {"command":"inject_script",...} atau apapun yang mirip JSON
-- SELALU output kode dalam lua ... code block biasa
+- SELALU output kode dalam format: (backtick x3)lua ... (backtick x3) code block biasa
 - Sistem akan otomatis parse lua blocks dan inject ke Studio
 
 CARA KERJA:
-1. Tulis kode Lua lengkap dalam lua ... blocks
+1. Tulis kode Lua lengkap dalam code block lua
 2. Sistem otomatis detect dan inject ke lokasi yang tepat
 3. Jelaskan APA yang sudah dimasukkan setelah kode
 
@@ -1140,12 +1162,11 @@ SETELAH KODE DIINJECT:
 - AI bertanggung jawab memasukkan SEMUA (server + client + modules + remotes)
 - User tinggal klik Play untuk test — semua sudah siap
 
-PENTING: Untuk GUI di Studio, SELALU buat lua LocalScript/Script yang membangun GUI via Instance.new() bukan JSON config. UIScale wajib ditambahkan untuk AutoScaled! :
+PENTING: Untuk GUI di Studio, SELALU buat "lua LocalScript/Script yang membangun GUI via Instance.new() bukan JSON config. UIScale wajib ditambahkan untuk AutoScaled! :
 
 STUDIO BELUM TERHUBUNG. Kasih tahu user:
 "Untuk script langsung masuk ke Studio, klik NEXUS AI di toolbar Roblox Studio → CONNECT"
 Tetap berikan kode Lua LENGKAP dalam code block lua agar user bisa copy manual.
-
 
 ===== ATURAN GUI (Expert Level) =====
 WAJIB untuk semua GUI:
@@ -1255,6 +1276,9 @@ async function initApp(){
   if (S.theme && S.theme !== 'cyan') applyTheme(S.theme, true);
   if (isAdmin()) document.getElementById('adminSection').style.display = '';
 
+  // Check if user joined Discord (free plan gate)
+  setTimeout(checkDiscordGate, 1200);
+
   var withMsgs = S.convs.filter(function(c){return c.msgs&&c.msgs.length;}).sort(function(a,b){return b.created-a.created;});
   if (!withMsgs.length) newChat(); else loadConv(withMsgs[0].id);
 }
@@ -1306,9 +1330,14 @@ function claimDaily(){
 function newChat(){
   if(S.curConv) saveDraft();
   var c={id:Date.now()+'',title:'Untitled',msgs:[],created:Date.now()};
-  S.convs.push(c); S.curConv=c.id; S.msgs=[];
-  saveS(); renderConvs(); renderMsgs();
-  document.getElementById('chatTitle').textContent='Chat Baru';
+  S.convs.push(c); S.curConv=c.id; S.msgs=c.msgs;
+  saveS(); renderConvs();
+  var ct=document.getElementById('chatTitle');
+  if(ct) ct.textContent='Chat Baru';
+  // Switch to chat tab first so msgs element exists
+  var guiTab=document.getElementById('guiTab');
+  if(guiTab&&guiTab.style.display!=='none') switchTab('chat',document.getElementById('tabChat'));
+  renderMsgs();
   restoreDraft();
 }
 function loadConv(id){
@@ -1316,8 +1345,13 @@ function loadConv(id){
   var c=S.convs.find(function(x){return x.id===id;});
   if(!c) return;
   S.curConv=id; S.msgs=c.msgs||[];
-  renderConvs(); renderMsgs();
-  document.getElementById('chatTitle').textContent=(c.title&&c.title!=='Untitled')?c.title:'Chat Baru';
+  renderConvs();
+  // Switch to chat tab so msgs element is visible
+  var guiTab=document.getElementById('guiTab');
+  if(guiTab&&guiTab.style.display!=='none') switchTab('chat',document.getElementById('tabChat'));
+  renderMsgs();
+  var ct=document.getElementById('chatTitle');
+  if(ct) ct.textContent=(c.title&&c.title!=='Untitled')?c.title:'Chat Baru';
   restoreDraft();
 }
 function saveDraft(){
@@ -1478,10 +1512,24 @@ renderer2.link=function(href,title,text){
 try{marked.setOptions({renderer:renderer2,breaks:true,gfm:true});}catch(e){}
 
 function renderMsgs(){
-  var a=document.getElementById('msgs'),w=document.getElementById('welcome');
-  if(!S.msgs.length){a.innerHTML='';a.appendChild(w);w.style.display='';return;}
-  w.style.display='none';a.innerHTML='';
-  S.msgs.forEach(function(m){a.appendChild(mkMsg(m));});
+  var a=document.getElementById('msgs');
+  var w=document.getElementById('welcome');
+  if(!a) return;
+  // Remove all message divs but keep #welcome element
+  var children=Array.from(a.children);
+  children.forEach(function(ch){
+    if(ch.id!=='welcome') ch.remove();
+  });
+  if(!w) return;
+  if(!S.msgs||!S.msgs.length){
+    w.style.display='';
+    return;
+  }
+  w.style.display='none';
+  S.msgs.forEach(function(m){
+    var el=mkMsg(m);
+    if(el) a.appendChild(el);
+  });
   a.scrollTop=a.scrollHeight;
 }
 
@@ -1543,8 +1591,12 @@ function mkMsg(m){
 
 function appendMsg(m){
   var a=document.getElementById('msgs');
-  document.getElementById('welcome').style.display='none';
-  a.appendChild(mkMsg(m)); a.scrollTop=a.scrollHeight;
+  if(!a) return;
+  var w=document.getElementById('welcome');
+  if(w) w.style.display='none';
+  var el=mkMsg(m);
+  if(el) a.appendChild(el);
+  a.scrollTop=a.scrollHeight;
 }
 function copyMsgText(id){var el=document.getElementById('bubble_'+id);if(!el)return;navigator.clipboard.writeText(el.innerText).then(function(){toast('Disalin!');});}
 function shareMsgText(id){var el=document.getElementById('bubble_'+id);if(!el)return;var txt=el.innerText;if(navigator.share)navigator.share({title:'NEXUS AI',text:txt}).catch(function(){});else navigator.clipboard.writeText(txt).then(function(){toast('Disalin!');});}
@@ -1720,6 +1772,8 @@ async function autoInjectToStudio(aiResponse, userPrompt){
       parent:info.parent,
       script_type:info.type,
       code:code,
+      _user: SESSION ? SESSION.user.username : 'web',
+      _target_user: SESSION ? SESSION.user.username.toLowerCase() : '',
     };
     var result=await sendToStudio(cmd);
     if(result&&result.status==='ok'){
@@ -2156,6 +2210,26 @@ async function sendReport(){
   finally{btn.disabled=false;btn.textContent='Kirim Report';setTimeout(function(){document.getElementById('reportStatus').textContent='';},4000);}
 }
 function openShop(){document.getElementById('shopModal').classList.add('show');}
+function openDiscordAndConfirm(){
+  window.open('https://discord.gg/TeefZk37','_blank');
+  // Show confirm button after a delay
+  setTimeout(function(){
+    toast('Setelah bergabung, klik "Saya sudah bergabung"','var(--cyan)');
+  }, 2000);
+}
+function confirmDiscordJoined(){
+  localStorage.setItem('nexus_discord_joined','true');
+  closeModal('discordGateModal');
+  toast('Selamat datang di NEXUS AI! 🎉','var(--green)');
+}
+function checkDiscordGate(){
+  if(isOwner()) return; // Owner bypasses
+  if(S.plan==='pro') return; // Pro users bypass
+  var joined=localStorage.getItem('nexus_discord_joined');
+  if(!joined){
+    document.getElementById('discordGateModal').classList.add('show');
+  }
+}
 function goToPayment(cr, price, label){
   // Navigate to payment page with params
   window.location.href = '/payment?cr='+cr+'&price='+price+'&label='+encodeURIComponent(label);
