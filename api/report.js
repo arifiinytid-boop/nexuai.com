@@ -155,7 +155,7 @@ export default async function handler(req, res) {
           },
           body: JSON.stringify({
             from: 'NEXUS AI <onboarding@resend.dev>',
-            to:   ['arifiinytid@gmail.com'],
+            to:   ['linaarifin088@gmail.com'],
             subject,
             html: emailBody,
           })
