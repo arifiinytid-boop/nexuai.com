@@ -171,6 +171,21 @@ export default async function handler(req, res) {
       console.warn('RESEND_API_KEY not set in Vercel environment variables!');
     }
 
+    // Also notify Discord bot if configured
+    const discordNotif = process.env.DISCORD_NOTIF_CHANNEL;
+    if (discordNotif) {
+      try {
+        await fetch(
+          `${process.env.VERCEL_URL ? 'https://' + process.env.VERCEL_URL : 'https://nexusai-com.vercel.app'}/api/discord`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ _nexusNotify: true, type: isPayment ? 'payment' : 'report', ...report }),
+          }
+        );
+      } catch(e) { console.warn('Discord notify failed:', e.message); }
+    }
+
     return res.status(200).json({ status: 'ok', id: report.id });
   }
 
