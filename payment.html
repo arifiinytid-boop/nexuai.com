@@ -199,42 +199,49 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         <button class="plan-btn free-btn" disabled id="freeBtnPlan">Paket Aktif</button>
       </div>
       <!-- PRO -->
-      <div class="plan-card" id="planPro" onclick="selectPlan('pro')">
-        <span class="pro-badge">SOON</span>
+      <div class="plan-card" id="planPro" onclick="selectProPlan()" style="cursor:pointer;">
+        <span class="pro-badge">HOT 🔥</span>
         <div class="plan-badge pro">PRO</div>
-        <div class="plan-price">$9.99<sub>/bulan</sub></div>
-        <div class="plan-period">Per bulan · Batal kapanpun</div>
+        <div class="plan-price">Rp 150K<sub style="font-size:10px;color:var(--dim);">/bulan</sub></div>
+        <div class="plan-period">Per bulan · Bayar via OVO/DANA</div>
         <ul class="plan-features">
-          <li>200 CR saat aktif</li>
-          <li>+25 CR / hari</li>
+          <li>200 CR langsung aktif</li>
+          <li>+25 CR / hari (auto)</li>
           <li>Semua model AI</li>
           <li>Priority support</li>
-          <li>Fitur eksklusif</li>
+          <li>Akses fitur eksklusif</li>
+          <li>Custom AI personality</li>
         </ul>
-        <button class="plan-btn pro-btn" disabled>Segera Hadir</button>
+        <button class="plan-btn pro-btn" onclick="selectProPlan()">Langganan Pro</button>
       </div>
     </div>
 
     <!-- CREDIT PACKS -->
     <div class="sec-title">Credit Packs (Beli Sekali)</div>
-    <div class="packs">
-      <div class="pack-card" id="pack21" onclick="selectPack('21','79000','21 CR Small')">
-        <div class="pack-cr">21</div>
-        <div class="pack-label">Small</div>
-        <div class="pack-price">Rp 79K</div>
-        <div class="pack-sub">≈ Rp 3.800/CR</div>
+    <div class="packs" style="grid-template-columns:repeat(2,1fr);">
+      <div class="pack-card" id="pack50" onclick="selectPack('50','38000','50 CR Starter')">
+        <div class="pack-cr">50</div>
+        <div class="pack-label">Starter</div>
+        <div class="pack-price">Rp 38K</div>
+        <div class="pack-sub" style="font-size:8px;">≈ $2.38 USD</div>
       </div>
-      <div class="pack-card popular" id="pack86" onclick="selectPack('86','299000','86 CR Popular')">
-        <div class="pack-cr">86</div>
+      <div class="pack-card popular" id="pack80" onclick="selectPack('80','50000','80 CR Popular')">
+        <div class="pack-cr">80</div>
         <div class="pack-label">Popular</div>
-        <div class="pack-price">Rp 299K</div>
-        <div class="pack-sub">≈ Rp 3.500/CR</div>
+        <div class="pack-price">Rp 50K</div>
+        <div class="pack-sub" style="font-size:8px;">≈ $3.13 USD</div>
       </div>
-      <div class="pack-card" id="pack438" onclick="selectPack('438','1500000','438 CR Mega')">
-        <div class="pack-cr">438</div>
+      <div class="pack-card" id="pack150" onclick="selectPack('150','120000','150 CR Pro')">
+        <div class="pack-cr">150</div>
+        <div class="pack-label">Pro</div>
+        <div class="pack-price">Rp 120K</div>
+        <div class="pack-sub" style="font-size:8px;">≈ $7.50 USD</div>
+      </div>
+      <div class="pack-card" id="pack500" onclick="selectPack('500','1500000','500 CR Mega')">
+        <div class="pack-cr">500</div>
         <div class="pack-label">Mega</div>
         <div class="pack-price">Rp 1.5M</div>
-        <div class="pack-sub">≈ Rp 3.400/CR</div>
+        <div class="pack-sub" style="font-size:8px;">≈ $93.75 USD</div>
       </div>
     </div>
 
@@ -437,13 +444,29 @@ function goToView(n){
 }
 
 function selectPlan(p){
-  // Only free plan active for now
-  if (p === 'pro') { toast('Pro plan segera hadir!', 'var(--yellow)'); return; }
+  // Free plan info
+  if (p === 'free') { toast('Kamu sudah di Free plan!', 'var(--green)'); return; }
+}
+function selectProPlan(){
+  // Select Pro as a monthly subscription pack
+  sel.pack = 'pro';
+  sel.cr = 200;
+  sel.price = 150000;
+  sel.priceStr = 'Rp 150K/bulan';
+  sel.label = 'Pro Plan (1 Bulan) · 200 CR + 25 CR/hari';
+  // Deselect credit packs
+  ['pack50','pack80','pack150','pack500'].forEach(function(id){
+    var el = document.getElementById(id);
+    if(el) el.classList.remove('selected');
+  });
+  document.getElementById('planPro').style.borderColor = 'var(--cyan)';
+  document.getElementById('btnNext1').disabled = false;
+  toast('Pro Plan dipilih!', 'var(--cyan)');
 }
 
 function selectPack(cr, price, label){
   // Deselect all
-  ['pack21','pack86','pack438'].forEach(function(id){
+  ['pack50','pack80','pack150','pack500'].forEach(function(id){
     document.getElementById(id).classList.remove('selected');
   });
   var priceNum = parseInt(price);
