@@ -5,6 +5,7 @@
     { "source": "/login",  "destination": "/login.html" },
     { "source": "/privacy",  "destination": "/privacy.html" },
     { "source": "/terms",  "destination": "/terms.html" },
+    { "source": "/discord-app",  "destination": "/discord-app.html" },
     { "source": "/payment",  "destination": "/payment.html" }
   ],
   "headers": [
