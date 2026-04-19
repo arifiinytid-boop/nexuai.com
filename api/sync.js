@@ -1,244 +1,220 @@
-// api/sync.js — NEXUS AI User Data Sync v3
-// Persistent storage via Vercel KV (keyed by Roblox username)
-// Owner/Admin by Roblox User ID (from OWNER_IDS / ADMIN_IDS env vars)
+// api/sync.js — NEXUS AI User Data Sync V8.2
+// FIX: pakai SCAN agar semua user ter-load (bukan keys() yang ada limit)
 
 let kv = null;
-let kvReady = false;
-
-async function initKV() {
-  if (kvReady) return kv;
-  try {
-    const kvModule = require('@vercel/kv');
-    kv = kvModule.kv || kvModule.default || kvModule;
-    kvReady = true;
-  } catch (e) {
-    kv = null;
-    kvReady = false;
-  }
+async function getKV() {
+  if (kv) return kv;
+  try { const m = await import('@vercel/kv'); kv = m.kv || m.default || m; } catch(e) {}
   return kv;
 }
 
-const memStore = {};
-
-async function getUser(key) {
-  const kvClient = await initKV();
-  if (kvClient && kvReady) {
-    try { return await kvClient.get('nexusai:' + key); } catch(e) {}
-  }
-  return memStore[key] || null;
-}
-
-async function setUser(key, data) {
-  const kvClient = await initKV();
-  if (kvClient && kvReady) {
+// Ambil semua user via SCAN (pakai pagination supaya tidak ada yang ketinggalan)
+async function scanAllUsers(db) {
+  const allKeys = [];
+  let cursor = 0;
+  try {
+    do {
+      const [newCursor, batch] = await db.scan(cursor, { match: 'nexusai:*', count: 200 });
+      cursor = parseInt(newCursor);
+      allKeys.push(...batch);
+    } while (cursor !== 0);
+  } catch(e) {
+    // Fallback ke keys() jika scan tidak tersedia
     try {
-      await kvClient.set('nexusai:' + key, data, { ex: 60 * 60 * 24 * 365 });
-      return;
-    } catch(e) {}
+      const keys = await db.keys('nexusai:*');
+      allKeys.push(...keys);
+    } catch(_) {}
   }
-  memStore[key] = data;
+  return allKeys;
 }
 
-async function listUsers() {
-  const kvClient = await initKV();
-  if (kvClient && kvReady) {
-    try {
-      const keys = await kvClient.keys('nexusai:*');
-      const result = {};
-      for (const k of keys) {
-        result[k.replace('nexusai:', '')] = await kvClient.get(k);
-      }
-      return result;
-    } catch(e) {}
-  }
-  return memStore;
-}
-
-// Parse Owner/Admin IDs from env vars
-// Format: "userId1:Name1,userId2:Name2,userId3:Name3"
-// or just "userId1,userId2,userId3"
-function parseIdList(envStr) {
-  return (envStr || '').split(',').map(s => {
-    const parts = s.trim().split(':');
-    return { id: parts[0].trim(), name: parts[1] ? parts[1].trim() : null };
-  }).filter(x => x.id);
-}
-
-function getOwnerIds() {
-  const fromEnv = parseIdList(process.env.OWNER_IDS);
-  // Default: FIINYTID25 user ID
-  if (fromEnv.length === 0) return [{ id: '128649548', name: 'FIINYTID25' }];
-  return fromEnv;
-}
-
-function getAdminIds() {
-  return parseIdList(process.env.ADMIN_IDS);
-}
-
-function isOwnerById(userId) {
-  const uid = String(userId).trim();
-  return getOwnerIds().some(o => {
-    const oid = String(o.id || o).trim();
-    return oid === uid;
-  });
-}
-
-function isAdminById(userId) {
-  if (isOwnerById(userId)) return true;
-  const uid = String(userId).trim();
-  return getAdminIds().some(a => {
-    const aid = String(a.id || a).trim();
-    return aid === uid;
-  });
-}
-
-module.exports = async (req, res) => {
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  if (req.method === 'OPTIONS') return res.status(200).end();
 
-  if (req.method === 'OPTIONS') { res.status(200).end(); return; }
+  const db = await getKV();
+  if (!db) return res.status(503).json({ error: 'KV tidak tersedia' });
 
-  const userKey = (req.query.user || '').toLowerCase().trim();
-
-  // ── GET ──────────────────────────────────────────────────────────────────
-  if (req.method === 'GET') {
-    if (req.query.list === '1') {
-      const all = await listUsers();
-      return res.json(all);
-    }
-    if (!userKey) return res.json(null);
-    const data = await getUser(userKey);
-    // Auto-set unlimited credits for owner/admin (if userId known)
-    if (data && data.robloxId && isOwnerById(data.robloxId)) {
-      data.credits = 999999;
-      data.plan = 'owner';
-      data.roles = ['owner', 'admin'];
-    } else if (data && data.robloxId && isAdminById(data.robloxId)) {
-      if ((data.credits || 0) < 999999) data.credits = 999999;
-      if (!data.roles) data.roles = ['admin'];
-      if (!data.roles.includes('admin')) data.roles.push('admin');
-    }
-    return res.json(data);
-  }
-
-  // ── POST ─────────────────────────────────────────────────────────────────
-  if (req.method === 'POST') {
+  // ── GET: list semua user ──────────────────────────────────────
+  if (req.method === 'GET' && req.query.list === '1') {
     try {
-      const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
-      const { user, data, action } = body || {};
+      const allKeys = await scanAllUsers(db);
+      const result  = {};
 
-      // ─── Admin actions ───────────────────────────────────────────────────
-      if (action === 'give-credits') {
-        const { target, amount } = body;
-        if (!target || isNaN(amount)) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.credits = parseFloat(((existing.credits || 0) + parseFloat(amount)).toFixed(4));
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true, newCredits: existing.credits, user: target });
-      }
-
-      if (action === 'set-plan') {
-        const { target, plan } = body;
-        if (!target || !plan) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.plan = plan;
-        if (plan === 'pro' || plan === 'owner') {
-          existing.credits = Math.max(existing.credits || 0, 200);
+      await Promise.all(allKeys.map(async k => {
+        const name = k.replace('nexusai:', '');
+        // Hanya return user data, skip system keys
+        if (!name.startsWith('_')) {
+          const data = await db.get(k);
+          if (data) result[name] = data;
         }
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
-      }
+      }));
 
-      if (action === 'reset-credits') {
-        const { target } = body;
-        if (!target) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.credits = 30;
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
-      }
-
-      if (action === 'ban') {
-        const { target, reason } = body;
-        if (!target) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.banned = true;
-        existing.banReason = reason || 'No reason given';
-        existing.bannedAt = Date.now();
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
-      }
-
-      if (action === 'unban') {
-        const { target } = body;
-        if (!target) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.banned = false;
-        existing.banReason = null;
-        existing.unbannedAt = Date.now();
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
-      }
-
-      if (action === 'add-admin') {
-        // Only owner can add admins via web console
-        // (actual admin list is in env vars - this just sets a role flag in user data)
-        const { target, requesterUserId } = body;
-        if (!isOwnerById(requesterUserId)) return res.json({ error: 'Owner only' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.roles = existing.roles || [];
-        if (!existing.roles.includes('admin')) existing.roles.push('admin');
-        existing.credits = 999999;
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
-      }
-
-      // ─── Normal user data sync ───────────────────────────────────────────
-      if (!user || !data) return res.json({ error: 'Missing user or data' });
-      const key = user.toLowerCase();
-
-      // Check if user is banned
-      const existingData = await getUser(key);
-      if (existingData && existingData.banned) {
-        return res.status(403).json({ error: 'Account banned', reason: existingData.banReason || 'Violation of ToS' });
-      }
-
-      // Auto-set credits/roles for owner/admin based on userId
-      let saveData = { ...data, _updated: Date.now() };
-      if (data.robloxId && isOwnerById(data.robloxId)) {
-        saveData.credits = 999999;
-        saveData.plan = 'owner';
-        saveData.roles = ['owner', 'admin'];
-      } else if (data.robloxId && isAdminById(data.robloxId)) {
-        saveData.credits = 999999;
-        saveData.roles = saveData.roles || [];
-        if (!saveData.roles.includes('admin')) saveData.roles.push('admin');
-      }
-
-      await setUser(key, saveData);
-      return res.json({ success: true });
-    } catch (e) {
-      return res.status(400).json({ error: e.message });
+      return res.status(200).json(result);
+    } catch(e) {
+      console.error('sync list error:', e.message);
+      return res.status(500).json({ error: e.message });
     }
   }
 
-  // ── DELETE ───────────────────────────────────────────────────────────────
-  if (req.method === 'DELETE') {
-    if (!userKey) return res.json({ error: 'Missing user' });
+  // ── GET: ambil data satu user ─────────────────────────────────
+  if (req.method === 'GET' && req.query.user) {
     try {
-      const kvClient = await initKV();
-      if (kvClient && kvReady) { await kvClient.del('nexusai:' + userKey); }
-      else { delete memStore[userKey]; }
-      return res.json({ success: true });
-    } catch(e) { return res.status(500).json({ error: e.message }); }
+      const username = String(req.query.user).toLowerCase().replace(/[^a-z0-9_]/g, '');
+      if (!username) return res.status(400).json({ error: 'username tidak valid' });
+      const data = await db.get('nexusai:' + username);
+      if (!data) return res.status(404).json(null);
+      return res.status(200).json(data);
+    } catch(e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
+  // ── GET: stats summary ────────────────────────────────────────
+  if (req.method === 'GET' && req.query.stats === '1') {
+    try {
+      const allKeys = await scanAllUsers(db);
+      let total = 0, pro = 0, credits = 0;
+      await Promise.all(allKeys.map(async k => {
+        const name = k.replace('nexusai:', '');
+        if (!name.startsWith('_')) {
+          const d = await db.get(k);
+          if (d) {
+            total++;
+            credits += parseFloat(d.credits || 0);
+            if (d.plan === 'pro') pro++;
+          }
+        }
+      }));
+      return res.status(200).json({ total, pro, credits: Math.floor(credits) });
+    } catch(e) {
+      return res.status(500).json({ error: e.message });
+    }
+  }
+
+  // ── POST: berbagai action ─────────────────────────────────────
+  if (req.method === 'POST') {
+    const body = req.body || {};
+    const username = String(body.user || body.target || '').toLowerCase().replace(/[^a-z0-9_]/g, '');
+    if (!username) return res.status(400).json({ error: 'user diperlukan' });
+
+    const action = body.action || '';
+
+    // ── give-credits ──────────────────────────────────────────
+    if (action === 'give-credits') {
+      const target = String(body.target || username).toLowerCase();
+      const amount = parseFloat(body.amount || 0);
+      try {
+        const existing = await db.get('nexusai:' + target) || { credits: 0, plan: 'free', _created: Date.now() };
+        existing.credits  = parseFloat(Math.max(-3, ((existing.credits || 0) + amount)).toFixed(4));
+        existing._updated = Date.now();
+        await db.set('nexusai:' + target, existing, { ex: 60*60*24*365 });
+        return res.status(200).json({ success: true, newCredits: existing.credits, user: target });
+      } catch(e) {
+        return res.status(500).json({ success: false, error: e.message });
+      }
+    }
+
+    // ── set-plan ──────────────────────────────────────────────
+    if (action === 'set-plan') {
+      const target = String(body.target || username).toLowerCase();
+      const plan   = body.plan === 'pro' ? 'pro' : 'free';
+      try {
+        const existing = await db.get('nexusai:' + target) || { credits: 0 };
+        existing.plan = plan;
+        if (plan === 'pro') existing.credits = Math.max(existing.credits || 0, 200);
+        existing._updated = Date.now();
+        await db.set('nexusai:' + target, existing, { ex: 60*60*24*365 });
+        return res.status(200).json({ success: true, plan, user: target });
+      } catch(e) {
+        return res.status(500).json({ success: false, error: e.message });
+      }
+    }
+
+    // ── ban / unban ───────────────────────────────────────────
+    if (action === 'ban' || action === 'unban') {
+      const target = String(body.target || username).toLowerCase();
+      try {
+        const existing = await db.get('nexusai:' + target) || {};
+        existing.banned    = action === 'ban';
+        existing.banReason = action === 'ban' ? (body.reason || 'Admin action') : null;
+        existing._updated  = Date.now();
+        await db.set('nexusai:' + target, existing, { ex: 60*60*24*365 });
+        return res.status(200).json({ success: true, banned: existing.banned });
+      } catch(e) {
+        return res.status(500).json({ success: false, error: e.message });
+      }
+    }
+
+    // ── sync user data (dari login web) ───────────────────────
+    if (action === 'sync' || action === 'login') {
+      try {
+        const existing = await db.get('nexusai:' + username) || {
+          credits: 30, plan: 'free', _created: Date.now()
+        };
+        // Update dari data yang dikirim
+        if (body.robloxId)    existing.robloxId    = body.robloxId;
+        if (body.displayName) existing.displayName = body.displayName;
+        if (body.googleEmail) existing.googleEmail = body.googleEmail;
+        if (body.avatar)      existing.avatar      = body.avatar;
+        existing._updated = Date.now();
+        await db.set('nexusai:' + username, existing, { ex: 60*60*24*365 });
+        return res.status(200).json({ success: true, ...existing });
+      } catch(e) {
+        return res.status(500).json({ success: false, error: e.message });
+      }
+    }
+
+    // ── deduct (kurangi credits per penggunaan AI) ────────────
+    if (action === 'deduct') {
+      const amount = parseFloat(body.amount || 1);
+      try {
+        const existing = await db.get('nexusai:' + username) || { credits: 0, plan: 'free' };
+        if (existing.plan === 'pro') return res.status(200).json({ success: true, credits: existing.credits, unlimited: true });
+        if (existing.banned) return res.status(403).json({ success: false, error: 'Akun dibanned' });
+        if ((existing.credits || 0) < amount) return res.status(402).json({ success: false, error: 'Credits tidak cukup' });
+        existing.credits  = parseFloat(((existing.credits || 0) - amount).toFixed(4));
+        existing._updated = Date.now();
+        await db.set('nexusai:' + username, existing, { ex: 60*60*24*365 });
+        return res.status(200).json({ success: true, credits: existing.credits });
+      } catch(e) {
+        return res.status(500).json({ success: false, error: e.message });
+      }
+    }
+
+    // ── Internal: tambah kode custom ──────────────────────────
+    if (action === '_internal_add_code') {
+      try {
+        const custom = await db.get('nexusai:_custom_codes') || {};
+        const code   = String(body.code || '').toUpperCase();
+        if (!code || !body.credits) return res.status(400).json({ error: 'code dan credits diperlukan' });
+        custom[code] = {
+          credits:   parseInt(body.credits),
+          maxUses:   parseInt(body.maxUses || 9999),
+          expires:   body.expires || 'never',
+          createdAt: Date.now(),
+        };
+        await db.set('nexusai:_custom_codes', custom);
+        return res.status(200).json({ success: true, code });
+      } catch(e) {
+        return res.status(500).json({ success: false, error: e.message });
+      }
+    }
+
+    // Fallback: update raw data
+    try {
+      const existing = await db.get('nexusai:' + username) || {};
+      const newData  = { ...existing, ...body, _updated: Date.now() };
+      // Hapus field berbahaya
+      delete newData.action; delete newData.user; delete newData._apiKey;
+      await db.set('nexusai:' + username, newData, { ex: 60*60*24*365 });
+      return res.status(200).json({ success: true, ...newData });
+    } catch(e) {
+      return res.status(500).json({ success: false, error: e.message });
+    }
   }
 
   return res.status(405).json({ error: 'Method not allowed' });
-};
+}
