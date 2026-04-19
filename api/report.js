@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
   const DISCORD_TOKEN  = process.env.DISCORD_TOKEN;
   const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-  const ADMIN_EMAIL    = process.env.ADMIN_EMAIL || '';
+  const ADMIN_EMAIL    = process.env.ADMIN_EMAIL || 'arifiinytid@gmail.com';
 
   // ── Helper: kirim ke Discord channel ─────────────────────────
   async function sendDiscordNotif(channelId, embeds, content = '') {
@@ -48,7 +48,7 @@ export default async function handler(req, res) {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_API_KEY}` },
         body: JSON.stringify({
           from: 'NEXUS AI <noreply@nexusai-com.vercel.app>',
-          to:   process.env.ADMIN_EMAIL,
+          to:   ADMIN_EMAIL,
           subject,
           html,
         }),
