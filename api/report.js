@@ -48,7 +48,7 @@ export default async function handler(req, res) {
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${RESEND_API_KEY}` },
         body: JSON.stringify({
           from: 'NEXUS AI <noreply@nexusai-com.vercel.app>',
-          to:   ADMIN_EMAIL,
+          to:   `${ADMIN_EMAIL}`,
           subject,
           html,
         }),
