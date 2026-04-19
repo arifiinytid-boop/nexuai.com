@@ -12,8 +12,8 @@ export default async function handler(req, res) {
   const type = body.type || 'report'; // 'report' | 'payment'
 
   const DISCORD_TOKEN  = process.env.DISCORD_TOKEN;
-  const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
-  const ADMIN_EMAIL    = process.env.ADMIN_EMAIL || 'arifiinytid@gmail.com';
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+  const ADMIN_EMAIL    = process.env.ADMIN_EMAIL;
 
   // ── Helper: kirim ke Discord channel ─────────────────────────
   async function sendDiscordNotif(channelId, embeds, content = '') {
