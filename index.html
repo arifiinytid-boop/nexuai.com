@@ -671,6 +671,27 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 </div>
 
 <script>
+  // Memblokir Klik Kanan
+  document.addEventListener('contextmenu', event => event.preventDefault());
+
+  // Memblokir tombol F12, Ctrl+Shift+I, Ctrl+Shift+J, dan Ctrl+U
+  document.onkeydown = function(e) {
+    if(e.keyCode == 123) { // F12
+      return false;
+    }
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Inspect Element
+      return false;
+    }
+    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Console
+      return false;
+    }
+    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // View Source
+      return false;
+    }
+  }
+</script>
+
+<script>
 'use strict';
 // ═══════════════════════════════════════
 //  MODEL LIST (shared between chat & GUI builder)
