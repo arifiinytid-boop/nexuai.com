@@ -285,17 +285,17 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   </div>
   <div id="sb">
     <div class="sb-head">
-      <div class="sb-logo"><img src="nexusai.png" alt="N" onerror="this.style.display=\'none\'"></div>
+      <div class="sb-logo"><img src="nexusai.png" alt="N" onerror="this.style.display='none'"></div>
       <div><div class="sb-logo-text">NEXUS AI</div><div class="sb-logo-sub" id="sbVerSub">V10.2 · Roblox Dev</div></div>
     </div>
     <div class="sb-user">
-      <img class="sb-av" id="sbAv" src="nexusai.png" alt="" onerror="this.style.opacity=\'.3\'" onclick="openAvatarModal()">
+      <img class="sb-av" id="sbAv" src="nexusai.png" alt="" onerror="this.style.opacity='.3'" onclick="openAvatarModal()">
       <div style="min-width:0;flex:1;"><div class="sb-un" id="sbUn">-</div><div class="sb-role" id="sbRole">Roblox Developer</div></div>
       <button class="sb-gear" onclick="openSettings()" title="Settings">
         <svg width="15" height="15" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       </button>
     </div>
-    <div class="creds" id="credsEl" onclick="window.location.href=\'/payment\'">
+    <div class="creds" id="credsEl" onclick="location.href='/payment'">
       <div><div class="cred-l" id="credLabelEl">Credits</div><div style="font-size:8.5px;color:rgba(255,214,0,.5);margin-top:1px;" id="credSubEl">Click to buy more</div></div>
       <div style="text-align:right;"><div class="cred-v" id="credDisp">25.00</div><div style="font-size:8.5px;color:rgba(255,214,0,.5);">CR</div></div>
     </div>
@@ -324,7 +324,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="credit-warn hidden" id="creditWarnBar">
       <svg width="11" height="11" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span id="creditWarnTxt">Credits negative — only free models available</span>
-      <a onclick="window.location.href=\'/payment\'" style="color:var(--cyan);cursor:pointer;margin-left:4px;" id="buyCrLink">Buy credits →</a>
+      <a onclick="window.location.href='/payment'" style="color:var(--cyan);cursor:pointer;margin-left:4px;" id="buyCrLink">Buy credits →</a>
     </div>
     <div class="chat-hdr">
       <div class="chat-title" id="chatTitle">NEXUS AI — Roblox Dev Assistant</div>
@@ -334,11 +334,11 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       </div>
     </div>
     <div class="chat-tabs">
-      <button class="tab-btn act" id="tabChat" onclick="switchTab(\'chat\',this)">
+      <button class="tab-btn act" id="tabChat" onclick="switchTab('chat',this)">
         <svg width="11" height="11" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span id="tabChatLbl">Chat</span>
       </button>
-      <button class="tab-btn" id="tabGui" onclick="switchTab(\'gui\',this)">
-        <svg width="11" height="11" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><span id="tabGuiLbl">GUI Builder</span>
+      <button class="tab-btn" id="tabGui" onclick="switchTab('gui',this)">
+        <svg width="11" height="11" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="display:inline;vertical-align:middle;margin-right:3px"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg><span id="tabGuiLbl">UI Editor</span>
       </button>
     </div>
 
@@ -365,7 +365,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
               <input type="file" id="fi" accept="image/*,.lua,.txt,.json,.js,.ts,.py" style="display:none" onchange="handleFile(event)" multiple>
               <button class="ib" onclick="clearChat()" title="Clear chat"><svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
               <div class="inp-model" id="inpModelBtn" onclick="toggleMDD(event)">
-                <img id="inpMIcon" src="" alt="" onerror="this.style.display=\'none\'">
+                <img id="inpMIcon" src="" alt="" onerror="this.style.display='none'">
                 <span class="inp-model-name" id="inpMName">Gemini 2.5 Flash Lite</span>
                 <span class="inp-model-badge" id="inpMBadge" style="color:var(--green);">1 CR</span>
                 <svg width="8" height="8" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="color:var(--dim);flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
@@ -387,15 +387,15 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div id="guiTab">
       <div class="gui-toolbar">
         <span style="font-size:10px;color:var(--dim);" id="addLbl">Add:</span>
-        <button class="gui-btn" onclick="addEl(\'Frame\')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Frame</button>
-        <button class="gui-btn" onclick="addEl(\'TextLabel\')"><svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Label</button>
-        <button class="gui-btn" onclick="addEl(\'TextButton\')"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="3"/></svg>Button</button>
-        <button class="gui-btn" onclick="addEl(\'TextBox\')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>Input</button>
-        <button class="gui-btn" onclick="addEl(\'ImageLabel\')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Image</button>
+        <button class="gui-btn" onclick="addEl('Frame')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Frame</button>
+        <button class="gui-btn" onclick="addEl('TextLabel')"><svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Label</button>
+        <button class="gui-btn" onclick="addEl('TextButton')"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="3"/></svg>Button</button>
+        <button class="gui-btn" onclick="addEl('TextBox')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>Input</button>
+        <button class="gui-btn" onclick="addEl('ImageLabel')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Image</button>
         <div style="margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
           <div class="gui-model-wrap">
             <div class="inp-model" id="guiModelBtn" onclick="toggleGuiMDD(event)" style="max-width:155px;">
-              <img id="guiMIcon" src="" alt="" onerror="this.style.display=\'none\'">
+              <img id="guiMIcon" src="" alt="" onerror="this.style.display='none'">
               <span class="inp-model-name" id="guiMName">Gemini 2.5 Flash Lite</span>
               <span class="inp-model-badge" id="guiMBadge" style="color:var(--green);">1 CR</span>
               <svg width="8" height="8" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="color:var(--dim);flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
@@ -435,7 +435,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div style="font-size:11px;color:var(--dim);margin-bottom:20px;line-height:1.7;" id="discordGateSub">Join our Discord to use NEXUS AI for free.</div>
     <div style="background:var(--bg3);border:1px solid rgba(88,101,242,.4);border-radius:8px;padding:14px;margin-bottom:16px;">
       <div style="font-size:10px;color:var(--dim);margin-bottom:6px;">NEXUS STUDIO Discord:</div>
-      <div id="discordInviteEl" style="font-family:\'Orbitron\',sans-serif;font-size:16px;color:#5865F2;font-weight:700;">discord.gg/HuGtbRvD</div>
+      <div id="discordInviteEl" style="font-family:'Orbitron',sans-serif;font-size:16px;color:#5865F2;font-weight:700;">discord.gg/HuGtbRvD</div>
     </div>
     <div style="display:flex;flex-direction:column;gap:8px;">
       <button class="btn-modal primary" id="joinDiscordBtn" onclick="openDiscordAndConfirm()" style="padding:12px;font-size:11px;background:linear-gradient(135deg,#5865F2,#7289DA);display:flex;align-items:center;justify-content:center;gap:8px;">
@@ -452,11 +452,11 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 
 <div class="ov" id="avatarModal">
   <div class="modal" style="width:360px;text-align:center;padding:28px;">
-    <div style="font-family:\'Orbitron\',sans-serif;font-size:13px;color:var(--cyan);margin-bottom:16px;" id="avatarModalName">-</div>
-    <img id="avatarModalImg" src="" alt="" style="width:140px;height:140px;border-radius:50%;border:3px solid var(--cyan);object-fit:cover;margin:0 auto 16px;display:block;" onerror="this.src=\'nexusai.png\'">
+    <div style="font-family:'Orbitron',sans-serif;font-size:13px;color:var(--cyan);margin-bottom:16px;" id="avatarModalName">-</div>
+    <img id="avatarModalImg" src="" alt="" style="width:140px;height:140px;border-radius:50%;border:3px solid var(--cyan);object-fit:cover;margin:0 auto 16px;display:block;" onerror="this.src='nexusai.png'">
     <div style="font-size:11px;color:var(--dim);margin-bottom:6px;" id="avatarModalRole">Roblox Developer</div>
     <div style="font-size:10px;color:var(--dim);" id="avatarModalId">-</div>
-    <div class="modal-footer" style="justify-content:center;margin-top:16px;"><button class="btn-modal primary" id="closeAvatarBtn" onclick="closeModal(\'avatarModal\')">CLOSE</button></div>
+    <div class="modal-footer" style="justify-content:center;margin-top:16px;"><button class="btn-modal primary" id="closeAvatarBtn" onclick="closeModal('avatarModal')">CLOSE</button></div>
   </div>
 </div>
 
@@ -465,12 +465,12 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="modal-t"><svg width="16" height="16" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span id="installTitle">How to Install NEXUS AI Plugin</span></div>
     <div class="modal-b" id="installBody">
       <div class="install-step"><div class="install-num">1</div><div class="install-txt" id="inst1">Download <code>nexusai_plugin_v10.2.lua</code> from NEXUS STUDIO Discord</div></div>
-      <div class="install-step"><div class="install-num">2</div><div class="install-txt" id="inst2">Save to: <code>C:\\Users\\[Name]\\AppData\\Local\\Roblox\\Plugins\\</code></div></div>
+      <div class="install-step"><div class="install-num">2</div><div class="install-txt" id="inst2">Save to: <code>C:\Users\[Name]\AppData\Local\Roblox\Plugins\</code></div></div>
       <div class="install-step"><div class="install-num">3</div><div class="install-txt" id="inst3">Roblox Studio → <strong>Plugins</strong> → <strong>Manage Plugin</strong> → Click <strong>NEXUS AI</strong> → <strong>Permission</strong> → Enable <strong>Allow HTTP Requests</strong> AND <strong>Allow Script Injection</strong></div></div>
       <div class="install-step"><div class="install-num">4</div><div class="install-txt" id="inst4">Click <strong>NEXUS AI</strong> in toolbar → Click <strong>CONNECT</strong></div></div>
       <div class="install-step"><div class="install-num">5</div><div class="install-txt" id="inst5">Status turns green → Chat → AI builds directly in your place!</div></div>
     </div>
-    <div class="modal-footer"><button class="btn-modal primary" id="installOkBtn" onclick="closeModal(\'installModal\')">UNDERSTOOD</button></div>
+    <div class="modal-footer"><button class="btn-modal primary" id="installOkBtn" onclick="closeModal('installModal')">UNDERSTOOD</button></div>
   </div>
 </div>
 
@@ -534,7 +534,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div class="settings-title" id="downloadPluginTitle">Plugin</div>
       <div class="settings-row" style="flex-direction:column;gap:5px;align-items:flex-start;">
         <div style="font-size:10px;color:var(--dim);" id="downloadPluginDesc">Install NEXUS AI Plugin V10.2 in Roblox Studio</div>
-        <button class="settings-btn" onclick="window.open(\'https://discord.gg/\'+DISCORD_INVITE,\'_blank\')" id="downloadPluginBtn">Download via Discord</button>
+        <button class="settings-btn" onclick="window.open('https://discord.gg/'+DISCORD_INVITE,'_blank')" id="downloadPluginBtn">Download via Discord</button>
       </div>
     </div>
     <div class="settings-section">
@@ -542,7 +542,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div class="settings-row"><span id="switchAccLabel">Switch Account</span><button class="settings-btn" onclick="switchAccount()" id="switchAccBtn">Switch</button></div>
       <div class="settings-row"><span id="logoutLabel">Logout</span><button class="settings-btn danger" onclick="logout()" id="logoutBtn">Logout</button></div>
     </div>
-    <div class="modal-footer"><button class="btn-modal primary" id="closeSettingsBtn" onclick="closeModal(\'settingsModal\')">CLOSE</button></div>
+    <div class="modal-footer"><button class="btn-modal primary" id="closeSettingsBtn" onclick="closeModal('settingsModal')">CLOSE</button></div>
   </div>
 </div>
 
@@ -553,56 +553,35 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="modal-footer">
       <button class="btn-modal primary" id="copyGuiBtn" onclick="copyGuiCode()">Copy</button>
       <button class="btn-modal secondary" id="dlGuiBtn" onclick="downloadGuiCode()">Download .lua</button>
-      <button class="btn-modal secondary" onclick="closeModal(\'guiCodeModal\')" id="closeGuiCodeBtn">Close</button>
+      <button class="btn-modal secondary" onclick="closeModal('guiCodeModal')" id="closeGuiCodeBtn">Close</button>
     </div>
   </div>
 </div>
 
 <div class="ov" id="guiAIChatModal">
   <div class="modal" style="width:520px;">
-    <div class="modal-t">AI GUI Builder</div>
+    <div class="modal-t">AI UI Builder</div>
     <div class="modal-b" style="margin-bottom:8px;">
       <p style="margin-bottom:6px;font-size:11px;" id="guiAIDesc">Describe the GUI you want. AI will build it on canvas + generate complete Lua script.</p>
       <p style="margin-bottom:10px;font-size:10px;color:var(--dim);">Model: <span id="guiModalModelLabel" style="color:var(--cyan);">Gemini 2.5 Flash Lite</span></p>
-      <textarea id="guiAIPrompt" style="width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:10px;color:white;font-family:\'JetBrains Mono\',monospace;font-size:12px;outline:none;resize:vertical;min-height:90px;" id="guiAIPromptEl" placeholder="e.g.: Shop GUI with 3 item cards, scroll list, green buy button..."></textarea>
+      <textarea id="guiAIPrompt" style="width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:10px;color:white;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;resize:vertical;min-height:90px;" id="guiAIPromptEl" placeholder="e.g.: Shop GUI with 3 item cards, scroll list, green buy button..."></textarea>
     </div>
     <div class="modal-footer">
       <button class="btn-modal primary" id="buildWithAIBtn" onclick="generateGuiFromAI()">Build with AI</button>
-      <button class="btn-modal secondary" id="cancelAIBuildBtn" onclick="closeModal(\'guiAIChatModal\')">Cancel</button>
+      <button class="btn-modal secondary" id="cancelAIBuildBtn" onclick="closeModal('guiAIChatModal')">Cancel</button>
     </div>
   </div>
 </div>
 
 <!-- Screenshot viewer -->
-<div class="ov" id="screenshotModal" onclick="closeModal(\'screenshotModal\')" style="z-index:9999;">
+<div class="ov" id="screenshotModal" onclick="closeModal('screenshotModal')" style="z-index:9999;">
   <div style="max-width:90vw;max-height:90vh;position:relative;" onclick="event.stopPropagation()">
     <img id="screenshotImg" src="" style="max-width:90vw;max-height:85vh;border-radius:8px;display:block;border:1px solid var(--b);">
-    <button onclick="closeModal(\'screenshotModal\')" style="position:absolute;top:-12px;right:-12px;background:var(--pink);border:none;border-radius:50%;width:28px;height:28px;color:white;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+    <button onclick="closeModal('screenshotModal')" style="position:absolute;top:-12px;right:-12px;background:var(--pink);border:none;border-radius:50%;width:28px;height:28px;color:white;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;">
       <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
   </div>
 </div>
-
-<script>
-  // Memblokir Klik Kanan
-  document.addEventListener('contextmenu', event => event.preventDefault());
-
-  // Memblokir tombol F12, Ctrl+Shift+I, Ctrl+Shift+J, dan Ctrl+U
-  document.onkeydown = function(e) {
-    if(e.keyCode == 123) { // F12
-      return false;
-    }
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'I'.charCodeAt(0)) { // Inspect Element
-      return false;
-    }
-    if(e.ctrlKey && e.shiftKey && e.keyCode == 'J'.charCodeAt(0)) { // Console
-      return false;
-    }
-    if(e.ctrlKey && e.keyCode == 'U'.charCodeAt(0)) { // View Source
-      return false;
-    }
-  }
-</script>
 
 <script>
 'use strict';
@@ -1072,7 +1051,7 @@ async function autoInjectToStudio(aiResponse,userPrompt){
     try{
       var r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({type:'batch_commands',commands:jsonCmds,_user:SESSION?SESSION.user.username:'web',_target_user:username,target:username})});
-      if(r.ok){var rd=await r.json();if(rd.pushed>0){summary.push('JSON: '+rd.pushed+' command(s) executed in Studio');toast(rd.pushed+' JSON command(s) sent to Studio!','var(--cyan)');}}
+      if(r.ok){var rd=await r.json();if(rd.pushed>0){var cmds2=jsonCmds;cmds2.forEach(function(cmd){var nm=cmd.name||'';var par=cmd.parent||'ReplicatedStorage';var a2=cmd.action||'';if(a2==='create_remote'){summary.push('+'+(cmd.remote_type||'RemoteEvent')+': '+nm+' → '+par);}else if(a2==='create_part'){summary.push('+Part: '+(nm||'Part')+' → workspace');}else if(a2==='create_folder'){summary.push('+Folder: '+nm+' → '+par);}else if(a2==='create_instance'){summary.push('+'+(cmd.class_name||cmd.class||'Instance')+': '+nm);}else if(a2==='batch_commands'){(cmd.commands||[]).forEach(function(c2){var n2=c2.name||'';var a3=c2.action||'';if(a3==='create_remote')summary.push('+'+(c2.remote_type||'RemoteEvent')+': '+n2+' → '+(c2.parent||'ReplicatedStorage'));else if(a3==='create_part')summary.push('+Part: '+n2);else if(a3==='create_folder')summary.push('+Folder: '+n2);else summary.push('+'+a3+(n2?': '+n2:''));});}else if(a2!=='none'&&a2!=='batch_commands'){summary.push('+'+a2+(nm?': '+nm:''));}});}}
     }catch(e){console.warn('JSON inject:',e.message);}
   }
 
@@ -1177,7 +1156,15 @@ function buildSysPrompt(){
     'ScreenGui: ResetOnSpawn=false, IgnoreGuiInset=true',
     'Wrap all tweens in pcall() to prevent runtime errors',
     '',
-    'NEXUS AI RULE: Objects/Remotes → JSON. Game Logic → Lua. Never mix.',
+    'NEXUS AI RULE: Objects/Remotes → JSON. Game Logic → Lua. Never mix.
+
+═══ IMPORTANT BEHAVIOR RULES ═══
+- NEVER tell the user to "copy-paste JSON" or "use the plugin to inject JSON". The plugin handles this AUTOMATICALLY.
+- NEVER mention JSON commands to the user. Just say "I will create X in your place" and the injection happens automatically.
+- NEVER explain your internal process (JSON vs Lua). Just build what the user wants.
+- Give DESCRIPTIVE names to all scripts: LoadingScreen_Client, ShopSystem_Server, CoinTracker_Module, AdminCommands_Script, etc. NEVER use generic names like Script_1, Script_ayiu_2, or random names.
+- When analyzing a user's long script (>200 lines), read it section by section: analyze lines 1-100 first, then 101-200, etc. Describe what each section does before fixing.
+- Always refer to yourself as NEXUS AI, never mention your underlying AI model.',
   ].join('\n');
 }
 
@@ -1494,7 +1481,7 @@ var THEMES={cyan:{'--cyan':'#00e5ff','--purple':'#8800ff','--green':'#00ffaa','-
 function applyTheme(name,silent){var th=THEMES[name]||THEMES.cyan;var root=document.documentElement;Object.keys(th).forEach(function(k){root.style.setProperty(k,th[k]);});S.theme=name;if(!silent){saveS();toast('Theme: '+name);}}
 
 // ═══ MISC UTILS ═══
-function switchTab(tab,btn){document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('act');});btn.classList.add('act');document.getElementById('chatTab').style.display=tab==='chat'?'flex':'none';if(tab==='chat')document.getElementById('chatTab').style.flexDirection='column';document.getElementById('guiTab').style.display=tab==='gui'?'flex':'none';}
+function switchTab(tab,btn){document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('act');});btn.classList.add('act');var ct=document.getElementById('chatTab'),gt=document.getElementById('guiTab');if(tab==='chat'){ct.style.display='flex';ct.style.flexDirection='column';gt.style.display='none';}else{ct.style.display='none';gt.style.display='flex';gt.style.flexDirection='column';}}
 function clearChat(){if(!confirm(t('cc')))return;S.msgs=[];var c=S.convs.find(function(x){return x.id===S.curConv;});if(c){c.msgs=[];c.title='Untitled';}saveS();renderMsgs();document.getElementById('chatTitle').textContent=t('nc');}
 function useSugg(txt){document.getElementById('inp').value=txt;document.getElementById('inp').focus();}
 function showInstall(){document.getElementById('installModal').classList.add('show');}
