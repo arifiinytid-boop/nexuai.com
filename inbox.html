@@ -56,7 +56,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 </head>
 <body>
 <nav class="nav">
-  <img src="nexusai.png" style="width:22px;height:22px;border-radius:5px;" onerror="this.style.display=\'none\'">
+  <img src="nexusai.png" style="width:22px;height:22px;border-radius:5px;" onerror="this.style.display='none'">
   <span class="nav-logo">NEXUS AI</span>
   <a class="nav-back" href="/">← Back to Chat</a>
 </nav>
@@ -113,7 +113,7 @@ async function loadMessages(){
     }else{
       listEl.innerHTML=messages.map(function(m){
         var typeCls='type-'+(m.type||'general');
-        return'<div class="msg-item'+(m.read?'':' unread')+'" onclick="openMsg(\''+m.id+'\')">'+
+        return'<div class="msg-item'+(m.read?'':' unread')+'" onclick="openMsg(''+m.id+'')">'+
           '<div class="msg-from"><div class="msg-from-icon">N</div><span>'+esc(m.from||'NEXUS AI')+'</span><span class="type-badge '+typeCls+'">'+(m.type||'general').toUpperCase()+'</span></div>'+
           '<div class="msg-subject">'+(m.read?'':'<span class="unread-dot"></span>')+esc(m.subject||'Message')+'</div>'+
           '<div class="msg-preview">'+esc((m.content||'').substring(0,100))+'</div>'+
