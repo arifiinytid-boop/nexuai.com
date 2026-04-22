@@ -1,9 +1,9 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/",                  "destination": "/dashboard.html" },
+    { "source": "/",                  "destination": "/index.html" },
     { "source": "/login",             "destination": "/login.html" },
-    { "source": "/chats",             "destination": "/index.html" },
+    { "source": "/chats",             "destination": "/chats.html" },
     { "source": "/payment",           "destination": "/payment.html" },
     { "source": "/setup-discord-app", "destination": "/discord-app.html" },
     { "source": "/privacy",           "destination": "/privacy.html" },
