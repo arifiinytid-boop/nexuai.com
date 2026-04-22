@@ -1039,7 +1039,7 @@ function makeScriptName(prompt,index,code){
   for(var i=0;i<kw.length;i++){if(lower.includes(kw[i][0]))return kw[i][1]+(index>0?'_'+(index+1):'');}
   return'Script_'+Date.now().toString(36).slice(-4)+(index>0?'_'+(index+1):'');
 }
-new_fn = """function makeScriptName(prompt,index,code){
+new_fn = function makeScriptName(prompt,index,code){
   // 1) First: read the -- name: header from the Lua code block
   if(code){
     var nm=code.match(/--\\s*name:\\s*([\\w_]+)/i);
