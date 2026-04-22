@@ -136,14 +136,14 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .mab svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;}
 /* THINKING — Lemonade style */
 .thinking-wrap{display:flex;gap:9px;animation:mi .25s ease;}
-.thinking-box{background:var(--bg2);border:1px solid var(--b);border-radius:2px 10px 10px 10px;padding:12px 14px;display:flex;flex-direction:column;gap:4px;max-width:360px;min-width:240px;}
-.thinking-hdr{font-size:10px;color:var(--cyan);display:flex;align-items:center;gap:8px;font-family:'Orbitron',sans-serif;letter-spacing:.5px;margin-bottom:4px;}
+.think-bubble{background:var(--bg2);border:1px solid var(--b);border-radius:12px;padding:10px 14px;font-size:11px;color:var(--text);max-width:90%;min-width:200px;}
+.think-header{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-weight:700;color:var(--cyan);font-size:11px;}
+.think-steps{display:flex;flex-direction:column;gap:3px;margin-top:4px;}
+.think-step{display:flex;align-items:flex-start;gap:6px;font-size:10px;color:var(--dim);padding:2px 0;transition:.3s;}
+.think-step.active{color:var(--text);}
+.think-step.done{color:var(--green);}
+.think-step-icon{width:14px;height:14px;flex-shrink:0;margin-top:1px;}
 .tspin{width:12px;height:12px;border:2px solid rgba(0,229,255,.2);border-top-color:var(--cyan);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
-@keyframes spin{to{transform:rotate(360deg)}}
-.t-step{font-size:10px;color:var(--dim);display:flex;align-items:center;gap:7px;transition:.3s;padding:2px 0;}
-.t-step.active{color:var(--cyan);}
-.t-step.done{color:var(--green);}
-.t-step-ic{width:14px;height:14px;border-radius:50%;border:1px solid currentColor;display:flex;align-items:center;justify-content:center;font-size:7px;flex-shrink:0;}
 .t-step.done .t-step-ic::after{content:'✓';}
 .t-step.active .t-step-ic::after{content:'▶';}
 .cancel-btn{margin-top:4px;padding:3px 10px;background:rgba(255,45,107,.1);border:1px solid rgba(255,45,107,.3);border-radius:5px;color:var(--pink);font-size:9.5px;cursor:pointer;align-self:flex-start;transition:.1s;}
