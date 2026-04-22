@@ -1,15 +1,15 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/chat",         "destination": "/index.html" },
-    { "source": "/login",        "destination": "/login.html" },
-    { "source": "/",             "destination": "/dashboard.html" },
-    { "source": "/payment",      "destination": "/payment.html" },
+    { "source": "/chat",              "destination": "/index.html" },
+    { "source": "/login",             "destination": "/login.html" },
+    { "source": "/",                  "destination": "/dashboard.html" },
+    { "source": "/payment",           "destination": "/payment.html" },
     { "source": "/setup-discord-app", "destination": "/discord-app.html" },
-    { "source": "/privacy",      "destination": "/privacy.html" },
-    { "source": "/terms",        "destination": "/terms.html" },
-    { "source": "/admin-panel",  "destination": "/actions.html" },
-    { "source": "/inbox",        "destination": "/inbox.html" }
+    { "source": "/privacy",           "destination": "/privacy.html" },
+    { "source": "/terms",             "destination": "/terms.html" },
+    { "source": "/admin-panel",       "destination": "/actions.html" },
+    { "source": "/inbox",             "destination": "/inbox.html" }
   ],
   "headers": [
     {
