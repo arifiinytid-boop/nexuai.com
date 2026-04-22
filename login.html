@@ -13,8 +13,8 @@
 html,body{height:100%;font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:13px;}
 body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0,229,255,.015)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.015)1px,transparent 1px);background-size:40px 40px;pointer-events:none;}
 .page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:radial-gradient(ellipse at 50% 30%,#0e003a 0%,var(--bg) 65%);padding:16px;}
-.particles{position:fixed;inset:0;pointer-events:none;z-chats:0;}
-.box{position:relative;width:100%;max-width:440px;background:var(--bg2);border:1px solid var(--b);border-radius:16px;padding:38px 32px 30px;text-align:center;box-shadow:var(--gc),var(--gp);animation:boxIn .5s cubic-bezier(.16,1,.3,1);z-chats:1;}
+.particles{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.box{position:relative;width:100%;max-width:440px;background:var(--bg2);border:1px solid var(--b);border-radius:16px;padding:38px 32px 30px;text-align:center;box-shadow:var(--gc),var(--gp);animation:boxIn .5s cubic-bezier(.16,1,.3,1);z-index:1;}
 .box::before{content:'';position:absolute;top:0;left:20%;right:20%;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),var(--purple),transparent);border-radius:2px;}
 @keyframes boxIn{from{opacity:0;transform:translateY(24px) scale(.96)}to{opacity:1;transform:none}}
 .logo{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;margin-bottom:2px;}
@@ -57,7 +57,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 @keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}90%{opacity:.4}100%{transform:translateY(-10vh) scale(1.2);opacity:0}}
 @media(max-width:480px){.box{padding:28px 18px;}.logo{font-size:22px;}}
 /* Loading overlay — shown after Roblox login success */
-.loading-overlay{position:fixed;inset:0;background:var(--bg);z-chats:9999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
+.loading-overlay{position:fixed;inset:0;background:var(--bg);z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;gap:16px;}
 .loading-overlay.show{display:flex;}
 .loading-logo{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:4px;}
 .loading-spinner{width:40px;height:40px;border:3px solid var(--b);border-top-color:var(--cyan);border-radius:50%;animation:spin .8s linear infinite;}
@@ -76,7 +76,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   <div class="box">
     <div class="logo">NEXUS AI</div>
     <div class="tag">Roblox Dev Intelligence</div>
-    <div class="version"><div class="vdot"></div> v10.2 Online</div>
+    <div class="version"><div class="vdot"></div> v8.2 Online</div>
 
     <div class="lang-row">
       <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="color:var(--dim);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
@@ -372,7 +372,7 @@ async function finishLogin(gUser, robloxUser){
   if(lt) lt.textContent = 'Memuat data akun @' + robloxUser.username + '...';
 
   var username = robloxUser.username;
-  var isOwner = OWNER_USERS.chatsOf(username) !== -1 || OWNER_USERS.chatsOf(username.toLowerCase()) !== -1;
+  var isOwner = OWNER_USERS.indexOf(username) !== -1 || OWNER_USERS.indexOf(username.toLowerCase()) !== -1;
 
   // Load existing data from server (persistent per Roblox account)
   var serverData = await loadUserDataFromServer(username);
