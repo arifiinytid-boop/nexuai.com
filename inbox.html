@@ -10,12 +10,12 @@
 :root{--bg:#030312;--bg2:#06071a;--bg3:#0a0b22;--cyan:#00e5ff;--purple:#8800ff;--pink:#ff2d6b;--green:#00ffaa;--yellow:#ffd600;--text:#b8cfff;--dim:#3a4a7a;--b:rgba(0,229,255,.12);--r:8px;}
 *{margin:0;padding:0;box-sizing:border-box;}
 html,body{min-height:100%;font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:13px;}
-body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0,229,255,.012)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.012)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
-.nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:10px;padding:10px 20px;background:rgba(3,3,18,.92);border-bottom:1px solid var(--b);backdrop-filter:blur(10px);}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0,229,255,.012)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.012)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-chats:0;}
+.nav{position:sticky;top:0;z-chats:100;display:flex;align-items:center;gap:10px;padding:10px 20px;background:rgba(3,3,18,.92);border-bottom:1px solid var(--b);backdrop-filter:blur(10px);}
 .nav-logo{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .nav-back{margin-left:auto;background:none;border:1px solid var(--b);border-radius:5px;color:var(--dim);font-size:10px;padding:4px 10px;cursor:pointer;font-family:'JetBrains Mono',monospace;text-decoration:none;transition:.15s;}
 .nav-back:hover{color:var(--cyan);border-color:var(--cyan);}
-.main{max-width:800px;margin:0 auto;padding:24px 16px;position:relative;z-index:1;}
+.main{max-width:800px;margin:0 auto;padding:24px 16px;position:relative;z-chats:1;}
 .inbox-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
 .inbox-title{font-family:'Orbitron',sans-serif;font-size:16px;color:var(--cyan);}
 .inbox-actions{display:flex;gap:8px;}
