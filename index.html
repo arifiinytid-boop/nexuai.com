@@ -1038,7 +1038,7 @@ function makeScriptName(prompt,index,code){
   var kw=[['loading screen','LoadingScreen'],['loading','LoadingScreen'],['shop gui','ShopGUI'],['shop','ShopGUI'],['tycoon','TycoonSystem'],['leaderboard','Leaderboard'],['admin','AdminSystem'],['coin','CoinSystem'],['inventory','InventorySystem'],['quest','QuestSystem'],['npc','NPCSystem'],['datastore','DataStore'],['weapon','WeaponSystem'],['tool','ToolSystem'],['vehicle','VehicleSystem'],['pet','PetSystem'],['music','MusicSystem'],['gui','GUIScript'],['menu','MenuSystem']];
   for(var i=0;i<kw.length;i++){if(lower.includes(kw[i][0]))return kw[i][1]+(index>0?'_'+(index+1):'');}
   return'Script_'+Date.now().toString(36).slice(-4)+(index>0?'_'+(index+1):'');
-}"""
+}
 new_fn = """function makeScriptName(prompt,index,code){
   // 1) First: read the -- name: header from the Lua code block
   if(code){
