@@ -1038,75 +1038,46 @@ function makeScriptName(prompt,index,code){
   var kw=[['loading screen','LoadingScreen'],['loading','LoadingScreen'],['shop gui','ShopGUI'],['shop','ShopGUI'],['tycoon','TycoonSystem'],['leaderboard','Leaderboard'],['admin','AdminSystem'],['coin','CoinSystem'],['inventory','InventorySystem'],['quest','QuestSystem'],['npc','NPCSystem'],['datastore','DataStore'],['weapon','WeaponSystem'],['tool','ToolSystem'],['vehicle','VehicleSystem'],['pet','PetSystem'],['music','MusicSystem'],['gui','GUIScript'],['menu','MenuSystem']];
   for(var i=0;i<kw.length;i++){if(lower.includes(kw[i][0]))return kw[i][1]+(index>0?'_'+(index+1):'');}
   return'Script_'+Date.now().toString(36).slice(-4)+(index>0?'_'+(index+1):'');
-}
-
-async function autoInjectToStudio(aiResponse,userPrompt){
-  if(!studioConnected)return null;
-  var summary=[];var username=SESSION?SESSION.user.username.toLowerCase():'';
-
-// 1) Send JSON commands first (create_remote, create_part, etc.)
-// These execute DIRECTLY in Studio — plugin handles them
-var jsonCmds = parseJsonBlocks(aiResponse);
-if (jsonCmds.length > 0) {
-  try {
-    var r = await fetch(API_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ type: 'batch_commands', commands: jsonCmds, _user: SESSION ? SESSION.user.username : 'web', _target_user: username, target: username })
-    });
-    
-    if (r.ok) {
-      var rd = await r.json();
-      if (rd.pushed > 0) {
-        var cmds2 = jsonCmds;
-        cmds2.forEach(function(cmd) {
-          var nm = cmd.name || '';
-          var par = cmd.parent || 'ReplicatedStorage';
-          var a2 = cmd.action || '';
-          
-          if (a2 === 'create_remote') {
-            summary.push('+' + (cmd.remote_type || 'RemoteEvent') + ': ' + nm + ' → ' + par);
-          } else if (a2 === 'create_part') {
-            summary.push('+Part: ' + (nm || 'Part') + ' → workspace');
-          } else if (a2 === 'create_folder') {
-            summary.push('+Folder: ' + nm + ' → ' + par);
-          } else if (a2 === 'create_gui') {
-            summary.push('+ScreenGui: ' + nm + ' created in Studio');
-          } else if (a2 === 'set_lighting') {
-            summary.push('+Lighting updated');
-          } else if (a2 === 'create_instance') {
-            summary.push('+' + (cmd.class_name || cmd.class || 'Instance') + ': ' + nm);
-          } else if (a2 === 'batch_commands') {
-            (cmd.commands || []).forEach(function(c2) {
-              var n2 = c2.name || '';
-              var a3 = c2.action || '';
-              if (a3 === 'create_remote') summary.push('+' + (c2.remote_type || 'RemoteEvent') + ': ' + n2 + ' → ' + (c2.parent || 'ReplicatedStorage'));
-              else if (a3 === 'create_part') summary.push('+Part: ' + n2);
-              else if (a3 === 'create_folder') summary.push('+Folder: ' + n2);
-              else if (a3 === 'create_gui') summary.push('+ScreenGui: ' + n2);
-              else if (a3 !== 'none') summary.push('+' + a3 + (n2 ? ': ' + n2 : ''));
-            });
-          } else if (a2 !== 'none' && a2 !== 'batch_commands') {
-            summary.push('+' + a2 + (nm ? ': ' + nm : ''));
-          }
-        });
-      }
+}"""
+new_fn = """function makeScriptName(prompt,index,code){
+  // 1) First: read the -- name: header from the Lua code block
+  if(code){
+    var nm=code.match(/--\\s*name:\\s*([\\w_]+)/i);
+    if(nm&&nm[1]&&nm[1].length>3)return nm[1];
+  }
+  // 2) Use prompt keywords
+  var lower=(prompt||'').toLowerCase();
+  var kw=[
+    ['loading screen','LoadingScreen_Client'],['loading','LoadingScreen_Client'],
+    ['shop gui','ShopGUI_Client'],['shop','ShopSystem'],
+    ['server list','ServerListUI'],['serverlist','ServerListUI'],
+    ['tycoon','TycoonSystem'],['leaderboard','Leaderboard_Server'],
+    ['admin','AdminSystem_Server'],['coin','CoinSystem_Server'],
+    ['inventory','InventorySystem'],['quest','QuestSystem'],
+    ['npc','NPCBehavior_Server'],['datastore','DataStore_Module'],
+    ['weapon','WeaponSystem'],['tool','ToolHandler'],
+    ['vehicle','VehicleSystem'],['pet','PetSystem'],
+    ['music','MusicPlayer'],['gui','GUIHandler'],
+    ['menu','MenuSystem'],['kill','KillBrick_Script'],
+    ['door','DoorSystem'],['obby','ObbyCheckpoint'],
+    ['house','HouseBuilder'],['map','MapLoader'],
+    ['death','DeathHandler'],['win','WinHandler'],
+    ['timer','TimerSystem'],['round','RoundSystem'],
+    ['chat','ChatSystem'],['badge','BadgeAwarder'],
+    ['sword','SwordTool'],['gun','GunSystem'],
+    ['sprint','SprintHandler'],['jump','JumpBoost'],
+    ['night','NightSystem'],['day','DayNightCycle'],
+    ['sky','SkyController'],['weather','WeatherSystem'],
+  ];
+  for(var i=0;i<kw.length;i++){if(lower.includes(kw[i][0]))return kw[i][1]+(index>0?'_'+(index+1):'');}
+  // 3) Fallback: derive from first meaningful line of code
+  if(code){
+    var firstComment=code.match(/--\\s*([A-Z][\\w\\s]+?)(?:\\n|$)/);
+    if(firstComment&&firstComment[1]&&firstComment[1].trim().length>3){
+      return firstComment[1].trim().replace(/\\s+/g,'_').slice(0,30);
     }
-  } catch(e) {
-    console.warn('JSON inject:', e.message);
   }
-}
-
-  // 2) Send Lua scripts
-  var blocks=parseLuaBlocks(aiResponse);
-  for(var i=0;i<blocks.length;i++){
-    var code=blocks[i],info=detectScriptParent(code),scriptName=makeScriptName(userPrompt,i,code);
-    var result=await sendToStudio({action:'inject_script',name:scriptName,parent:info.parent,script_type:info.type,code:code});
-    if(result&&result.status==='ok')summary.push(info.type+': '+scriptName+' → '+info.parent);
-    if(blocks.length>1)await new Promise(function(r){setTimeout(r,300);});
-  }
-  if(summary.length>0)toast(summary.length+' item(s) injected to Studio!');
-  return summary.length>0?summary:null;
+  return 'GameScript'+(index>0?'_'+(index+1):'');
 }
 
 // ═══ SYSTEM PROMPT V10.2 ═══
