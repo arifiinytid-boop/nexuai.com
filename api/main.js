@@ -11,7 +11,7 @@ export default function handler(req, res) {
     gmail_key:        process.env.GMAIL_KEY         || '',
     roblox_client_id: process.env.ROBLOX_CLIENT_ID  || '',
     discord_invite:   process.env.DISCORD_INVITE    || 'HuGtbRvD',
-    version:          '10.2',
+    version:          '10.3',
     has_gemini:   !!(process.env.GEMINI_API_KEY),
     has_claude:   !!(process.env.CLAUDE_API_KEY),
     has_openai:   !!(process.env.OPENAI_API_KEY),
