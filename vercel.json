@@ -3,7 +3,7 @@
   "rewrites": [
     { "source": "/",                  "destination": "/index.html" },
     { "source": "/login",             "destination": "/login.html" },
-    { "source": "/dashboard",         "destination": "/dashboard.html" },
+    { "source": "/chats",             "destination": "/chats.html" },
     { "source": "/payment",           "destination": "/payment.html" },
     { "source": "/setup-discord-app", "destination": "/setup-discord-app.html" },
     { "source": "/privacy",           "destination": "/privacy.html" },
