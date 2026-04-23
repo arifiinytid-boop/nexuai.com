@@ -23,15 +23,15 @@
   --r:8px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{height:100%;font-family:\'JetBrains Mono\',monospace;background:var(--bg);color:var(--text);font-size:13px;overflow:hidden;}
-body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba(0,229,255,.012)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.012)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+html,body{height:100%;font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:13px;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0,229,255,.012)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.012)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
 #app{display:grid;grid-template-columns:255px 1fr;height:100vh;position:relative;z-index:1;transition:grid-template-columns .2s;}
 #app.sb-hidden{grid-template-columns:0 1fr;}
 #sb{display:flex;flex-direction:column;background:var(--bg2);border-right:1px solid var(--b);overflow:hidden;position:relative;z-index:5;}
 .sb-head{padding:11px 14px 9px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .sb-logo{width:30px;height:30px;border-radius:7px;overflow:hidden;flex-shrink:0;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;}
-.sb-logo-n{font-family:\'Orbitron\',sans-serif;font-size:16px;font-weight:900;color:white;}
-.sb-logo-text{font-family:\'Orbitron\',sans-serif;font-weight:900;font-size:12px;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.sb-logo-n{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:900;color:white;}
+.sb-logo-text{font-family:'Orbitron',sans-serif;font-weight:900;font-size:12px;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .sb-logo-sub{font-size:8px;color:var(--dim);}
 .sb-user{padding:8px 12px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--b);flex-shrink:0;}
 .sb-av{width:32px;height:32px;border-radius:50%;border:1.5px solid var(--cyan2);object-fit:cover;background:var(--bg3);flex-shrink:0;transition:.2s;cursor:pointer;}
@@ -44,7 +44,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
 .creds{margin:7px 12px;padding:8px 10px;background:linear-gradient(135deg,rgba(255,214,0,.06),rgba(255,119,0,.06));border:1px solid rgba(255,214,0,.18);border-radius:var(--r);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;cursor:pointer;transition:.15s;}
 .creds:hover{border-color:rgba(255,214,0,.35);}
 .creds.low{border-color:rgba(255,45,107,.4);background:rgba(255,45,107,.06);}
-.cred-v{font-family:\'Orbitron\',sans-serif;font-size:18px;color:var(--yellow);font-weight:700;}
+.cred-v{font-family:'Orbitron',sans-serif;font-size:18px;color:var(--yellow);font-weight:700;}
 .creds.low .cred-v{color:var(--pink);}
 .cred-l{font-size:9px;color:rgba(255,214,0,.6);text-transform:uppercase;letter-spacing:1.5px;}
 .btn-nc{margin:0 12px 6px;padding:7px 11px;background:rgba(0,229,255,.06);border:1px solid var(--b);border-radius:var(--r);color:var(--cyan);font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px;width:calc(100% - 24px);}
@@ -74,7 +74,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
 .plug-banner a{color:var(--cyan);cursor:pointer;text-decoration:none;}
 .plug-banner.connected{background:rgba(0,255,170,.05);border-color:rgba(0,255,170,.2);color:var(--green);}
 .chat-hdr{padding:9px 16px;border-bottom:1px solid var(--b);background:var(--bg2);display:flex;align-items:center;gap:9px;flex-shrink:0;}
-.chat-title{font-family:\'Orbitron\',sans-serif;font-size:11px;font-weight:700;color:white;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.chat-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:white;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .status-badge{display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;border:1px solid;font-size:9px;cursor:pointer;flex-shrink:0;transition:.2s;}
 .status-badge.off{border-color:rgba(255,45,107,.3);color:var(--pink);background:rgba(255,45,107,.06);}
 .status-badge.on{border-color:rgba(0,255,170,.3);color:var(--green);background:rgba(0,255,170,.06);}
@@ -90,7 +90,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
 #msgs::-webkit-scrollbar{width:3px;}
 #msgs::-webkit-scrollbar-thumb{background:var(--b);}
 .welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;flex:1;text-align:center;gap:12px;padding:30px 16px;color:var(--dim);}
-.wt{font-family:\'Orbitron\',sans-serif;font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.wt{font-family:'Orbitron',sans-serif;font-size:22px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
 .ws{font-size:11.5px;line-height:1.9;max-width:340px;}
 .suggs{display:grid;grid-template-columns:1fr 1fr;gap:7px;max-width:440px;margin-top:4px;}
 .sugg{padding:9px 11px;background:var(--card);border:1px solid var(--b);border-radius:var(--r);cursor:pointer;transition:.18s;text-align:left;font-size:11px;color:var(--text);line-height:1.5;}
@@ -108,7 +108,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
 .msg.user .bubble{background:linear-gradient(135deg,rgba(0,229,255,.08),rgba(136,0,255,.08));border:1px solid rgba(0,229,255,.15);border-radius:10px 2px 10px 10px;color:white;}
 .msg.ai .bubble{background:var(--bg2);border:1px solid var(--b);border-radius:2px 10px 10px 10px;color:var(--text);}
 .studio-inject-card{background:rgba(0,255,170,.05);border:1px solid rgba(0,255,170,.2);border-radius:8px;padding:10px 13px;margin:6px 0;font-size:11px;}
-.sc-title{color:var(--green);font-weight:700;font-family:\'Orbitron\',sans-serif;font-size:9px;letter-spacing:1px;margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.sc-title{color:var(--green);font-weight:700;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1px;margin-bottom:5px;display:flex;align-items:center;gap:6px;}
 .sc-title svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;}
 .sc-item{color:var(--text);padding:2px 0;display:flex;align-items:center;gap:6px;font-size:10.5px;}
 .sc-item::before{content:"✓";color:var(--green);font-weight:700;}
@@ -124,7 +124,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
 .cbtn.ed{color:var(--yellow);border-color:rgba(255,214,0,.3);}
 .bubble code:not(.hljs){background:rgba(0,229,255,.08);padding:2px 5px;border-radius:3px;font-size:11px;color:var(--cyan);}
 .bubble p{margin-bottom:6px;}.bubble p:last-child{margin-bottom:0;}
-.bubble h1,.bubble h2,.bubble h3{color:var(--cyan);margin:10px 0 5px;font-family:\'Orbitron\',sans-serif;}
+.bubble h1,.bubble h2,.bubble h3{color:var(--cyan);margin:10px 0 5px;font-family:'Orbitron',sans-serif;}
 .bubble h1{font-size:14px;}.bubble h2{font-size:13px;}.bubble h3{font-size:12px;}
 .bubble ul,.bubble ol{padding-left:18px;margin-bottom:6px;}
 .bubble li{margin-bottom:3px;line-height:1.65;}
@@ -143,7 +143,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
 /* Thinking — Lemonade style */
 .thinking-wrap{display:flex;gap:9px;animation:mi .25s ease;}
 .thinking-box{background:var(--bg2);border:1px solid var(--b);border-radius:2px 10px 10px 10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:220px;max-width:320px;}
-.thinking-hdr{font-size:10px;color:var(--cyan);display:flex;align-items:center;gap:8px;font-family:\'Orbitron\',sans-serif;letter-spacing:.5px;}
+.thinking-hdr{font-size:10px;color:var(--cyan);display:flex;align-items:center;gap:8px;font-family:'Orbitron',sans-serif;letter-spacing:.5px;}
 .tspin{width:12px;height:12px;border:2px solid rgba(0,229,255,.2);border-top-color:var(--cyan);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
 @keyframes spin{to{transform:rotate(360deg)}}
 .t-steps{display:flex;flex-direction:column;gap:4px;margin-top:2px;}
@@ -167,7 +167,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
 .attach-rm{position:absolute;top:-5px;right:-5px;width:16px;height:16px;background:var(--pink);border:none;border-radius:50%;color:white;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
 .inp-box{background:var(--bg3);border:1px solid var(--b);border-radius:12px;transition:.2s;overflow:hidden;}
 .inp-box:focus-within{border-color:var(--cyan2);box-shadow:0 0 0 2px rgba(0,229,255,.05);}
-#inp{width:100%;background:transparent;border:none;outline:none;color:white;font-family:\'JetBrains Mono\',monospace;font-size:13px;padding:11px 14px;resize:none;min-height:44px;max-height:130px;line-height:1.55;}
+#inp{width:100%;background:transparent;border:none;outline:none;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;padding:11px 14px;resize:none;min-height:44px;max-height:130px;line-height:1.55;}
 #inp::placeholder{color:var(--dim);}
 .inp-bar{display:flex;align-items:center;padding:5px 9px;border-top:1px solid var(--b);gap:5px;}
 .inp-l{display:flex;align-items:center;gap:4px;flex:1;min-width:0;overflow:hidden;}
@@ -235,25 +235,25 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
 .ov{position:fixed;inset:0;background:rgba(3,3,18,.92);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
 .ov.show{display:flex;}
 .modal{background:var(--bg2);border:1px solid var(--b);border-radius:13px;padding:22px;width:500px;max-width:95vw;box-shadow:var(--gc);max-height:90vh;overflow-y:auto;}
-.modal-t{font-family:\'Orbitron\',sans-serif;font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.modal-t{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--cyan);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
 .modal-t svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2;}
 .modal-b{font-size:11.5px;color:var(--text);line-height:1.75;margin-bottom:14px;}
-.modal-b code{font-family:\'JetBrains Mono\';background:rgba(0,229,255,.08);padding:1px 5px;border-radius:3px;color:var(--cyan);}
+.modal-b code{font-family:'JetBrains Mono';background:rgba(0,229,255,.08);padding:1px 5px;border-radius:3px;color:var(--cyan);}
 .modal-footer{display:flex;gap:8px;flex-wrap:wrap;}
-.btn-modal{padding:8px 16px;border-radius:var(--r);font-family:\'Orbitron\',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border:none;transition:.15s;}
+.btn-modal{padding:8px 16px;border-radius:var(--r);font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;cursor:pointer;border:none;transition:.15s;}
 .btn-modal.primary{background:var(--cyan);color:#030312;}
 .btn-modal.secondary{background:rgba(255,255,255,.06);color:var(--text);border:1px solid var(--b);}
 .btn-modal:hover{opacity:.84;}
 .settings-section{margin-bottom:16px;padding-bottom:16px;border-bottom:1px solid var(--b);}
 .settings-section:last-child{border-bottom:none;margin-bottom:0;}
-.settings-title{font-size:10px;color:var(--cyan);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;font-family:\'Orbitron\',sans-serif;}
+.settings-title{font-size:10px;color:var(--cyan);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:10px;font-family:'Orbitron',sans-serif;}
 .settings-row{display:flex;align-items:center;justify-content:space-between;padding:5px 0;font-size:11px;gap:8px;}
 .settings-btn{padding:5px 13px;border-radius:5px;font-size:10px;cursor:pointer;border:1px solid var(--b);background:var(--card);color:var(--text);transition:.15s;}
 .settings-btn:hover{border-color:var(--cyan2);color:var(--cyan);}
 .settings-btn.danger{border-color:rgba(255,45,107,.3);color:var(--pink);}
 .settings-btn.danger:hover{background:rgba(255,45,107,.08);}
-.settings-select{background:var(--bg3);border:1px solid var(--b);border-radius:5px;padding:4px 7px;color:white;font-family:\'JetBrains Mono\',monospace;font-size:10px;outline:none;cursor:pointer;}
-.report-ta{width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:8px 10px;color:white;font-family:\'JetBrains Mono\',monospace;font-size:11px;outline:none;resize:vertical;min-height:80px;margin-top:6px;}
+.settings-select{background:var(--bg3);border:1px solid var(--b);border-radius:5px;padding:4px 7px;color:white;font-family:'JetBrains Mono',monospace;font-size:10px;outline:none;cursor:pointer;}
+.report-ta{width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:8px 10px;color:white;font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;resize:vertical;min-height:80px;margin-top:6px;}
 .install-step{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--b);align-items:flex-start;}
 .install-step:last-child{border-bottom:none;}
 .install-num{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0;margin-top:1px;}
@@ -292,7 +292,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
       </div>
     </div>
     <div class="sb-user">
-      <img class="sb-av" id="sbAv" src="nexusai.png" alt="" onerror="this.style.opacity=\'.3\'" onclick="openAvatarModal()">
+      <img class="sb-av" id="sbAv" src="nexusai.png" alt="" onerror="this.style.opacity='.3'" onclick="openAvatarModal()">
       <div style="min-width:0;flex:1;">
         <div class="sb-un" id="sbUn">-</div>
         <div class="sb-role" id="sbRole">Roblox Developer</div>
@@ -301,7 +301,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
       </button>
     </div>
-    <div class="creds" id="credsEl" onclick="location.href=\'/payment\'">
+    <div class="creds" id="credsEl" onclick="location.href='/payment'">
       <div>
         <div class="cred-l">Credits</div>
         <div style="font-size:8.5px;color:rgba(255,214,0,.5);margin-top:1px;">Klik untuk beli lebih</div>
@@ -338,10 +338,10 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
       </div>
     </div>
     <div class="chat-tabs">
-      <button class="tab-btn act" id="tabChat" onclick="switchTab(\'chat\',this)">
+      <button class="tab-btn act" id="tabChat" onclick="switchTab('chat',this)">
         <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>Chat
       </button>
-      <button class="tab-btn" id="tabGui" onclick="switchTab(\'gui\',this)">
+      <button class="tab-btn" id="tabGui" onclick="switchTab('gui',this)">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>UI Editor
       </button>
     </div>
@@ -381,7 +381,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
                 <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
               </button>
               <div class="inp-model" id="inpModelBtn" onclick="toggleMDD(event)">
-                <img id="inpMIcon" src="" alt="" onerror="this.style.display=\'none\'" style="width:14px;height:14px;border-radius:3px;">
+                <img id="inpMIcon" src="" alt="" onerror="this.style.display='none'" style="width:14px;height:14px;border-radius:3px;">
                 <span class="inp-model-name" id="inpMName">Gemini 2.5 Flash Lite</span>
                 <span class="inp-model-badge" id="inpMBadge" style="color:var(--green);">1 CR</span>
                 <svg width="8" height="8" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="color:var(--dim);flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
@@ -407,11 +407,11 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
     <div id="guiTab">
       <div class="gui-toolbar">
         <span style="font-size:10px;color:var(--dim);">Add:</span>
-        <button class="gui-btn" onclick="addEl(\'Frame\')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Frame</button>
-        <button class="gui-btn" onclick="addEl(\'TextLabel\')"><svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Label</button>
-        <button class="gui-btn" onclick="addEl(\'TextButton\')"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="3"/></svg>Button</button>
-        <button class="gui-btn" onclick="addEl(\'TextBox\')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>Input</button>
-        <button class="gui-btn" onclick="addEl(\'ImageLabel\')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Image</button>
+        <button class="gui-btn" onclick="addEl('Frame')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Frame</button>
+        <button class="gui-btn" onclick="addEl('TextLabel')"><svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Label</button>
+        <button class="gui-btn" onclick="addEl('TextButton')"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="3"/></svg>Button</button>
+        <button class="gui-btn" onclick="addEl('TextBox')"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>Input</button>
+        <button class="gui-btn" onclick="addEl('ImageLabel')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Image</button>
         <div style="margin-left:auto;display:flex;gap:5px;align-items:center;flex-wrap:wrap;">
           <div class="inp-model" id="guiModelBtn" onclick="toggleGuiMDD(event)" style="max-width:155px;">
             <img id="guiMIcon" src="" alt="" onerror="this.style.display=\'none\'" style="width:14px;height:14px;border-radius:3px;">
@@ -452,11 +452,11 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
 <!-- MODALS -->
 <div class="ov" id="avatarModal">
   <div class="modal" style="width:360px;text-align:center;padding:28px;">
-    <div style="font-family:\'Orbitron\',sans-serif;font-size:13px;color:var(--cyan);margin-bottom:16px;" id="avatarModalName">-</div>
-    <img id="avatarModalImg" src="" alt="" style="width:120px;height:120px;border-radius:50%;border:3px solid var(--cyan);object-fit:cover;margin:0 auto 14px;display:block;" onerror="this.src=\'nexusai.png\'">
+    <div style="font-family:'Orbitron',sans-serif;font-size:13px;color:var(--cyan);margin-bottom:16px;" id="avatarModalName">-</div>
+    <img id="avatarModalImg" src="" alt="" style="width:120px;height:120px;border-radius:50%;border:3px solid var(--cyan);object-fit:cover;margin:0 auto 14px;display:block;" onerror="this.src='nexusai.png'">
     <div style="font-size:11px;color:var(--dim);margin-bottom:4px;" id="avatarModalRole">Roblox Developer</div>
     <div style="font-size:10px;color:var(--dim);" id="avatarModalId">-</div>
-    <div class="modal-footer" style="justify-content:center;margin-top:16px;"><button class="btn-modal primary" onclick="closeModal(\'avatarModal\')">TUTUP</button></div>
+    <div class="modal-footer" style="justify-content:center;margin-top:16px;"><button class="btn-modal primary" onclick="closeModal('avatarModal')">TUTUP</button></div>
   </div>
 </div>
 <div class="ov" id="installModal">
@@ -464,12 +464,12 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
     <div class="modal-t"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Cara Install Plugin NEXUS AI</div>
     <div class="modal-b">
       <div class="install-step"><div class="install-num">1</div><div class="install-txt">Download plugin dari Discord NEXUS STUDIO: <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">discord.gg/HuGtbRvD</a></div></div>
-      <div class="install-step"><div class="install-num">2</div><div class="install-txt">Simpan ke: <code>C:\\Users\\[Nama]\\AppData\\Local\\Roblox\\Plugins\\</code></div></div>
+      <div class="install-step"><div class="install-num">2</div><div class="install-txt">Simpan ke: <code>C:\Users\[Nama]\AppData\Local\Roblox\Plugins\</code></div></div>
       <div class="install-step"><div class="install-num">3</div><div class="install-txt">Roblox Studio → <strong>Manage Plugin</strong> → Permission → Enable <strong>HTTP Requests</strong> + <strong>Script Injection</strong></div></div>
       <div class="install-step"><div class="install-num">4</div><div class="install-txt">Klik tombol <strong>NEXUS AI</strong> di toolbar Studio → Klik <strong>CONNECT</strong></div></div>
       <div class="install-step"><div class="install-num">5</div><div class="install-txt">Status hijau = terhubung! Chat di web → AI langsung build di place Anda!</div></div>
     </div>
-    <div class="modal-footer"><button class="btn-modal primary" onclick="closeModal(\'installModal\')">MENGERTI</button></div>
+    <div class="modal-footer"><button class="btn-modal primary" onclick="closeModal('installModal')">MENGERTI</button></div>
   </div>
 </div>
 <div class="ov" id="settingsModal">
@@ -527,14 +527,14 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
       <div class="settings-title">Download Plugin V10.3</div>
       <div class="settings-row" style="flex-direction:column;gap:5px;align-items:flex-start;">
         <div style="font-size:10px;color:var(--dim);">Install NEXUS AI Plugin di Roblox Studio</div>
-        <button class="settings-btn" onclick="window.open(\'https://discord.gg/HuGtbRvD\',\'_blank\')">Download via Discord</button>
+        <button class="settings-btn" onclick="window.open('https://discord.gg/HuGtbRvD','_blank')">Download via Discord</button>
       </div>
     </div>
     <div class="settings-section">
       <div class="settings-title">Akun</div>
       <div class="settings-row"><span>Logout</span><button class="settings-btn danger" onclick="logout()">Logout</button></div>
     </div>
-    <div class="modal-footer"><button class="btn-modal primary" onclick="closeModal(\'settingsModal\')">TUTUP</button></div>
+    <div class="modal-footer"><button class="btn-modal primary" onclick="closeModal('settingsModal')">TUTUP</button></div>
   </div>
 </div>
 <div class="ov" id="guiCodeModal">
@@ -544,7 +544,7 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
     <div class="modal-footer">
       <button class="btn-modal primary" onclick="copyGuiCode()">Copy</button>
       <button class="btn-modal secondary" onclick="downloadGuiCode()">Download .lua</button>
-      <button class="btn-modal secondary" onclick="closeModal(\'guiCodeModal\')">Tutup</button>
+      <button class="btn-modal secondary" onclick="closeModal('guiCodeModal')">Tutup</button>
     </div>
   </div>
 </div>
@@ -553,11 +553,11 @@ body::before{content:\'\';position:fixed;inset:0;background:linear-gradient(rgba
     <div class="modal-t"><svg viewBox="0 0 24 24"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/></svg>AI UI Builder</div>
     <div class="modal-b" style="margin-bottom:8px;">
       <p style="margin-bottom:10px;font-size:11px;">Deskripsikan UI yang Anda inginkan:</p>
-      <textarea id="guiAIPrompt" style="width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:10px;color:white;font-family:\'JetBrains Mono\',monospace;font-size:12px;outline:none;resize:vertical;min-height:90px;" placeholder="contoh: Shop GUI dengan 3 kartu item, scroll list, tombol beli hijau..."></textarea>
+      <textarea id="guiAIPrompt" style="width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:10px;color:white;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;resize:vertical;min-height:90px;" placeholder="contoh: Shop GUI dengan 3 kartu item, scroll list, tombol beli hijau..."></textarea>
     </div>
     <div class="modal-footer">
       <button class="btn-modal primary" onclick="generateGuiFromAI()">Bangun dengan AI</button>
-      <button class="btn-modal secondary" onclick="closeModal(\'guiAIChatModal\')">Batal</button>
+      <button class="btn-modal secondary" onclick="closeModal('guiAIChatModal')">Batal</button>
     </div>
   </div>
 </div>
@@ -793,9 +793,9 @@ function renderConvs(){
   if(!real.length){el.innerHTML='<div class="conv-empty">'+t('noConv')+'</div>';return;}
   el.innerHTML=real.map(function(c){
     var title=(c.title&&c.title!=='Untitled')?c.title:((c.msgs&&c.msgs[0])?(c.msgs[0].content||t('nc')).substring(0,35):t('nc'));
-    return'<div class="ci '+(c.id===S.curConv?'act':'')+'" onclick="loadConv(\''+c.id+'\')">'+
+    return'<div class="ci '+(c.id===S.curConv?'act':'')+'" onclick="loadConv(''+c.id+'')">'+
       '<div style="flex:1;min-width:0;"><div class="ci-title">'+esc(title)+'</div><div class="ci-time">'+ago(c.created)+'</div></div>'+
-      '<span class="ci-del" onclick="delConv(\''+c.id+'\',event)"><svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>'+
+      '<span class="ci-del" onclick="delConv(''+c.id+'',event)"><svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>'+
     '</div>';
   }).join('');
 }
@@ -805,7 +805,7 @@ async function setConvTitle(id){
   var lower=(fu.content||'').toLowerCase();
   var tm=[[/loading.?screen/,'Loading Screen'],[/shop.?gui|toko/,'Shop GUI'],[/leaderboard/,'Leaderboard'],[/admin/,'Admin System'],[/datastore/,'DataStore'],[/tycoon/,'Tycoon'],[/main.?menu/,'Main Menu'],[/weapon|sword/,'Weapon System'],[/coin|money/,'Economy System'],[/hallo|hello|hai|hey/,curLang==='id'?'Salam':'Welcome']];
   var title=null;for(var i=0;i<tm.length;i++){if(tm[i][0].test(lower)){title=tm[i][1];break;}}
-  if(!title)title=fu.content.replace(/[^a-zA-Z0-9\s]/g,' ').trim().substring(0,40)||t('nc');
+  if(!title)title=fu.content.replace([^a-zA-Z0-9s]/g,' ').trim().substring(0,40)||t('nc');
   c.title=title;renderConvs();
 }
 
@@ -854,9 +854,9 @@ renderer2.code=function(code,language){
   try{if(lang&&hljs.getLanguage(lang))hl=hljs.highlight(cs,{language:lang}).value;else hl=hljs.highlightAuto(cs).value;}catch(e){}
   var id='cb'+Math.random().toString(36).slice(2,8);
   return'<div class="code-block-wrap" id="'+id+'"><div class="code-btns">'+
-    '<button class="cbtn cp" onclick="copyCode(\''+id+'\')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>'+
-    '<button class="cbtn dl" onclick="downloadCode(\''+id+'\',\''+lang+'\')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>.'+lang+'</button>'+
-    '<button class="cbtn ed" onclick="toggleEditCode(\''+id+'\')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>'+
+    '<button class="cbtn cp" onclick="copyCode(''+id+'')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>'+
+    '<button class="cbtn dl" onclick="downloadCode(''+id+'',''+lang+'')"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>.'+lang+'</button>'+
+    '<button class="cbtn ed" onclick="toggleEditCode(''+id+'')"><svg viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>Edit</button>'+
   '</div><pre><code class="hljs language-'+lang+'" id="code_'+id+'" contenteditable="false" spellcheck="false">'+hl+'</code></pre></div>';
 };
 renderer2.link=function(href,title,text){
@@ -877,7 +877,7 @@ function renderMsgs(){
 
 function isLongCode(text){
   if(!text||text.length<150)return false;
-  return /local\s+\w+\s*=|function\s+\w+\s*\(|game:|workspace:|require\s*\(|:GetService\(|Instance\.new\(/.test(text)&&(text.match(/\n/g)||[]).length>5;
+  return /locals+w+s*=|functions+w+s*(|game:|workspace:|requires*(|:GetService(|Instance.new(/.test(text)&&(text.match(/\n/g)||[]).length>5;
 }
 
 function mkMsg(m){
@@ -888,14 +888,14 @@ function mkMsg(m){
       var h=content.replace(/</g,'&lt;').replace(/>/g,'&gt;');
       try{h=hljs.highlight(content,{language:'lua'}).value;}catch(e){}
       var cid='ucb'+Math.random().toString(36).slice(2,8);
-      contentHtml='<div class="user-code-wrap"><div class="user-code-header"><span>Lua Script ('+content.split('\n').length+' lines)</span><button onclick="navigator.clipboard.writeText(document.getElementById(\''+cid+'\').innerText).then(function(){toast(\'Copied!\')})" style="background:none;border:none;color:var(--cyan);font-size:9px;cursor:pointer;">Copy</button></div><div class="user-code-inner"><pre style="margin:0"><code class="hljs language-lua" id="'+cid+'" style="font-size:10.5px;border:none;border-radius:0">'+h+'</code></pre></div></div>';
-    }else{contentHtml=content?esc(content).replace(/\n/g,'<br>'):''; }
+      contentHtml='<div class="user-code-wrap"><div class="user-code-header"><span>Lua Script ('+content.split('\n').length+' lines)</span><button onclick="navigator.clipboard.writeText(document.getElementById(''+cid+'').innerText).then(function(){toast('Copied!')})" style="background:none;border:none;color:var(--cyan);font-size:9px;cursor:pointer;">Copy</button></div><div class="user-code-inner"><pre style="margin:0"><code class="hljs language-lua" id="'+cid+'" style="font-size:10.5px;border:none;border-radius:0">'+h+'</code></pre></div></div>';
+    }else{contentHtml=content?esc(content).replace(/n/g,'<br>'):''; }
     var imgs=(m.attachments||[]).filter(function(a){return a.type==='image';}).map(function(a){return'<img style="max-width:180px;max-height:140px;border-radius:6px;margin-top:6px;border:1px solid var(--b);display:block;cursor:pointer;" src="'+a.dataUrl+'" onclick="viewScreenshot(this.src)" alt="">';}).join('');
     var files=(m.attachments||[]).filter(function(a){return a.type==='file';}).map(function(a){return'<div class="user-file-badge"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>'+esc(a.name)+'</div>';}).join('');
-    d.innerHTML='<div class="av"><img src="'+(SESSION?esc(SESSION.user.avatar||'nexusai.png'):'nexusai.png')+'" alt="" onerror="this.src=\'nexusai.png\'" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--cyan2);"></div>'+
+    d.innerHTML='<div class="av"><img src="'+(SESSION?esc(SESSION.user.avatar||'nexusai.png'):'nexusai.png')+'" alt="" onerror="this.src='nexusai.png'" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--cyan2);"></div>'+
       '<div class="mb-wrap"><div class="msg-sender">'+esc(SESSION?SESSION.user.username:'You')+'<span style="font-size:9px;color:var(--dim);">'+ago(m.time)+'</span></div>'+
       '<div class="bubble">'+contentHtml+imgs+files+'</div>'+
-      '<div class="msg-acts"><button class="mab" onclick="navigator.clipboard.writeText(this.dataset.t).then(function(){toast(\'Copied!\')})" data-t="'+escA(content||'')+'"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></div>'+
+      '<div class="msg-acts"><button class="mab" onclick="navigator.clipboard.writeText(this.dataset.t).then(function(){toast('Copied!')})" data-t="'+escA(content||'')+'"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></div>'+
       '</div>';
   }else{
     var mid='msg'+Math.random().toString(36).slice(2,8);d.id=mid;
@@ -905,11 +905,11 @@ function mkMsg(m){
       try{bh=safeMarked(m.content||'')+sh;}catch(e){bh=esc(m.content||'')+sh;}
     }else{try{bh=safeMarked(m.content||'');}catch(e){bh=esc(m.content||'');}}
     d.innerHTML='<div class="av"><img src="nexusai.png" alt="N" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--cyan2);"></div>'+
-      '<div class="mb-wrap"><div class="msg-sender"><span style="color:var(--cyan);font-family:\'Orbitron\',sans-serif;font-size:9px;font-weight:700;">NEXUS AI</span><span style="font-size:9px;color:var(--dim);">'+(m.model?'· '+m.model+' ':'')+ago(m.time)+'</span></div>'+
+      '<div class="mb-wrap"><div class="msg-sender"><span style="color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;">NEXUS AI</span><span style="font-size:9px;color:var(--dim);">'+(m.model?'· '+m.model+' ':'')+ago(m.time)+'</span></div>'+
       '<div class="bubble" id="bubble_'+mid+'">'+bh+'</div>'+
       '<div class="msg-acts">'+
-      '<button class="mab" onclick="copyMsgText(\''+mid+'\')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>'+
-      '<button class="mab" onclick="shareMsgText(\''+mid+'\')"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share</button>'+
+      '<button class="mab" onclick="copyMsgText(''+mid+'')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>'+
+      '<button class="mab" onclick="shareMsgText(''+mid+'')"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share</button>'+
       '</div></div>';
   }
   return d;
