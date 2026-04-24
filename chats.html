@@ -877,7 +877,7 @@ function buildModelDDHtml(){
     var act=m.id===S.model.id?'act':'';
     var soon=m.soon?'<span style="font-size:8px;color:var(--dim);margin-left:4px;">Soon</span>':'';
     var badge=m.soon?'':'<span class="mb '+(m.cost<=1?'f':'s')+'">'+m.cost+' CR</span>';
-    html+='<div class="mo '+act+(m.soon?' disabled':'\')+'" onclick="selModel(\''+m.id+'\')">'+ 
+    html+='<div class="mo '+act+(m.soon?' disabled':'')+'" onclick="selModel(\''+m.id+'\')">'+
       '<div class="mo-icon"><img src="'+(m.icon||'')+'" onerror="this.style.display=\'none\'" style="width:18px;height:18px;object-fit:contain;border-radius:3px;"></div>'+
       '<div><div class="mo-n">'+m.label+soon+'</div><div class="mo-s">'+m.prov+'</div></div>'+
       badge+'</div>';
