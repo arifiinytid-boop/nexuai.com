@@ -793,7 +793,7 @@ function renderConvs(){
   if(!real.length){el.innerHTML='<div class="conv-empty">'+t('noConv')+'</div>';return;}
   el.innerHTML=real.map(function(c){
     var title=(c.title&&c.title!=='Untitled')?c.title:((c.msgs&&c.msgs[0])?(c.msgs[0].content||t('nc')).substring(0,35):t('nc'));
-    return'<div class="ci '+(c.id===S.curConv?'act':'')+'" onclick="loadConv(''+c.id+'')">'+
+    return'<div class="ci '+(c.id===S.curConv?'act':'')+'" onclick="loadConv(\''+c.id+'\')">'+
       '<div style="flex:1;min-width:0;"><div class="ci-title">'+esc(title)+'</div><div class="ci-time">'+ago(c.created)+'</div></div>'+
       '<span class="ci-del" onclick="delConv(''+c.id+'',event)"><svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></span>'+
     '</div>';
