@@ -1878,7 +1878,7 @@ function openAvatarModal(){
   var rid=document.getElementById('avatarModalId');if(rid)rid.textContent='ID: '+(u.robloxId||'-');
   document.getElementById('avatarModal').classList.add('show');
 }
-function logout(){if(!confirm(curLang==='id'?'Logout?':'Logout?'))return;saveS();localStorage.removeItem('nexus_session');window.location.replace('/login');}
+function logout(){if(!confirm(curLang==='id'?'Logout?':'Logout?'))return;saveS();localStorage.removeItem('nexus_session');window.location.replace('/');}
 function toggleSidebar(){var a=document.getElementById('app');var hidden=a.classList.toggle('sb-hidden');var icon=document.getElementById('collapseSbIcon');if(icon)icon.style.transform=hidden?'rotate(180deg)':'';}
 function toast(msg,col){
   document.querySelectorAll('.toast-el').forEach(function(x){x.remove();});
