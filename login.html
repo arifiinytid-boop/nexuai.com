@@ -434,7 +434,7 @@ async function finishLogin(gUser, robloxUser){
 
   // Short delay so user sees the success state, then redirect
   setTimeout(function(){
-    window.location.replace('/');
+    window.location.replace('/chats');
   }, 800);
 }
 
@@ -447,7 +447,7 @@ async function finishLogin(gUser, robloxUser){
     if(s){
       var p = JSON.parse(s);
       if(p && p.user && p.user.username && p.user.robloxId && p.loginTime && (Date.now()-p.loginTime) < 86400000*7){
-        window.location.replace('/');
+        window.location.replace('/chats');
         return;
       }
       localStorage.removeItem('nexus_session');
