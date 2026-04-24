@@ -1,15 +1,17 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/",                  "destination": "/index.html" },
-    { "source": "/login",             "destination": "/login.html" },
-    { "source": "/chats",             "destination": "/chats.html" },
-    { "source": "/payment",           "destination": "/payment.html" },
+    { "source": "/chat",          "destination": "/chats.html" },
+    { "source": "/chats",         "destination": "/chats.html" },
+    { "source": "/login",         "destination": "/login.html" },
+    { "source": "/",              "destination": "/index.html" },
+    { "source": "/payment",       "destination": "/payment.html" },
     { "source": "/setup-discord-app", "destination": "/setup-discord-app.html" },
-    { "source": "/privacy",           "destination": "/privacy.html" },
-    { "source": "/terms",             "destination": "/terms.html" },
-    { "source": "/admin-panel",       "destination": "/admin-panel.html" },
-    { "source": "/inbox",             "destination": "/inbox.html" }
+    { "source": "/privacy",       "destination": "/privacy.html" },
+    { "source": "/terms",         "destination": "/terms.html" },
+    { "source": "/admin-panel",   "destination": "/admin-panel.html" },
+    { "source": "/inbox",         "destination": "/inbox.html" },
+    { "source": "/ui-editor",     "destination": "/chats.html" }
   ],
   "headers": [
     {
