@@ -873,17 +873,14 @@ function updateModelUI(){
 function buildModelDDHtml(){
   var html='';
   MODEL_LIST.forEach(function(m){
-    if(m.grp){html+='<div class="mg">'+esc(m.grp)+'</div>';return;}
-    var isAct=m.id===S.model.id;
-    var cls='mo'+(isAct?' act':'')+(m.soon?' disabled':'');
-    var soonBadge=m.soon?'<span style="font-size:8px;color:var(--dim);margin-left:4px;">Soon</span>':'';
-    var crBadge=m.soon?'':'<span class="mb '+(m.cost<=1?'f':'s')+'">'+m.cost+' CR</span>';
-    var iconHtml=m.icon?'<img src="'+m.icon+'" onerror="this.style.display=\'none\'" style="width:18px;height:18px;object-fit:contain;border-radius:3px;">':'';
-    var onclick2=m.soon?'':("onclick=\"selModel('" + m.id + "')\"");
-    html+='<div class="'+cls+'" '+onclick2+'>'+
-      '<div class="mo-icon">'+iconHtml+'</div>'+
-      '<div><div class="mo-n">'+esc(m.label||m.id)+soonBadge+'</div><div class="mo-s">'+esc(m.prov||'')+'</div></div>'+
-      crBadge+'</div>';
+    if(m.grp){html+='<div class="mg">'+m.grp+'</div>';return;}
+    var act=m.id===S.model.id?'act':'';
+    var soon=m.soon?'<span style="font-size:8px;color:var(--dim);margin-left:4px;">Soon</span>':'';
+    var badge=m.soon?'':'<span class="mb '+(m.cost<=1?'f':'s')+'">'+m.cost+' CR</span>';
+    html+='<div class="mo '+act+(m.soon?' disabled':'')+'" onclick="selModel(\''+m.id+'\')">'+ // ✅ '' bukan '\''
+      '<div class="mo-icon"><img src="'+(m.icon||'')+'" onerror="this.style.display=\'none\'" style="width:18px;height:18px;object-fit:contain;border-radius:3px;"></div>'+
+      '<div><div class="mo-n">'+m.label+soon+'</div><div class="mo-s">'+m.prov+'</div></div>'+
+      badge+'</div>';
   });
   return html;
 }
@@ -1624,7 +1621,7 @@ function updatePropsPanel(){
     '<div class="gui-prop-label">Name</div><input class="gui-prop-input" value="'+esc(el.name||'')+'" onchange="updateElProp(\''+selectedElId+'\',\'name\',this.value)">'+
     '<div class="gui-prop-label">Text</div><input class="gui-prop-input" value="'+esc(el.text||'')+'" onchange="updateElProp(\''+selectedElId+'\',\'text\',this.value)">'+
     '<div class="gui-prop-label">Font Size</div><input class="gui-prop-input" type="number" value="'+(el.fontSize||14)+'" onchange="updateElProp(\''+selectedElId+'\',\'fontSize\',parseInt(this.value))">'+
-    '<div class="gui-prop-label">BG Color</div><input class="gui-prop-input" type="color" value="'+(el.bgColor&&el.bgColor!==\'transparent\'?el.bgColor:\'#1e2040\')+'" onchange="updateElProp(\''+selectedElId+'\',\'bgColor\',this.value)">'+
+    '<div class="gui-prop-label">BG Color</div><input class="gui-prop-input" type="color" value="'+(el.bgColor&&el.bgColor!=='transparent'?el.bgColor:'#1e2040')+'" onchange="updateElProp(\''+selectedElId+'\',\'bgColor\',this.value)">'+
     '<div class="gui-prop-label">Text Color</div><input class="gui-prop-input" type="color" value="'+(el.textColor||'#ffffff')+'" onchange="updateElProp(\''+selectedElId+'\',\'textColor\',this.value)">'+
     '<div class="gui-prop-label">Corner Radius</div><input class="gui-prop-input" type="number" value="'+(el.cornerRadius||0)+'" onchange="updateElProp(\''+selectedElId+'\',\'cornerRadius\',parseInt(this.value))">'+
     '<button style="margin-top:12px;width:100%;padding:6px;background:rgba(255,45,107,.12);border:1px solid rgba(255,45,107,.3);border-radius:5px;color:var(--pink);font-size:10px;cursor:pointer;" onclick="deleteEl(\''+selectedElId+'\')">Hapus Elemen</button>';
