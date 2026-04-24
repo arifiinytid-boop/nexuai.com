@@ -999,20 +999,41 @@ function mkMsg(m) {
       '<div class="msg-acts"><button class="mab" onclick="navigator.clipboard.writeText(this.dataset.t).then(function(){toast(\'Copied!\')})" data-t="' + (typeof escA === 'function' ? escA(content) : '') + '"><svg viewBox="0 0 24 24" width="12" height="12"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button></div>' +
       '</div>';
   } else {
-    var mid='msg'+Math.random().toString(36).slice(2,8);d.id=mid;
-    var bh='';
-    if(m.studioInjected&&m.injectSummary){
-      var sh='<div class="studio-inject-card"><div class="sc-title">NEXUS AI INJECTED TO STUDIO</div>'+m.injectSummary.map(function(s){return'<div class="sc-item">'+esc(s)+'</div>';}).join('')+'</div>';
-      try{bh=safeMarked(m.content||'')+sh;}catch(e){bh=esc(m.content||'')+sh;}
-    }else{try{bh=safeMarked(m.content||'');}catch(e){bh=esc(m.content||'');}}
-    d.innerHTML='<div class="av"><img src="nexusai.png" alt="N" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--cyan2);"></div>'+
-      '<div class="mb-wrap"><div class="msg-sender"><span style="color:var(--cyan);font-family:'Orbitron',sans-serif;font-size:9px;font-weight:700;">NEXUS AI</span><span style="font-size:9px;color:var(--dim);">'+(m.model?'· '+m.model+' ':'')+ago(m.time)+'</span></div>'+
-      '<div class="bubble" id="bubble_'+mid+'">'+bh+'</div>'+
-      '<div class="msg-acts">'+
-      '<button class="mab" onclick="copyMsgText(''+mid+'')"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>'+
-      '<button class="mab" onclick="shareMsgText(''+mid+'')"><svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>Share</button>'+
-      '</div></div>';
-  }
+    var mid = 'msg' + Math.random().toString(36).slice(2, 8);
+    d.id = mid;
+    var bh = '';
+
+    // 1. Logika untuk Studio Injection
+    if (m.studioInjected && m.injectSummary) {
+      var sh = '<div class="studio-inject-card"><div class="sc-title">NEXUS AI INJECTED TO STUDIO</div>' + 
+        (m.injectSummary || []).map(function(s) { 
+          return '<div class="sc-item">' + esc(s) + '</div>'; 
+        }).join('') + '</div>';
+      try { bh = safeMarked(m.content || '') + sh; } catch (e) { bh = esc(m.content || '') + sh; }
+    } else {
+      try { bh = safeMarked(m.content || ''); } catch (e) { bh = esc(m.content || ''); }
+    }
+
+    // 2. Render HTML Utama untuk AI
+    d.innerHTML = '<div class="av"><img src="nexusai.png" alt="N" style="width:30px;height:30px;border-radius:50%;object-fit:cover;border:1.5px solid var(--cyan2);"></div>' +
+      '<div class="mb-wrap">' +
+        '<div class="msg-sender">' +
+          // PERBAIKAN: Gunakan kutip ganda untuk Orbitron agar tidak bentrok dengan kutip tunggal pembungkus
+          '<span style="color:var(--cyan);font-family:\'Orbitron\',sans-serif;font-size:9px;font-weight:700;">NEXUS AI</span>' +
+          '<span style="font-size:9px;color:var(--dim);">' + (m.model ? ' · ' + m.model + ' ' : ' ') + (typeof ago === 'function' ? ago(m.time) : '') + '</span>' +
+        '</div>' +
+        '<div class="bubble" id="bubble_' + mid + '">' + bh + '</div>' +
+        '<div class="msg-acts">' +
+          // PERBAIKAN: Gunakan escape quote (\') pada mid
+          '<button class="mab" onclick="copyMsgText(\'' + mid + '\')">' +
+            '<svg viewBox="0 0 24 24" width="12" height="12"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy' +
+          '</button>' +
+          '<button class="mab" onclick="shareMsgText(\'' + mid + '\')">' +
+            '<svg viewBox="0 0 24 24" width="12" height="12"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg> Share' +
+          '</button>' +
+        '</div>' +
+      '</div>';
+  } // Penutup if/else role
   return d;
 }
 function viewScreenshot(src){var img=document.getElementById('screenshotImg');if(img)img.src=src;document.getElementById('screenshotModal').classList.add('show');}
