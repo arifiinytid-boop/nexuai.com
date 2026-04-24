@@ -1621,7 +1621,7 @@ function updatePropsPanel(){
     '<div class="gui-prop-label">Name</div><input class="gui-prop-input" value="'+esc(el.name||'')+'" onchange="updateElProp(\''+selectedElId+'\',\'name\',this.value)">'+
     '<div class="gui-prop-label">Text</div><input class="gui-prop-input" value="'+esc(el.text||'')+'" onchange="updateElProp(\''+selectedElId+'\',\'text\',this.value)">'+
     '<div class="gui-prop-label">Font Size</div><input class="gui-prop-input" type="number" value="'+(el.fontSize||14)+'" onchange="updateElProp(\''+selectedElId+'\',\'fontSize\',parseInt(this.value))">'+
-    '<div class="gui-prop-label">BG Color</div><input class="gui-prop-input" type="color" value="'+(el.bgColor&&el.bgColor!==\'transparent\'?el.bgColor:\'#1e2040\')+'" onchange="updateElProp(\''+selectedElId+'\',\'bgColor\',this.value)">'+
+    '<div class="gui-prop-label">BG Color</div><input class="gui-prop-input" type="color" value="'+(el.bgColor&&el.bgColor!=='transparent'?el.bgColor:'#1e2040')+'" onchange="updateElProp(\''+selectedElId+'\',\'bgColor\',this.value)">'+
     '<div class="gui-prop-label">Text Color</div><input class="gui-prop-input" type="color" value="'+(el.textColor||'#ffffff')+'" onchange="updateElProp(\''+selectedElId+'\',\'textColor\',this.value)">'+
     '<div class="gui-prop-label">Corner Radius</div><input class="gui-prop-input" type="number" value="'+(el.cornerRadius||0)+'" onchange="updateElProp(\''+selectedElId+'\',\'cornerRadius\',parseInt(this.value))">'+
     '<button style="margin-top:12px;width:100%;padding:6px;background:rgba(255,45,107,.12);border:1px solid rgba(255,45,107,.3);border-radius:5px;color:var(--pink);font-size:10px;cursor:pointer;" onclick="deleteEl(\''+selectedElId+'\')">Hapus Elemen</button>';
