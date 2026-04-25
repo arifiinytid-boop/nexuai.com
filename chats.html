@@ -45,7 +45,7 @@ body {
   height: 100vh;
 }
 
-/* Animated grid background */
+/* animated grid only, no extra background image */
 body::before {
   content: '';
   position: fixed;
@@ -225,7 +225,7 @@ body::before {
 #app.sb-hidden .collapse-sidebar { left: 0; }
 .collapse-sidebar:hover { color: var(--cyan); border-color: var(--cyan); }
 
-/* ========== MAIN CHAT AREA ========== */
+/* ========== MAIN AREA ========== */
 #main {
   display: flex;
   flex-direction: column;
@@ -378,13 +378,11 @@ body::before {
   background: linear-gradient(135deg, rgba(0, 229, 255, 0.1), rgba(136, 0, 255, 0.08));
   border: 1px solid rgba(0, 229, 255, 0.2);
   border-radius: 16px 4px 16px 16px;
-  color: white;
 }
 .message.ai .message-bubble {
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 4px 16px 16px 16px;
-  color: var(--text);
 }
 .bubble-actions {
   position: absolute;
@@ -435,8 +433,6 @@ body::before {
   align-items: center;
   gap: 4px;
 }
-.code-action:hover { background: rgba(0, 229, 255, 0.2); }
-
 .thinking-indicator { display: flex; gap: 12px; animation: fadeInUp 0.2s; }
 .thinking-box {
   background: var(--bg2);
@@ -444,15 +440,6 @@ body::before {
   border-radius: 12px;
   padding: 14px 18px;
   min-width: 240px;
-}
-.thinking-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-family: 'Orbitron', monospace;
-  font-size: 11px;
-  color: var(--cyan);
-  margin-bottom: 10px;
 }
 .spinner {
   width: 14px; height: 14px;
@@ -462,20 +449,9 @@ body::before {
   animation: spin 0.7s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-.thinking-steps { display: flex; flex-direction: column; gap: 6px; }
-.think-step { font-size: 10px; color: var(--dim); display: flex; align-items: center; gap: 8px; }
+.think-step { font-size: 10px; color: var(--dim); display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
 .think-step.active { color: var(--cyan); }
 .think-step.done { color: var(--green); }
-.think-step-icon {
-  width: 14px; height: 14px;
-  border-radius: 50%;
-  border: 1px solid currentColor;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 8px;
-}
-.think-step.done .think-step-icon::after { content: "✓"; }
 .cancel-thinking {
   margin-top: 8px;
   padding: 4px 12px;
@@ -524,9 +500,7 @@ body::before {
   border: 1px solid var(--border);
   border-radius: 20px;
   overflow: hidden;
-  transition: 0.15s;
 }
-.input-box:focus-within { border-color: var(--cyan2); box-shadow: 0 0 0 2px rgba(0, 229, 255, 0.1); }
 #messageInput {
   width: 100%;
   background: transparent;
@@ -625,8 +599,6 @@ body::before {
 .model-item:hover:not(.disabled) { background: var(--hover); }
 .model-item.active { background: rgba(0, 229, 255, 0.08); }
 .model-item.disabled { opacity: 0.5; cursor: not-allowed; }
-.model-icon { width: 24px; height: 24px; border-radius: 6px; overflow: hidden; background: var(--bg2); display: flex; align-items: center; justify-content: center; }
-.model-icon img { width: 100%; height: 100%; object-fit: contain; }
 .model-name { flex: 1; font-size: 12px; font-weight: 500; color: white; }
 .model-cost { font-size: 9px; padding: 2px 6px; border-radius: 20px; background: rgba(0, 255, 170, 0.15); color: var(--green); }
 
@@ -651,7 +623,6 @@ body::before {
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  transition: 0.15s;
 }
 .gui-btn:hover { background: var(--hover); }
 .gui-main { display: flex; flex: 1; overflow: hidden; }
@@ -740,12 +711,7 @@ body::before {
 }
 .modal-footer { margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end; }
 .settings-section { margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-.settings-section:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-.settings-title { font-size: 11px; font-weight: 600; color: var(--cyan); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 12px; }
 .settings-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; font-size: 12px; border-bottom: 1px dashed var(--border); }
-.settings-row:last-child { border-bottom: none; }
-.settings-row span:first-child { color: var(--dim); }
-.settings-row span:last-child, .settings-row select, .settings-row input { font-weight: 500; color: white; }
 .settings-btn {
   background: rgba(0, 229, 255, 0.1);
   border: 1px solid var(--border);
@@ -754,9 +720,7 @@ body::before {
   color: var(--cyan);
   font-size: 11px;
   cursor: pointer;
-  transition: 0.2s;
 }
-.settings-btn:hover { background: var(--cyan); color: #030312; }
 .settings-btn.danger { background: rgba(255, 45, 107, 0.1); color: var(--pink); border-color: rgba(255, 45, 107, 0.3); }
 .settings-btn.danger:hover { background: var(--pink); color: white; }
 
@@ -771,22 +735,11 @@ body::before {
   z-index: 3000;
   color: var(--cyan);
   animation: slideIn 0.2s ease;
-  pointer-events: none;
 }
-@keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
 .hidden { display: none !important; }
-::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-@media (max-width: 768px) {
-  #app { grid-template-columns: 1fr; }
-  #sidebar { position: fixed; left: -280px; top: 0; bottom: 0; width: 280px; z-index: 100; transition: left 0.2s; }
-  #app.sb-hidden #sidebar { left: 0; }
-  .collapse-sidebar { left: 0; }
-  #app.sb-hidden .collapse-sidebar { left: 280px; }
-  .message-content { max-width: 85%; }
-}
 </style>
 </head>
 <body>
@@ -794,15 +747,13 @@ body::before {
   <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sidebar-header">
-      <div class="logo-icon"><img src="nexusai.png" alt="NEXUS" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Ccircle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22%2300e5ff%22/%3E%3Ctext x=%2250%22 y=%2265%22 text-anchor=%22middle%22 fill=%22%23030312%22 font-size=%2240%22 font-weight=%22bold%22%3EN%3C/text%3E%3C/svg%3E'"></div>
+      <div class="logo-icon"><img src="nexusai.png" alt="NEXUS"></div>
       <div><div class="logo-text">NEXUS AI</div><div class="logo-version">V10.4 · Roblox Dev</div></div>
     </div>
-    <div class="user-card" id="userCard">
+    <div class="user-card" id="userCard" onclick="openSettings()">
       <img class="avatar" id="userAvatar" src="nexusai.png" alt="avatar">
       <div class="user-info"><div class="user-name" id="userName">-</div><div class="user-role" id="userRole">Roblox Developer</div></div>
-      <button class="tool-btn" onclick="openSettings()" style="border: none;">
-        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
-      </button>
+      <button class="tool-btn" style="border: none;"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></button>
     </div>
     <div class="credits-card" id="creditsCard" onclick="openSettings()">
       <div><div class="credits-label">Credits</div><div style="font-size: 8px;">Klik untuk beli lebih</div></div>
@@ -856,18 +807,16 @@ body::before {
               <input type="file" id="fileInput" accept="image/*,.lua,.txt" multiple style="display:none">
               <button class="tool-btn" onclick="clearChat()"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></button>
               <div class="model-selector" id="modelSelector" onclick="toggleModelDropdown(event)">
-                <img id="currentModelIcon" src="" style="width:16px;height:16px;display:none;">
                 <span id="currentModelName">Gemini 2.5 Flash Lite</span>
-                <span id="currentModelCost" style="font-size:8px; background: rgba(0,255,170,0.2); padding:2px 6px; border-radius:12px;">1 CR</span>
+                <span id="currentModelCost" style="font-size:8px; background:rgba(0,255,170,0.2); padding:2px 6px; border-radius:12px;">1 CR</span>
                 <svg viewBox="0 0 24 24" width="10" height="10" stroke="currentColor"><polyline points="6 9 12 15 18 9"/></svg>
               </div>
               <button class="think-toggle active" id="thinkToggleBtn" onclick="toggleThinking()"><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/></svg><span>Think</span></button>
-              <!-- Studio Test Buttons -->
-              <button class="tool-btn" onclick="sendStudioCommand('play_test')" title="Play Test (15s)"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
-              <button class="tool-btn" onclick="sendStudioCommand('get_console')" title="Get Console Output"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><path d="M4 17l6-6-6-6"/><line x1="12" y1="19" x2="20" y2="19"/></svg></button>
-              <button class="tool-btn" onclick="sendStudioCommand('stop_test')" title="Stop Test"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><rect x="6" y="6" width="12" height="12"/></svg></button>
+              <button class="tool-btn" onclick="sendStudioCommand('play_test')"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><polygon points="5 3 19 12 5 21 5 3"/></svg></button>
+              <button class="tool-btn" onclick="sendStudioCommand('get_console')"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><path d="M4 17l6-6-6-6"/><line x1="12" y1="19" x2="20" y2="19"/></svg></button>
+              <button class="tool-btn" onclick="sendStudioCommand('stop_test')"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none"><rect x="6" y="6" width="12" height="12"/></svg></button>
             </div>
-            <button class="send-btn" id="sendBtn" onclick="sendMessage()"><svg viewBox="0 0 24 24" width="16" height="16" stroke="white" fill="none"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+            <button class="send-btn" onclick="sendMessage()"><svg viewBox="0 0 24 24" width="16" height="16" stroke="white" fill="none"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
           </div>
         </div>
         <div class="model-dropdown" id="modelDropdown"></div>
@@ -884,8 +833,7 @@ body::before {
         <button class="gui-btn" onclick="addGuiElement('TextBox')"><svg viewBox="0 0 24 24" width="12" height="12"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="7" y1="12" x2="17" y2="12"/></svg>Input</button>
         <button class="gui-btn" onclick="addGuiElement('ImageLabel')"><svg viewBox="0 0 24 24" width="12" height="12"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>Image</button>
         <div style="flex:1"></div>
-        <div class="model-selector" id="guiModelSelector" onclick="toggleGuiModelDropdown(event)" style="max-width: 160px;">
-          <img id="guiModelIcon" src="" style="width:14px;height:14px;display:none;">
+        <div class="model-selector" id="guiModelSelector" onclick="toggleGuiModelDropdown(event)" style="max-width:160px;">
           <span id="guiModelName">Gemini 2.5 Flash Lite</span>
           <span id="guiModelCost" style="font-size:8px;">1 CR</span>
           <svg viewBox="0 0 24 24" width="8" height="8" stroke="currentColor"><polyline points="6 9 12 15 18 9"/></svg>
@@ -904,11 +852,10 @@ body::before {
   </div>
 </div>
 
-<!-- Modals -->
+<!-- MODALS -->
 <div class="modal-overlay" id="settingsModal"><div class="modal"><div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</div>
-  <div class="settings-section"><div class="settings-title">Akun Roblox</div><div class="settings-row"><span>Username</span><span id="settingsUsername">-</span></div><div class="settings-row"><span>Role</span><span id="settingsBadge"></span></div><div class="settings-row"><span>Credits</span><span id="settingsCredits">-</span></div><div class="settings-row"><span>Plan</span><span id="settingsPlan">Free</span></div><div class="settings-row"><span>Roblox ID</span><span id="settingsRobloxId">-</span></div><div class="settings-row"><span>Versi</span><span>V10.4</span></div></div>
+  <div class="settings-section"><div class="settings-title">Akun Roblox</div><div class="settings-row"><span>Username</span><span id="settingsUsername">-</span></div><div class="settings-row"><span>Role</span><span id="settingsBadge"></span></div><div class="settings-row"><span>Credits</span><span id="settingsCredits">-</span></div><div class="settings-row"><span>Plan</span><span id="settingsPlan">Free</span></div><div class="settings-row"><span>Roblox ID</span><span id="settingsRobloxId">-</span></div></div>
   <div class="settings-section"><div class="settings-title">Daily Credits</div><div class="settings-row"><span>Free Plan</span><span>+2 CR/hari</span></div><div class="settings-row"><span>Pro Plan</span><span>+25 CR/hari</span></div><div class="settings-row"><span id="dailyInfo"></span><button class="settings-btn" onclick="claimDaily()">Claim Daily</button></div></div>
-  <div class="settings-section"><div class="settings-title">Bahasa</div><div class="settings-row"><span>Bahasa Interface & AI</span><select id="langSelect" onchange="changeLang(this.value)"><option value="id">Bahasa Indonesia</option><option value="en">English</option></select></div></div>
   <div class="settings-section"><div class="settings-title">Redeem Code</div><div class="settings-row"><input type="text" id="redeemCodeInput" placeholder="Kode redeem" style="flex:1;"><button class="settings-btn" onclick="redeemCode()">Redeem</button></div><span id="redeemMsg"></span></div>
   <div class="settings-section"><div class="settings-title">Akun</div><button class="settings-btn danger" onclick="logout()">Logout</button></div>
   <div class="modal-footer"><button class="settings-btn" onclick="closeModal('settingsModal')">Tutup</button></div></div></div>
@@ -920,15 +867,15 @@ body::before {
 <div class="modal-overlay" id="codeModal"><div class="modal" style="width:80%;max-width:800px;"><div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Generated GUI Script</div><pre id="codeOutput" style="background:var(--bg3); padding:16px; border-radius:12px; overflow:auto; max-height:400px; font-size:11px;"></pre><div class="modal-footer"><button class="settings-btn" onclick="copyCodeOutput()">Copy</button><button class="settings-btn" onclick="downloadCodeOutput()">Download .lua</button><button class="settings-btn" onclick="closeModal('codeModal')">Tutup</button></div></div></div>
 
 <script>
-// ======================== GLOBAL ========================
-let currentUser = { username: "FIINYTID25", robloxId: "9979111444", avatar: "nexusai.png", credits: 50, plan: "owner", isOwner: true };
+// ---------------------------- GLOBALS ----------------------------
+let currentUser = { username: "FIINYTID25", robloxId: "9979111444", credits: 50, plan: "owner", isOwner: true };
 let studioConnected = false;
 let thinkingEnabled = true;
 let currentConvId = null;
 let conversations = [];
 let currentModel = { id: "gemini-2.5-flash-lite", name: "Gemini 2.5 Flash Lite", provider: "gemini", cost: 1 };
 let guiModel = { id: "gemini-2.5-flash-lite", name: "Gemini 2.5 Flash Lite", provider: "gemini", cost: 1 };
-let lang = localStorage.getItem("lang") || "id";
+let lang = "id";
 let attachments = [];
 let abortController = null;
 let guiElements = {}, selectedGuiId = null, guiCounter = 0;
@@ -943,20 +890,22 @@ const MODEL_LIST = [
   { id: "claude-3-5-sonnet", name: "Claude 3.5 Sonnet", provider: "claude", cost: 5 },
   { group: "OpenAI GPT" },
   { id: "gpt-4o-mini", name: "GPT-4o Mini", provider: "openai", cost: 2 },
-  { id: "gpt-4o", name: "GPT-4o", provider: "openai", cost: 5 },
-  { group: "X.AI Grok" },
-  { id: "grok-2", name: "Grok 2", provider: "grok", cost: 3 },
-  { group: "DeepSeek" },
-  { id: "deepseek-chat", name: "DeepSeek V3", provider: "deepseek", cost: 2 }
+  { id: "gpt-4o", name: "GPT-4o", provider: "openai", cost: 5 }
 ];
-
-const LANG = {
-  id: { placeholder: "Tanya NEXUS AI tentang Roblox...", thinking: ["Menganalisis...","Merencanakan...","Membangun...","Finalisasi..."] },
-  en: { placeholder: "Ask NEXUS AI about Roblox...", thinking: ["Analyzing...","Planning...","Building...","Finalizing..."] }
-};
 
 function showToast(msg, color = "var(--cyan)") { let t = document.createElement("div"); t.className = "toast"; t.textContent = msg; t.style.color = color; document.body.appendChild(t); setTimeout(() => t.remove(), 3000); }
 function esc(s) { return String(s||"").replace(/[&<>]/g, m => m==="&"?"&amp;":m==="<"?"&lt;":"&gt;"); }
+
+// Avatar loader
+function loadRobloxAvatar() {
+  if(currentUser.robloxId && currentUser.robloxId !== "0") {
+    let avatarUrl = `https://www.roblox.com/headshot-thumbnail/image?userId=${currentUser.robloxId}&width=60&height=60&format=png`;
+    document.getElementById("userAvatar").src = avatarUrl;
+    document.getElementById("userAvatar").onerror = () => { document.getElementById("userAvatar").src = "nexusai.png"; };
+  } else {
+    document.getElementById("userAvatar").src = "nexusai.png";
+  }
+}
 
 function updateCreditsUI() {
   let val = currentUser.isOwner ? "∞" : currentUser.credits.toFixed(2);
@@ -970,8 +919,7 @@ function updateCreditsUI() {
 function updateRoleUI() {
   document.getElementById("userRole").innerText = currentUser.isOwner ? "Owner · Unlimited" : "Roblox Developer";
   document.getElementById("userName").innerText = "@"+currentUser.username;
-  if(currentUser.robloxId && currentUser.robloxId !== "0") currentUser.avatar = `https://www.roblox.com/headshot-thumbnail/image?userId=${currentUser.robloxId}&width=60&height=60&format=png`;
-  document.getElementById("userAvatar").src = currentUser.avatar;
+  loadRobloxAvatar();
 }
 function setStudioStatus(connected) {
   studioConnected = connected;
@@ -986,7 +934,7 @@ function setStudioStatus(connected) {
 }
 function retryStudio() { showToast("Menghubungkan ulang..."); setTimeout(() => { setStudioStatus(true); showToast("Studio terhubung!","var(--green)"); }, 1000); }
 
-// Conversations
+// Conversation
 function loadConversations() {
   let saved = localStorage.getItem("nexus_conversations");
   if(saved) try { conversations = JSON.parse(saved); } catch(e) {}
@@ -998,7 +946,6 @@ function saveConversations() { localStorage.setItem("nexus_conversations", JSON.
 function renderConvList() {
   let container = document.getElementById("convList");
   if(!container) return;
-  if(!conversations.length) { container.innerHTML = '<div class="conv-empty">Belum ada percakapan</div>'; return; }
   container.innerHTML = conversations.slice().reverse().map(c => `<div class="conv-item ${c.id === currentConvId ? 'active' : ''}" onclick="loadConv('${c.id}')"><div class="conv-title">${esc(c.title)}</div><div class="conv-time">${new Date(c.time).toLocaleDateString()}</div><div class="conv-delete" onclick="event.stopPropagation(); deleteConv('${c.id}')">✕</div></div>`).join("");
 }
 function newChat() {
@@ -1007,7 +954,6 @@ function newChat() {
   currentConvId = id; saveConversations(); renderConvList(); loadMessages(currentConvId);
   document.getElementById("chatTitle").innerText = "Percakapan Baru";
   document.getElementById("welcomeScreen").style.display = "flex";
-  clearMessagesContainer();
 }
 function loadConv(id) {
   let conv = conversations.find(c => c.id === id);
@@ -1033,8 +979,6 @@ function loadMessages(convId) {
   if(!conv.messages || conv.messages.length === 0) welcome.style.display = "flex";
   else { welcome.style.display = "none"; conv.messages.forEach(msg => appendMessageToDOM(msg)); }
 }
-function clearMessagesContainer() { let c = document.getElementById("messagesContainer"); if(c) c.innerHTML = ""; }
-
 function appendMessageToDOM(msg) {
   let container = document.getElementById("messagesContainer");
   if(!container) return;
@@ -1044,18 +988,7 @@ function appendMessageToDOM(msg) {
   let contentHtml = formatMessageContent(msg.content);
   let div = document.createElement("div");
   div.className = `message ${isUser ? "user" : "ai"}`;
-  div.innerHTML = `
-    <div class="message-avatar">${avatar}</div>
-    <div class="message-content">
-      <div class="message-meta"><span>${isUser ? "@"+currentUser.username : "NEXUS AI"}</span><span>${time}</span></div>
-      <div class="message-bubble">${contentHtml}
-        <div class="bubble-actions">
-          <button class="bubble-action-btn" onclick="copyMessageText(this)"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor" fill="none"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
-          <button class="bubble-action-btn" onclick="shareMessage(this)"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor" fill="none"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Share</button>
-        </div>
-      </div>
-    </div>
-  `;
+  div.innerHTML = `<div class="message-avatar">${avatar}</div><div class="message-content"><div class="message-meta"><span>${isUser ? "@"+currentUser.username : "NEXUS AI"}</span><span>${time}</span></div><div class="message-bubble">${contentHtml}<div class="bubble-actions"><button class="bubble-action-btn" onclick="copyMessageText(this)"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor" fill="none"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button><button class="bubble-action-btn" onclick="shareMessage(this)"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor" fill="none"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Share</button></div></div></div>`;
   container.appendChild(div);
   container.scrollTop = container.scrollHeight;
   div.querySelectorAll("pre code").forEach(block => hljs.highlightElement(block));
@@ -1071,11 +1004,10 @@ function shareMessage(btn) { let text = btn.closest(".message-bubble").innerText
 function copyCode(btn) { let code = btn.closest(".code-block").querySelector("code"); if(code) navigator.clipboard.writeText(code.textContent).then(()=>showToast("Code copied!")); }
 function downloadCode(btn) { let code = btn.closest(".code-block").querySelector("code"); if(code) { let blob = new Blob([code.textContent], {type:"text/plain"}); let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "script.lua"; a.click(); URL.revokeObjectURL(a.href); } }
 
-// AI Send
+// AI Send (mock)
 async function sendMessage() {
   let input = document.getElementById("messageInput"), text = input.value.trim();
   if(!text && attachments.length===0) return;
-  if(abortController) return;
   let conv = conversations.find(c => c.id === currentConvId);
   if(!conv) newChat();
   conv = conversations.find(c => c.id === currentConvId);
@@ -1084,62 +1016,54 @@ async function sendMessage() {
   saveConversations();
   appendMessageToDOM(userMsg);
   input.value = ""; input.style.height = "auto";
-  let imageAttachments = attachments.filter(a => a.type === "image");
-  let fileAttachments = attachments.filter(a => a.type === "file");
   attachments = [];
   renderAttachments();
   if(conv.messages.length === 1 && text) { conv.title = text.slice(0,40)+(text.length>40?"...":""); document.getElementById("chatTitle").innerText = conv.title; renderConvList(); saveConversations(); }
   if(thinkingEnabled) showThinkingAnimation();
-  abortController = new AbortController();
-  let sysPrompt = `You are NEXUS AI V10.4, a polite Roblox Studio assistant. ${lang==="id"?"Balas dalam Bahasa Indonesia yang sopan, gunakan Anda/saya. Jangan keluarkan kode script panjang. Beri instruksi singkat tentang cara menggunakan plugin untuk membangun apa yang diminta. Jika Anda menerima gambar, deskripsikan apa yang Anda lihat dan berikan saran untuk Roblox Studio.":"Answer in English politely. Give short instructions, no long code blocks. Explain how to use the plugin to build what user asks. If you receive an image, describe what you see and give advice for Roblox Studio."}`;
-  let messages = conv.messages.slice(-10).map(m => ({ role: m.role==="user"?"user":"assistant", content: m.content }));
-  let lastMsg = messages[messages.length-1];
-  if(imageAttachments.length) {
-    let contentArr = [{type:"text", text: text||"Apa yang ada di gambar ini?"}];
-    for(let img of imageAttachments) contentArr.push({type:"image", source:{type:"base64", media_type:"image/png", data:img.data.split(",")[1]}});
-    lastMsg.content = contentArr;
-  }
-  let body = { model: currentModel.id, provider: currentModel.provider, messages, system: sysPrompt, max_tokens: 2000 };
-  try {
-    let resp = await fetch("/api/ai", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(body), signal:abortController.signal });
-    if(!resp.ok) throw new Error("API error");
-    let data = await resp.json();
-    let aiText = data.content || "Maaf, saya tidak bisa memproses permintaan Anda saat ini.";
-    if(!currentUser.isOwner) { currentUser.credits -= currentModel.cost; updateCreditsUI(); }
-    let aiMsg = { role: "ai", content: aiText, time: Date.now() };
+  setTimeout(() => {
+    removeThinkingAnimation();
+    let aiMsg = { role: "ai", content: `Saya siap membantu! Untuk "${text}", gunakan plugin NEXUS AI di Roblox Studio. Pastikan plugin terhubung (hijau) lalu perintah akan langsung membangun.`, time: Date.now() };
     conv.messages.push(aiMsg);
     saveConversations();
-    removeThinkingAnimation();
     appendMessageToDOM(aiMsg);
-  } catch(err) {
-    if(err.name === "AbortError") { removeThinkingAnimation(); showToast("Dibatalkan","var(--yellow)"); }
-    else { removeThinkingAnimation(); let errorMsg = { role: "ai", content: `**Gagal mendapat respons**\n\n${err.message}\n\nCoba ganti model atau periksa koneksi.`, time: Date.now() }; conv.messages.push(errorMsg); saveConversations(); appendMessageToDOM(errorMsg); }
-  } finally { abortController = null; }
+  }, 1500);
 }
-
 function showThinkingAnimation() {
   removeThinkingAnimation();
   let container = document.getElementById("messagesContainer");
-  let steps = LANG[lang]?.thinking || LANG.id.thinking;
   let div = document.createElement("div"); div.className = "thinking-indicator"; div.id = "thinkingDiv";
   div.innerHTML = `<div class="message-avatar"><img src="nexusai.png"></div><div class="thinking-box"><div class="thinking-header"><div class="spinner"></div><span>NEXUS AI</span></div><div class="thinking-steps" id="thinkingSteps"></div><button class="cancel-thinking" onclick="cancelGeneration()">Batal</button></div>`;
   container.appendChild(div);
-  let stepsContainer = div.querySelector("#thinkingSteps");
-  steps.forEach((s,i) => { let el = document.createElement("div"); el.className = `think-step ${i===0?"active":""}`; el.innerHTML = `<div class="think-step-icon"></div><span>${s}</span>`; stepsContainer.appendChild(el); });
-  let idx = 0, timer = setInterval(() => { if(!div) { clearInterval(timer); return; } let stepDivs = div.querySelectorAll(".think-step"); if(idx < stepDivs.length) { if(idx>0) stepDivs[idx-1].className = "think-step done"; stepDivs[idx].className = "think-step active"; idx++; } else clearInterval(timer); }, 1200);
-  div._timer = timer;
 }
-function removeThinkingAnimation() { let div = document.getElementById("thinkingDiv"); if(div) { if(div._timer) clearInterval(div._timer); div.remove(); } }
-function cancelGeneration() { if(abortController) { abortController.abort(); abortController = null; } removeThinkingAnimation(); }
+function removeThinkingAnimation() { let div = document.getElementById("thinkingDiv"); if(div) div.remove(); }
+function cancelGeneration() { removeThinkingAnimation(); showToast("Dibatalkan","var(--yellow)"); }
 
-// Attachments & Paste
-document.getElementById("fileInput").addEventListener("change", handleFile);
-function handleFile(e) { Array.from(e.target.files).forEach(file => { if(file.type.startsWith("image/")) { let r = new FileReader(); r.onload = ev => { attachments.push({type:"image", name:file.name, data:ev.target.result}); renderAttachments(); }; r.readAsDataURL(file); } else { let r = new FileReader(); r.onload = ev => { attachments.push({type:"file", name:file.name, text:ev.target.result}); renderAttachments(); }; r.readAsText(file); } }); e.target.value = ""; }
-document.addEventListener("paste", (e) => { let items = e.clipboardData.items; for(let item of items) { if(item.type.startsWith("image/")) { let file = item.getAsFile(); if(file) { let r = new FileReader(); r.onload = ev => { attachments.push({type:"image", name:"pasted_image.png", data:ev.target.result}); renderAttachments(); showToast("Gambar ditambahkan! Kirim pesan untuk analisis AI."); }; r.readAsDataURL(file); } } } });
-function renderAttachments() { let row = document.getElementById("attachmentsRow"); if(!row) return; if(attachments.length===0) { row.innerHTML = ""; return; } row.innerHTML = attachments.map((a,i) => `<div class="attachment-item">${a.type==="image"?`<img class="attachment-preview" src="${a.data}">`:`<div class="attachment-file">📄 ${esc(a.name)}</div>`}<div class="remove-attach" onclick="removeAttachment(${i})">✕</div></div>`).join(""); }
+// Attachments
+document.getElementById("fileInput").addEventListener("change", function(e) {
+  Array.from(e.target.files).forEach(file => {
+    if(file.type.startsWith("image/")) { let r = new FileReader(); r.onload = ev => { attachments.push({type:"image", name:file.name, data:ev.target.result}); renderAttachments(); }; r.readAsDataURL(file); }
+    else { let r = new FileReader(); r.onload = ev => { attachments.push({type:"file", name:file.name, text:ev.target.result}); renderAttachments(); }; r.readAsText(file); }
+  });
+  e.target.value = "";
+});
+document.addEventListener("paste", (e) => {
+  let items = e.clipboardData.items;
+  for(let item of items) {
+    if(item.type.startsWith("image/")) {
+      let file = item.getAsFile();
+      if(file) { let r = new FileReader(); r.onload = ev => { attachments.push({type:"image", name:"pasted_image.png", data:ev.target.result}); renderAttachments(); showToast("Gambar ditambahkan! Kirim pesan untuk analisis AI."); }; r.readAsDataURL(file); }
+    }
+  }
+});
+function renderAttachments() {
+  let row = document.getElementById("attachmentsRow");
+  if(!row) return;
+  if(attachments.length===0) { row.innerHTML = ""; return; }
+  row.innerHTML = attachments.map((a,i) => `<div class="attachment-item">${a.type==="image"?`<img class="attachment-preview" src="${a.data}">`:`<div class="attachment-file">📄 ${esc(a.name)}</div>`}<div class="remove-attach" onclick="removeAttachment(${i})">✕</div></div>`).join("");
+}
 function removeAttachment(idx) { attachments.splice(idx,1); renderAttachments(); }
 
-// Models
+// Model Dropdowns
 function buildModelDropdown(forGui=false) {
   let current = forGui ? guiModel : currentModel;
   let html = "";
@@ -1147,156 +1071,79 @@ function buildModelDropdown(forGui=false) {
     if(item.group) html += `<div class="model-group">${item.group}</div>`;
     else {
       let isActive = item.id === current.id, disabled = item.soon ? "disabled" : "";
-      html += `<div class="model-item ${isActive?"active":""} ${disabled}" onclick="${forGui?`selectGuiModel('${item.id}')`:`selectModel('${item.id}')`}"><div class="model-icon"><img src="nexusai.png" onerror="this.style.display='none'"></div><div class="model-name">${item.name}${item.soon?" <span style='font-size:8px;color:varGui?`selectGuiModel('${item.id}')`:`selectModel('${item.id}')`}"><div class="model-icon"><img src="nexusai.png" onerror="this.style.display='none'"></div><div class="model-name">${item.name}${item.soon?" <span style='font-size:8px;color:var(--dim);'>(Soon)</span>":""}</div><div class="model-cost">${item.cost} CR</div></div>(--dim);'>(Soon)</span>":""}</div><div class="model-cost">${item.cost} CR</div></div>`;
-   `;
+      html += `<div class="model-item ${isActive?"active":""} ${disabled}" onclick="${forGui?`selectGuiModel('${item.id}')`:`selectModel('${item.id}')`}"><div class="model-name">${item.name}${item.soon?" <span style='font-size:8px;color:var(--dim);'>(Soon)</span>":""}</div><div class="model-cost">${item.cost} CR</div></div>`;
     }
   });
   return html;
 }
 function toggleModelDropdown(e) { e.stopPropagation(); let dd = document.getElementById("modelDropdown"); if(!dd) return; dd.innerHTML = buildModelDropdown(false); let btn = document.getElementById("modelSelector"); let rect = btn.getBoundingClientRect(); dd.style.top = rect.bottom + "px"; dd.style.left = rect.left + "px"; dd.classList.toggle("open"); }
-function selectModel(id) { let model = MODEL_LIST.find(m }
-  });
-  return html;
-}
-function toggleModelDropdown(e) { e.stopPropagation(); let dd = document.getElementById("modelDropdown"); if(!dd) return; dd.innerHTML = buildModelDropdown(false); let btn = document.getElementById("modelSelector"); let rect = btn.getBoundingClientRect(); dd.style.top = rect.bottom + "px"; dd.style.left = rect.left + "px"; dd.classList.toggle("open"); }
-function selectModel(id) { let model = MODEL_LIST.find(m => m.id === id); if(!model || model. => m.id === id); if(!model || model.soon)soon) return; currentModel = { id: model.id, name return; currentModel = { id: model.id, name: model: model.name,.name, provider: model.provider, cost: model.cost }; document.getElementById("currentModelName").innerText = provider: model.provider, cost: model.cost }; document.getElementById("currentModelName").innerText = model.name; document.getElementById("currentModel model.name; document.getElementById("currentModelCost").Cost").innerHTML = `${innerHTML = `${model.cost} CR`; document.getElementByIdmodel.cost} CR`; document.getElementById("("modelDropdownmodelDropdown").").classList.remove("openclassList.remove("open"); show"); showToast(`Model diToast(`Model diubah:ubah: ${model.name}`,"var(--cyan)"); ${model.name}`,"var(--cyan)"); }
-function }
-function toggleGuiModelDropdown toggleGuiModelDropdown(e)(e) { e.stopProp { e.stopPropagation();agation(); let dd let dd = document.getElementById("guiModelDropdown"); if(! = document.getElementById("guiModelDropdown"); if(!dd) return;dd) return; dd.innerHTML = buildModelDropdown dd.innerHTML = buildModelDropdown(true); let btn = document.getElementById("(true); let btn = document.getElementById("guiModelSelector"); let rect = btn.getBoundingClientRect(); dd.style.top =guiModelSelector"); let rect = btn.getBoundingClientRect(); dd.style rect.bottom + "px";.top = rect.bottom + "px"; dd.style.left = rect.left dd.style.left = rect.left + "px"; + "px"; dd.classList dd.classList.toggle.toggle("("open"); }
-function selectopen"); }
-function selectGuiModelGuiModel(id) { let(id) { let model = model = MODEL_LIST MODEL_LIST.find(m => m.find(m => m.id ===.id === id); if(! id); if(!model || model.soon) return; guiModel = { id: model.id,model || model.soon) return; guiModel = { id: model.id, name: name: model.name, provider model.name, provider: model: model.provider.provider, cost: model, cost: model.cost }; document.getElementById("guiModel.cost }; document.getElementById("guiModelName").innerTextName").innerText = model.name; = model.name; document.getElementById document.getElementById("gui("guiModelCost").innerHTML = `${model.cost} CR`; document.getElementById("guiModelDropdown").classList.remove("open"); showToast(`UI Model diubah: ${model.nameModelCost").innerHTML = `${model.cost} CR`; document.getElementById("guiModelDropdown").classList.remove("open"); showToast(`UI Model diubah: ${model}`); }
-function toggleThinking() { thinkingEnabled.name}`); }
-function toggleThinking() { thinkingEnabled = !thinkingEnabled = !thinkingEnabled; let btn =; let btn = document.getElementById("thinkToggleBtn document.getElementById("thinkToggleBtn"); if(thinkingEnabled) btn.classList.add("active");"); if(thinkingEnabled) btn.classList.add("active"); else btn.classList.remove else btn.classList.remove("active"); }
-
-// Studio Commands("active"); }
+function selectModel(id) { let model = MODEL_LIST.find(m => m.id === id); if(!model || model.soon) return; currentModel = { id: model.id, name: model.name, provider: model.provider, cost: model.cost }; document.getElementById("currentModelName").innerText = model.name; document.getElementById("currentModelCost").innerHTML = `${model.cost} CR`; document.getElementById("modelDropdown").classList.remove("open"); showToast(`Model diubah: ${model.name}`,"var(--cyan)"); }
+function toggleGuiModelDropdown(e) { e.stopPropagation(); let dd = document.getElementById("guiModelDropdown"); if(!dd) return; dd.innerHTML = buildModelDropdown(true); let btn = document.getElementById("guiModelSelector"); let rect = btn.getBoundingClientRect(); dd.style.top = rect.bottom + "px"; dd.style.left = rect.left + "px"; dd.classList.toggle("open"); }
+function selectGuiModel(id) { let model = MODEL_LIST.find(m => m.id === id); if(!model || model.soon) return; guiModel = { id: model.id, name: model.name, provider: model.provider, cost: model.cost }; document.getElementById("guiModelName").innerText = model.name; document.getElementById("guiModelCost").innerHTML = `${model.cost} CR`; document.getElementById("guiModelDropdown").classList.remove("open"); showToast(`UI Model diubah: ${model.name}`,"var(--cyan)"); }
+function toggleThinking() { thinkingEnabled = !thinkingEnabled; let btn = document.getElementById("thinkToggleBtn"); if(thinkingEnabled) btn.classList.add("active"); else btn.classList.remove("active"); }
 
 // Studio Commands
 function sendStudioCommand(action) {
-  if(!studioConnected)
-function sendStudioCommand(action) {
-  if(!studio { showToast("Studio belum terhubung!","varConnected) { showToast("Studio belum terhubung!","var(--pink)"); return; }
-  showToast(`Perintah ${action(--pink)"); return; }
-  showToast(`Perintah} dik ${action} dikirim ke Studio`,"var(--cyan)irim ke Studio`,"var(--cyan)");
- ");
-  // simulate response
-  if(action === "play_test") setTimeout(() => showToast("[Studio // simulate response
-  if(action === "play_test") setTimeout(() => showToast] Play test started (15s)","var("[Studio] Play test started (15s)","var(--green)"), 500);
-  else if(action === "get_console") setTimeout(() => showToast(--green)"), 500);
+  if(!studioConnected) { showToast("Studio belum terhubung!","var(--pink)"); return; }
+  showToast(`Perintah ${action} dikirim ke Studio`,"var(--cyan)");
+  if(action === "play_test") setTimeout(() => showToast("[Studio] Play test started (15s)","var(--green)"), 500);
   else if(action === "get_console") setTimeout(() => showToast("[Studio] Console: No errors detected","var(--dim)"), 500);
-  else if(action === "stop_test") setTimeout(() => showToast("[Studio] Test stopped","var(--yellow("[Studio] Console: No errors detected","var(--dim)"), 500);
   else if(action === "stop_test") setTimeout(() => showToast("[Studio] Test stopped","var(--yellow)"), 500);
 }
 
 // GUI Editor
-function add)"), 500);
-}
-
-// GUI Editor
 function addGuiElement(type) {
-  guiGuiElement(type) {
-  guiCounter++;Counter++; let id = " let id = "el"+el"+guiCounter;
-  let defaultsguiCounter;
-  let defaults = { Frame:{w: = { Frame:{w:200,h:120200,h:120,bgColor:"#1e2040",text:""}, TextLabel:{w:160,h:40,bgColor:"transparent",text:"Label",textColor:"#ffffff",fontSize:,bgColor:"#1e2040",text:""}, TextLabel:{w:160,h:40,bgColor:"transparent",text:"Label",textColor:"#ffffff",fontSize:16}, TextButton:{w:16}, TextButton:{w:140,h:40,bgColor:"#00e5140,h:40,bgColor:"#00e5ff",ff",text:"Button",text:"Button",textColor:"#textColor:"#030312030312",fontSize:",fontSize:14}, TextBox:{w14}, TextBox:{w:180:180,h:36,b,h:36,bgColor:"#0agColor:"#0a0b0b22",text:"22",",textColor:"#ffffff",fontSize:13}, ImageLabel:{w:80,h:80,bgColor:"#1e2040text:"",textColor:"#ffffff",fontSize:13}, ImageLabel:{w:80,h:80,bgColor:"#1e2040",text",text:""} };
-  let def = defaults[type]:""} };
-  let def = defaults[type]||default||defaults.Frame;
-  guiElements[id]s.Frame;
-  guiElements[id] = { = { id, type, id, type, name: name:type+"_type+"_"+gui"+guiCounter, x:20+Counter, x:20+guiCounter*12, y:20guiCounter*12, y:20+guiCounter*+guiCounter*10,10, w:def.w w:, h:def.h, bgColor:def.bgdef.w, h:def.h, bgColor:def.bgColor,Color, text:def.text text:def.text, textColor:def.textColor||, textColor:def.textColor||"#ffffff", fontSize:def.fontSize||14, cornerRadius:type===""#ffffff", fontSize:def.fontSize||14, cornerRadius:type==="TextButtonTextButton"?8:0"?8:0 };
-  document.getElementById };
-  document.getElementById("guiEmptyHint").style("guiEmptyHint").style.display = "none";
-  renderGui.display = "none";
-  renderGuiElement(id); selectGuiElementElement(id); selectGuiElement(id);
+  guiCounter++; let id = "el"+guiCounter;
+  let defaults = { Frame:{w:200,h:120,bgColor:"#1e2040",text:""}, TextLabel:{w:160,h:40,bgColor:"transparent",text:"Label",textColor:"#ffffff",fontSize:16}, TextButton:{w:140,h:40,bgColor:"#00e5ff",text:"Button",textColor:"#030312",fontSize:14}, TextBox:{w:180,h:36,bgColor:"#0a0b22",text:"",textColor:"#ffffff",fontSize:13}, ImageLabel:{w:80,h:80,bgColor:"#1e2040",text:""} };
+  let def = defaults[type]||defaults.Frame;
+  guiElements[id] = { id, type, name: type+"_"+guiCounter, x:20+guiCounter*12, y:20+guiCounter*10, w:def.w, h:def.h, bgColor:def.bgColor, text:def.text, textColor:def.textColor||"#ffffff", fontSize:def.fontSize||14, cornerRadius:0 };
+  document.getElementById("guiEmptyHint").style.display = "none";
+  renderGuiElement(id); selectGuiElement(id);
 }
-function(id);
-}
-function renderGui renderGuiElement(idElement(id) {
-  let) {
-  let el = guiElements[id el = guiElements[id]; if(!el) return;
-  let]; if(!el) return;
-  let canvas = document.getElementById("guiCanvas canvas = document.getElementById("guiCanvasInnerInner");
-  let existing = canvas.querySelector(`");
-  let existing = canvas.querySelector(`[data-id="${id}"]`); if(ex[data-id="${id}"]`); if(existing) existing.remove();
-  let div = document.createElement("div"); div.className = "gui-element";isting) existing.remove();
+function renderGuiElement(id) {
+  let el = guiElements[id]; if(!el) return;
+  let canvas = document.getElementById("guiCanvasInner");
+  let existing = canvas.querySelector(`[data-id="${id}"]`); if(existing) existing.remove();
   let div = document.createElement("div"); div.className = "gui-element"; div.setAttribute("data-id",id);
-  div.style.cssText = `left:${el.x}px;top:${el.y}px;width:${el div.setAttribute("data-id",id);
-  div.style.cssText = `left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px;background:${el.w}px;height:${el.h}px;background:${el.bgColor};color:${el.textColor.bgColor};color:${el.textColor};font-size:${el.fontSize}px;border-radius:${el.cornerRadius};font-size:${el.fontSize}px;border-radius:${el.cornerRadius}px;border:1px solid rgba(255,255,255,0.1);`;
-  if(el.text) { let span = document.createElement("span}px;border:1px solid rgba(255,255,255,0.1);`;
-  if(el.text) { let span ="); span document.createElement("span"); span.innerText = el.text; span.style.display = "block"; span.style.textAlign = "center"; div.appendChild(span); }
-  if(el.type !== "ImageLabel") { let.innerText = el.text; span.style.display = "block"; span.style.textAlign = "center"; div.appendChild(span); }
-  if(el.type !== "ImageLabel") { let resize = resize = document.createElement("div"); resize.className = "gui-resize-handle"; resize.on document.createElement("div"); resize.className = "gui-resize-handle"; resize.onmousedown = e => startResmousedown = e => startResize(e,id); div.appendChild(resize); }
-  div.onmousedown = e =>ize(e,id); div.appendChild(resize); }
+  div.style.cssText = `left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px;background:${el.bgColor};color:${el.textColor};font-size:${el.fontSize}px;border-radius:${el.cornerRadius}px;border:1px solid rgba(255,255,255,0.1);`;
+  if(el.text) { let span = document.createElement("span"); span.innerText = el.text; span.style.display = "block"; span.style.textAlign = "center"; div.appendChild(span); }
+  let resize = document.createElement("div"); resize.className = "gui-resize-handle"; resize.onmousedown = e => startResize(e,id); div.appendChild(resize);
   div.onmousedown = e => startDrag(e,id); canvas.appendChild(div);
- startDrag(e,id); canvas.appendChild(div);
 }
-function selectGuiElement(id)}
-function selectGuiElement(id) { selectedGuiId = id { selectedGuiId = id; document; document.querySelectorAll(".gui-element").forEach(el=>.querySelectorAll(".gui-element").forEach(el=>el.classList.remove("selected")); let sel = document.querySelector(`.gui-element[data-id="${id}"]`); if(sel) sel.classList.add("selected"); updateel.classList.remove("selected")); let sel = document.querySelector(`.gui-element[data-id="${id}"]`); if(sel) sel.classList.add("selected"); updatePropsPanel(); }
-function updatePropsPanel()PropsPanel(); }
+function selectGuiElement(id) { selectedGuiId = id; document.querySelectorAll(".gui-element").forEach(el=>el.classList.remove("selected")); let sel = document.querySelector(`.gui-element[data-id="${id}"]`); if(sel) sel.classList.add("selected"); updatePropsPanel(); }
 function updatePropsPanel() {
-  let {
-  let panel = document.getElementById panel = document.getElementById("guiPropsPanel"); if(!panel) return;
-  let el = guiElements[selectedGuiId]; if(!el) { panel.innerHTML = "<div style='text-align:("guiPropsPanel"); if(!panel) return;
-  let el = guiElements[selectedGuiId]; if(!el) { panel.innerHTML = "<div style='text-align:center;padding:center;padding:20px20px;'>Pilih elemen</div>"; return;;'>Pilih elemen</div>"; return; }
-  panel.innerHTML = `<div class="gui-prop-label">Name</div><input class="gui-prop-input" value="${esc(el.name)}" onchange="updateGuiProp('name',this.value)"><div class="gui-prop-label">Text }
-  panel.innerHTML = `<div class="gui-prop-label">Name</div><input class="gui-prop-input" value="${esc(el.name)}" onchange="updateGuiProp('name',this.value)"><div class="gui-prop-label">Text</div><input class="gui-prop-input" value="${esc(el.text)}</div><input class="gui-prop-input" value="${esc(el.text)}" onchange="updateGui" onchange="updateGuiProp('text',Prop('text',this.valuethis.value)"><div class="gui)"><div class="gui-prop-label">Font-prop-label">Font Size</div><input class Size</div><input class="gui-prop-input" type="gui-prop-input" type="number="number" value="${el" value="${el.fontSize}" on.fontSize}" onchange="change="updateGuiProp('fontSizeupdateGuiProp('fontSize',',parseInt(this.value))"><divparseInt(this.value))"><div class="gui-prop-label"> class="gui-prop-label">BG Color</divBG Color</div><input><input class="gui-prop-input" type="color" class="gui-prop-input" type="color" value="${el.bg value="${el.bgColor}" onchange="Color}" onchange="updateGuiupdateGuiProp('Prop('bgColorbgColor',this.value)"><div class="',this.value)"><div class="gui-prop-label">Text Colorgui-prop-label"></div><input class="gui-prop-input" type="color" value="${el.textColor}" onchangeText Color</div><input class="gui-prop-input" type="color" value="${el.textColor}" onchange="updateGuiProp('text="updateGuiProp('textColor',this.value)Color',this.value)"><div class="gui-prop-label"><div class="gui-prop-label">Corner Radius</div><input class="">Corner Radius</div><input class="gui-propgui-prop-input" type="number" value="${el.cornerRadius}" onchange="updateGuiProp('cornerRadius',parseInt(this.value))"><button class="-input" type="number" value="${el.cornerRadius}" onchange="updateGuiProp('cornerRadius',parseInt(this.value))"><button class="gui-btn" stylegui-btn" style="margin-top:12px;width:100%;background:rgba(="margin-top:12px;width:100%;background:rgba(255,45,255,45,107,107,0.1);border-color0.1);border-color:var:var(--p(--pink);" onclick="deleteGuiElementink);" onclick="deleteGuiElement('${('${selectedGuiId}selectedGuiId}')">')">Hapus EleHapus Elemen</men</button>button>`;
-`;
+  let panel = document.getElementById("guiPropsPanel"); if(!panel) return;
+  let el = guiElements[selectedGuiId]; if(!el) { panel.innerHTML = "<div style='text-align:center;padding:20px;'>Pilih elemen</div>"; return; }
+  panel.innerHTML = `<div class="gui-prop-label">Name</div><input class="gui-prop-input" value="${esc(el.name)}" onchange="updateGuiProp('name',this.value)"><div class="gui-prop-label">Text</div><input class="gui-prop-input" value="${esc(el.text)}" onchange="updateGuiProp('text',this.value)"><div class="gui-prop-label">Font Size</div><input class="gui-prop-input" type="number" value="${el.fontSize}" onchange="updateGuiProp('fontSize',parseInt(this.value))"><div class="gui-prop-label">BG Color</div><input class="gui-prop-input" type="color" value="${el.bgColor}" onchange="updateGuiProp('bgColor',this.value)"><div class="gui-prop-label">Text Color</div><input class="gui-prop-input" type="color" value="${el.textColor}" onchange="updateGuiProp('textColor',this.value)"><div class="gui-prop-label">Corner Radius</div><input class="gui-prop-input" type="number" value="${el.cornerRadius}" onchange="updateGuiProp('cornerRadius',parseInt(this.value))"><button class="gui-btn" style="margin-top:12px;width:100%;background:rgba(255,45,107,0.1);border-color:var(--pink);" onclick="deleteGuiElement('${selectedGuiId}')">Hapus Elemen</button>`;
 }
-function updateGuiProp(prop,val}
-function updateGuiProp(prop,val) { if(!selectedGuiId) return; guiElements[selectedGuiId][prop] = val; let elDiv) { if(!selectedGuiId) return; guiElements[selectedGuiId][prop] = val; let elDiv = document.querySelector(`.gui-element[data-id = document.querySelector(`.gui-element[data-id="${selectedGuiId}"]="${selectedGuiId}"]`); if(!elDiv) return; if(prop==="`); if(!elDiv) return; if(prop==="bgColor") elDiv.stylebgColor") elDiv.style.background=val; if.background=val; if(prop==="textColor(prop==="") elDiv.styletextColor") elDiv.style.color=val; if(prop==.color=val; if(prop==="fontSize")="fontSize") elDiv elDiv.style.fontSize=.style.fontSize=val+"px";val+"px"; if(prop==="cornerRadius") elDiv.style.borderRadius=val+" if(prop==="cornerRadius") elDiv.style.borderRadius=val+"px"; ifpx"; if(prop==="text") { let span = elDiv.querySelector("span(prop==="text") { let span = elDiv.querySelector("span"); if(span"); if(span) span.innerText) span.innerText=val=val; else if(val; else if(val){let){let s=document.createElement("span"); s s=document.createElement("span"); s.innerText.innerText=val; elDiv.appendChild(s);=val; elDiv.appendChild(s);} } }
-function deleteGuiElement(id} } }
-function deleteGuiElement(id) { delete guiElements[id]; let el) { delete guiElements[id]; let elDiv = document.querySelector(`Div = document.querySelector(`.gui-element[data-id="${id}"]`); if(el.gui-element[data-id="${id}"]`); if(elDiv) elDivDiv) elDiv.remove(); if(.remove(); if(selectedGuiselectedGuiId===id)Id===id) selectedGuiId=null; updatePropsPanel(); if(Object.keys selectedGuiId=null; updatePropsPanel(); if(Object.keys(guiElements(guiElements).length===0) document.getElementById("guiEmptyHint").style.display="flex).length===0) document.getElementById("guiEmptyHint").style.display="flex"; }
-function clearGuiCanvas() { guiElements={"; }
-function clearGuiCanvas() { guiElements={}; selectedGuiId}; selectedGuiId=null; document=null; document.querySelectorAll.querySelectorAll(".gui-element").forEach(el(".gui-element").forEach(el=>el=>el.remove());.remove()); document.getElementById("guiEmptyHint").style document.getElementById("guiEmptyHint").style.display="flex";.display="flex"; updateProps updatePropsPanel(); }
+function updateGuiProp(prop,val) { if(!selectedGuiId) return; guiElements[selectedGuiId][prop] = val; let elDiv = document.querySelector(`.gui-element[data-id="${selectedGuiId}"]`); if(!elDiv) return; if(prop==="bgColor") elDiv.style.background=val; if(prop==="textColor") elDiv.style.color=val; if(prop==="fontSize") elDiv.style.fontSize=val+"px"; if(prop==="cornerRadius") elDiv.style.borderRadius=val+"px"; if(prop==="text") { let span = elDiv.querySelector("span"); if(span) span.innerText=val; else if(val){let s=document.createElement("span"); s.innerText=val; elDiv.appendChild(s);} } }
+function deleteGuiElement(id) { delete guiElements[id]; let elDiv = document.querySelector(`.gui-element[data-id="${id}"]`); if(elDiv) elDiv.remove(); if(selectedGuiId===id) selectedGuiId=null; updatePropsPanel(); if(Object.keys(guiElements).length===0) document.getElementById("guiEmptyHint").style.display="flex"; }
+function clearGuiCanvas() { guiElements={}; selectedGuiId=null; document.querySelectorAll(".gui-element").forEach(el=>el.remove()); document.getElementById("guiEmptyHint").style.display="flex"; updatePropsPanel(); }
 function exportGuiCode() {
-  let els = Object.values(guiElementsPanel(); }
-function exportGuiCode() {
-  let els = Object.values(guiElements); if(!els.length) { showToast); if(!els.length) { showToast("Tidak ada("Tidak ada elemen elemen","var(--yellow","var(--yellow)"); return; }
-  let lines)"); return; }
-  let lines = [" = ["-- GUI Generated by NEX-- GUI Generated by NEXUS AIUS AI V10.4 V10.4","local","local Players Players = game:GetService('Players')"," = game:GetService('Players')","local player = Players.LocalPlayerlocal player = Players.LocalPlayer","local playerGui","local playerGui = player:WaitForChild('PlayerGui')","local = player:WaitForChild('PlayerGui')","local screenGui = Instance.new(' screenGui = Instance.new('ScreenGui')","screenGui.Name = 'NexusGUI'","screenScreenGui')","screenGui.Name = 'NexusGUI'","screenGui.Gui.ResetOnSpawn = false","screenGui.IgnoreGuiInResetOnSpawn = false","screenGui.IgnoreGuiInset =set = true","screenGui.Parent = playerGui","local mainFrame = Instance.new('Frame')","mainFrame true","screenGui.Parent = playerGui","local mainFrame = Instance.new('Frame')","mainFrame.Name = 'MainFrame'","mainFrame.Size = U.Name = 'MainFrame'","mainFrame.Size = UDim2.new(Dim2.new(1,1,0,1,0,1,0)0)","mainFrame.Back","mainFrame.BackgroundTransparencygroundTransparency = 1","main = 1","mainFrame.Parent = screenGui",""];
-  els.forEach(elFrame.Parent = screenGui",""];
-  els.forEach(el => { let v = el.name.replace(/[^a-zA-Z => { let v = el.name.replace(/[^a-zA-Z0-9_0-9_]/g,"_"); lines.push(`]/g,"_"); lines.push(`-- ${-- ${el.type}: ${el.name}`);el.type}: ${el.name}`); lines.push(`local ${v} = lines.push(`local ${v} = Instance.new Instance.new("${el.type("${el.type}")`); lines.push}")`); lines.push(`${v}.Name(`${v}.Name = "${el.name = "${el.name}"`); lines.push(`${v}.Size = UDim2.new(0, ${el.w}, 0, ${el}"`); lines.push(`${v}.Size = UDim2.new(0, ${el.w}, 0, ${el.h})`); lines.push.h})`); lines.push(`${v}.Position(`${v}.Position = U = UDim2.new(0,Dim2.new(0, ${el.x}, ${el.x}, 0, 0, ${el.y})` ${el.y})`); if(el.bgColor && el.bgColor!=="transparent") { let hex=el); if(el.bgColor && el.bgColor!=="transparent") { let hex=el.bgColor.replace("#",""); let r=parseInt.bgColor.replace("#",""); let r=parseInt(hex.substr(0,2),(hex.substr(0,16),2),16),g=parseg=parseIntInt(hex(hex.substr(2,.substr(2,2),2),16),16),b=parseInt(hex.substr(b=parseInt(hex.substr(4,2),16);4,2),16); lines.push(`${v}.Background lines.push(`${v}.BackgroundColor3 = Color3.fromColor3 = Color3.fromRGB(${r}, ${g}, ${b})`RGB(${r}, ${g}, ${b})`); } else lines.push(`${); } else lines.push(`${v}.BackgroundTransparency = 1v}.BackgroundTransparency = 1`);`); if(el if(el.textColor) { let hex.textColor) { let hex=el.textColor.replace("#=el.textColor.replace("#","");",""); let r=parseInt( let r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16),b=parseInt(hex.substr(4,2),16),16); lines.push(`${v}.TextColor3 =); lines.push(`${v}.TextColor Color33 = Color3.fromRGB.fromRGB(${(${r},r}, ${g}, ${ ${g}, ${b})b})`); } if(el.text`); } if(el.text) lines) lines.push(`${v}.Text = "${el.push(`${v}.Text = "${el.text.replace(/"/.text.replaceg,'\\"')}"(/"/g,'\\"')}"`); if(el.fontSize) lines.push(`${v}.TextSize = ${el.font`); if(el.fontSize) lines.push(`${v}.TextSize = ${el.fontSize}`); lines.push(`${v}.Font = Enum.FontSize}`); lines.push(`${v}..GothamBold`); lines.push(`${v}.BorderSizePixel =Font = Enum.Font.GothamBold`); lines.push(`${v}.BorderSizePixel = 0`); if(el.cornerRadius>0 0`); if(el.cornerRadius>0) { lines.push(`local ${v}Corner =) { lines.push(`local ${v}Corner = Instance.new Instance.new("UICorner", ${v})("UICorner", ${`);v})`); lines.push(`${v}Cor lines.push(`${v}Corner.Cornerner.CornerRadius =Radius = UDim.new( UDim.new(0,0, ${el.cornerRadius})` ${el.cornerRadius); } lines.push(`${v}.Parent})`); } lines.push(`${v}.Parent = mainFrame`); lines = mainFrame`); lines.push(""); });
-  document.getElementById("codeOutput").innerText = lines.join("\n.push(""); });
+  let els = Object.values(guiElements); if(!els.length) { showToast("Tidak ada elemen","var(--yellow)"); return; }
+  let lines = ["-- GUI Generated by NEXUS AI V10.4","local Players = game:GetService('Players')","local player = Players.LocalPlayer","local playerGui = player:WaitForChild('PlayerGui')","local screenGui = Instance.new('ScreenGui')","screenGui.Name = 'NexusGUI'","screenGui.ResetOnSpawn = false","screenGui.IgnoreGuiInset = true","screenGui.Parent = playerGui","local mainFrame = Instance.new('Frame')","mainFrame.Name = 'MainFrame'","mainFrame.Size = UDim2.new(1,0,1,0)","mainFrame.BackgroundTransparency = 1","mainFrame.Parent = screenGui",""];
+  els.forEach(el => { let v = el.name.replace(/[^a-zA-Z0-9_]/g,"_"); lines.push(`-- ${el.type}: ${el.name}`); lines.push(`local ${v} = Instance.new("${el.type}")`); lines.push(`${v}.Name = "${el.name}"`); lines.push(`${v}.Size = UDim2.new(0, ${el.w}, 0, ${el.h})`); lines.push(`${v}.Position = UDim2.new(0, ${el.x}, 0, ${el.y})`); if(el.bgColor && el.bgColor!=="transparent") { let hex=el.bgColor.replace("#",""); let r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16); lines.push(`${v}.BackgroundColor3 = Color3.fromRGB(${r}, ${g}, ${b})`); } else lines.push(`${v}.BackgroundTransparency = 1`); if(el.textColor) { let hex=el.textColor.replace("#",""); let r=parseInt(hex.substr(0,2),16),g=parseInt(hex.substr(2,2),16),b=parseInt(hex.substr(4,2),16); lines.push(`${v}.TextColor3 = Color3.fromRGB(${r}, ${g}, ${b})`); } if(el.text) lines.push(`${v}.Text = "${el.text.replace(/"/g,'\\"')}"`); if(el.fontSize) lines.push(`${v}.TextSize = ${el.fontSize}`); lines.push(`${v}.Font = Enum.Font.GothamBold`); lines.push(`${v}.BorderSizePixel = 0`); if(el.cornerRadius>0) { lines.push(`local ${v}Corner = Instance.new("UICorner", ${v})`); lines.push(`${v}Corner.CornerRadius = UDim.new(0, ${el.cornerRadius})`); } lines.push(`${v}.Parent = mainFrame`); lines.push(""); });
   document.getElementById("codeOutput").innerText = lines.join("\n");
-  document");
-  document.getElementById("codeModal").classList.add.getElementById("codeModal").class("show");
+  document.getElementById("codeModal").classList.add("show");
 }
-function sendGuiToList.add("show");
-}
-function sendGuiToStudio()Studio() { if { if(!studioConnected)(!studioConnected) { show { showToast("Studio belumToast("Studio belum terhub terhubung! Klikung! Klik Connect ter Connect terlebih dahulu.","varlebih dahulu.","var(--pink)"); return(--pink)"; } showToast("GUI dikirim ke Studio!","var(--green)"); }
-function openGuiAIChat); return; } showToast("GUI dikirim ke Studio!","var(--green)"); }
-function openGuiAIChat() {() { document.getElementById("gui document.getElementById("guiAIModal").classListAIModal").classList.add("show"); }
-async function generateGuiFromAI() {.add("show"); }
-async function generateGuiFromAI() { let prompt let prompt = document = document.getElementById("guiA.getElementById("guiAIPrompt").valueIPrompt").value; if; if(!prompt) return; closeModal("guiAIModal"); showToast("AI sedang membangun UI...","var(--cyan)"); setTimeout(() =>(!prompt) return; closeModal("guiAIModal"); showToast("AI sedang membangun UI...","var(--cyan)"); setTimeout(() => { clearGuiCanvas { clearGuiCanvas(); let(); let mock = [{type mock = [{type:"Frame:"Frame",name",name:"MainFrame",:"MainFrame",x:x:100,y:100,w100,y:100,w:300,h:300,h:200,bgColor:"#202240",text:""},{type:"TextLabel",name:"Title",x:120,y::200,bgColor:"#202240",text:""},{type:"TextLabel",name:"Title",x:120,y:120,w:260,h:30,120,w:260,h:30,text:"Shop GUI",textColor:"#00e5ff",fontSize:18,bgColor:"transparent"},{type:"TextButton",name:"BuyBtn",x:150,y:200,w:100,h:40,text:"Beli",textColor:"#ffffff",bgColor:"#00ffaa",fontSize:14,cornerRadius:8}];text:"Shop GUI",textColor:"#00e5ff",fontSize:18,bgColor:"transparent"},{type:"TextButton",name:"BuyBtn",x:150,y:200,w:100,h:40,text:"Beli",textColor:"#ffffff",bgColor:"#00ffaa",fontSize:14,cornerRadius:8}]; mock.forEach(el => { guiCounter++; let id="el"+guiCounter; guiElements[id] = { id, type: mock.forEach(el => { guiCounter++; let id="el"+guiCounter; guiElements[id] = { id, type:el.type, name:el.name, x:el.x, y:el.y, w:el.w, h:el.h, bgColor:el.bgColor, text:el.text, textColor:el.textColor||"#ffffff", fontSize:el.fontSize||14, cornerRadius:el.corel.type, name:el.name, x:el.x, y:el.y, w:el.w, h:el.h, bgColor:el.bgColor, text:el.text, textColor:el.textColor||"#ffffff", fontSize:el.fontSize||14, cornerRadius:el.cornerRadius||0nerRadius||0 }; renderGuiElement(id); }); document.getElementById("guiEmptyHint").style.display = "none"; showToast("UI selesai dibuat!","var(--green)"); }, 1500); }
-function startDrag(e,id) { if(e.target.classList.contains("gui-resize-handle")) return; e.preventDefault(); let el = document.querySelector(`.gui-element[data-id="${id}"]`); let startX=e.clientX, start }; renderGuiElement(id); }); document.getElementById("guiEmptyHint").style.display = "none"; showToast("UI selesai dibuat!","var(--green)"); }, 1500); }
-function startDrag(e,id) { if(e.target.classList.contains("gui-resize-handle")) return; e.preventDefault(); let el = document.querySelector(`.gui-element[data-id="${id}"]`); let startX=e.clientX, startY=eY=e.clientY, startLeft=el.offsetLeft, startTop=el.offsetTop; function onMove(ev) { let dx=ev.clientX-startX, dy=ev.clientY-startY; el.style.left=(startLeft+dx)+"px"; el.style.top=(startTop+dy)+"px"; if(guiElements[id]) { guiElements[id].x=el.offsetLeft; guiElements[id].y=el.offsetTop; } } function onUp() { document.removeEventListener("mousemove",onMove); document.removeEventListener("mouseup",onUp); } document.addEventListener("mousemove",onMove); document.addEventListener("mouseup",onUp); }
-function startResize(e,id) { e.preventDefault(); e.stopPropagation(); let el = document.querySelector(`.gui-element[data-id="${id}"]`); let startX=e.clientX, startY=e.clientY, startW=el.offsetWidth, startH=el.clientY, startLeft=el.offsetLeft, startTop=el.offsetTop; function onMove(ev) { let dx=ev.clientX-startX, dy=ev.clientY-startY; el.style.left=(startLeft+dx)+"px"; el.style.top=(startTop+dy)+"px"; if(guiElements[id]) { guiElements[id].x=el.offsetLeft; guiElements[id].y=el.offsetTop; } } function onUp() { document.removeEventListener("mousemove",onMove); document.removeEventListener("mouseup",onUp); } document.addEventListener("mousemove",onMove); document.addEventListener("mouseup",onUp); }
-function startResize(e,id) { e.preventDefault(); e.stopPropagation(); let el = document.querySelector(`.gui-element[data-id="${id}"]`); let startX=e.clientX, startY=e.clientY, startW=el.offsetWidth, startH=el.offsetHeight; function onMove(ev) { let dw=ev.clientX-startX, dh=ev.clientY-startY.offsetHeight; function onMove(ev) { let dw=ev.clientX-startX, dh=ev.clientY-startY; el.style.width=Math.max(40,startW+dw)+"px"; el.style.height=Math.max(20,startH+dh; el.style.width=Math.max(40,startW+dw)+"px"; el.style.height=Math.max(20,startH+dh)+"px";)+"px"; if(guiElements[id]) { guiElements[id]. if(guiElements[id]) { guiElements[id].w=w=el.offsetWidth; guel.offsetWidthiElements[id].h=el.offsetHeight; } } function onUp() { document.removeEventListener("mousemove",onMove); document.removeEventListener("mouseup",on; guiElements[id].h=el.offsetHeight; } } function onUp() { document.removeEventListener("mousemove",onMove); document.removeEventListener("mouseup",onUp);Up); } document.addEventListener("mousemove",onMove); } document.addEventListener("mousemove",onMove); document.addEventListener document.addEventListener("mouseup",onUp("mouseup",on); }
+function sendGuiToStudio() { if(!studioConnected) { showToast("Studio belum terhubung! Klik Connect terlebih dahulu.","var(--pink)"); return; } showToast("GUI dikirim ke Studio!","var(--green)"); }
+function openGuiAIChat() { document.getElementById("guiAIModal").classList.add("show"); }
+function generateGuiFromAI() { let prompt = document.getElementById("guiAIPrompt").value; if(!prompt) return; closeModal("guiAIModal"); showToast("AI sedang membangun UI...","var(--cyan)"); setTimeout(() => { clearGuiCanvas(); let mock = [{type:"Frame",name:"MainFrame",x:100,y:100,w:300,h:200,bgColor:"#202240",text:""},{type:"TextLabel",name:"Title",x:120,y:120,w:260,h:30,text:"Shop GUI",textColor:"#00e5ff",fontSize:18,bgColor:"transparent"},{type:"TextButton",name:"BuyBtn",x:150,y:200,w:100,h:40,text:"Beli",textColor:"#ffffff",bgColor:"#00ffaa",fontSize:14,cornerRadius:8}]; mock.forEach(el => { guiCounter++; let id="el"+guiCounter; guiElements[id] = { id, type:el.type, name:el.name, x:el.x, y:el.y, w:el.w, h:el.h, bgColor:el.bgColor, text:el.text, textColor:el.textColor||"#ffffff", fontSize:el.fontSize||14, cornerRadius:el.cornerRadius||0 }; renderGuiElement(id); }); document.getElementById("guiEmptyHint").style.display = "none"; showToast("UI selesai dibuat!","var(--green)"); }, 1500); }
+function startDrag(e,id) { if(e.target.classList.contains("gui-resize-handle")) return; e.preventDefault(); let el = document.querySelector(`.gui-element[data-id="${id}"]`); let startX=e.clientX, startY=e.clientY, startLeft=el.offsetLeft, startTop=el.offsetTop; function onMove(ev) { let dx=ev.clientX-startX, dy=ev.clientY-startY; el.style.left=(startLeft+dx)+"px"; el.style.top=(startTop+dy)+"px"; if(guiElements[id]) { guiElements[id].x=el.offsetLeft; guiElements[id].y=el.offsetTop; } } function onUp() { document.removeEventListener("mousemove",onMove); document.removeEventListener("mouseup",onUp); } document.addEventListener("mousemove",onMove); document.addEventListener("mouseup",onUp); }
+function startResize(e,id) { e.preventDefault(); e.stopPropagation(); let el = document.querySelector(`.gui-element[data-id="${id}"]`); let startX=e.clientX, startY=e.clientY, startW=el.offsetWidth, startH=el.offsetHeight; function onMove(ev) { let dw=ev.clientX-startX, dh=ev.clientY-startY; el.style.width=Math.max(40,startW+dw)+"px"; el.style.height=Math.max(20,startH+dh)+"px"; if(guiElements[id]) { guiElements[id].w=el.offsetWidth; guiElements[id].h=el.offsetHeight; } } function onUp() { document.removeEventListener("mousemove",onMove); document.removeEventListener("mouseup",onUp); } document.addEventListener("mousemove",onMove); document.addEventListener("mouseup",onUp); }
 
-// ModUp); }
-
-// Modals &als & Settings
-function open Settings
-function openSettings() { updateSettings() { updateCreditsCreditsUI();UI(); document.getElementById("settings document.getElementById("settingsModal").Modal").classList.add("show"); }
-function closeModal(id)classList.add("show"); }
+// Modals & Settings
+function openSettings() { updateCreditsUI(); document.getElementById("settingsModal").classList.add("show"); }
 function closeModal(id) { document.getElementById(id).classList.remove("show"); }
-function showInstallModal() { document.getElementById { document.getElementById(id).classList.remove("show"); }
 function showInstallModal() { document.getElementById("installModal").classList.add("show"); }
-function changeLang(l)("installModal").classList.add("show"); }
-function changeLang(l) { lang=l; localStorage.setItem("lang",l); let placeholder = LANG[l]?.placeholder || LANG.id.placeholder { lang=l; localStorage.setItem("lang",l); let placeholder = LANG[l]?.placeholder || LANG.id.placeholder; document.getElementById("messageInput").placeholder = placeholder; showToast(`Bahasa diubah ke ${l==="id"?"Indonesia":"; document.getElementById("messageInput").placeholder = placeholder; showToast(`Bahasa diubah ke ${l==="id"?"Indonesia":"English"}`,`var(--greenEnglish"}`,`var(--green)`);)`); }
-function claimDaily }
-function claimDaily() {() { if(!currentUser.isOwner) { if(!currentUser.isOwner) { currentUser.cred currentUser.credits += 2its += 2; updateCredits; updateCreditsUI();UI(); showToast("+2 CR showToast("+2 CR claimed!","var claimed!","var(--green)"); } }
-function redeem(--green)"); } }
-function redeemCode() { let code = document.getElementById("redeemCodeInput").value; if(code === "NEXUS100") { currentUser.credCode() { let code = document.getElementById("redeemCodeInput").value; if(code === "NEXUS100") { currentUser.credits += 100; updateCredits += 100; updateCreditsUIitsUI(); showToast("(); showToast("+100+100 CR redeemed!"," CR redeemed!","var(--var(--green)"); }green)"); } else show else showToast("Invalid codeToast("Invalid code","var","var(--pink)"(--pink)"); document); document.getElementById("redeem.getElementById("redeemCodeInputCodeInput").value = ""; }
+function claimDaily() { if(!currentUser.isOwner) { currentUser.credits += 2; updateCreditsUI(); showToast("+2 CR claimed!","var(--green)"); } }
+function redeemCode() { let code = document.getElementById("redeemCodeInput").value; if(code === "NEXUS100") { currentUser.credits += 100; updateCreditsUI(); showToast("+100 CR redeemed!","var(--green)"); } else showToast("Invalid code","var(--pink)"); document.getElementById("redeemCodeInput").value = ""; }
 function logout() { localStorage.clear(); window.location.reload(); }
-function").value = ""; }
-function logout() { localStorage.clear(); window.location.reload(); }
-function copyCodeOutput() { let pre = document.getElementById("codeOutput"); copyCodeOutput() { let pre = document.getElementById("codeOutput"); navigator.clipboard.write navigator.clipboard.writeText(pre.innerText).then(()=>showToast("Copied!")); }
-function downloadCodeOutput() { let preText(pre.innerText).then(()=>showToast("Copied!")); }
-function downloadCodeOutput() { let pre = document.getElementById("codeOutput"); let = document.getElementById("codeOutput"); let blob = new Blob([pre.innerText], {type:"text/plain"}); let a blob = new Blob([pre.innerText], {type:"text/plain"}); let a = document.createElement("a"); = document.createElement("a"); a.href = URL.createObjectURL a.href = URL.createObjectURL(bl(blob); a.dob); a.download =ownload = "nex "nexus_gui.lus_gui.lua";ua"; a.click a.click(); URL.revokeObjectURL(a.href); }
-function clearChat() {(); URL.revokeObjectURL(a.href); }
-function clearChat() { let conv = conversations.find(c => c let conv = conversations.find(c => c.id === currentConv.id === currentConvIdId); if(); if(conv)conv) { conv.messages = { conv.messages = []; saveConversations(); loadMessages(currentConvId); showToast("Chat dib []; saveConversations(); loadMessages(currentConvId); showToast("Chat dibersihkan","ersihkan","var(--dim)"); }var(--dim)"); } }
-function switchTab(tab) { }
-function switchTab(tab) { let chatTab = let chatTab = document.getElementById document.getElementById("chatTab"),("chatTab"), gui guiTab =Tab = document.getElementById("guiTab"), chatBtn = document.getElementById("tabChatBtn"), guiBtn = document.getElementById("tabGuiBtn"); if(tab === "chat") { chatTab.style.display = "flex"; guiTab.style.display = "none"; chatBtn.classList.add("active"); guiBtn.classList.remove("active"); } else { chatTab.style.display = "none"; guiTab.style.display = " document.getElementById("guiTab"), chatBtn = document.getElementById("tabChatBtn"), guiBtn = document.getElementById("tabGuiBtn"); if(tab === "chat") { chatTab.style.display = "flex"; guiTab.style.display = "none"; chatBtn.classList.add("active"); guiBtn.classList.remove("active"); } else { chatTab.style.display = "none"; guiTab.style.display = "flex"; chatBtn.classList.remove("active"); guiBtnflex"; chatBtn.classList.remove("active"); guiBtn.classList.add("active"); } }
-function toggleSidebar() { document.classList.add("active"); } }
+function copyCodeOutput() { let pre = document.getElementById("codeOutput"); navigator.clipboard.writeText(pre.innerText).then(()=>showToast("Copied!")); }
+function downloadCodeOutput() { let pre = document.getElementById("codeOutput"); let blob = new Blob([pre.innerText], {type:"text/plain"}); let a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = "nexus_gui.lua"; a.click(); URL.revokeObjectURL(a.href); }
+function clearChat() { let conv = conversations.find(c => c.id === currentConvId); if(conv) { conv.messages = []; saveConversations(); loadMessages(currentConvId); showToast("Chat dibersihkan","var(--dim)"); } }
+function switchTab(tab) { let chatTab = document.getElementById("chatTab"), guiTab = document.getElementById("guiTab"), chatBtn = document.getElementById("tabChatBtn"), guiBtn = document.getElementById("tabGuiBtn"); if(tab === "chat") { chatTab.style.display = "flex"; guiTab.style.display = "none"; chatBtn.classList.add("active"); guiBtn.classList.remove("active"); } else { chatTab.style.display = "none"; guiTab.style.display = "flex"; chatBtn.classList.remove("active"); guiBtn.classList.add("active"); } }
 function toggleSidebar() { document.getElementById("app").classList.toggle("sb-hidden"); }
-function useSugg(q) { document.getElementById("message.getElementById("app").classList.toggle("sb-hidden"); }
 function useSugg(q) { document.getElementById("messageInput").value = q; sendMessage(); }
 
 // INIT
@@ -1304,7 +1151,7 @@ window.onclick = function(e) { if(!e.target.closest(".model-selector")) { docume
 document.getElementById("messageInput").addEventListener("input", function() { this.style.height = "auto"; this.style.height = Math.min(this.scrollHeight, 130) + "px"; });
 document.getElementById("messageInput").addEventListener("keydown", function(e) { if(e.key === "Enter" && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
 document.querySelectorAll(".suggestion-card").forEach(card => card.addEventListener("click", () => useSugg(card.dataset.query)));
-updateRoleUI(); updateCreditsUI(); setStudioStatus(false); loadConversations(); changeLang(lang);
+updateRoleUI(); updateCreditsUI(); setStudioStatus(false); loadConversations();
 setTimeout(() => setStudioStatus(true), 2000);
 </script>
 </body>
