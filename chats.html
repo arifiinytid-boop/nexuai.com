@@ -567,7 +567,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 </div>
 
 <script>
-// ====================== FULL FIXED CODE ======================
 'use strict';
 var WEB_VERSION='V10.4';
 var curLang=localStorage.getItem('nexus_lang')||'id';
@@ -580,48 +579,1362 @@ var API_URL='/api/control',REPORT_URL='/api/report';
 var K={gemini:'',claude:'',openai:'',grok:''};
 var OWNER_IDS=['128649548'];
 var ADMIN_IDS=[];
-var LANGS={id:{placeholder:'Tanya NEXUS AI tentang Roblox...',noConv:'Belum ada percakapan',newchat:'Percakapan Baru',recent:'Riwayat Chat',steps:['Menganalisis permintaan...','Merancang solusi...','Menulis kode Lua...','Optimasi & finalisasi...'],stepsDebug:['Membaca script...','Menganalisis error...','Merancang perbaikan...','Menulis fix kode...'],stepsGui:['Merancang UI/UX...','Membangun komponen...','Menyusun layout & style...','Finalisasi GUI...'],stepsJson:['Menganalisis workspace...','Merencanakan struktur...','Generate JSON commands...','Verifikasi & kirim...'],son:'Studio: ON',soff:'Studio: OFF',cancel:'Batalkan',connected:'Plugin terhubung — AI siap build di place kamu!',disconnected:'Plugin belum terhubung —'},en:{placeholder:'Ask NEXUS AI about Roblox...',noConv:'No conversations yet',newchat:'New Chat',recent:'Chat History',steps:['Analyzing request...','Designing solution...','Writing Lua code...','Optimizing & finalizing...'],stepsDebug:['Reading script...','Analyzing error...','Designing fix...','Writing fixed code...'],stepsGui:['Designing UI/UX...','Building components...','Composing layout & style...','Finalizing GUI...'],stepsJson:['Analyzing workspace...','Planning structure...','Generating JSON commands...','Verifying & sending...'],son:'Studio: ON',soff:'Studio: OFF',cancel:'Cancel',connected:'Plugin connected — AI ready to build in your place!',disconnected:'Plugin not connected —'}};
-var S={credits:30,convs:[],curConv:null,gen:false,cancelCtrl:null,model:{id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite'},guiModel:{id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite'},plan:'free',draftText:{},draftAttach:{},attachments:[],lastClaim:null};
-var MODEL_LIST=[{grp:'⚡ Google — Gemini Fast'},{id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite',icon:'/icon/gemini.png',badge:'FAST'},{id:'gemini-2.0-flash',prov:'gemini',cost:1,label:'Gemini 2.0 Flash',icon:'/icon/gemini.png',badge:'FAST'},{id:'gemini-3-flash-preview',prov:'gemini',cost:3,label:'Gemini 3 Flash',icon:'/icon/gemini.png',badge:'NEW'},{grp:'🧠 Google — Gemini Smart'},{id:'gemini-2.5-flash',prov:'gemini',cost:2,label:'Gemini 2.5 Flash',icon:'/icon/gemini.png',badge:'SMART'},{id:'gemini-2.5-flash-preview-04-17',prov:'gemini',cost:2,label:'Gemini 2.5 Flash Preview',icon:'/icon/gemini.png'},{id:'gemini-2.5-pro-preview',prov:'gemini',cost:5,label:'Gemini 2.5 Pro Preview',icon:'/icon/gemini.png',badge:'BEST'}];
-var MODEL_LIST_SOON=[{grp:'🤖 Anthropic — Claude'},{id:'claude-haiku-4-5',prov:'claude',cost:3,label:'Claude Haiku 4.5',icon:'/icon/claude.png',soon:true},{id:'claude-sonnet-4-6',prov:'claude',cost:7,label:'Claude Sonnet 4.6',icon:'/icon/claude.png',soon:true},{grp:'🌐 OpenAI & Grok'},{id:'gpt-4o-mini',prov:'openai',cost:3,label:'GPT-4o Mini',icon:'/icon/chatgpt.png',soon:true},{id:'x-ai/grok-3-mini-beta',prov:'openrouter',cost:3,label:'Grok 3 Mini',icon:'/icon/grok.png',soon:true}];
+
+var LANGS={
+  id:{placeholder:'Tanya NEXUS AI tentang Roblox...',noConv:'Belum ada percakapan',
+      newchat:'Percakapan Baru',recent:'Riwayat Chat',
+      steps:['Menganalisis permintaan...','Merancang solusi...','Menulis kode Lua...','Optimasi & finalisasi...'],
+      stepsDebug:['Membaca script...','Menganalisis error...','Merancang perbaikan...','Menulis fix kode...'],
+      stepsGui:['Merancang UI/UX...','Membangun komponen...','Menyusun layout & style...','Finalisasi GUI...'],
+      stepsJson:['Menganalisis workspace...','Merencanakan struktur...','Generate JSON commands...','Verifikasi & kirim...'],
+      son:'Studio: ON',soff:'Studio: OFF',cancel:'Batalkan',
+      connected:'Plugin terhubung — AI siap build di place kamu!',
+      disconnected:'Plugin belum terhubung —'},
+  en:{placeholder:'Ask NEXUS AI about Roblox...',noConv:'No conversations yet',
+      newchat:'New Chat',recent:'Chat History',
+      steps:['Analyzing request...','Designing solution...','Writing Lua code...','Optimizing & finalizing...'],
+      stepsDebug:['Reading script...','Analyzing error...','Designing fix...','Writing fixed code...'],
+      stepsGui:['Designing UI/UX...','Building components...','Composing layout & style...','Finalizing GUI...'],
+      stepsJson:['Analyzing workspace...','Planning structure...','Generating JSON commands...','Verifying & sending...'],
+      son:'Studio: ON',soff:'Studio: OFF',cancel:'Cancel',
+      connected:'Plugin connected — AI ready to build in your place!',
+      disconnected:'Plugin not connected —'},
+};
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+var S={
+  credits:30,convs:[],curConv:null,gen:false,cancelCtrl:null,
+  model:{id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite'},
+  guiModel:{id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite'},
+  plan:'free',draftText:{},draftAttach:{},attachments:[],
+  lastClaim:null,
+};
+
+// ─── COMPLETE MODEL LIST ───────────────────────────────────────────────────
+// AVAILABLE MODELS (aktif)
+var MODEL_LIST=[
+  {grp:'⚡ Google — Gemini Fast'},
+  {id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite',icon:'/icon/gemini.png',badge:'FAST'},
+  {id:'gemini-2.0-flash',prov:'gemini',cost:1,label:'Gemini 2.0 Flash',icon:'/icon/gemini.png',badge:'FAST'},
+  {id:'gemini-3-flash-preview',prov:'gemini',cost:3,label:'Gemini 3 Flash',icon:'/icon/gemini.png',badge:'NEW'},
+  {grp:'🧠 Google — Gemini Smart'},
+  {id:'gemini-2.5-flash',prov:'gemini',cost:2,label:'Gemini 2.5 Flash',icon:'/icon/gemini.png',badge:'SMART'},
+  {id:'gemini-2.5-flash-preview-04-17',prov:'gemini',cost:2,label:'Gemini 2.5 Flash Preview',icon:'/icon/gemini.png'},
+  {id:'gemini-2.5-pro-preview',prov:'gemini',cost:5,label:'Gemini 2.5 Pro Preview',icon:'/icon/gemini.png',badge:'BEST'},
+];
+// COMING SOON MODELS (terpisah — tidak ditampilkan di dropdown biasa)
+var MODEL_LIST_SOON=[
+  {grp:'🤖 Anthropic — Claude'},
+  {id:'claude-haiku-4-5',prov:'claude',cost:3,label:'Claude Haiku 4.5',icon:'/icon/claude.png',soon:true},
+  {id:'claude-sonnet-4-6',prov:'claude',cost:7,label:'Claude Sonnet 4.6',icon:'/icon/claude.png',soon:true},
+  {grp:'🌐 OpenAI & Grok'},
+  {id:'gpt-4o-mini',prov:'openai',cost:3,label:'GPT-4o Mini',icon:'/icon/chatgpt.png',soon:true},
+  {id:'x-ai/grok-3-mini-beta',prov:'openrouter',cost:3,label:'Grok 3 Mini',icon:'/icon/grok.png',soon:true},
+  {grp:'🔍 DeepSeek'},
+  {id:'deepseek/deepseek-chat-v3-0324',prov:'openrouter',cost:2,label:'DeepSeek V3',icon:'',soon:true},
+];
+
+// ─── AUTH CHECK ────────────────────────────────────────────────────────────
+(function(){
+  try{
+    var s=localStorage.getItem('nexus_session');
+    if(!s){window.location.replace('/login');return;}
+    var p=JSON.parse(s);
+    if(!p||!p.user||!p.user.username||!p.user.robloxId){localStorage.removeItem('nexus_session');window.location.replace('/login');return;}
+    if((Date.now()-p.loginTime)>=86400000*7){localStorage.removeItem('nexus_session');window.location.replace('/login');return;}
+    SESSION=p;
+    if(!SESSION.data)SESSION.data={};
+    document.getElementById('app').classList.remove('hidden');
+  }catch(e){localStorage.removeItem('nexus_session');window.location.replace('/login');}
+})();
+
+// ─── UTILS ─────────────────────────────────────────────────────────────────
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-function toast(msg,col,dur){var t=document.createElement('div');t.className='nx-toast';t.textContent=msg;t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--bg3);border:1px solid var(--b);border-radius:8px;padding:9px 15px;font-size:11px;z-index:9999;color:'+(col||'var(--cyan)')+';animation:toastIn .2s ease;pointer-events:none;';document.body.appendChild(t);setTimeout(function(){t.remove();},dur||2800);}
-function isOwner(){if(!SESSION)return false;var plan=(S.plan||SESSION.data&&SESSION.data.plan||'').toLowerCase();if(plan==='owner'||plan==='unlimited')return true;var roles=(SESSION.data&&SESSION.data.roles)||[];if(roles.indexOf('owner')>=0)return true;return OWNER_IDS.indexOf(String(SESSION.user.robloxId||''))>=0||OWNER_IDS.indexOf(String(SESSION.user.username||'').toLowerCase())>=0;}
-function isAdmin(){if(!SESSION)return false;if(isOwner())return true;var roles=(SESSION.data&&SESSION.data.roles)||[];return roles.indexOf('admin')>=0||ADMIN_IDS.indexOf(String(SESSION.user.robloxId||''))>=0;}
-function saveS(){if(!SESSION)return;SESSION.data.credits=S.credits;SESSION.data.convs=S.convs;SESSION.data.plan=S.plan;SESSION.data.model=S.model;SESSION.data.lastClaim=S.lastClaim;SESSION.data.curConv=S.curConv;try{localStorage.setItem('nexus_session',JSON.stringify(SESSION));}catch(e){}}
-async function loadS(){if(!SESSION)return;var u=SESSION;S.credits=parseFloat((u.data&&u.data.credits!==undefined)?u.data.credits:30)||30;S.convs=(u.data&&u.data.convs)||[];S.plan=(u.data&&u.data.plan)||'free';S.lastClaim=(u.data&&u.data.lastClaim)||null;S.curConv=(u.data&&u.data.curConv)||null;if(u.data&&u.data.model)S.model=u.data.model;}
-function applyLang(){var t=LANGS[curLang]||LANGS.id;var inp=document.getElementById('inp');if(inp)inp.placeholder=t.placeholder;var nc=document.getElementById('newChatLbl');if(nc)nc.textContent=t.newchat;var rc=document.getElementById('recentLbl');if(rc)rc.textContent=t.recent;}
-function setStudioStatus(on){studioConnected=on;var badge=document.getElementById('studioBadge');var t=LANGS[curLang]||LANGS.id;if(badge){badge.className='status-badge '+(on?'on':'off');badge.textContent=on?t.son:t.soff;}}
-async function checkStudio(){if(!SESSION)return;var username=(SESSION.user.username||'').toLowerCase();try{var r=await fetch(API_URL+'?check=1&user='+encodeURIComponent(username),{signal:AbortSignal.timeout(5000)});if(r.ok){var d=await r.json();setStudioStatus(d._pluginConnected===true||d.connected===true||d.online===true);}else setStudioStatus(false);}catch(e){setStudioStatus(false);}}
-function startStudioPoll(){if(studioPollTimer)clearInterval(studioPollTimer);checkStudio();studioPollTimer=setInterval(checkStudio,5000);}
-function updateCreds(){var v=isOwner()||isAdmin()?'∞':parseFloat(S.credits||0).toFixed(2);var el=document.getElementById('credDisp');if(el)el.textContent=v;var el2=document.getElementById('settingsCredits');if(el2)el2.textContent=v+' CR';}
-function newChat(){var id='c'+Date.now();S.curConv=id;S.convs.push({id:id,title:'Percakapan Baru',time:Date.now(),msgs:[]});renderConvs();renderMsgs([]);document.getElementById('welcome').style.display='flex';S.attachments=[];renderAttachRow();saveS();}
-function renderConvs(){var t=LANGS[curLang]||LANGS.id;var list=document.getElementById('convList');if(!list)return;if(!S.convs||!S.convs.length){list.innerHTML='<div class="conv-empty">'+t.noConv+'</div>';return;}list.innerHTML=S.convs.slice().reverse().map(function(cv){var act=cv.id===S.curConv?'act':'';return '<div class="ci '+act+'" onclick="loadConv(\''+cv.id+'\')"><div class="ci-title">'+esc(cv.title||'Percakapan')+'</div><button class="ci-del" onclick="delConv(event,\''+cv.id+'\')">×</button></div>';}).join('');}
-function loadConv(id){var cv=S.convs.find(function(x){return x.id===id;});if(!cv)return;S.curConv=id;renderConvs();document.getElementById('welcome').style.display=(cv.msgs&&cv.msgs.length)?'none':'flex';renderMsgs(cv.msgs||[]);S.attachments=[];renderAttachRow();var inp=document.getElementById('inp');if(inp)inp.value='';saveS();}
-function delConv(e,id){e.stopPropagation();S.convs=S.convs.filter(function(x){return x.id!==id;});if(S.curConv===id){if(S.convs.length)loadConv(S.convs[S.convs.length-1].id);else newChat();}renderConvs();saveS();}
-function renderMsgs(msgs){var container=document.getElementById('msgs');if(!container)return;var welcome=document.getElementById('welcome');if(!msgs||!msgs.length){if(welcome)welcome.style.display='flex';container.querySelectorAll('.msg,.thinking-wrap').forEach(function(el){el.remove();});return;}if(welcome)welcome.style.display='none';container.querySelectorAll('.msg,.thinking-wrap').forEach(function(el){el.remove();});msgs.forEach(function(m){appendMsg(m,true);});container.scrollTop=container.scrollHeight;}
-function appendMsg(m,skipScroll){var container=document.getElementById('msgs');if(!container)return;var isUser=m.role==='user';var wrap=document.createElement('div');wrap.className='msg '+(isUser?'user':'ai');var av=document.createElement('div');av.className='av';av.textContent=isUser?(SESSION.user.username.charAt(0).toUpperCase()):'N';wrap.appendChild(av);var mbWrap=document.createElement('div');mbWrap.className='mb-wrap';var bubble=document.createElement('div');bubble.className='bubble';bubble.innerHTML=m.content.replace(/\n/g,'<br>');mbWrap.appendChild(bubble);wrap.appendChild(mbWrap);container.appendChild(wrap);if(!skipScroll)container.scrollTop=container.scrollHeight;}
-function showThinking(stepsArr){var container=document.getElementById('msgs');if(!container)return null;var wrap=document.createElement('div');wrap.className='thinking-wrap';var box=document.createElement('div');box.className='thinking-box';box.innerHTML='<div class="tspin">⏳</div><div>AI sedang menganalisis...</div><button class="cancel-btn" onclick="cancelGen()">Batalkan</button>';wrap.appendChild(box);container.appendChild(wrap);thinkEl=wrap;return wrap;}
-function rmThinking(){if(thinkEl){thinkEl.remove();thinkEl=null;}}
-function cancelGen(){if(S.cancelCtrl)S.cancelCtrl.abort();S.gen=false;S.cancelCtrl=null;rmThinking();var sendBtn=document.getElementById('sendBtn'),cancelBtn=document.getElementById('cancelBtn');if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');}
-async function autoInjectToStudio(aiResponse,userPrompt){if(!studioConnected)return null;var summary=[];var username=(SESSION?SESSION.user.username:'').toLowerCase();var luaBlocks=[];var re=/```lua\s*([\s\S]*?)```/g,m;while((m=re.exec(aiResponse))!==null){luaBlocks.push(m[1].trim());}for(var i=0;i<luaBlocks.length;i++){summary.push('Script injected (simulasi)');}return summary.length?summary:null;}
-async function send(){if(S.gen)return;var inp=document.getElementById('inp');var txt=(inp?inp.value.trim():'');if(!txt)return;if(!isOwner()&&!isAdmin()&&S.credits<=0){toast('Credits habis!','var(--pink)');return;}if(!S.curConv)newChat();var cv=S.convs.find(function(x){return x.id===S.curConv;});if(!cv)return;S.gen=true;S.cancelCtrl=new AbortController();var sendBtn=document.getElementById('sendBtn'),cancelBtn=document.getElementById('cancelBtn');if(sendBtn)sendBtn.classList.add('hidden');if(cancelBtn)cancelBtn.classList.remove('hidden');if(inp)inp.value='';var userMsg={role:'user',content:txt,time:Date.now()};cv.msgs=cv.msgs||[];cv.msgs.push(userMsg);appendMsg(userMsg);lastUserPrompt=txt;if(cv.msgs.length===1){cv.title=txt.slice(0,40);renderConvs();}var t=LANGS[curLang]||LANGS.id;if(thinkingEnabled)showThinking(t.steps);var sysPrompt='Kamu adalah NEXUS AI expert Roblox. Balas dengan bahasa Indonesia atau Inggris sesuai pengaturan user. Berikan kode lengkap dalam blok ```lua. Jangan pernah memotong kode.';var apiMsgs=cv.msgs.slice(-10).map(function(m){return{role:m.role==='user'?'user':'model',content:m.content};});var aiText='';try{var response=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({provider:'gemini',model:'gemini-2.5-flash-lite',messages:apiMsgs,system:sysPrompt}),signal:S.cancelCtrl.signal});if(!response.ok)throw new Error('API error');var rd=await response.json();aiText=rd.content||'Maaf, tidak ada respons.';}catch(e){if(e.name==='AbortError'){S.gen=false;rmThinking();if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');return;}aiText='**Error:** '+e.message;}rmThinking();if(!isOwner()&&!isAdmin()&&aiText&&!aiText.startsWith('**Error')){S.credits=Math.max(-10,S.credits-(S.model.cost||1));updateCreds();}var injected=null;var displayText=aiText;if(studioConnected&&aiText.includes('```')){injected=await autoInjectToStudio(aiText,lastUserPrompt);displayText=aiText.replace(/```lua[\s\S]*?```/g,'').trim();if(!displayText)displayText='✅ Script telah diinject ke Studio.';}var aiMsg={role:'ai',content:displayText,time:Date.now()};if(injected)aiMsg.injected=injected;cv.msgs.push(aiMsg);appendMsg(aiMsg);S.gen=false;S.cancelCtrl=null;if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');saveS();}
-function handleFile(e){var files=Array.from(e.target.files||[]);files.forEach(function(file){if(file.type.startsWith('image/')){var reader=new FileReader();reader.onload=function(ev){S.attachments.push({type:'image',name:file.name,mime:file.type,data:ev.target.result.split(',')[1]});renderAttachRow();};reader.readAsDataURL(file);}});e.target.value='';}
-function renderAttachRow(){var row=document.getElementById('attachRow');if(!row)return;row.innerHTML=S.attachments.map(function(a,i){return '<div class="attach-item"><span>📎 '+esc(a.name)+'</span><button class="attach-rm" onclick="removeAttach('+i+')">×</button></div>';}).join('');}
+function toast(msg,col,dur){
+  document.querySelectorAll('.nx-toast').forEach(function(x){x.remove();});
+  var t=document.createElement('div');t.className='nx-toast';
+  t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--bg3);border:1px solid var(--b);border-radius:8px;padding:9px 15px;font-size:11px;z-index:9999;color:'+(col||'var(--cyan)')+';animation:toastIn .2s ease;pointer-events:none;';
+  document.body.appendChild(t);
+  setTimeout(function(){t.remove();},(dur||2800));
+}
+
+// ─── FIX: isOwner checks plan='owner' ──────────────────────────────────────
+function isOwner(){
+  if(!SESSION)return false;
+  var plan=(S.plan||SESSION.data&&SESSION.data.plan||'').toLowerCase();
+  if(plan==='owner'||plan==='unlimited')return true;
+  var roles=(SESSION.data&&SESSION.data.roles)||[];
+  if(roles.indexOf('owner')>=0)return true;
+  return OWNER_IDS.indexOf(String(SESSION.user.robloxId||''))>=0||
+    OWNER_IDS.indexOf(String(SESSION.user.username||'').toLowerCase())>=0;
+}
+function isAdmin(){
+  if(!SESSION)return false;
+  if(isOwner())return true;
+  var roles=(SESSION.data&&SESSION.data.roles)||[];
+  return roles.indexOf('admin')>=0||ADMIN_IDS.indexOf(String(SESSION.user.robloxId||''))>=0;
+}
+
+// ─── FIX: saveS now saves curConv ─────────────────────────────────────────
+function saveS(){
+  if(!SESSION)return;
+  SESSION.data.credits=S.credits;
+  SESSION.data.convs=S.convs;
+  SESSION.data.plan=S.plan;
+  SESSION.data.model=S.model;
+  SESSION.data.lastClaim=S.lastClaim;
+  SESSION.data.curConv=S.curConv; // FIX: persist curConv
+  try{localStorage.setItem('nexus_session',JSON.stringify(SESSION));}catch(e){}
+  try{
+    fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({user:(SESSION.user.username||'').toLowerCase(),data:SESSION.data})});
+  }catch(e){}
+}
+
+// ─── FIX: loadS now loads curConv ─────────────────────────────────────────
+async function loadS(){
+  if(!SESSION)return;
+  var u=SESSION;
+  S.credits=parseFloat((u.data&&u.data.credits!==undefined)?u.data.credits:30)||30;
+  S.convs=(u.data&&u.data.convs)||[];
+  S.plan=(u.data&&u.data.plan)||'free';
+  S.lastClaim=(u.data&&u.data.lastClaim)||null;
+  S.curConv=(u.data&&u.data.curConv)||null; // FIX: restore curConv
+  if(u.data&&u.data.model)S.model=u.data.model;
+  try{
+    var r=await fetch('/api/sync?user='+encodeURIComponent((SESSION.user.username||'').toLowerCase()));
+    if(r.ok){
+      var d=await r.json();
+      if(d&&d.credits!==undefined){
+        S.credits=parseFloat(d.credits)||0;
+        S.plan=d.plan||S.plan;
+        S.lastClaim=d.lastClaim||S.lastClaim;
+        if(d.convs&&d.convs.length)S.convs=d.convs;
+        if(d.curConv)S.curConv=d.curConv; // FIX: restore from server
+        SESSION.data=Object.assign(SESSION.data||{},d);
+      }
+    }
+  }catch(e){}
+}
+async function loadKeys(){
+  try{var r=await fetch('/api/main');if(r.ok){var d=await r.json();K.gemini=d.gemini_key||'';}}catch(e){}
+}
+async function loadAdminIds(){
+  try{var r=await fetch('/api/sync?admin_ids=1');if(r.ok){var d=await r.json();if(d.admin_ids)ADMIN_IDS=d.admin_ids;}}catch(e){}
+}
+
+// ─── LANG ──────────────────────────────────────────────────────────────────
+function applyLang(){
+  var t=LANGS[curLang]||LANGS.id;
+  var el=document.getElementById('inp');if(el)el.placeholder=t.placeholder;
+  var nc=document.getElementById('newChatLbl');if(nc)nc.textContent=t.newchat;
+  var rc=document.getElementById('recentLbl');if(rc)rc.textContent=t.recent;
+  var ls=document.getElementById('langSelector');if(ls)ls.value=curLang;
+  updateModelUI();
+}
+function changeLang(l){curLang=l;localStorage.setItem('nexus_lang',l);applyLang();renderConvs();}
+
+// ─── STUDIO POLL ───────────────────────────────────────────────────────────
+function setStudioStatus(on){
+  studioConnected=on;
+  var badge=document.getElementById('studioBadge');
+  var dot=document.getElementById('studioDot');
+  var txt=document.getElementById('studioTxt');
+  var banner=document.getElementById('plugBanner');
+  var bannerTxt=document.getElementById('plugBannerTxt');
+  var t=LANGS[curLang]||LANGS.id;
+  if(on){
+    if(badge)badge.className='status-badge on';
+    if(dot)dot.className='sdot pulse';
+    if(txt)txt.textContent=t.son;
+    if(banner)banner.className='plug-banner connected';
+    if(bannerTxt)bannerTxt.textContent=t.connected;
+  }else{
+    if(badge)badge.className='status-badge off';
+    if(dot)dot.className='sdot pulse';
+    if(txt)txt.textContent=t.soff;
+    if(banner)banner.className='plug-banner';
+    if(bannerTxt)bannerTxt.textContent=t.disconnected;
+  }
+}
+function startStudioPoll(){
+  if(studioPollTimer)clearInterval(studioPollTimer);
+  checkStudio();
+  // Poll every 5s for faster status updates
+  studioPollTimer=setInterval(checkStudio,5000);
+}
+async function checkStudio(){
+  if(!SESSION)return;
+  var username=(SESSION.user.username||'').toLowerCase();
+  try{
+    var r=await fetch(API_URL+'?check=1&user='+encodeURIComponent(username),{signal:AbortSignal.timeout(5000)});
+    if(r.ok){
+      var d=await r.json();
+      // FIX: check all possible status fields
+      var connected=(d._pluginConnected===true||d.connected===true||d.online===true);
+      setStudioStatus(connected);
+    }else{
+      setStudioStatus(false);
+    }
+  }catch(e){
+    setStudioStatus(false);
+  }
+}
+async function retryStudio(){
+  toast(curLang==='id'?'Menghubungkan ulang...':'Reconnecting...');
+  await checkStudio();
+}
+
+// ─── CREDITS ───────────────────────────────────────────────────────────────
+function updateCreds(){
+  var v=isOwner()||isAdmin()?'∞':parseFloat(S.credits||0).toFixed(2);
+  var el=document.getElementById('credDisp');if(el)el.textContent=v;
+  var el2=document.getElementById('settingsCredits');if(el2)el2.textContent=v+' CR';
+  var el3=document.getElementById('settingsUsername');if(el3)el3.textContent='@'+(SESSION&&SESSION.user.username||'-');
+  var el4=document.getElementById('settingsRobloxId');if(el4)el4.textContent=SESSION&&SESSION.user.robloxId||'-';
+  var credsEl=document.getElementById('credsEl');
+  if(credsEl){
+    if(!isOwner()&&!isAdmin()&&parseFloat(S.credits)<5)credsEl.classList.add('low');
+    else credsEl.classList.remove('low');
+  }
+}
+function checkDailyCredits(){
+  if(isOwner()||isAdmin())return;
+  var lastClaim=S.lastClaim;
+  var now=new Date();
+  var claimEl=document.getElementById('lastClaimInfo');
+  var claimBtn=document.getElementById('claimDailyBtn');
+  if(lastClaim){
+    var last=new Date(lastClaim);
+    var diffHrs=(now-last)/3600000;
+    if(diffHrs<24){
+      if(claimEl)claimEl.textContent='Next claim: '+(Math.ceil(24-diffHrs))+'h';
+      if(claimBtn)claimBtn.disabled=true;
+      return;
+    }
+  }
+  if(claimEl)claimEl.textContent='Daily credits available!';
+  if(claimBtn)claimBtn.disabled=false;
+}
+function claimDaily(){
+  if(isOwner()||isAdmin())return;
+  var perDay=S.plan==='pro'?25:2;
+  S.credits+=perDay;
+  S.lastClaim=new Date().toISOString();
+  updateCreds();saveS();
+  var btn=document.getElementById('claimDailyBtn');if(btn)btn.disabled=true;
+  var el=document.getElementById('lastClaimInfo');if(el)el.textContent='Claimed +'+perDay+' CR!';
+  toast('+'+perDay+' CR claimed!','var(--green)');
+}
+
+// ─── FIX: Role Display — OWNER badge correct ───────────────────────────────
+function updateRoleDisplay(){
+  if(!SESSION)return;
+  var plan=S.plan||'free';
+  var isO=isOwner(),isA=isAdmin();
+  var roleEl=document.getElementById('sbRole');
+  var planEl=document.getElementById('settingsPlan');
+  var badgeEl=document.getElementById('settingsBadge');
+  var adminSec=document.getElementById('adminSection');
+  if(roleEl){
+    if(isO)roleEl.textContent='👑 Owner · Unlimited';
+    else if(isA)roleEl.textContent='🛡 Admin';
+    else if(plan==='pro')roleEl.textContent='⭐ Pro Member';
+    else roleEl.textContent='Roblox Developer';
+  }
+  if(planEl)planEl.textContent=isO?'OWNER':isA?'Admin':plan.charAt(0).toUpperCase()+plan.slice(1);
+  // FIX: correct badge for owner
+  if(badgeEl){
+    if(isO)badgeEl.innerHTML='<span class="badge-owner">OWNER</span>';
+    else if(isA)badgeEl.innerHTML='<span class="badge-admin">ADMIN</span>';
+    else if(plan==='pro')badgeEl.innerHTML='<span class="badge-pro">PRO</span>';
+    else badgeEl.innerHTML='<span style="font-size:9px;color:var(--dim);">FREE</span>';
+  }
+  if(adminSec)adminSec.style.display=(isO||isA)?'block':'none';
+}
+
+// ─── CONVS ─────────────────────────────────────────────────────────────────
+function renderConvs(){
+  var t=LANGS[curLang]||LANGS.id;
+  var list=document.getElementById('convList');if(!list)return;
+  if(!S.convs||!S.convs.length){list.innerHTML='<div class="conv-empty">'+t.noConv+'</div>';return;}
+  list.innerHTML=S.convs.slice().reverse().map(function(cv){
+    var act=cv.id===S.curConv?'act':'';
+    var time=cv.time?new Date(cv.time).toLocaleDateString('id-ID',{day:'2-digit',month:'2-digit'}):'';
+    return '<div class="ci '+act+'" onclick="loadConv(\''+cv.id+'\')">'+
+      '<div class="ci-title">'+esc(cv.title||'Percakapan')+'</div>'+
+      '<div class="ci-time">'+time+'</div>'+
+      '<button class="ci-del" onclick="delConv(event,\''+cv.id+'\')" title="Hapus">×</button>'+
+      '</div>';
+  }).join('');
+}
+function newChat(){
+  var id='c'+Date.now();
+  S.curConv=id;S.convs.push({id:id,title:'Percakapan Baru',time:Date.now(),msgs:[]});
+  renderConvs();renderMsgs([]);
+  var title=document.getElementById('chatTitle');if(title)title.textContent='Percakapan Baru';
+  var welcome=document.getElementById('welcome');if(welcome)welcome.style.display='flex';
+  var inp=document.getElementById('inp');if(inp){inp.value='';inp.style.height='auto';}
+  S.attachments=[];renderAttachRow();
+  saveS();
+}
+function loadConv(id){
+  var cv=S.convs.find(function(x){return x.id===id;});
+  if(!cv)return;
+  S.curConv=id;
+  renderConvs();
+  var title=document.getElementById('chatTitle');
+  if(title)title.textContent=cv.title||'Percakapan';
+  var welcome=document.getElementById('welcome');
+  if(welcome)welcome.style.display=(cv.msgs&&cv.msgs.length)?'none':'flex';
+  renderMsgs(cv.msgs||[]);
+  S.attachments=[];renderAttachRow();
+  var inp=document.getElementById('inp');
+  if(inp){inp.value=S.draftText[id]||'';inp.style.height='auto';if(inp.value)inp.style.height=Math.min(inp.scrollHeight,130)+'px';}
+  saveS(); // persist curConv on load
+}
+function delConv(e,id){
+  e.stopPropagation();
+  S.convs=S.convs.filter(function(x){return x.id!==id;});
+  if(S.curConv===id){
+    if(S.convs.length)loadConv(S.convs[S.convs.length-1].id);
+    else newChat();
+  }
+  renderConvs();saveS();
+}
+function saveDraft(){
+  if(!S.curConv)return;
+  var inp=document.getElementById('inp');
+  if(inp&&inp.value.trim())S.draftText[S.curConv]=inp.value;
+  else delete S.draftText[S.curConv];
+}
+async function setConvTitle(convId,firstMsg){
+  var cv=S.convs.find(function(x){return x.id===convId;});if(!cv)return;
+  var t=firstMsg.slice(0,45)+(firstMsg.length>45?'...':'');
+  cv.title=t;
+  var title=document.getElementById('chatTitle');if(title)title.textContent=t;
+  renderConvs();saveS();
+}
+
+// ─── MODEL UI ──────────────────────────────────────────────────────────────
+function getFirstRealModel(){
+  for(var i=0;i<MODEL_LIST.length;i++){
+    if(MODEL_LIST[i].id&&!MODEL_LIST[i].grp&&!MODEL_LIST[i].soon)return MODEL_LIST[i];
+  }
+  return {id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite',icon:'/icon/gemini.png'};
+}
+function updateModelUI(){
+  var m=S.model||getFirstRealModel();
+  var el=document.getElementById('inpMName');if(el)el.textContent=m.label||m.id;
+  var badge=document.getElementById('inpMBadge');
+  if(badge){
+    badge.textContent=(m.cost||0)+' CR';
+    badge.style.color=m.cost<=1?'var(--green)':m.cost<=3?'var(--cyan)':m.cost<=5?'var(--yellow)':'var(--pink)';
+  }
+  var icon=document.getElementById('inpMIcon');if(icon){icon.src=m.icon||'';icon.style.display=m.icon?'':'none';}
+  var gm=S.guiModel||getFirstRealModel();
+  var gel=document.getElementById('guiMName');if(gel)gel.textContent=gm.label||gm.id;
+  var gbadge=document.getElementById('guiMBadge');
+  if(gbadge){
+    gbadge.textContent=(gm.cost||0)+' CR';
+    gbadge.style.color=gm.cost<=1?'var(--green)':gm.cost<=3?'var(--cyan)':'var(--yellow)';
+  }
+  var gicon=document.getElementById('guiMIcon');if(gicon){gicon.src=gm.icon||'';gicon.style.display=gm.icon?'':'none';}
+}
+function buildModelDDHtml(){
+  var html='';
+  // Available models
+  MODEL_LIST.forEach(function(m){
+    if(m.grp){html+='<div class="mg">'+esc(m.grp)+'</div>';return;}
+    var isAct=m.id===S.model.id;
+    var cls='mo'+(isAct?' act':'');
+    var badgeHtml='';
+    if(m.badge){
+      var bc=m.badge==='FAST'?'f':m.badge==='BEST'||m.badge==='NEW'?'p':'s';
+      badgeHtml='<span class="mb '+bc+'">'+m.badge+'</span>';
+    }else{
+      badgeHtml='<span class="mb '+(m.cost<=1?'f':m.cost<=2?'s':'p')+'">'+m.cost+' CR</span>';
+    }
+    var iconHtml=m.icon?'<img src="'+m.icon+'" onerror="this.style.display=\'none\'" style="width:18px;height:18px;object-fit:contain;border-radius:3px;">':'<div style="width:18px;height:18px;border-radius:3px;background:rgba(0,229,255,.1);display:flex;align-items:center;justify-content:center;font-size:9px;">AI</div>';
+    html+='<div class="'+cls+'" onclick="selModel(\''+m.id+'\')">' +
+      '<div class="mo-icon">'+iconHtml+'</div>'+
+      '<div><div class="mo-n">'+esc(m.label||m.id)+'</div><div class="mo-s">'+esc(m.prov||'')+'</div></div>'+
+      badgeHtml+'</div>';
+  });
+  // Coming soon section
+  html+='<div class="mg" style="color:rgba(255,45,107,.6);border-top:1px solid rgba(255,45,107,.15);">🔒 COMING SOON</div>';
+  MODEL_LIST_SOON.forEach(function(m){
+    if(m.grp){html+='<div class="mg" style="opacity:.5;">'+esc(m.grp)+'</div>';return;}
+    var iconHtml=m.icon?'<img src="'+m.icon+'" onerror="this.style.display=\'none\'" style="width:18px;height:18px;object-fit:contain;border-radius:3px;opacity:.4;">':'<div style="width:18px;height:18px;border-radius:3px;background:rgba(100,100,100,.1);opacity:.4;">AI</div>';
+    html+='<div class="mo disabled">'+
+      '<div class="mo-icon">'+iconHtml+'</div>'+
+      '<div><div class="mo-n" style="opacity:.4;">'+esc(m.label||m.id)+'<span style="font-size:8px;color:var(--pink);margin-left:5px;">Soon</span></div><div class="mo-s" style="opacity:.4;">'+esc(m.prov||'')+'</div></div>'+
+      '<span class="mb" style="opacity:.3;background:rgba(100,100,100,.1);color:#888;">'+m.cost+' CR</span></div>';
+  });
+  return html;
+}
+function toggleMDD(e){
+  e.stopPropagation();
+  var dd=document.getElementById('mDD');
+  if(!dd)return;
+  dd.innerHTML=buildModelDDHtml();
+  var btn=document.getElementById('inpModelBtn');
+  if(btn){
+    var rect=btn.getBoundingClientRect();
+    dd.style.bottom=(window.innerHeight-rect.top+4)+'px';
+    dd.style.left=rect.left+'px';
+    dd.style.right='auto';
+  }
+  dd.classList.toggle('open');
+}
+function selModel(id){
+  if(!id)return;
+  var m=MODEL_LIST.find(function(x){return x.id===id;});
+  if(!m||m.grp||m.soon)return;
+  S.model=m;updateModelUI();
+  var dd=document.getElementById('mDD');if(dd)dd.classList.remove('open');
+  saveS();
+}
+function toggleGuiMDD(e){
+  e.stopPropagation();
+  var dd=document.getElementById('guiMDD');
+  if(!dd)return;
+  dd.innerHTML=buildModelDDHtml();
+  var btn=document.getElementById('guiModelBtn');
+  if(btn){var rect=btn.getBoundingClientRect();dd.style.top=rect.bottom+'px';dd.style.left=rect.left+'px';}
+  dd.classList.toggle('open');
+}
+function selGuiModel(id){
+  var m=MODEL_LIST.find(function(x){return x.id===id;});
+  if(!m||m.grp||m.soon)return;
+  S.guiModel=m;updateModelUI();
+  var dd=document.getElementById('guiMDD');if(dd)dd.classList.remove('open');
+}
+
+// ─── RENDER MSGS ───────────────────────────────────────────────────────────
+function safeMarked(md){
+  try{if(typeof marked==='undefined')return esc(md);return marked.parse(String(md||''));}
+  catch(e){return esc(md);}
+}
+function renderMsgs(msgs){
+  var container=document.getElementById('msgs');if(!container)return;
+  var welcome=document.getElementById('welcome');
+  if(!msgs||!msgs.length){
+    if(welcome)welcome.style.display='flex';
+    container.querySelectorAll('.msg,.thinking-wrap').forEach(function(el){el.remove();});
+    return;
+  }
+  if(welcome)welcome.style.display='none';
+  container.querySelectorAll('.msg,.thinking-wrap,.studio-inject-card').forEach(function(el){el.remove();});
+  msgs.forEach(function(m){appendMsg(m,true);});
+  container.scrollTop=container.scrollHeight;
+}
+function mkAv(role){
+  var av=document.createElement('div');av.className='av';
+  if(role==='ai'){
+    var img=document.createElement('img');img.src='nexusai.png';img.alt='N';
+    img.onerror=function(){this.parentElement.style.cssText='display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--cyan);background:linear-gradient(135deg,rgba(0,229,255,.2),rgba(136,0,255,.2));';this.remove();this.parentElement.textContent='N';};
+    av.appendChild(img);
+  }else if(SESSION&&SESSION.user.avatar){
+    var img2=document.createElement('img');img2.src=SESSION.user.avatar;img2.alt='U';av.appendChild(img2);
+  }else{
+    av.style.cssText='display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--cyan);background:rgba(0,229,255,.1);';
+    av.textContent=(SESSION&&SESSION.user.username?SESSION.user.username.charAt(0).toUpperCase():'U');
+  }
+  return av;
+}
+function appendMsg(m,skipScroll){
+  var container=document.getElementById('msgs');if(!container)return;
+  var welcome=document.getElementById('welcome');if(welcome)welcome.style.display='none';
+  var isUser=m.role==='user';
+  var wrap=document.createElement('div');wrap.className='msg '+(isUser?'user':'ai');
+  wrap.appendChild(mkAv(m.role));
+  var mbWrap=document.createElement('div');mbWrap.className='mb-wrap';
+  var sender=document.createElement('div');sender.className='msg-sender';
+  var t=new Date(m.time||Date.now());
+  sender.innerHTML='<span>'+(isUser?'@'+(SESSION&&SESSION.user.username||'You'):'NEXUS AI')+'</span><span>'+t.toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'})+'</span>';
+  mbWrap.appendChild(sender);
+  var bubble=document.createElement('div');bubble.className='bubble';
+  var content=String(m.content||'');
+  var codeRe=/```(\w*)\n?([\s\S]*?)```/g;
+  var codeBlocks=[];
+  var processed=content.replace(codeRe,function(match,lang,code){
+    var idx=codeBlocks.length;codeBlocks.push({lang:lang||'',code:code.trim()});return '%%CB_'+idx+'%%';
+  });
+  var parts=processed.split(/(%%CB_\d+%%)/);
+  parts.forEach(function(part){
+    var cm=part.match(/%%CB_(\d+)%%/);
+    if(cm){
+      var cb=codeBlocks[parseInt(cm[1])];
+      var wrap2=document.createElement('div');wrap2.className='code-block-wrap';
+      var pre=document.createElement('pre');
+      var codeEl=document.createElement('code');
+      codeEl.className=cb.lang?'language-'+cb.lang:'';
+      codeEl.textContent=cb.code;
+      pre.appendChild(codeEl);wrap2.appendChild(pre);
+      var btns=document.createElement('div');btns.className='code-btns';
+      btns.innerHTML='<button class="cbtn" onclick="copyCode(this)"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>'+
+        '<button class="cbtn dl" onclick="downloadCode(this,\''+cb.lang+'\')"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>DL</button>';
+      wrap2.appendChild(btns);
+      try{hljs.highlightElement(codeEl);}catch(err){}
+      bubble.appendChild(wrap2);
+    }else if(part.trim()){
+      var div=document.createElement('div');div.innerHTML=safeMarked(part);bubble.appendChild(div);
+    }
+  });
+  if(m.injected&&m.injected.length){
+    var card=document.createElement('div');card.className='studio-inject-card';
+    card.innerHTML='<div class="sc-title"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>✅ NEXUS AI INJECTED TO STUDIO</div>'+
+      m.injected.map(function(it){return '<div class="sc-item">'+esc(it)+'</div>';}).join('');
+    bubble.appendChild(card);
+  }
+  mbWrap.appendChild(bubble);
+  if(!isUser){
+    var acts=document.createElement('div');acts.className='msg-acts';
+    acts.innerHTML='<button class="mab" onclick="copyMsgText(this)" title="Copy" style="font-size:9.5px;color:var(--dim);background:none;border:none;cursor:pointer;padding:2px 7px;border-radius:3px;"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>';
+    mbWrap.appendChild(acts);
+  }
+  wrap.appendChild(mbWrap);
+  container.appendChild(wrap);
+  if(!skipScroll)container.scrollTop=container.scrollHeight;
+}
+function copyCode(btn){
+  var pre=btn.closest('.code-block-wrap').querySelector('pre code');
+  if(pre)navigator.clipboard.writeText(pre.textContent).then(function(){toast('Copied!');});
+}
+function downloadCode(btn,lang){
+  var pre=btn.closest('.code-block-wrap').querySelector('pre code');
+  if(!pre)return;
+  var ext=lang==='lua'||lang==='luau'?'.lua':lang?'.'+lang:'.txt';
+  var a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(pre.textContent);
+  a.download='nexus_script'+ext;a.click();
+}
+function copyMsgText(btn){
+  var bubble=btn.closest('.mb-wrap').querySelector('.bubble');
+  if(bubble)navigator.clipboard.writeText(bubble.innerText||bubble.textContent).then(function(){toast('Copied!');});
+}
+
+// ─── ENHANCED THINKING UI ──────────────────────────────────────────────────
+function toggleThinking(){
+  thinkingEnabled=!thinkingEnabled;
+  var btn=document.getElementById('thinkToggle');
+  if(btn)btn.className='think-toggle'+(thinkingEnabled?' active':'');
+}
+function showThinking(stepsArr){
+  rmThinking();
+  var container=document.getElementById('msgs');if(!container)return null;
+  var welcome=document.getElementById('welcome');if(welcome)welcome.style.display='none';
+  var wrap=document.createElement('div');wrap.className='thinking-wrap';
+  wrap.appendChild(mkAv('ai'));
+  var box=document.createElement('div');box.className='thinking-box';
+  var hdr=document.createElement('div');hdr.className='thinking-hdr';
+  hdr.innerHTML='<div class="tspin"></div><span style="font-family:Orbitron,sans-serif;letter-spacing:.5px;">NEXUS AI</span><span style="font-size:8px;color:var(--dim);margin-left:auto;">berpikir...</span>';
+  box.appendChild(hdr);
+  // Progress bar
+  var progWrap=document.createElement('div');progWrap.className='t-progress';
+  var progBar=document.createElement('div');progBar.className='t-progress-bar';
+  progWrap.appendChild(progBar);box.appendChild(progWrap);
+  var stepsDiv=document.createElement('div');stepsDiv.className='t-steps';
+  var steps2=stepsArr||['Menganalisis...','Merancang...','Menulis kode...','Finalisasi...'];
+  var stepEls=steps2.map(function(s,i){
+    var el=document.createElement('div');el.className='t-step'+(i===0?' active':'');
+    el.innerHTML='<div class="t-step-ic"></div><span>'+esc(s)+'</span>';
+    stepsDiv.appendChild(el);return el;
+  });
+  box.appendChild(stepsDiv);
+  var canBtn=document.createElement('button');canBtn.className='cancel-btn';
+  canBtn.textContent=(LANGS[curLang]||LANGS.id).cancel;
+  canBtn.onclick=cancelGen;box.appendChild(canBtn);
+  wrap.appendChild(box);container.appendChild(wrap);
+  container.scrollTop=container.scrollHeight;
+  thinkEl=wrap;
+  // Animate progress + steps
+  var step=0;
+  var progPct=0;
+  var progTimer=setInterval(function(){
+    if(!thinkEl){clearInterval(progTimer);return;}
+    progPct=Math.min(progPct+2,88);
+    progBar.style.width=progPct+'%';
+  },200);
+  function nextStep(){
+    if(!thinkEl||step>=stepEls.length){clearInterval(progTimer);return;}
+    if(step>0)stepEls[step-1].className='t-step done';
+    stepEls[step].className='t-step active';
+    step++;
+    if(step<stepEls.length)setTimeout(nextStep,1400);
+  }
+  setTimeout(nextStep,600);
+  return wrap;
+}
+function rmThinking(){
+  if(thinkEl){thinkEl.remove();thinkEl=null;}
+  document.querySelectorAll('.thinking-wrap').forEach(function(el){el.remove();});
+}
+
+// ─── CANCEL ────────────────────────────────────────────────────────────────
+function cancelGen(){
+  if(S.cancelCtrl)S.cancelCtrl.abort();
+  S.gen=false;S.cancelCtrl=null;rmThinking();
+  var sendBtn=document.getElementById('sendBtn');var cancelBtn=document.getElementById('cancelBtn');
+  if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');
+  toast((LANGS[curLang]||LANGS.id).cancel,'var(--yellow)');
+}
+
+// ─── LUA/JSON PARSING ──────────────────────────────────────────────────────
+function parseLuaBlocks(text){
+  var blocks=[];
+  var re=/```(?:lua|luau)\s*([\s\S]*?)```/g,m;
+  while((m=re.exec(text))!==null){
+    var code=m[1].trim();
+    if(code.length<10)continue;
+    if(/^\s*[\[{]/.test(code)&&/"action"\s*:/.test(code))continue;
+    blocks.push(code);
+  }
+  return blocks;
+}
+function parseJsonBlocks(text){
+  var cmds=[];
+  var re=/```json\s*([\s\S]*?)```/g,m;
+  while((m=re.exec(text))!==null){
+    try{
+      var parsed=JSON.parse(m[1].trim());
+      var items=Array.isArray(parsed)?parsed:[parsed];
+      items.forEach(function(item){if(item&&item.action)cmds.push(item);});
+    }catch(e){}
+  }
+  return cmds;
+}
+function detectScriptParent(code){
+  if(/ReplicatedFirst|LoadingScreen/i.test(code)&&/ScreenGui|Frame|ImageLabel/i.test(code))
+    return{parent:'ReplicatedFirst',type:'LocalScript'};
+  if(/^\s*local\s+\w+\s*=\s*\{\}|return\s+\{/.test(code)||/module/i.test(code.slice(0,50)))
+    return{parent:'ReplicatedStorage',type:'ModuleScript'};
+  if(/DataStoreService|PlayerAdded|PlayerRemoving|OnServerEvent/.test(code))
+    return{parent:'ServerScriptService',type:'Script'};
+  if(/Players\.LocalPlayer|PlayerGui|StarterPlayerScripts|UserInputService/.test(code))
+    return{parent:'StarterGui',type:'LocalScript'};
+  return{parent:'ServerScriptService',type:'Script'};
+}
+function makeScriptName(userPrompt,index,code){
+  if(code){var nm=code.match(/--\s*name:\s*([\w_]+)/i);if(nm&&nm[1]&&nm[1].length>2)return nm[1];}
+  var lower=(userPrompt||'').toLowerCase();
+  var kw=[
+    ['loading screen','LoadingScreen_Client'],['loading','LoadingScreen_Client'],
+    ['shop gui','ShopGUI_Client'],['shop','ShopSystem_Server'],
+    ['server list','ServerListUI'],['tycoon','TycoonSystem_Server'],
+    ['leaderboard','Leaderboard_Server'],['admin','AdminSystem_Server'],
+    ['coin','CoinSystem_Server'],['money','MoneySystem_Server'],
+    ['inventory','InventorySystem'],['quest','QuestSystem_Server'],
+    ['npc','NPCBehavior_Server'],['door','DoorSystem_Server'],
+    ['datastore','DataStore_Module'],['kill brick','KillBrick_Script'],
+    ['music','MusicPlayer_Client'],['weapon','WeaponSystem'],
+    ['tool','ToolHandler'],['sword','SwordTool'],['round','RoundSystem_Server'],
+    ['menu','MenuSystem_Client'],['hud','HUD_Client'],['badge','BadgeAwarder'],
+    ['timer','TimerSystem'],['sprint','SprintHandler_Client'],
+    ['animation','AnimationController'],['map','MapLoader_Server'],
+    ['gui','GUIScript_Client'],['pet','PetSystem_Server'],
+  ];
+  for(var i=0;i<kw.length;i++){if(lower.includes(kw[i][0]))return kw[i][1]+(index>0?'_'+(index+1):'');}
+  return 'GameScript'+(index>0?'_'+(index+1):'');
+}
+
+// ─── INJECT TO STUDIO ──────────────────────────────────────────────────────
+async function autoInjectToStudio(aiResponse,userPrompt){
+  if(!studioConnected)return null;
+  var summary=[];
+  var username=(SESSION?SESSION.user.username:'').toLowerCase();
+  var jsonCmds=parseJsonBlocks(aiResponse);
+  if(jsonCmds.length>0){
+    try{
+      var r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({type:'batch_commands',commands:jsonCmds,
+          _user:SESSION?SESSION.user.username:'web',_target_user:username,target:username})});
+      if(r.ok){
+        var rd=await r.json();
+        if(rd.pushed>0){
+          jsonCmds.forEach(function(cmd){
+            var nm=cmd.name||'',a=cmd.action||'';
+            if(a==='create_remote')summary.push('+'+(cmd.remote_type||'RemoteEvent')+': '+nm);
+            else if(a==='create_part')summary.push('+Part: '+(nm||'Part'));
+            else if(a==='create_folder')summary.push('+Folder: '+nm);
+            else if(a==='create_gui')summary.push('+ScreenGui: '+nm);
+            else if(a==='set_lighting')summary.push('+Lighting updated');
+            else if(a==='batch_create')summary.push('+Model: '+(cmd.model_name||'Group'));
+            else if(a==='batch_commands')(cmd.commands||[]).forEach(function(c2){
+              if(c2.action&&c2.action!=='none')summary.push('+'+c2.action+(c2.name?': '+c2.name:''));
+            });
+            else if(a!=='none')summary.push('+'+a+(nm?': '+nm:''));
+          });
+        }
+      }
+    }catch(e){console.warn('JSON inject:',e.message);}
+  }
+  var luaBlocks=parseLuaBlocks(aiResponse);
+  for(var i=0;i<luaBlocks.length;i++){
+    var code=luaBlocks[i];
+    var info=detectScriptParent(code);
+    var sName=makeScriptName(userPrompt,i,code);
+    var tm=code.match(/--\s*script_type:\s*(\w+)/i);if(tm)info.type=tm[1];
+    var pm=code.match(/--\s*parent:\s*([\w.]+)/i);if(pm)info.parent=pm[1];
+    try{
+      var r2=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({type:'inject_command',command:{action:'inject_script',name:sName,
+          parent:info.parent,script_type:info.type,code:code},
+          _user:SESSION?SESSION.user.username:'web',_target_user:username,target:username})});
+      if(r2.ok){var rd2=await r2.json();if(rd2.status==='ok'||rd2.pushed>0)summary.push(info.type+': '+sName+' → '+info.parent);}
+    }catch(e){}
+    if(luaBlocks.length>1)await new Promise(function(res){setTimeout(res,300);});
+  }
+  return summary.length>0?summary:null;
+}
+
+// ─── IMPROVED SYSTEM PROMPT ────────────────────────────────────────────────
+function buildSysPrompt(){
+  var u=SESSION?SESSION.user:{username:'Unknown',displayName:'Unknown'};
+  var connected=studioConnected;
+  var dn=u.displayName||u.username||'Developer';
+  var un=u.username||'Unknown';
+  var cr=isOwner()||isAdmin()?'Unlimited':parseFloat(S.credits||0).toFixed(2);
+  var now=new Date();
+  var isID=curLang==='id';
+
+  var langRule=isID
+    ?'WAJIB: Selalu balas dalam Bahasa Indonesia yang profesional dan sopan. Gunakan "Anda" dan "saya". Bersikaplah seperti expert Roblox developer profesional.'
+    :'REQUIRED: Always respond in English professionally. Be like an expert Roblox developer.';
+
+  var jsonFull=
+'──────────────── SEMUA JSON ACTIONS ────────────────\n'+
+'SCRIPTS:\n'+
+'  inject_script   → {action:"inject_script",name:"NamaScript",parent:"ServerScriptService",script_type:"Script|LocalScript|ModuleScript",code:"-- kode lua..."}\n'+
+'  batch_inject    → {action:"batch_inject",scripts:[{name,parent,script_type,code}]}\n'+
+'  edit_script     → {action:"edit_script",name,parent,source,script_type}\n'+
+'  read_script     → {action:"read_script",name,parent}\n'+
+'  list_scripts    → {action:"list_scripts",parent}\n'+
+'\n'+
+'REMOTES / INSTANCES:\n'+
+'  create_remote   → {action:"create_remote",name:"NamaRemote",parent:"ReplicatedStorage",remote_type:"RemoteEvent|RemoteFunction|BindableEvent"}\n'+
+'  batch_remote    → {action:"batch_remote",remotes:[{name,parent,remote_type}]}\n'+
+'  create_folder   → {action:"create_folder",name,parent,type:"Folder|Model"}\n'+
+'  create_instance → {action:"create_instance",class_name:"ClassName",name,parent,properties:{...}}\n'+
+'  create_value    → {action:"create_value",name,parent,value_type:"string|int|number|bool",value}\n'+
+'\n'+
+'PARTS / WORLD:\n'+
+'  create_part     → {action:"create_part",name,color:[R,G,B],size:[x,y,z],position:[x,y,z],material:"SmoothPlastic|Neon|Glass|...",anchored:true}\n'+
+'  create_wedge    → {action:"create_wedge",name,color:[R,G,B],size:[x,y,z],position:[x,y,z]}\n'+
+'  create_sphere   → {action:"create_sphere",name,color:[R,G,B],size:[r,r,r],position:[x,y,z]}\n'+
+'  create_cylinder → {action:"create_cylinder",name,color:[R,G,B],size:[x,y,z],position:[x,y,z]}\n'+
+'  batch_create    → {action:"batch_create",model_name:"NamaModel",group_as_model:true,parts:[{name,color,size,position,material}]}\n'+
+'  modify_part     → {action:"modify_part",name,parent,properties:{Color:[R,G,B],Size:[x,y,z],Position:[x,y,z],Material:"...",Transparency:0}}\n'+
+'  move_object     → {action:"move_object",name,parent,position:[x,y,z]}\n'+
+'  rotate_object   → {action:"rotate_object",name,parent,rotation:[rx,ry,rz]}\n'+
+'  resize_object   → {action:"resize_object",name,parent,size:[x,y,z]}\n'+
+'  delete_object   → {action:"delete_object",name,parent}\n'+
+'  delete_multiple → {action:"delete_multiple",names:[...],parent}\n'+
+'  group_parts     → {action:"group_parts",parts:[...],model_name}\n'+
+'  anchor_all      → {action:"anchor_all"}\n'+
+'  clone_object    → {action:"clone_object",name,parent,new_name,target_parent}\n'+
+'\n'+
+'GUI / UI:\n'+
+'  create_gui      → {action:"create_gui",name,parent:"StarterGui",elements:[{class:"Frame|TextLabel|TextButton|TextBox|ImageLabel|ScrollingFrame",name,properties:{Size:UDim2,Position:UDim2,BackgroundColor3:[R,G,B],Text:"...",TextColor3:[R,G,B],Font:"GothamBold",TextSize:14,BackgroundTransparency:0},children:[...]}],script_code:"-- LocalScript code"}\n'+
+'  create_billboard → {action:"create_billboard",name,parent,target:"PartName",size:[w,h],study_offset:[x,y,z],elements:[...]}\n'+
+'  create_surface_gui → {action:"create_surface_gui",name,parent,target,face:"Front|Top|Back",elements:[...]}\n'+
+'\n'+
+'LIGHTING / WORLD:\n'+
+'  set_lighting    → {action:"set_lighting",brightness:1,ambient:[R,G,B],outdoor_ambient:[R,G,B],time:14,fog_end:1000,fog_start:100,shadows:true,atmosphere:{density:0.3,haze:0.5,color:[R,G,B]}}\n'+
+'  create_sky      → {action:"create_sky",star_count:3000}\n'+
+'  fill_terrain    → {action:"fill_terrain",position:[x,y,z],size:[w,h,d],material:"Grass|Water|Rock|Sand"}\n'+
+'  clear_terrain   → {action:"clear_terrain"}\n'+
+'  change_baseplate → {action:"change_baseplate",color:[R,G,B],material:"SmoothPlastic",size:[x,y,z]}\n'+
+'\n'+
+'EFFECTS / SOUNDS:\n'+
+'  create_sound    → {action:"create_sound",name,parent,sound_id:"rbxassetid://123",volume:1,looped:false}\n'+
+'  create_fire     → {action:"create_fire",target,parent,size:5,heat:9,color1:[255,100,0],color2:[255,200,0]}\n'+
+'  create_smoke    → {action:"create_smoke",target,parent,color:[R,G,B],opacity:0.5}\n'+
+'  create_sparkles → {action:"create_sparkles",target,parent,color:[R,G,B]}\n'+
+'  create_particle → {action:"create_particle",target,parent,rate:20,color1:[R,G,B],color2:[R,G,B],lifetime:1}\n'+
+'  create_light    → {action:"create_light",target,parent,light_type:"PointLight|SpotLight|SurfaceLight",brightness:5,range:16,color:[R,G,B]}\n'+
+'  create_trail    → {action:"create_trail",target,parent,color1:[R,G,B],color2:[R,G,B],lifetime:0.5}\n'+
+'  add_effect      → {action:"add_effect",parent:"Lighting",effect_type:"BloomEffect|ColorCorrectionEffect",properties:{Intensity:1}}\n'+
+'\n'+
+'NPC / OBJECTS:\n'+
+'  create_npc      → {action:"create_npc",name,position:[x,y,z],display_name,health:100,walkspeed:16,color:[R,G,B]}\n'+
+'  create_spawn    → {action:"create_spawn",name,position:[x,y,z],color:[R,G,B]}\n'+
+'  create_tool     → {action:"create_tool",name,parent:"StarterPack",tooltip:"",can_drop:true,size:[x,y,z],color:[R,G,B],script_code:"-- tool script"}\n'+
+'  create_seat     → {action:"create_seat",name,parent,position:[x,y,z],is_vehicle:false}\n'+
+'  create_team     → {action:"create_team",name,team_color:"Bright red",auto_assignable:false}\n'+
+'  create_animation → {action:"create_animation",name,parent,animation_id:"rbxassetid://123"}\n'+
+'\n'+
+'PHYSICS / JOINTS:\n'+
+'  weld_parts      → {action:"weld_parts",part0:"NamaPart1",part1:"NamaPart2",parent}\n'+
+'  create_attachment → {action:"create_attachment",name,target,parent,position:[x,y,z]}\n'+
+'  create_proximity_prompt → {action:"create_proximity_prompt",target,parent,action_text:"Interact",object_text:"",hold_duration:0}\n'+
+'  create_click_detector → {action:"create_click_detector",target,parent,max_distance:32}\n'+
+'\n'+
+'MISC:\n'+
+'  scan_workspace  → {action:"scan_workspace"}\n'+
+'  print_output    → {action:"print_output",message:"test"}\n'+
+'  run_lua         → {action:"run_lua",code:"print(\\"hello\\")"}\n'+
+'  clear_workspace → {action:"clear_workspace"}\n'+
+'  batch_commands  → {action:"batch_commands",commands:[...semua action di atas...]}';
+
+  var studioBlock=connected?(
+'STUDIO CONNECTED ✓ — JSON + Lua AUTO-INJECT AKTIF!\n'+
+'\n'+
+'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+
+'WAJIB IKUTI ATURAN INI SAAT STUDIO CONNECTED:\n'+
+'━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n'+
+'\n'+
+'🚫 DILARANG KERAS:\n'+
+'• JANGAN tampilkan blok ```json ke pengguna — sistem auto-inject akan memprosesnya di background!\n'+
+'• JANGAN tunjukkan technical details inject ke user\n'+
+'• JANGAN buat RemoteEvent/Function di dalam kode Lua — pakai JSON create_remote\n'+
+'\n'+
+'✅ YANG HARUS DILAKUKAN:\n'+
+'• Ketika user minta sesuatu (loading screen, GUI, sistem, dll):\n'+
+'  1. Output blok ```json berisi perintah inject (TIDAK ditampilkan ke user)\n'+
+'  2. Output blok ```lua berisi script yang harus diisi (TIDAK ditampilkan ke user)\n'+
+'  3. Berikan PENJELASAN SINGKAT & RAMAH ke user: apa saja yang telah dibuat,\n'+
+'     bagaimana menggunakannya, dan apa yang perlu dikonfigurasi\n'+
+'• Selalu ucapkan dengan bahasa natural apa saja yang sudah dimasukkan ke Studio\n'+
+'• Contoh respon yang benar: "✅ Berhasil! Saya telah membuat Loading Screen di ReplicatedFirst.\n'+
+'  Tampilannya berisi progress bar dengan animasi dan 5 tips acak. Anda bisa ubah warna\n'+
+'  di baris 12 dan tips di tabel TIPS_LIST."\n'+
+'\n'+
+'📋 FORMAT OUTPUT WAJIB:\n'+
+'• JSON inject → ```json [perintah action] ``` (auto-diproses, tidak tampil ke user)\n'+
+'• Script content → ```lua [kode lengkap dengan header] ``` (auto-diinject, tidak tampil)\n'+
+'• Penjelasan untuk user → teks biasa yang ramah dan informatif\n'+
+'\n'+
+'Header Lua WAJIB:\n'+
+'-- name: NamaScript_Client\n'+
+'-- parent: StarterGui\n'+
+'-- script_type: LocalScript\n'+
+'\n'+
+'Urutan inject: ModuleScript → Script → LocalScript\n'+
+'\n'+
+jsonFull
+  ):(
+'STUDIO OFFLINE — Plugin belum terhubung.\n'+
+'Saat offline, tulis SEMUA kode Lua lengkap dalam blok ```lua dengan header:\n'+
+'-- name: NamaScript\n'+
+'-- parent: ServiceName\n'+
+'-- script_type: Script/LocalScript/ModuleScript\n'+
+'\n'+
+'Untuk sistem multi-file, output setiap file dalam blok ```lua terpisah.\n'+
+'Sertakan komentar untuk memandu user meletakkan script di mana.\n'+
+'\n'+
+'JSON Actions reference (untuk ketika Studio terhubung):\n'+
+jsonFull
+  );
+
+  return [
+    '╔══════════════════════════════════════════════════╗',
+    '║  NEXUS AI — ROBLOX STUDIO EXPERT AI             ║',
+    '╚══════════════════════════════════════════════════╝',
+    'User   : "'+dn+'" (@'+un+') | Plan: '+S.plan+' | Credits: '+cr+' CR',
+    'Studio : '+(connected?'✓ CONNECTED':'✗ OFFLINE')+' | '+now.toLocaleString(),
+    '',
+    '── BAHASA ───────────────────────────────────────────',
+    langRule,
+    '',
+    '── IDENTITAS NEXUS AI ───────────────────────────────',
+    'Kamu adalah NEXUS AI — AI spesialis Roblox Studio nomor 1 di dunia.',
+    'Dibuat oleh NEXUS STUDIO (FIINYTID25).',
+    'Keahlian: Lua/Luau, Roblox API penuh, DataStore, GUI Design,',
+    'Game Systems, NPC AI, Physics, Networking, Anti-Exploit, Monetisasi.',
+    '',
+    '── ATURAN KODE WAJIB ────────────────────────────────',
+    '1.  Kode SELALU LENGKAP 100% — JANGAN dipotong atau tulis "-- etc / -- more code"',
+    '2.  Script 500+ baris = tetap tulis SEMUA tanpa singkatan apapun',
+    '3.  Gunakan task.wait() bukan wait() (wait() deprecated di Roblox modern)',
+    '4.  Gunakan task.spawn()/task.delay() untuk async operations',
+    '5.  Selalu pcall() untuk DataStore, HTTP, RemoteEvent yang berisiko',
+    '6.  Gunakan :WaitForChild(timeout) untuk assets yang mungkin belum ready',
+    '7.  Header script WAJIB: -- name:, -- parent:, -- script_type:',
+    '8.  Nama script DESKRIPTIF: LoadingScreen_Client, ShopSystem_Server, CoinModule',
+    '9.  Services: SELALU pakai game:GetService() bukan game.ServiceName',
+    '10. Validate SEMUA input dari client di server (penting anti-exploit!)',
+    '11. DataStore: selalu pcall + retry + yield pattern',
+    '12. GUI animasi: WAJIB pakai TweenService, JANGAN task.wait() untuk animasi',
+    '13. Jika debug/perbaiki → EDIT yang ada, jangan buat ulang dari nol',
+    '14. Untuk loading screen: LocalScript di ReplicatedFirst',
+    '15. Untuk server sistem: Script di ServerScriptService',
+    '16. Untuk shared modules: ModuleScript di ReplicatedStorage',
+    '',
+    '── ROBLOX LUA BEST PRACTICES ────────────────────────',
+    '• RemoteEvent: Server .OnServerEvent:Connect(func), Client :FireServer(data)',
+    '• RemoteFunction: Server .OnServerInvoke = func, Client :InvokeServer()',
+    '• DataStore pattern:',
+    '  local ok, data = pcall(store.GetAsync, store, key)',
+    '  if not ok then task.wait(1); ok, data = pcall(...) end',
+    '• Tween: TweenService:Create(obj, TweenInfo.new(t, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {props})',
+    '• NPC Movement: PathfindingService:CreatePath() + path:ComputeAsync()',
+    '• Cleanup: use :Disconnect() and script.Destroying:Connect()',
+    '• BindToClose: game:BindToClose(function() — save data sebelum shutdown)',
+    '• Tagging: CollectionService:AddTag()/GetTagged() untuk mass management',
+    '',
+    '── STUDIO CAPABILITIES ──────────────────────────────',
+    studioBlock,
+    '',
+    '── KARAKTER NEXUS AI ────────────────────────────────',
+    'Selalu beri solusi production-ready, bukan prototype.',
+    'Kode siap pakai di game Roblox nyata dengan ratusan/ribuan player.',
+    'Kalau Studio CONNECTED: langsung inject, lalu jelaskan dengan bahasa ramah.',
+    'Kalau Studio OFFLINE: tulis kode lengkap + panduan cara pasangnya.',
+  ].join('\n');
+}
+
+// ─── SEND MESSAGE ──────────────────────────────────────────────────────────
+function buildMsgs(){
+  var cv=S.convs.find(function(x){return x.id===S.curConv;});
+  if(!cv)return[];
+  return(cv.msgs||[]).slice(-28).map(function(m){
+    // Gunakan _rawContent (versi lengkap dengan JSON/Lua) untuk context AI
+    // bukan content yang sudah distrip
+    var content=m._rawContent||m.content||'';
+    if(Array.isArray(m.content)){return{role:m.role==='user'?'user':'model',content:m.content};}
+    return{role:m.role==='user'?'user':'model',content:String(content)};
+  });
+}
+// Detect request type for thinking steps
+function detectRequestType(txt){
+  var lower=txt.toLowerCase();
+  if(/error|fix|bug|perbaiki|debug|broken|crash|not work/.test(lower))return'debug';
+  if(/gui|hud|menu|shop|loading|inventory|screen|frame|button/.test(lower))return'gui';
+  if(/create|buat|inject|add|generate|json|action/.test(lower)&&studioConnected)return'json';
+  return'normal';
+}
+async function send(){
+  if(S.gen)return;
+  var inp=document.getElementById('inp');
+  var txt=(inp?inp.value.trim():'');
+  var attachments=S.attachments.slice();
+  if(!txt&&!attachments.length)return;
+  if(!isOwner()&&!isAdmin()){
+    if(S.credits<=-10){toast(curLang==='id'?'Credits habis! Beli di Payment.':'Credits exhausted!','var(--pink)');return;}
+    if(S.credits<0&&S.model.cost>1){toast(curLang==='id'?'Credits tidak cukup. Ganti ke model gratis.':'Credits low. Switch to free model.','var(--yellow)');return;}
+  }
+  if(!S.curConv)newChat();
+  var cv=S.convs.find(function(x){return x.id===S.curConv;});if(!cv)return;
+  S.gen=true;S.cancelCtrl=new AbortController();
+  var sendBtn=document.getElementById('sendBtn');var cancelBtn=document.getElementById('cancelBtn');
+  if(sendBtn)sendBtn.classList.add('hidden');if(cancelBtn)cancelBtn.classList.remove('hidden');
+  if(inp)inp.value='';if(inp)inp.style.height='auto';
+  delete S.draftText[S.curConv];
+  var userMsg={role:'user',content:txt,time:Date.now()};
+  if(attachments.length)userMsg.attachments=attachments;
+  cv.msgs=cv.msgs||[];cv.msgs.push(userMsg);
+  appendMsg(userMsg);
+  lastUserPrompt=txt;
+  S.attachments=[];renderAttachRow();
+  if(cv.msgs.length===1)setConvTitle(S.curConv,txt);
+  var t=LANGS[curLang]||LANGS.id;
+  var reqType=detectRequestType(txt);
+  var steps=reqType==='debug'?t.stepsDebug:reqType==='gui'?t.stepsGui:reqType==='json'?t.stepsJson:t.steps;
+  if(thinkingEnabled)showThinking(steps);
+  var msgs=buildMsgs();
+  var sysPrompt=buildSysPrompt();
+  var apiMsgs=msgs.slice(0,-1);
+  var lastM={role:'user',content:txt};
+  if(attachments.length){
+    var contentArr=[{type:'text',text:txt}];
+    attachments.forEach(function(a){if(a.type==='image')contentArr.push({type:'image',source:{type:'base64',media_type:a.mime,data:a.data}});});
+    lastM.content=contentArr;
+  }
+  apiMsgs.push(lastM);
+  var aiText='';
+  try{
+    var body={provider:S.model.prov||'gemini',model:S.model.id,messages:apiMsgs,system:sysPrompt,max_tokens:65536};
+    var response=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:S.cancelCtrl.signal});
+    if(!response.ok){
+      var errData=await response.json().catch(function(){return{};});
+      var errMsg=(errData.error||'API error '+response.status);
+      if(response.status===503||errMsg.includes('overloaded')||errMsg.includes('high demand')){
+        errMsg=(curLang==='id'?'Model sedang sibuk. Coba ganti model lain (contoh: Gemini 1.5 Flash).':'Model is busy. Try switching model.')+'\n\n'+errMsg;
+      }
+      throw new Error(errMsg);
+    }
+    var rd=await response.json();
+    aiText=rd.content||'';
+  }catch(e){
+    if(e.name==='AbortError'){
+      S.gen=false;S.cancelCtrl=null;
+      if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');
+      rmThinking();return;
+    }
+    aiText='**'+(curLang==='id'?'Gagal mendapatkan respons':'Failed to get response')+'**\n\n'+e.message+'\n\n'+(curLang==='id'?'💡 Coba ganti model atau periksa koneksi internet.':'💡 Try switching the model or check your connection.');
+  }
+  // ... bagian sebelumnya tetap sama hingga rmThinking()
+rmThinking();
+
+// Potongan kredit (tidak berubah)
+if(!isOwner() && !isAdmin() && aiText && !aiText.startsWith('**Gagal') && !aiText.startsWith('**Failed')){
+    S.credits = Math.max(-10, S.credits - (S.model.cost || 1));
+    updateCreds();
+}
+
+// ========== PERBAIKAN MULAI DI SINI ==========
+var injected = null;
+var displayText = aiText;   // <-- FIX: gunakan aiText (bukan aItext)
+
+if (typeof connected !== 'undefined' && connected && aiText && aiText.startsWith("***")) {
+    injected = await autoInjectToStudio(aiText, lastUserPrompt);
+    
+    // Hapus blok ```json ... ``` dan ```lua ... ```
+    displayText = aiText
+        .replace(/```json[\s\S]*?```/g, '')
+        .replace(/```lua[\s\S]*?```/g, '')
+        .trim();
+
+    if (!displayText || displayText.length < 10) {
+        displayText = curLang === "id"
+            ? 'Semua komponen telah berhasil dibuat dan dimasukkan ke Roblox Studio Anda.'
+            : 'Done! All components have been created and injected into your Roblox Studio.';
+    }
+}
+
+var aiMsg = {
+    role: 'ai',
+    content: displayText,
+    time: Date.now()
+};
+if (injected) aiMsg.injected = injected;
+
+cv.msgs.push(aiMsg);   // <-- FIX: msgs (bukan mes)
+
+// Simpan full AI text (dengan JSON/Lua) untuk konteks percakapan berikutnya
+var lastAiMsg = cv.msgs[cv.msgs.length - 1];
+lastAiMsg._rawContent = aiText;
+
+appendMsg(aiMsg);
+
+S.gen = false;
+S.cancelCtrl = null;
+
+if(sendBtn) sendBtn.classList.remove('hidden');
+if(cancelBtn) cancelBtn.classList.add('hidden');
+
+saveS();
+
+// ─── ATTACHMENTS ───────────────────────────────────────────────────────────
+function handleFile(e){
+  var files=Array.from(e.target.files||[]);
+  files.forEach(function(file){
+    if(file.type.startsWith('image/')){
+      var reader=new FileReader();
+      reader.onload=function(ev){S.attachments.push({type:'image',name:file.name,mime:file.type,data:ev.target.result.split(',')[1]});renderAttachRow();};
+      reader.readAsDataURL(file);
+    }else{
+      var reader=new FileReader();
+      reader.onload=function(ev){S.attachments.push({type:'file',name:file.name,text:ev.target.result});renderAttachRow();};
+      reader.readAsText(file);
+    }
+  });
+  e.target.value='';
+}
+function renderAttachRow(){
+  var row=document.getElementById('attachRow');if(!row)return;
+  row.innerHTML=S.attachments.map(function(a,i){
+    if(a.type==='image')return '<div class="attach-item"><img src="data:'+a.mime+';base64,'+a.data+'" alt=""><button class="attach-rm" onclick="removeAttach('+i+')">×</button></div>';
+    return '<div class="attach-item"><div class="attach-file"><svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/></svg>'+esc(a.name)+'</div><button class="attach-rm" onclick="removeAttach('+i+')">×</button></div>';
+  }).join('');
+}
 function removeAttach(i){S.attachments.splice(i,1);renderAttachRow();}
-function toggleThinking(){thinkingEnabled=!thinkingEnabled;var btn=document.getElementById('thinkToggle');if(btn)btn.style.opacity=thinkingEnabled?'1':'0.5';}
-function toggleSidebar(){document.getElementById('app').classList.toggle('sb-hidden');}
-function openSettings(){document.getElementById('settingsModal').classList.add('show');updateCreds();}
+
+// ─── ACTIONS ───────────────────────────────────────────────────────────────
+function clearChat(){
+  if(!S.curConv)return;
+  if(!confirm(curLang==='id'?'Hapus semua pesan?':'Delete all messages?'))return;
+  var cv=S.convs.find(function(x){return x.id===S.curConv;});
+  if(cv)cv.msgs=[];
+  renderMsgs([]);saveS();
+}
+function openSettings(){
+  updateCreds();checkDailyCredits();updateRoleDisplay();
+  document.getElementById('settingsModal').classList.add('show');
+}
+function openAvatarModal(){
+  if(!SESSION)return;
+  var u=SESSION.user;
+  var nameEl=document.getElementById('avatarModalName');if(nameEl)nameEl.textContent='@'+(u.username||'-');
+  var imgEl=document.getElementById('avatarModalImg');if(imgEl)imgEl.src=u.avatar||'nexusai.png';
+  var roleEl=document.getElementById('avatarModalRole');if(roleEl)roleEl.textContent=isOwner()?'👑 Owner · NEXUS AI':isAdmin()?'🛡 Admin':'Roblox Developer';
+  var idEl=document.getElementById('avatarModalId');if(idEl)idEl.textContent='Roblox ID: '+(u.robloxId||'-');
+  document.getElementById('avatarModal').classList.add('show');
+}
 function closeModal(id){var el=document.getElementById(id);if(el)el.classList.remove('show');}
-function logout(){localStorage.removeItem('nexus_session');window.location.reload();}
-function showInstall(){toast('Plugin NEXUS AI tersedia di Creator Store','var(--cyan)');}
-function switchTab(tab){if(tab==='gui')toast('GUI Builder sederhana — lengkapi sendiri','var(--yellow)');}
-async function initApp(){if(!SESSION)return;await loadS();updateCreds();applyLang();startStudioPoll();renderConvs();if(S.curConv&&S.convs.some(function(x){return x.id===S.curConv;}))loadConv(S.curConv);else if(S.convs.length>0)loadConv(S.convs[0].id);else newChat();}
-(function(){try{var s=localStorage.getItem('nexus_session');if(!s){document.getElementById('app').classList.remove('hidden');SESSION={user:{username:'DemoDev',robloxId:123,avatar:''},data:{plan:'free',credits:30}};initApp();return;}var p=JSON.parse(s);if(!p||!p.user){localStorage.removeItem('nexus_session');document.getElementById('app').classList.remove('hidden');SESSION={user:{username:'DemoDev',robloxId:123,avatar:''},data:{plan:'free',credits:30}};initApp();return;}SESSION=p;if(!SESSION.data)SESSION.data={};document.getElementById('app').classList.remove('hidden');initApp();}catch(e){document.getElementById('app').classList.remove('hidden');SESSION={user:{username:'DemoDev',robloxId:123,avatar:''},data:{plan:'free',credits:30}};initApp();}})();
-document.getElementById('inp').addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}});
-document.getElementById('inp').addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px';});
-window.addEventListener('click',function(e){var md5=document.getElementById('md0');if(md5&&!md5.contains(e.target))md5.classList.remove('opened');});
+function logout(){localStorage.removeItem('nexus_session');localStorage.removeItem('nexus_google_tmp');window.location.replace('/login');}
+function useSugg(q){var inp=document.getElementById('inp');if(inp){inp.value=q;inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,130)+'px';inp.focus();}send();}
+function showInstall(){document.getElementById('installModal').classList.add('show');}
+function toggleSidebar(){
+  var app=document.getElementById('app');var icon=document.getElementById('collapseSbIcon');
+  app.classList.toggle('sb-hidden');
+  if(icon){icon.innerHTML=app.classList.contains('sb-hidden')?'<polyline points="9 18 15 12 9 6"/>':'<polyline points="15 18 9 12 15 6"/>';}
+}
+function switchTab(tab,btn){
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('act');});
+  btn.classList.add('act');
+  var ct=document.getElementById('chatTab'),gt=document.getElementById('guiTab');
+  if(tab==='chat'){ct.style.display='flex';ct.style.flexDirection='column';gt.style.display='none';}
+  else{ct.style.display='none';gt.style.display='flex';gt.style.flexDirection='column';}
+}
+async function sendReport(){
+  var ta=document.getElementById('reportTa');var btn=document.getElementById('reportBtn');var st=document.getElementById('reportStatus');
+  if(!ta||!ta.value.trim())return;
+  if(btn)btn.disabled=true;
+  try{
+    await fetch(REPORT_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({from:SESSION&&SESSION.user.username||'?',userId:SESSION&&SESSION.user.robloxId||'?',
+        message:ta.value,type:'report',time:new Date().toISOString()})});
+    if(st)st.textContent='Terkirim!';if(ta)ta.value='';
+  }catch(e){if(st)st.textContent='Error: '+e.message;}
+  if(btn)setTimeout(function(){btn.disabled=false;},3000);
+}
+async function redeemCode(){
+  var inp=document.getElementById('redeemInput');var btn=document.getElementById('redeemBtn');var st=document.getElementById('redeemStatus');
+  if(!inp||!inp.value.trim())return;
+  var code=inp.value.trim().toUpperCase();
+  if(btn)btn.disabled=true;
+  try{
+    var r=await fetch('/api/redeem',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({code:code,user:(SESSION&&SESSION.user.username||'').toLowerCase(),userId:SESSION&&SESSION.user.robloxId||''})});
+    var d=await r.json();
+    if(d.success){S.credits+=parseFloat(d.credits||0);updateCreds();saveS();if(st)st.textContent='+'+(d.credits||0)+' CR ditambahkan!';if(inp)inp.value='';}
+    else if(st)st.textContent='Error: '+(d.error||'Kode tidak valid');
+  }catch(e){if(st)st.textContent='Error: '+e.message;}
+  if(btn)setTimeout(function(){btn.disabled=false;},3000);
+}
+
+// ─── GUI EDITOR ────────────────────────────────────────────────────────────
+function addEl(type){
+  guiElCounter++;
+  var id='el'+guiElCounter;
+  var defaults={
+    Frame:{w:200,h:120,bgColor:'#1e2040',text:'',textColor:'#ffffff'},
+    TextLabel:{w:160,h:40,bgColor:'transparent',text:'Label',textColor:'#ffffff',fontSize:16},
+    TextButton:{w:140,h:40,bgColor:'#00e5ff',text:'Button',textColor:'#030312',fontSize:14},
+    TextBox:{w:180,h:36,bgColor:'#0a0b22',text:'',textColor:'#ffffff',fontSize:13},
+    ImageLabel:{w:80,h:80,bgColor:'#1e2040',text:'',textColor:'#ffffff'},
+  };
+  var def=defaults[type]||defaults.Frame;
+  guiElements[id]=Object.assign({},def,{id:id,type:type,name:type+'_'+guiElCounter,x:20+guiElCounter*12,y:20+guiElCounter*10,cornerRadius:type==='TextButton'?8:0});
+  document.getElementById('guiEmpty').style.display='none';
+  renderGuiEl(id);selectEl(id);
+}
+function renderGuiEl(id){
+  var el=guiElements[id];if(!el)return;
+  var canvas=document.getElementById('guiCanvasInner');if(!canvas)return;
+  var existing=canvas.querySelector('[data-elid="'+id+'"]');if(existing)existing.remove();
+  var div=document.createElement('div');div.className='gui-el';div.setAttribute('data-elid',id);
+  div.style.cssText='left:'+el.x+'px;top:'+el.y+'px;width:'+el.w+'px;height:'+el.h+'px;background:'+(el.bgColor||'#1e2040')+';color:'+(el.textColor||'#fff')+';font-size:'+(el.fontSize||14)+'px;border-radius:'+(el.cornerRadius||0)+'px;border:1px solid rgba(255,255,255,0.08);';
+  if(el.text){var span=document.createElement('span');span.className='gel-text';span.textContent=el.text;div.appendChild(span);}
+  div.onmousedown=function(e){startDrag(e,id);};
+  if(el.type!=='ImageLabel'){var resize=document.createElement('div');resize.className='gui-resize';resize.onmousedown=function(e){startResize(e,id);};div.appendChild(resize);}
+  canvas.appendChild(div);
+}
+function selectEl(id){
+  selectedElId=id;
+  document.querySelectorAll('.gui-el').forEach(function(el){el.classList.remove('selected');});
+  var el=document.querySelector('[data-elid="'+id+'"]');if(el)el.classList.add('selected');
+  updatePropsPanel();
+}
+function updatePropsPanel(){
+  var props=document.getElementById('guiProps');if(!props)return;
+  if(!selectedElId||!guiElements[selectedElId]){props.innerHTML='<div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Pilih elemen</div>';return;}
+  var el=guiElements[selectedElId];
+  props.innerHTML='<div style="font-size:9px;color:var(--cyan);font-family:Orbitron,sans-serif;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;">'+el.type+'</div>'+
+    '<div class="gui-prop-label">Name</div><input class="gui-prop-input" value="'+esc(el.name||'')+'" onchange="updateElProp(\''+selectedElId+'\',\'name\',this.value)">'+
+    '<div class="gui-prop-label">Text</div><input class="gui-prop-input" value="'+esc(el.text||'')+'" onchange="updateElProp(\''+selectedElId+'\',\'text\',this.value)">'+
+    '<div class="gui-prop-label">Font Size</div><input class="gui-prop-input" type="number" value="'+(el.fontSize||14)+'" onchange="updateElProp(\''+selectedElId+'\',\'fontSize\',parseInt(this.value))">'+
+    '<div class="gui-prop-label">BG Color</div><input class="gui-prop-input" type="color" value="'+(el.bgColor&&el.bgColor!=='transparent'?el.bgColor:'#1e2040')+'" onchange="updateElProp(\''+selectedElId+'\',\'bgColor\',this.value)">'+
+    '<div class="gui-prop-label">Text Color</div><input class="gui-prop-input" type="color" value="'+(el.textColor||'#ffffff')+'" onchange="updateElProp(\''+selectedElId+'\',\'textColor\',this.value)">'+
+    '<div class="gui-prop-label">Corner Radius</div><input class="gui-prop-input" type="number" value="'+(el.cornerRadius||0)+'" onchange="updateElProp(\''+selectedElId+'\',\'cornerRadius\',parseInt(this.value))">'+
+    '<button style="margin-top:12px;width:100%;padding:6px;background:rgba(255,45,107,.12);border:1px solid rgba(255,45,107,.3);border-radius:5px;color:var(--pink);font-size:10px;cursor:pointer;" onclick="deleteEl(\''+selectedElId+'\')">Hapus Elemen</button>';
+}
+function updateElProp(elId,prop,val){
+  if(!guiElements[elId])return;
+  guiElements[elId][prop]=val;
+  var el=document.querySelector('[data-elid="'+elId+'"]');if(!el)return;
+  if(prop==='text'){var span=el.querySelector('.gel-text');if(span)span.textContent=val;else if(val){var s=document.createElement('span');s.className='gel-text';s.textContent=val;el.appendChild(s);}}
+  if(prop==='bgColor')el.style.background=val;
+  if(prop==='textColor')el.style.color=val;
+  if(prop==='fontSize')el.style.fontSize=val+'px';
+  if(prop==='cornerRadius')el.style.borderRadius=val+'px';
+}
+function deleteEl(elId){
+  delete guiElements[elId];
+  var el=document.querySelector('[data-elid="'+elId+'"]');if(el)el.remove();
+  selectedElId=null;updatePropsPanel();
+  if(!Object.keys(guiElements).length)document.getElementById('guiEmpty').style.display='';
+}
+function clearCanvas(){
+  guiElements={};guiElCounter=0;selectedElId=null;
+  var canvas=document.getElementById('guiCanvasInner');
+  if(canvas)canvas.querySelectorAll('.gui-el').forEach(function(el){el.remove();});
+  document.getElementById('guiEmpty').style.display='';updatePropsPanel();
+}
+function generateGuiCode(){
+  var els=Object.values(guiElements);
+  if(!els.length){toast('Tambahkan elemen dulu!','var(--yellow)');return;}
+  var lines=['-- GUI Script Generated by NEXUS AI','-- Place: LocalScript in StarterGui',
+    'local Players = game:GetService("Players")',
+    'local TweenService = game:GetService("TweenService")',
+    'local player = Players.LocalPlayer',
+    'local playerGui = player:WaitForChild("PlayerGui")',
+    '','local screenGui = Instance.new("ScreenGui")',
+    'screenGui.Name = "NexusGUI"','screenGui.ResetOnSpawn = false',
+    'screenGui.IgnoreGuiInset = true','screenGui.Parent = playerGui',''];
+  els.forEach(function(el){
+    var v=el.name.replace(/[^a-zA-Z0-9_]/g,'_');
+    lines.push('-- '+el.type+': '+el.name);
+    lines.push('local '+v+' = Instance.new("'+el.type+'")');
+    lines.push(v+'.Name = "'+el.name+'"');
+    lines.push(v+'.Size = UDim2.new(0, '+el.w+', 0, '+el.h+')');
+    lines.push(v+'.Position = UDim2.new(0, '+el.x+', 0, '+el.y+')');
+    if(el.bgColor&&el.bgColor!=='transparent'){var hex=el.bgColor.replace('#','');lines.push(v+'.BackgroundColor3 = Color3.fromRGB('+parseInt(hex.substr(0,2),16)+', '+parseInt(hex.substr(2,2),16)+', '+parseInt(hex.substr(4,2),16)+')');}
+    else lines.push(v+'.BackgroundTransparency = 1');
+    if(el.textColor){var hex2=el.textColor.replace('#','');lines.push(v+'.TextColor3 = Color3.fromRGB('+parseInt(hex2.substr(0,2),16)+', '+parseInt(hex2.substr(2,2),16)+', '+parseInt(hex2.substr(4,2),16)+')');}
+    if(el.text)lines.push(v+'.Text = "'+el.text.replace(/"/g,'\\"')+'"');
+    if(el.fontSize)lines.push(v+'.TextSize = '+el.fontSize);
+    lines.push(v+'.Font = Enum.Font.GothamBold');lines.push(v+'.BorderSizePixel = 0');
+    if(el.cornerRadius>0){lines.push('local '+v+'_corner = Instance.new("UICorner", '+v+')');lines.push(v+'_corner.CornerRadius = UDim.new(0, '+el.cornerRadius+')');}
+    lines.push(v+'.Parent = screenGui');lines.push('');
+  });
+  var code=lines.join('\n');
+  var output=document.getElementById('guiCodeOutput');if(output)output.textContent=code;
+  document.getElementById('guiCodeModal').classList.add('show');
+}
+function copyGuiCode(){var pre=document.getElementById('guiCodeOutput');if(pre)navigator.clipboard.writeText(pre.textContent).then(function(){toast('Copied!');});}
+function downloadGuiCode(){var pre=document.getElementById('guiCodeOutput');if(!pre)return;var a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(pre.textContent);a.download='NexusGUI.lua';a.click();}
+function openGuiAIChat(){document.getElementById('guiAIChatModal').classList.add('show');}
+async function generateGuiFromAI(){
+  var prompt=document.getElementById('guiAIPrompt');if(!prompt||!prompt.value.trim())return;
+  closeModal('guiAIChatModal');
+  var loading=document.getElementById('guiLoading');if(loading)loading.classList.add('show');
+  try{
+    var body={provider:S.guiModel.prov||'gemini',model:S.guiModel.id,
+      system:'You are a Roblox GUI designer. Output ONLY a JSON array of UI elements, no explanation, no markdown. Each element: {"type":"Frame|TextLabel|TextButton|TextBox|ImageLabel","name":"string","x":number,"y":number,"w":number,"h":number,"bgColor":"#hex or transparent","textColor":"#hex","text":"string","fontSize":number,"cornerRadius":number}',
+      messages:[{role:'user',content:'Create Roblox GUI: '+prompt.value}],max_tokens:2000};
+    var r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(r.ok){
+      var d=await r.json();var content=d.content||'';
+      try{
+        var jsonMatch=content.match(/\[[\s\S]+\]/);
+        if(jsonMatch){
+          var els=JSON.parse(jsonMatch[0]);
+          clearCanvas();
+          els.forEach(function(el){
+            guiElCounter++;var id='el'+guiElCounter;
+            guiElements[id]=Object.assign({id:id,cornerRadius:0,fontSize:14,text:'',bgColor:'#1e2040',textColor:'#ffffff'},el);
+            renderGuiEl(id);
+          });
+          document.getElementById('guiEmpty').style.display='none';
+        }
+      }catch(e){toast('AI response invalid','var(--yellow)');}
+    }
+  }catch(e){toast('Error: '+e.message,'var(--pink)');}
+  if(loading)loading.classList.remove('show');
+}
+async function sendGuiToPlace(){
+  if(!studioConnected){toast(curLang==='id'?'Studio belum terhubung!':'Studio not connected!','var(--pink)');return;}
+  var els=Object.values(guiElements);if(!els.length){toast('Tambahkan elemen dulu!','var(--yellow)');return;}
+  var cmds=[{action:'create_gui',name:'NexusGUI',parent:'StarterGui',elements:els.map(function(el){
+    return{class:el.type,name:el.name,size:[0,el.w,0,el.h],position:[0,el.x,0,el.y],
+      bg_color:hexToRgb(el.bgColor),text_color:hexToRgb(el.textColor),text:el.text||'',
+      text_size:el.fontSize,corner:el.cornerRadius||0};
+  })}];
+  try{
+    var r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({type:'batch_commands',commands:cmds,_user:SESSION?SESSION.user.username:'web',
+        target:(SESSION?SESSION.user.username:'').toLowerCase()})});
+    var d=await r.json();
+    if(d.pushed>0)toast(curLang==='id'?'GUI dikirim ke Studio!':'GUI sent to Studio!','var(--green)');
+    else toast('Sent','var(--dim)');
+  }catch(e){toast('Error: '+e.message,'var(--pink)');}
+}
+function hexToRgb(hex){
+  if(!hex||hex==='transparent')return[30,30,64];
+  var h=hex.replace('#','');if(h.length<6)return[30,30,64];
+  return[parseInt(h.substr(0,2),16),parseInt(h.substr(2,2),16),parseInt(h.substr(4,2),16)];
+}
+
+// ─── DRAG/RESIZE ───────────────────────────────────────────────────────────
+function startDrag(e,elId){
+  if(e.target.classList.contains('gui-resize'))return;
+  e.preventDefault();selectEl(elId);
+  var el=document.querySelector('[data-elid="'+elId+'"]');if(!el)return;
+  var sx=e.clientX,sy=e.clientY,sl=el.offsetLeft,st=el.offsetTop;
+  function onMove(ev){el.style.left=(sl+ev.clientX-sx)+'px';el.style.top=(st+ev.clientY-sy)+'px';if(guiElements[elId]){guiElements[elId].x=el.offsetLeft;guiElements[elId].y=el.offsetTop;}}
+  function onUp(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);}
+  document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
+}
+function startResize(e,elId){
+  e.preventDefault();e.stopPropagation();
+  var el=document.querySelector('[data-elid="'+elId+'"]');if(!el)return;
+  var sx=e.clientX,sy=e.clientY,sw=el.offsetWidth,sh=el.offsetHeight;
+  function onMove(ev){el.style.width=Math.max(40,sw+ev.clientX-sx)+'px';el.style.height=Math.max(20,sh+ev.clientY-sy)+'px';if(guiElements[elId]){guiElements[elId].w=el.offsetWidth;guiElements[elId].h=el.offsetHeight;}}
+  function onUp(){document.removeEventListener('mousemove',onMove);document.removeEventListener('mouseup',onUp);}
+  document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
+}
+
+// ─── FIX: INIT — no extra newChat on refresh ───────────────────────────────
+async function initApp(){
+  if(!SESSION)return;
+  await loadS();
+  var u=SESSION.user;
+  var av=document.getElementById('sbAv');if(av)av.src=u.avatar||'nexusai.png';
+  var un=document.getElementById('sbUn');if(un)un.textContent='@'+(u.username||'-');
+  updateRoleDisplay();updateCreds();checkDailyCredits();
+  await loadKeys();await loadAdminIds();
+  applyLang();updateModelUI();
+  startStudioPoll();renderConvs();
+  // FIX: Smart conv restoration
+  if(S.curConv&&S.convs.some(function(x){return x.id===S.curConv;})){
+    loadConv(S.curConv); // Restore existing conv
+  }else if(S.convs.length>0){
+    // Load most recent conv
+    var mostRecent=S.convs.reduce(function(a,b){return(b.time||0)>(a.time||0)?b:a;});
+    S.curConv=mostRecent.id;
+    loadConv(S.curConv);
+  }else{
+    newChat(); // Only create new if no convs exist
+  }
+}
+
+// ========== EVENT LISTENERS ==========
+document.querySelectorAll('.ov').forEach(function(ov) {
+    ov.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    });
+});
+
+document.getElementById('inp').addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.max(this.scrollHeight, 130) + 'px';
+    saveDraft();
+});
+
+document.getElementById('inp').addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        e.preventDefault();
+        send();
+    }
+});
+
+window.addEventListener('click', function(e) {
+    var md5 = document.getElementById('md0');
+    if (md5 && !md5.contains(e.target) && !document.getElementById('inpModelBtn').contains(e.target)) {
+        md5.classList.remove('opened');
+    }
+    var gmd5 = document.getElementById('guiModelBtn');
+    if (gmd5 && !gmd5.contains(e.target) && !document.getElementById('guiModelBtn').contains(e.target)) {
+        gmd5.classList.remove('opened');
+    }
+});
+initApp();
+  
 </script>
-<style>.conv-empty,.ci{ padding: 10px; border-radius: 12px; background: var(--bg2); margin-bottom: 6px; cursor: pointer; } .ci.act{ background: var(--bg3); border-left: 3px solid var(--cyan); } .ci-del{ float:right; background:none; border:none; color:var(--pink); cursor:pointer;} .hidden{display:none;} .nx-toast{ animation: fadeInUp 0.2s ease; } @keyframes fadeInUp{ from{ opacity:0; transform:translateY(10px);} to{ opacity:1; transform:translateY(0);}}</style>
 </body>
 </html>
