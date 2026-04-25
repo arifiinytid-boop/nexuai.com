@@ -3,8 +3,8 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 
 const TMP = '/tmp';
-export const REQUIRED_PLUGIN_VERSION = 'V10.3';
-export const WEB_VERSION = 'V10.3';
+export const REQUIRED_PLUGIN_VERSION = 'V10.4';
+export const WEB_VERSION = 'V10.4';
 
 function san(user) {
   return (user || 'default').replace(/[^a-zA-Z0-9_\-]/g, '_').toLowerCase().substring(0, 40);
