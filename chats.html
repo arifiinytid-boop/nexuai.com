@@ -1570,29 +1570,27 @@ async function send(){
     S.credits=Math.max(-10,S.credits-(S.model.cost||1));
     updateCreds();
   }
-  var injected=null;
-  var displayText=aiText;
-  if(studioConnected&&aiText&&!aiText.startsWith('**')){
-    injected=await autoInjectToStudio(aiText,lastUserPrompt);
-    // Hapus blok ```json dan ```lua dari teks yang ditampilkan ke user
-    // karena sudah di-inject ke Studio secara otomatis
-    displayText=aiText
-      .replace(/```json[\s\S]*?```/g,'')
-      .replace(/```lua[\s\S]*?```/g,'')
-      .replace(/```luau[\s\S]*?```/g,'')
-      .replace(/
-{3,}/g,'\n\n')
-      .trim();
+  var injected = null;
+  var displayText = aItext;
+
+if (typeof connected !== 'undefined' && connected && aItext && aItext.startsWith("***")) {
+    injected = await autoInjectToStudio(aItext, lastUserPrompt);
+    
+    // Hapus blok ```json ... ``` dan ```lua ... ``` dari teks yang ditampilkan ke user
+    displayText = aItext
+        .replace(/```json[\s\S]*?```/g, '')
+        .replace(/```lua[\s\S]*?```/g, '')
+        .trim();
+
     // Jika setelah strip tidak ada teks yang berarti, beri pesan default
-    if(!displayText||displayText.length<10){
-      displayText=curLang==='id'
-        ?'✅ Selesai! Semua komponen telah berhasil dibuat dan dimasukkan ke Roblox Studio Anda.'
-        :'✅ Done! All components have been created and injected into your Roblox Studio.';
+    if (!displayText || displayText.length < 10) {
+        displayText = curLang === "id" ? 'Semua komponen telah berhasil dibuat dan dimasukkan ke Roblox Studio Anda.' : 'Done! All components have been created and injected into your Roblox Studio.';
     }
-  }
-  var aiMsg={role:'ai',content:displayText,time:Date.now()};
-  if(injected)aiMsg.injected=injected;
-  cv.msgs.push(aiMsg);
+}
+
+var aiMsg = { role: 'ai', content: displayText, time: Date.now() };
+if (injected) aiMsg.injected = injected;
+cv.mes.push(aiMsg);
   // Simpan full AI text (dengan JSON/Lua) untuk context percakapan berikutnya
   var lastAiMsg=cv.msgs[cv.msgs.length-1];
   lastAiMsg._rawContent=aiText; // untuk context AI, bukan untuk display
