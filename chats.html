@@ -1538,7 +1538,7 @@ function openAvatarModal(){
   document.getElementById('avatarModal').classList.add('show');
 }
 function closeModal(id){var el=document.getElementById(id);if(el)el.classList.remove('show');}
-function logout(){localStorage.removeItem('nexus_session');localStorage.removeItem('nexus_google_tmp');window.location.replace('/login');}
+function logout(){localStorage.removeItem('nexus_session');localStorage.removeItem('nexus_google_tmp');window.location.replace('/');}
 function useSugg(q){var inp=document.getElementById('inp');if(inp){inp.value=q;inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,130)+'px';inp.focus();}send();}
 function showInstall(){document.getElementById('installModal').classList.add('show');}
 function toggleSidebar(){
