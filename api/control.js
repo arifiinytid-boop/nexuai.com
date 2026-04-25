@@ -173,8 +173,7 @@ const VALID = new Set([
   // Misc
   'set_game_info', 'clear_workspace', 'teleport_player',
   // play test
-  'play_test',
-  'stop_test',
+  'play_test', 'run_test', 'stop_test',
 ]);
 
 // ─── RATE LIMITING (simple per-user) ──────────────────────
