@@ -46,7 +46,7 @@ body {
   height: 100vh;
 }
 
-/* Animated background */
+/* Animated background grid */
 body::before {
   content: '';
   position: fixed;
@@ -599,11 +599,21 @@ body::before {
   color: var(--text);
 }
 
-.copy-btn {
+.bubble-actions {
   position: absolute;
   bottom: 6px;
   right: 8px;
+  display: flex;
+  gap: 6px;
   opacity: 0;
+  transition: 0.2s;
+}
+
+.message-bubble:hover .bubble-actions {
+  opacity: 1;
+}
+
+.bubble-action-btn {
   background: rgba(0, 0, 0, 0.6);
   border: none;
   color: var(--cyan);
@@ -611,17 +621,12 @@ body::before {
   padding: 3px 6px;
   font-size: 9px;
   cursor: pointer;
-  transition: 0.2s;
   display: flex;
   align-items: center;
   gap: 3px;
 }
 
-.message-bubble:hover .copy-btn {
-  opacity: 1;
-}
-
-.copy-btn:hover {
+.bubble-action-btn:hover {
   background: var(--cyan);
   color: black;
 }
@@ -1136,7 +1141,7 @@ body::before {
   border: 1px solid var(--border);
   border-radius: 20px;
   padding: 24px;
-  width: 520px;
+  width: 540px;
   max-width: 90vw;
   max-height: 85vh;
   overflow-y: auto;
@@ -1157,6 +1162,79 @@ body::before {
   display: flex;
   gap: 12px;
   justify-content: flex-end;
+}
+
+/* Settings layout improvements */
+.settings-section {
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.settings-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.settings-title {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--cyan);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 12px;
+}
+
+.settings-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  font-size: 12px;
+  border-bottom: 1px dashed var(--border);
+}
+
+.settings-row:last-child {
+  border-bottom: none;
+}
+
+.settings-row span:first-child {
+  color: var(--dim);
+}
+
+.settings-row span:last-child,
+.settings-row select,
+.settings-row input {
+  font-weight: 500;
+  color: white;
+}
+
+.settings-btn {
+  background: rgba(0, 229, 255, 0.1);
+  border: 1px solid var(--border);
+  padding: 6px 14px;
+  border-radius: 20px;
+  color: var(--cyan);
+  font-size: 11px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.settings-btn:hover {
+  background: var(--cyan);
+  color: #030312;
+}
+
+.settings-btn.danger {
+  background: rgba(255, 45, 107, 0.1);
+  color: var(--pink);
+  border-color: rgba(255, 45, 107, 0.3);
+}
+
+.settings-btn.danger:hover {
+  background: var(--pink);
+  color: white;
 }
 
 /* Toast */
@@ -1254,9 +1332,11 @@ body::before {
         <div class="user-name" id="userName">-</div>
         <div class="user-role" id="userRole">Roblox Developer</div>
       </div>
-      <button class="tool-btn" onclick="openSettings()" style="border: none;">⚙️</button>
+      <button class="tool-btn" onclick="openSettings()" style="border: none;">
+        <svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      </button>
     </div>
-    <div class="credits-card" id="creditsCard">
+    <div class="credits-card" id="creditsCard" onclick="openSettings()">
       <div>
         <div class="credits-label">Credits</div>
         <div style="font-size: 8px;">Klik untuk beli lebih</div>
@@ -1309,10 +1389,22 @@ body::before {
           <div class="welcome-title">NEXUS AI V10.4</div>
           <div class="welcome-desc">AI Roblox cerdas — tulis perintah, plugin akan langsung membangun di Studio! Connect plugin untuk mulai.</div>
           <div class="suggestion-grid">
-            <div class="suggestion-card" data-query="Buat loading screen profesional dengan progress bar dan tips"><strong>📱 Loading Screen</strong><span>Loading screen keren & lengkap</span></div>
-            <div class="suggestion-card" data-query="Buat shop GUI dengan 3 item, animasi hover, dan tombol beli"><strong>🛒 Shop GUI</strong><span>Toko dengan animasi & scroll</span></div>
-            <div class="suggestion-card" data-query="Buat sistem leaderboard dengan DataStore (Coins, Level)"><strong>🏆 Leaderboard</strong><span>DataStore Coins + Level</span></div>
-            <div class="suggestion-card" data-query="Buat sistem admin commands lengkap dengan panel GUI"><strong>⚙️ Admin System</strong><span>Admin commands + UI panel</span></div>
+            <div class="suggestion-card" data-query="Buat loading screen profesional dengan progress bar dan tips">
+              <strong><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" style="display: inline; margin-right: 4px;"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg> Loading Screen</strong>
+              <span>Loading screen keren & lengkap</span>
+            </div>
+            <div class="suggestion-card" data-query="Buat shop GUI dengan 3 item, animasi hover, dan tombol beli">
+              <strong><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" style="display: inline; margin-right: 4px;"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/></svg> Shop GUI</strong>
+              <span>Toko dengan animasi & scroll</span>
+            </div>
+            <div class="suggestion-card" data-query="Buat sistem leaderboard dengan DataStore (Coins, Level)">
+              <strong><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" style="display: inline; margin-right: 4px;"><path d="M12 2L15 8.5L22 9.5L17 14L18.5 21L12 17.5L5.5 21L7 14L2 9.5L9 8.5L12 2z"/></svg> Leaderboard</strong>
+              <span>DataStore Coins + Level</span>
+            </div>
+            <div class="suggestion-card" data-query="Buat sistem admin commands lengkap dengan panel GUI">
+              <strong><svg viewBox="0 0 24 24" width="12" height="12" stroke="currentColor" fill="none" style="display: inline; margin-right: 4px;"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/><line x1="12" y1="11" x2="12" y2="17"/><line x1="9" y1="14" x2="15" y2="14"/></svg> Admin System</strong>
+              <span>Admin commands + UI panel</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1386,19 +1478,42 @@ body::before {
 <!-- Modals -->
 <div class="modal-overlay" id="settingsModal">
   <div class="modal">
-    <div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</div>
-    <div class="settings-section"><div class="settings-title">Akun Roblox</div><div class="settings-row"><span id="settingsUsername">-</span><span id="settingsBadge"></span></div><div class="settings-row"><span>Credits</span><span id="settingsCredits">-</span></div><div class="settings-row"><span>Plan</span><span id="settingsPlan">Free</span></div><div class="settings-row"><span>Roblox ID</span><span id="settingsRobloxId">-</span></div><div class="settings-row"><span>Versi</span><span>V10.4</span></div></div>
-    <div class="settings-section"><div class="settings-title">Daily Credits</div><div class="settings-row"><span>Free Plan</span><span>+2 CR/hari</span></div><div class="settings-row"><span>Pro Plan</span><span>+25 CR/hari</span></div><div class="settings-row"><span id="dailyInfo"></span><button class="settings-btn" onclick="claimDaily()">Claim Daily</button></div></div>
-    <div class="settings-section"><div class="settings-title">Bahasa</div><div class="settings-row"><span>Bahasa Interface & AI</span><select id="langSelect" onchange="changeLang(this.value)"><option value="id">Bahasa Indonesia</option><option value="en">English</option></select></div></div>
-    <div class="settings-section"><div class="settings-title">Redeem Code</div><div class="settings-row"><input type="text" id="redeemCodeInput" placeholder="Kode redeem" style="flex:1;"><button class="settings-btn" onclick="redeemCode()">Redeem</button></div><span id="redeemMsg"></span></div>
-    <div class="settings-section"><div class="settings-title">Akun</div><button class="settings-btn danger" onclick="logout()">Logout</button></div>
+    <div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg> Settings</div>
+    <div class="settings-section">
+      <div class="settings-title">Akun Roblox</div>
+      <div class="settings-row"><span>Username</span><span id="settingsUsername">-</span></div>
+      <div class="settings-row"><span>Role</span><span id="settingsBadge"></span></div>
+      <div class="settings-row"><span>Credits</span><span id="settingsCredits">-</span></div>
+      <div class="settings-row"><span>Plan</span><span id="settingsPlan">Free</span></div>
+      <div class="settings-row"><span>Roblox ID</span><span id="settingsRobloxId">-</span></div>
+      <div class="settings-row"><span>Versi</span><span>V10.4</span></div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Daily Credits</div>
+      <div class="settings-row"><span>Free Plan</span><span>+2 CR/hari</span></div>
+      <div class="settings-row"><span>Pro Plan</span><span>+25 CR/hari</span></div>
+      <div class="settings-row"><span id="dailyInfo"></span><button class="settings-btn" onclick="claimDaily()">Claim Daily</button></div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Bahasa</div>
+      <div class="settings-row"><span>Bahasa Interface & AI</span><select id="langSelect" onchange="changeLang(this.value)"><option value="id">Bahasa Indonesia</option><option value="en">English</option></select></div>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Redeem Code</div>
+      <div class="settings-row"><input type="text" id="redeemCodeInput" placeholder="Kode redeem" style="flex:1; background: var(--bg3); border: 1px solid var(--border); border-radius: 8px; padding: 6px 10px; color: white;"><button class="settings-btn" onclick="redeemCode()">Redeem</button></div>
+      <span id="redeemMsg" style="font-size: 10px;"></span>
+    </div>
+    <div class="settings-section">
+      <div class="settings-title">Akun</div>
+      <button class="settings-btn danger" onclick="logout()">Logout</button>
+    </div>
     <div class="modal-footer"><button class="settings-btn" onclick="closeModal('settingsModal')">Tutup</button></div>
   </div>
 </div>
 
 <div class="modal-overlay" id="installModal">
   <div class="modal">
-    <div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Cara Install Plugin</div>
+    <div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Cara Install Plugin</div>
     <div class="modal-b" style="font-size:12px; line-height:1.8;">
       <p>1. Download plugin dari Discord: <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">discord.gg/HuGtbRvD</a></p>
       <p>2. Simpan ke: <code>C:\Users\[Nama]\AppData\Local\Roblox\Plugins\</code></p>
@@ -1412,7 +1527,7 @@ body::before {
 
 <div class="modal-overlay" id="guiAIModal">
   <div class="modal">
-    <div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/></svg>AI UI Builder</div>
+    <div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/></svg>AI UI Builder</div>
     <p>Deskripsikan UI yang Anda inginkan:</p>
     <textarea id="guiAIPrompt" style="width:100%; background:var(--bg3); border:1px solid var(--border); border-radius:8px; padding:10px; color:white; min-height:100px; margin:10px 0;" placeholder="Contoh: Shop GUI dengan 3 kartu item, scroll list, tombol beli hijau..."></textarea>
     <div class="modal-footer"><button class="settings-btn" onclick="generateGuiFromAI()">Bangun dengan AI</button><button class="settings-btn" onclick="closeModal('guiAIModal')">Batal</button></div>
@@ -1421,7 +1536,7 @@ body::before {
 
 <div class="modal-overlay" id="codeModal">
   <div class="modal" style="width: 80%; max-width: 800px;">
-    <div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Generated GUI Script</div>
+    <div class="modal-title"><svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" fill="none"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Generated GUI Script</div>
     <pre id="codeOutput" style="background:var(--bg3); padding:16px; border-radius:12px; overflow:auto; max-height:400px; font-size:11px;"></pre>
     <div class="modal-footer"><button class="settings-btn" onclick="copyCodeOutput()">Copy</button><button class="settings-btn" onclick="downloadCodeOutput()">Download .lua</button><button class="settings-btn" onclick="closeModal('codeModal')">Tutup</button></div>
   </div>
@@ -1441,30 +1556,22 @@ let attachments = [];
 let abortController = null;
 let guiElements = {}, selectedGuiId = null, guiCounter = 0;
 
-// Model List Lengkap dengan yang baru
+// Model List Lengkap
 const MODEL_LIST = [
   { group: "Google Gemini" },
-  { id: "gemini-2.5-flash-lite", name: "Gemini 2.5 Flash Lite", provider: "gemini", cost: 1, icon: "https://cdn.jsdelivr.net/gh/google/gemini-api/badge.svg" },
+  { id: "gemini-2.5-flash-lite", name: "Gemini 2.5 Flash Lite", provider: "gemini", cost: 1, icon: "" },
   { id: "gemini-2.5-flash", name: "Gemini 2.5 Flash", provider: "gemini", cost: 2, icon: "" },
-  { id: "gemini-3-flash-preview", name: "Gemini 3 Flash", provider: "gemini", cost: 3, icon: "" },
-  { id: "gemini-1.5-flash", name: "Gemini 1.5 Flash", provider: "gemini", cost: 1, icon: "" },
+  { id: "gemini-3-flash-preview", name: "Gemini 3 Flash", provider: "gemini", cost: 3, icon: "", soon: true },
   { group: "Anthropic Claude" },
-  { id: "claude-3-5-haiku", name: "Claude 3.5 Haiku", provider: "claude", cost: 2, icon: "", soon: false },
-  { id: "claude-3-5-sonnet", name: "Claude 3.5 Sonnet", provider: "claude", cost: 5, icon: "", soon: false },
-  { id: "claude-3-opus", name: "Claude 3 Opus", provider: "claude", cost: 8, icon: "", soon: true },
+  { id: "claude-3-5-haiku", name: "Claude 3.5 Haiku", provider: "claude", cost: 2, icon: "" },
+  { id: "claude-3-5-sonnet", name: "Claude 3.5 Sonnet", provider: "claude", cost: 5, icon: "" },
   { group: "OpenAI GPT" },
-  { id: "gpt-4o-mini", name: "GPT-4o Mini", provider: "openai", cost: 2, icon: "", soon: false },
-  { id: "gpt-4o", name: "GPT-4o", provider: "openai", cost: 5, icon: "", soon: false },
-  { id: "o3-mini", name: "O3 Mini", provider: "openai", cost: 4, icon: "", soon: true },
+  { id: "gpt-4o-mini", name: "GPT-4o Mini", provider: "openai", cost: 2, icon: "" },
+  { id: "gpt-4o", name: "GPT-4o", provider: "openai", cost: 5, icon: "" },
   { group: "X.AI Grok" },
-  { id: "grok-2", name: "Grok 2", provider: "grok", cost: 3, icon: "", soon: false },
-  { id: "grok-3-mini", name: "Grok 3 Mini", provider: "grok", cost: 5, icon: "", soon: true },
+  { id: "grok-2", name: "Grok 2", provider: "grok", cost: 3, icon: "" },
   { group: "DeepSeek" },
-  { id: "deepseek-chat", name: "DeepSeek V3", provider: "deepseek", cost: 2, icon: "", soon: false },
-  { id: "deepseek-coder", name: "DeepSeek Coder", provider: "deepseek", cost: 2, icon: "", soon: false },
-  { group: "Lainnya" },
-  { id: "mistral-large", name: "Mistral Large", provider: "mistral", cost: 3, icon: "", soon: true },
-  { id: "llama-3-70b", name: "Llama 3 70B", provider: "meta", cost: 2, icon: "", soon: true }
+  { id: "deepseek-chat", name: "DeepSeek V3", provider: "deepseek", cost: 2, icon: "" },
 ];
 
 // Language strings
@@ -1505,7 +1612,13 @@ function updateRoleUI() {
   let role = currentUser.isOwner ? "Owner · Unlimited" : "Roblox Developer";
   document.getElementById("userRole").innerText = role;
   document.getElementById("userName").innerText = "@" + currentUser.username;
-  document.getElementById("userAvatar").src = currentUser.avatar || "nexusai.png";
+  // Set avatar from Roblox thumbnail
+  if (currentUser.robloxId && currentUser.robloxId !== "0") {
+    currentUser.avatar = `https://www.roblox.com/headshot-thumbnail/image?userId=${currentUser.robloxId}&width=60&height=60&format=png`;
+  } else {
+    currentUser.avatar = "nexusai.png";
+  }
+  document.getElementById("userAvatar").src = currentUser.avatar;
 }
 
 function setStudioStatus(connected) {
@@ -1529,7 +1642,7 @@ function setStudioStatus(connected) {
 
 async function retryStudio() {
   showToast("Menghubungkan ulang...");
-  // Simulasi cek koneksi
+  // Simulasi koneksi
   setTimeout(() => {
     setStudioStatus(true);
     showToast("Studio terhubung!", "var(--green)");
@@ -1582,7 +1695,6 @@ function newChat() {
   document.getElementById("chatTitle").innerText = "Percakapan Baru";
   document.getElementById("welcomeScreen").style.display = "flex";
   clearMessagesContainer();
-  showWelcome();
 }
 
 function loadConv(id) {
@@ -1624,28 +1736,30 @@ function appendMessageToDOM(msg) {
   let container = document.getElementById("messagesContainer");
   if (!container) return;
   let isUser = msg.role === "user";
-  let bubbleClass = isUser ? "user" : "ai";
   let avatarContent = isUser ? (currentUser.avatar ? `<img src="${currentUser.avatar}" alt="user">` : `<div style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;background:rgba(0,229,255,0.2);border-radius:50%;">${currentUser.username.charAt(0).toUpperCase()}</div>`) : `<img src="nexusai.png" alt="AI">`;
   let time = new Date(msg.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   let contentHtml = formatMessageContent(msg.content);
   let msgDiv = document.createElement("div");
-  msgDiv.className = `message ${bubbleClass}`;
+  msgDiv.className = `message ${isUser ? "user" : "ai"}`;
   msgDiv.innerHTML = `
     <div class="message-avatar">${avatarContent}</div>
     <div class="message-content">
       <div class="message-meta"><span>${isUser ? "@" + currentUser.username : "NEXUS AI"}</span><span>${time}</span></div>
-      <div class="message-bubble">${contentHtml}<button class="copy-btn" onclick="copyMessageText(this)"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor" fill="none"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button></div>
+      <div class="message-bubble">${contentHtml}
+        <div class="bubble-actions">
+          <button class="bubble-action-btn" onclick="copyMessageText(this)"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor" fill="none"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copy</button>
+          <button class="bubble-action-btn" onclick="shareMessage(this)"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor" fill="none"><path d="M4 12v8a2 2 0 002 2h12a2 2 0 002-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> Share</button>
+        </div>
+      </div>
     </div>
   `;
   container.appendChild(msgDiv);
   container.scrollTop = container.scrollHeight;
-  // highlight code blocks
   msgDiv.querySelectorAll("pre code").forEach(block => hljs.highlightElement(block));
 }
 
 function formatMessageContent(text) {
   if (!text) return "";
-  // sederhana: konversi markdown basic
   let html = text.replace(/```(\w*)\n([\s\S]*?)```/g, (match, lang, code) => {
     return `<div class="code-block"><pre><code class="language-${lang || 'lua'}">${esc(code)}</code></pre><div class="code-actions"><button class="code-action" onclick="copyCode(this)"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button><button class="code-action" onclick="downloadCode(this)"><svg width="10" height="10" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>DL</button></div></div>`;
   });
@@ -1656,8 +1770,18 @@ function formatMessageContent(text) {
 
 function copyMessageText(btn) {
   let bubble = btn.closest(".message-bubble");
-  let text = bubble.innerText.replace("Copy", "").trim();
+  let text = bubble.innerText.replace("Copy", "").replace("Share", "").trim();
   navigator.clipboard.writeText(text).then(() => showToast("Teks disalin!"));
+}
+
+function shareMessage(btn) {
+  let bubble = btn.closest(".message-bubble");
+  let text = bubble.innerText.replace("Copy", "").replace("Share", "").trim();
+  if (navigator.share) {
+    navigator.share({ title: "Pesan dari NEXUS AI", text: text }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(text).then(() => showToast("Teks disalin (share tidak didukung)"));
+  }
 }
 
 function copyCode(btn) {
@@ -1679,14 +1803,7 @@ function downloadCode(btn) {
 
 function clearMessagesContainer() {
   let container = document.getElementById("messagesContainer");
-  if (container) {
-    container.innerHTML = "";
-  }
-}
-
-function showWelcome() {
-  let welcome = document.getElementById("welcomeScreen");
-  if (welcome) welcome.style.display = "flex";
+  if (container) container.innerHTML = "";
 }
 
 // ======================== AI SEND ========================
@@ -1695,7 +1812,6 @@ async function sendMessage() {
   let text = input.value.trim();
   if (!text && attachments.length === 0) return;
   if (abortController) return;
-  // simpan pesan user
   let conv = conversations.find(c => c.id === currentConvId);
   if (!conv) newChat();
   conv = conversations.find(c => c.id === currentConvId);
@@ -1707,16 +1823,13 @@ async function sendMessage() {
   input.style.height = "auto";
   attachments = [];
   renderAttachments();
-  // update title if first message
   if (conv.messages.length === 1 && text) {
     conv.title = text.slice(0, 40) + (text.length > 40 ? "..." : "");
     document.getElementById("chatTitle").innerText = conv.title;
     renderConvList();
     saveConversations();
   }
-  // Show thinking
   if (thinkingEnabled) showThinkingAnimation();
-  // Call API
   abortController = new AbortController();
   let sysPrompt = `You are NEXUS AI V10.4, a polite Roblox Studio assistant. ${lang === "id" ? "Balas dalam Bahasa Indonesia yang sopan, gunakan Anda/saya. Jangan keluarkan kode script panjang. Beri instruksi singkat tentang cara menggunakan plugin untuk membangun apa yang diminta." : "Answer in English politely. Give short instructions, no long code blocks. Explain how to use the plugin to build what user asks."}`;
   let messages = conv.messages.slice(-10).map(m => ({ role: m.role === "user" ? "user" : "assistant", content: m.content }));
@@ -1737,7 +1850,6 @@ async function sendMessage() {
     if (!resp.ok) throw new Error("API error");
     let data = await resp.json();
     let aiText = data.content || "Maaf, saya tidak bisa memproses permintaan Anda saat ini.";
-    // kurangi credits jika bukan owner
     if (!currentUser.isOwner) {
       currentUser.credits -= currentModel.cost;
       updateCreditsUI();
@@ -1871,7 +1983,6 @@ function buildModelDropdown(forGui = false) {
     } else {
       let isActive = item.id === current.id;
       let disabled = item.soon ? "disabled" : "";
-      let costClass = item.cost <= 2 ? "model-cost" : "model-cost";
       html += `
         <div class="model-item ${isActive ? "active" : ""} ${disabled}" onclick="${forGui ? `selectGuiModel('${item.id}')` : `selectModel('${item.id}')`}">
           <div class="model-icon"><img src="${item.icon || 'nexusai.png'}" onerror="this.style.display='none'"></div>
@@ -1944,30 +2055,61 @@ function addGuiElement(type) {
     TextLabel: { w: 160, h: 40, bgColor: "transparent", text: "Label", textColor: "#ffffff", fontSize: 16 },
     TextButton: { w: 140, h: 40, bgColor: "#00e5ff", text: "Button", textColor: "#030312", fontSize: 14 },
     TextBox: { w: 180, h: 36, bgColor: "#0a0b22", text: "", textColor: "#ffffff", fontSize: 13 },
-    ImageLabel: { w: 80, h: 80, bgColor: "#1e2040", text: "" }
+    ImageLabel: { fontSize: 16 },
+    TextButton: { w: 140, h: 40, bgColor: "#00e5ff", text: "Button", textColor: "#030312", fontSize: 14 },
+    TextBox: { w: 180, h: 36, bgColor: "#0a0b22", text: "", textColor: "#ffffff", fontSize: 13 },
+    ImageLabel: { w: 80, h: w: 80, h: 80, 80, bgColor: "# bgColor: "#1e2040", text: "" }
+  };
+ 1e2040", text: "" }
   };
   let def = defaults[type] || defaults.Frame;
-  guiElements[id] = {
-    id, type, name: type + "_" + guiCounter,
-    x: 20 + guiCounter * 12, y: 20 + guiCounter * 10,
-    w: def.w, h: def.h, bgColor: def.bgColor, text: def.text,
-    textColor: def.textColor || "#ffffff", fontSize: def.fontSize || 14, cornerRadius: type === "TextButton" ? 8 : 0
+  guiElements let def = defaults[type] || defaults.Frame;
+  guiElements[id] =[id] = {
+    id, type, name: type + "_" + {
+    id, type, name: type + "_ guiCounter,
+    x: " + guiCounter,
+    x: 20 +20 + guiCounter * guiCounter * 12, y: 20 + gui 12, y: 20 + guiCounter *Counter * 10,
+    w: def.w, h: def.h, bgColor: def.bg 10,
+    w: def.w, h: def.h, bgColor: def.bgColor, text: def.textColor, text:,
+    textColor: def.textColor || "#ffffff", def.text,
+    textColor: def.textColor fontSize: def.fontSize || || "#ffffff", fontSize: def.fontSize || 14, cornerRadius: 14, cornerRadius: type === "TextButton" type === "TextButton" ? ? 8 : 0
+  };
+  8 : 0
   };
   document.getElementById("guiEmptyHint").style.display = "none";
-  renderGuiElement(id);
-  selectGuiElement(id);
+  document.getElementById("guiEmptyHint").style.display = "none";
+  renderGui renderGuiElement(id);
+ Element(id);
+  selectGui selectGuiElement(id);
+Element(id);
 }
 
 function renderGuiElement(id) {
-  let el = guiElements[id];
+ }
+
+function renderGuiElement(id) {
+  let el let el = guiElements[id];
   if (!el) return;
+ = guiElements[id];
+  if (!el) return  let canvas = document.getElementById("guiCanvas;
   let canvas = document.getElementById("guiCanvasInner");
+  let existing = canvas.querySelector(`[data-idInner");
   let existing = canvas.querySelector(`[data-id="${id}"]`);
   if (existing) existing.remove();
-  let div = document.createElement("div");
+  let div = document="${id}"]`);
+  if (existing) existing.remove();
+  let div.createElement("div");
   div.className = "gui-element";
   div.setAttribute("data-id", id);
-  div.style.cssText = `left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px;background:${el.bgColor};color:${el.textColor};font-size:${el.fontSize}px;border-radius:${el.cornerRadius}px;border:1px solid rgba(255,255,255,0.1);`;
+  div.style.cssText = `left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el = document.createElement("div");
+  div.className = "gui-element";
+  div.setAttribute("data-id", id);
+  div.style.cssText = `left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px;background:${el.bgColor};color:${el.textColor};font-size:${el.fontSize}px;border-radius:${el.h}px;background:${el.bgColor};color:${el.textColor};font-size:${el.fontSize}px;border.cornerRadius}px;border:1px solid rgba(-radius:${el.cornerRadius}px;border:1px solid rgba(255,255,255,0.1);`;
+  if (el.text) {
+    let span = document.createElement("span");
+    span.innerText = el.text;
+    span.style.display = "block";
+    span.style.textAlign = "255,255,255,0.1);`;
   if (el.text) {
     let span = document.createElement("span");
     span.innerText = el.text;
@@ -1976,10 +2118,26 @@ function renderGuiElement(id) {
     div.appendChild(span);
   }
   if (el.type !== "ImageLabel") {
-    let resize = document.createElement("div");
+center";
+    div.appendChild(span);
+  }
+  if (el.type !== "ImageLabel") {
+       let resize = document.createElement("div");
     resize.className = "gui-resize-handle";
     resize.onmousedown = e => startResize(e, id);
-    div.appendChild(resize);
+    div.appendChild(res let resize = document.createElement("div");
+    resize.className = "gui-resize-handle";
+    resize.onmousedown = e => startResize(e, id);
+    div.appendChild(resizeize);
+  }
+  div.onmousedown = e => startDrag(e, id);
+  canvas.appendChild(div);
+}
+
+function selectGuiElement(id) {
+  selectedGuiId = id;
+  document.querySelectorAll(".gui-element").forEach(el => el.classList.remove("selected"));
+  let sel);
   }
   div.onmousedown = e => startDrag(e, id);
   canvas.appendChild(div);
@@ -1989,7 +2147,13 @@ function selectGuiElement(id) {
   selectedGuiId = id;
   document.querySelectorAll(".gui-element").forEach(el => el.classList.remove("selected"));
   let sel = document.querySelector(`.gui-element[data-id="${id}"]`);
-  if (sel) sel.classList.add("selected");
+  if (sel) = document.querySelector(`.gui-element[data-id="${id}"]`);
+  if ( sel.classList.add("selected");
+  updatePropsPanel();
+}
+
+function updatePropsPanel() {
+  let panel = document.getElementByIdsel) sel.classList.add("selected");
   updatePropsPanel();
 }
 
@@ -2005,28 +2169,73 @@ function updatePropsPanel() {
     <div class="gui-prop-label">Name</div>
     <input class="gui-prop-input" value="${esc(el.name)}" onchange="updateGuiProp('name', this.value)">
     <div class="gui-prop-label">Text</div>
-    <input class="gui-prop-input" value="${esc(el.text)}" onchange="updateGuiProp('text', this.value)">
+    <input class="gui("guiPropsPanel");
+  if (!panel) return;
+  let el = guiElements[selectedGuiId];
+  if (!el) {
+    panel.innerHTML = "<div style='text-align:center;padding:20px;'>Pilih elemen</div>";
+    return;
+  }
+  panel.innerHTML = `
+    <div class="gui-prop-label">Name</div>
+    <input class="gui-prop-input" value="${esc(el.name)}" onchange="updateGuiProp('name', this.value)">
+    <div class="gui-prop-label">Text</div>
+    <input class-prop-input" value="${esc(el.text)}" onchange="updateGuiProp('text', this.value)">
     <div class="gui-prop-label">Font Size</div>
-    <input class="gui-prop-input" type="number" value="${el.fontSize}" onchange="updateGuiProp('fontSize', parseInt(this.value))">
+    <input class="gui="gui-prop-input" value="${esc(el.text)}" onchange="updateGuiProp('text', this.value)">
+    <div class="gui-prop-label">Font Size</div>
+    <input class="gui-prop-input" type="number" value="${el.fontSize}" onchange="-prop-input" type="number" value="${el.fontSize}" onchange="updateGuiProp('fontSize', parseInt(this.value))">
     <div class="gui-prop-label">BG Color</div>
-    <input class="gui-prop-input" type="color" value="${el.bgColor}" onchange="updateGuiProp('bgColor', this.value)">
+    <input classupdateGuiProp('fontSize', parseInt(this.value))">
+    <div class="gui-prop-label">BG Color</div>
+   ="gui-prop-input" type="color" value="${el.bgColor}" onchange="updateGuiProp('bgColor', this.value)">
+    <div class="gui-prop-label">Text Color</div>
+    <input class="gui-prop-input" <input class="gui-prop-input" type="color" value="${el.bgColor}" onchange="updateGuiProp('bgColor', this.value)">
     <div class="gui-prop-label">Text Color</div>
     <input class="gui-prop-input" type="color" value="${el.textColor}" onchange="updateGuiProp('textColor', this.value)">
+    <div class=" type="color" value="${el.textColor}" onchange="updateGuiProp('textColor', this.value)">
     <div class="gui-prop-label">Corner Radius</div>
-    <input class="gui-prop-input" type="number" value="${el.cornerRadius}" onchange="updateGuiProp('cornerRadius', parseInt(this.value))">
-    <button class="gui-btn" style="margin-top:12px; width:100%; background:rgba(255,45,107,0.1); border-color:var(--pink);" onclick="deleteGuiElement('${selectedGuiId}')">Hapus Elemen</button>
+    <input class="guigui-prop-label">Corner Radius</div>
+    <input class="gui-prop-input-prop-input" type="number" value="${el.cor" type="number" value="${el.cornerRadius}" onchange="updateGuiProp('cornerRadius', parseInt(this.value))">
+    <button class="gui-btn" style="margin-top:12px; width:100%; background:rgnerRadius}" onchange="updateGuiProp('cornerRadius', parseInt(this.value))">
+    <button class="gui-btn" style="margin-top:12px; width:100%; backgroundba(255,45,107,0.1); border-color:var(--p:rgba(255,45,107,0.1); border-color:varink);" onclick="deleteGuiElement('${(--pink);" onclick="deleteGuiElement('${selectedGuiId}')">Hapus Elemen</selectedGuiId}')">Hapus Elemen</button>
   `;
 }
 
 function updateGuiProp(prop, value) {
-  if (!selectedGuiId) return;
+  if (!selectedGuiId) returnbutton>
+  `;
+}
+
+function updateGuiProp(prop, value) {
+  if (!selectedGuiId;
   guiElements[selectedGuiId][prop] = value;
-  let elDiv = document.querySelector(`.gui-element[data-id="${selectedGuiId}"]`);
+ ) return;
+  guiElements[selectedGuiId][prop] = value;
+  let elDiv = document.querySelector(`.gui-element let elDiv = document.querySelector(`.gui-element[data-id="${selectedGuiId}"]`);
+  if (elDiv) {
+    if (prop === "bgColor") elDiv.style.background = value;
+    if (prop === "textColor") elDiv.style.color = value;
+    if (prop === "fontSize") elDiv.style.fontSize = value + "px";
+    if (prop === "cornerRadius") elDiv[data-id="${selectedGuiId}"]`);
   if (elDiv) {
     if (prop === "bgColor") elDiv.style.background = value;
     if (prop === "textColor") elDiv.style.color = value;
     if (prop === "fontSize") elDiv.style.fontSize = value + "px";
     if (prop === "cornerRadius") elDiv.style.borderRadius = value + "px";
+    if (prop === "text") {
+      let span = elDiv.querySelector("span");
+      if (span) span.innerText = value;
+      else if (value) {
+        let s = document.createElement("span");
+        s.innerText = value;
+        elDiv.appendChild(s);
+      }
+    }
+  }
+}
+
+function delete.style.borderRadius = value + "px";
     if (prop === "text") {
       let span = elDiv.querySelector("span");
       if (span) span.innerText = value;
@@ -2059,45 +2268,106 @@ function clearGuiCanvas() {
 function exportGuiCode() {
   let els = Object.values(guiElements);
   if (els.length === 0) { showToast("Tidak ada elemen", "var(--yellow)"); return; }
-  let lines = ["-- GUI Generated by NEXUS AI V10.4", "local Players = game:GetService('Players')", "local player = Players.LocalPlayer", "local playerGui = player:WaitForChild('PlayerGui')", "local screenGui = Instance.new('ScreenGui')", "screenGui.Name = 'NexusGUI'", "screenGui.ResetOnSpawn = false", "screenGui.IgnoreGuiInset = true", "screenGui.Parent = playerGui", "local mainFrame = Instance.new('Frame')", "mainFrame.Name = 'MainFrame'", "mainFrame.Size = UDim2.new(1,0,1,0)", "mainFrame.BackgroundTransparency = 1", "mainFrame.Parent = screenGui", ""];
+  let lines = ["-- GUI Generated by NEXUS AI VGuiElement(id) {
+  delete guiElements[id];
+  let elDiv = document.querySelector(`.gui-element[data-id="${id}"]`);
+  if (elDiv) elDiv.remove();
+  if (selectedGuiId === id) selectedGuiId = null;
+  updatePropsPanel();
+  if (Object.keys(guiElements).length === 0) document.getElementById("guiEmptyHint").style.display = "flex";
+}
+
+function clearGuiCanvas() {
+  guiElements = {};
+  selectedGuiId = null;
+  document.querySelectorAll(".gui-element").forEach(el => el.remove());
+  document.getElementById("guiEmptyHint").style.display = "flex";
+  updatePropsPanel();
+}
+
+function exportGuiCode() {
+  let els = Object.values(guiElements);
+  if (els.length === 0) { showToast("Tidak ada elemen", "var(--yellow)"); return; }
+  let lines = ["-- GUI Generated by NEXUS AI V10.4", "local Players = game:GetService('Players')", "local player = Players.LocalPlayer", "local playerGui = player:WaitForChild('PlayerGui')", "local screenGui = Instance.new('ScreenGui')", "screenGui.Name = 'NexusGUI'", "screenGui.ResetOnSpawn = false", "screenGui.IgnoreGuiInset = true", "screenGui.P10.4", "local Players = game:GetService('Players')", "local player = Players.LocalPlayer", "local playerGui = player:WaitForChild('PlayerGui')", "local screenGui = Instance.new('ScreenGui')", "screenGui.Name = 'NexusGUI'", "screenGui.ResetOnSpawn = false", "screenGui.IgnoreGuiInset = true", "screenGui.Parent = playerGui", "local mainFrame =arent = playerGui", "local main Instance.new('Frame')", "mainFrame.Name = 'MainFrame'", "mainFrame.Size = UDim2.new(1,0,1,0)", "mainFrame.BackgroundTransparency = 1", "mainFrame.Parent = screenGui", ""];
   els.forEach(el => {
     let v = el.name.replace(/[^a-zA-Z0-9_]/g, "_");
-    lines.push(`-- ${el.type}: ${el.name}`);
+    lines.push(`-- ${el.type}: ${Frame = Instance.new('Frame')", "mainFrame.Name = 'MainFrame'", "mainFrame.Size = UDim2.new(1,0,1,0)", "mainFrame.BackgroundTransparency = 1", "mainFrame.Parent = screenGui", ""];
+  els.forEach(el => {
+    let v = el.name.replace(/[^a-zA-Z0-9_]/g, "_");
+    lines.push(`-- ${el.type}: ${el.nameel.name}`);
+    lines.push(`local ${v}`);
     lines.push(`local ${v} = Instance.new("${el.type}")`);
+    lines.push(`${v}.Name = "${} = Instance.new("${el.type}")`);
     lines.push(`${v}.Name = "${el.name}"`);
-    lines.push(`${v}.Size = UDim2.new(0, ${el.w}, 0, ${el.h})`);
-    lines.push(`${v}.Position = UDim2.new(0, ${el.x}, 0, ${el.y})`);
-    if (el.bgColor && el.bgColor !== "transparent") {
-      let hex = el.bgColor.replace("#","");
-      let r = parseInt(hex.substr(0,2),16), g = parseInt(hex.substr(2,2),16), b = parseInt(hex.substr(4,2),16);
+    lines.push(`${v}.Size = UDim2.newel.name}"`);
+    lines.push(`${(0, ${el.w}, 0, ${el.h})`);
+    lines.push(`${v}.Position = UDimv}.Size = UDim2.new(0, ${el.w}, 0, ${el.h})`);
+    lines.push(`${v}.Position = UDim2.new(0, ${el.x}, 0, ${el.y})2.new(0, ${el.x}, 0, ${el.y`);
+    if (el.bgColor && el})`);
+    if.bgColor !== "transparent") {
+      let hex = el.b (el.bgColor && el.bgColor !== "transparent") {
+      let hex = el.bgColorgColor.replace("#","");
+      let r =.replace("#","");
+      let r = parseInt(hex.substr(0,2),16), g = parseInt(hex.substr( parseInt(hex.substr(0,2),16), g = parseInt(hex.substr(2,2),16), b = parseInt(hex.substr(4,2),16);
+      lines.push(`${v}.BackgroundColor3 = Color3.fromRGB(${r}, ${g}, ${b2,2),16), b = parseInt(hex.substr(4,2),16);
       lines.push(`${v}.BackgroundColor3 = Color3.fromRGB(${r}, ${g}, ${b})`);
+    } else lines.push(`${v}.BackgroundTransparency = 1})`);
     } else lines.push(`${v}.BackgroundTransparency = 1`);
     if (el.textColor) {
       let hex = el.textColor.replace("#","");
+      let r = parseInt(hex.substr(0,2),16), g = parseInt(hex.substr(2,2),16), b =`);
+    if (el.textColor) {
+      let hex = el.textColor.replace("#","");
       let r = parseInt(hex.substr(0,2),16), g = parseInt(hex.substr(2,2),16), b = parseInt(hex.substr(4,2),16);
+      lines.push(`${v}.TextColor3 = Color3.fromRGB(${r parseInt(hex.substr(4,2),16);
       lines.push(`${v}.TextColor3 = Color3.fromRGB(${r}, ${g}, ${b})`);
     }
     if (el.text) lines.push(`${v}.Text = "${el.text.replace(/"/g, '\\"')}"`);
-    if (el.fontSize) lines.push(`${v}.TextSize = ${el.fontSize}`);
-    lines.push(`${v}.Font = Enum.Font.GothamBold`);
-    lines.push(`${v}.BorderSizePixel = 0`);
-    if (el.cornerRadius > 0) {
+    if (}, ${g}, ${b})`);
+    }
+    if (el.text) lines.push(`${v}.Text = "${el.text.replace(/"/g, '\\"')}"`);
+    if (el.fontSize)el.fontSize) lines.push(`${v}.TextSize = ${el.fontSize}`);
+    lines.push lines.push(`${v}.TextSize = ${el.fontSize}`);
+    lines.push(`${v}.Font = Enum.Font(`${v}.Font = Enum.Font.GothamBold`);
+    lines.push(`${v}.Border.GothamBold`);
+    lines.push(`${vSizePixel = 0`);
+    if (el.cor}.BorderSizePixel = 0`);
+    if (elnerRadius > 0) {
+      lines.push(`local ${v}Corner = Instance.new("UICorner.cornerRadius > 0) {
       lines.push(`local ${v}Corner = Instance.new("UICorner", ${v})`);
+      lines.push(`${v}Corner.CornerRadius = UDim.new(0, ${el.cornerRadius})`);
+    }
+    lines.push(`${", ${v})`);
       lines.push(`${v}Corner.CornerRadius = UDim.new(0, ${el.cornerRadius})`);
     }
     lines.push(`${v}.Parent = mainFrame`);
     lines.push("");
   });
+  document.getElementById("codeOutput").v}.Parent = mainFrame`);
+    lines.push("");
+  });
   document.getElementById("codeOutput").innerText = lines.join("\n");
   document.getElementById("codeModal").classList.add("show");
+innerText = lines.join("\n");
+  document.getElementById("codeModal").classList.add("show");
 }
+
+function sendGuiToStudio() {
+  if (!studioConnected) {
+    showToast("}
 
 function sendGuiToStudio() {
   if (!studioConnected) {
     showToast("Studio belum terhubung! Klik Connect terlebih dahulu.", "var(--pink)");
     return;
   }
-  showToast("GUI dikirim ke Studio! (simulasi)", "var(--green)");
+  showToast("GUI dikStudio belum terhubung! Klik Connect terlebih dahulu.", "var(--pink)");
+    return;
+  }
+  showToast("GUI dikirim ke Studio! (simulasiirim ke Studio! (sim)", "var(--green)");
+}
+
+function openGuiAIChat()ulasi)", "var(--green)");
 }
 
 function openGuiAIChat() {
@@ -2106,15 +2376,41 @@ function openGuiAIChat() {
 
 async function generateGuiFromAI() {
   let prompt = document.getElementById("guiAIPrompt").value;
+  if (!prompt) return {
+  document.getElementById("guiAIModal").classList.add("show");
+}
+
+async function generateGuiFromAI() {
+  let prompt = document.getElementById("guiAIPrompt").value;
   if (!prompt) return;
+  close;
   closeModal("guiAIModal");
   showToast("AI sedang membangun UI...", "var(--cyan)");
-  // Simulasi AI response (karena API mungkin tidak tersedia)
   setTimeout(() => {
     clearGuiCanvas();
-    let mock = [{ type: "Frame", name: "MainFrame", x: 100, y: 100, w: 300, h: 200, bgColor: "#202240", text: "" },
-                { type: "TextLabel", name: "Title", x: 120, y: 120, w: 260, h: 30, text: "Shop GUI", textColor: "#00e5ff", fontSize: 18, bgColor: "transparent" },
-                { type: "TextButton", name: "BuyBtn", x: 150, y: 200, w: 100, h: 40, text: "Beli", textColor: "#ffffff", bgColor: "#00ffaa", fontSize: 14, cornerRadius: 8 }];
+    let mock = [{ type: "Modal("guiAIModal");
+  showToast("AI sedang membangun UI...", "var(--cyan)");
+  setTimeout(() => {
+    clearGuiCanvas();
+    let mock = [{ typeFrame", name: "MainFrame", x: 100, y: 100, w: 300, h: 200, bgColor: "#202240", text: "" },
+                { type: "TextLabel", name: ": "Frame", name: "MainFrame", x: 100, y: 100, w: 300, h: 200, bgColor: "#202240", text: "" },
+                { type: "TextLabel", name: "Title",Title", x: 120, y: 120, w: 260, h: 30, text: x: 120, y: 120, w: 260, h: 30, text: "Shop GUI", textColor: "#00e5ff", fontSize: 18, bgColor: "transparent" },
+                { type: "TextButton", "Shop GUI", textColor: "#00e5ff", fontSize: 18, bgColor: "transparent" },
+                { type: "TextButton", name: name: "BuyBtn", x: 150, y:  "BuyBtn", x: 150, y: 200, w: 100, h: 40, text: "Beli", textColor: "#ffffff",200, w: 100, h: 40, text: "Beli", textColor: "#ffffff", bgColor: "#00ffaa", fontSize: 14, cornerRadius: 8 }];
+    mock.forEach(el => {
+      guiCounter++;
+      let id = "el" + guiCounter;
+      guiElements[id] = { id, type: el.type, name: el.name, x: el.x, y: el.y, w: el.w, h: el.h, bgColor: el.bgColor, text: el.text, textColor: el.textColor || "#ffffff", fontSize: el.fontSize || 14, cornerRadius: el.cornerRadius || 0 };
+      renderGuiElement(id);
+    });
+    document.getElementById("guiEmptyHint").style.display = "none";
+    showToast("UI selesai dibuat!", "var(--green)");
+  }, 1500);
+}
+
+// Drag & Resize
+function startDrag(e, id) {
+  if (e.target.classList.contains("gui-resize-handle")) bgColor: "#00ffaa", fontSize: 14, cornerRadius: 8 }];
     mock.forEach(el => {
       guiCounter++;
       let id = "el" + guiCounter;
@@ -2132,7 +2428,25 @@ function startDrag(e, id) {
   e.preventDefault();
   let el = document.querySelector(`.gui-element[data-id="${id}"]`);
   let startX = e.clientX, startY = e.clientY;
-  let startLeft = el.offsetLeft, startTop = el.offsetTop;
+  let startLeft = el return;
+  e.preventDefault();
+  let el = document.querySelector(`.gui-element[data-id="${id}"]`);
+  let startX = e.clientX, startY = e.clientY;
+  let startLeft = el.offset.offsetLeft, startTop = el.offsetTop;
+  function onMouseMove(ev) {
+    let dx = ev.clientX - startX;
+    let dy = ev.clientY - startY;
+    el.style.left = (startLeft + dx) + "px";
+    el.style.top = (startTop + dy) + "px";
+    if (guiElements[id]) {
+      guiElements[id].x = el.offsetLeft;
+      guiElements[id].y = el.offsetTop;
+    }
+  }
+  function onMouseUp() {
+    document.removeEventListener("mousemove", onMouseMove);
+    document.removeEventListener("mouseup", onMouseUp);
+ Left, startTop = el.offsetTop;
   function onMouseMove(ev) {
     let dx = ev.clientX - startX;
     let dy = ev.clientY - startY;
@@ -2156,7 +2470,22 @@ function startResize(e, id) {
   e.stopPropagation();
   let el = document.querySelector(`.gui-element[data-id="${id}"]`);
   let startX = e.clientX, startY = e.clientY;
+  let startW = el.offsetWidth, startH = el.offset }
+  document.addEventListener("mousemove", onMouseMove);
+  document.addEventListener("mouseup", onMouseUp);
+}
+
+function startResize(e, id) {
+  e.preventDefault();
+  e.stopPropagation();
+  let el = document.querySelector(`.gui-element[data-id="${id}"]`);
+  let startX = e.clientX, startY = e.clientY;
   let startW = el.offsetWidth, startH = el.offsetHeight;
+  function onMove(ev) {
+    let dw = ev.clientX - startX;
+    let dh = ev.clientY - startY;
+    el.style.width = Math.max(40, startW + dw) + "px";
+    el.style.height = Math.max(20, startH +Height;
   function onMove(ev) {
     let dw = ev.clientX - startX;
     let dh = ev.clientY - startY;
@@ -2171,7 +2500,21 @@ function startResize(e, id) {
     document.removeEventListener("mousemove", onMove);
     document.removeEventListener("mouseup", onUp);
   }
+  document.addEventListener("mousemove dh) + "px";
+    if (guiElements[id]) {
+      guiElements[id].w = el.offsetWidth;
+      guiElements[id].h = el.offsetHeight;
+    }
+  }
+  function onUp() {
+    document.removeEventListener("mousemove", onMove);
+    document.removeEventListener("mouseup", onUp);
+  }
   document.addEventListener("mousemove", onMove);
+  document.addEventListener("mouseup", onUp);
+}
+
+// ======================== MODALS & SET", onMove);
   document.addEventListener("mouseup", onUp);
 }
 
@@ -2184,7 +2527,23 @@ function closeModal(id) {
   document.getElementById(id).classList.remove("show");
 }
 function showInstallModal() {
+  document.getElementById("installModal").classListTINGS ========================
+function openSettings() {
+  updateCreditsUI();
+  document.getElementById("settingsModal").classList.add("show");
+}
+function closeModal(id) {
+  document.getElementById(id).classList.remove("show");
+}
+function showInstallModal() {
   document.getElementById("installModal").classList.add("show");
+}
+function changeLang(l) {
+  lang = l;
+  localStorage.setItem("lang", l);
+  let placeholder = LANG[l]?.placeholder || LANG.id.placeholder;
+  document.getElementById("messageInput").placeholder = placeholder;
+  showToast(`Bahasa diubah ke ${l === "id" ? ".add("show");
 }
 function changeLang(l) {
   lang = l;
@@ -2202,51 +2561,116 @@ function claimDaily() {
 }
 function redeemCode() {
   let code = document.getElementById("redeemCodeInput").value;
+  if (code ===Indonesia" : "English"}`, "var(--green)");
+}
+function claimDaily() {
+  if (!currentUser.isOwner) {
+    currentUser.credits += 2;
+    updateCreditsUI();
+    showToast("+2 CR claimed!", "var(--green)");
+  }
+}
+function redeemCode() {
+  let code = document.getElementById("redeemCodeInput").value;
   if (code === "NEXUS100") {
     currentUser.credits += 100;
     updateCreditsUI();
+    showToast("+100 CR redeemed!", "var(--green) "NEXUS100") {
+    currentUser.credits += 100;
+    updateCreditsUI();
     showToast("+100 CR redeemed!", "var(--green)");
+  } else showToast("");
   } else showToast("Invalid code", "var(--pink)");
+  documentInvalid code", "var(--pink)");
   document.getElementById("redeemCodeInput").value = "";
 }
 function logout() {
   localStorage.clear();
+  window.location.reload.getElementById("redeemCodeInput").value = "";
+}
+function logout() {
+  localStorage.clear();
   window.location.reload();
+();
 }
 function copyCodeOutput() {
-  let pre = document.getElementById("codeOutput");
-  navigator.clipboard.writeText(pre.innerText).then(() => showToast("Copied!"));
+  let}
+function copyCodeOutput() pre = document.getElementById("codeOutput {
+  let pre = document.getElementById("code");
+  navigator.clipboard.writeText(pre.innerText).Output");
+  navigator.clipboard.writeText(pre.innerText).then(() => showthen(() => showToast("Toast("Copied!"));
+}
+function downloadCodeOutput()Copied!"));
 }
 function downloadCodeOutput() {
+  {
   let pre = document.getElementById("codeOutput");
-  let blob = new Blob([pre.innerText], {type: "text/plain"});
-  let a = document.createElement("a");
+  let blob = new Blob([pre let pre = document.getElementById("codeOutput");
+  let blob = new Blob([pre.innerText], {type: "text.innerText], {type: "text/plain/plain"});
+  let a = document.createElement"});
+  let a = document.createElement("a("a");
+  a.href =");
   a.href = URL.createObjectURL(blob);
+  a URL.createObjectURL(blob.download = "nexus_gui.lua);
   a.download = "nexus_gui.lua";
+ ";
   a.click();
+  URL.revokeObjectURL(a.href a.click();
   URL.revokeObjectURL(a.href);
+}
+function clearChat() {
+  let conv = conversations.find(c => c.id === currentConv);
 }
 function clearChat() {
   let conv = conversations.find(c => c.id === currentConvId);
   if (conv) {
     conv.messages = [];
+    saveConversationsId);
+  if (conv) {
+    conv.messages = [];
     saveConversations();
-    loadMessages(currentConvId);
-    showToast("Chat dibersihkan", "var(--dim)");
+   ();
+    loadMessages(currentConv loadMessages(currentConvIdId);
+    showToast("Chat dibersihkan", "var(--dim);
+    showToast("Chat dibersihkan", "var(--dim))");
+  }
+}
+function switchTab(tab) {
+  let chatTab = document.getElementById("");
   }
 }
 function switchTab(tab) {
   let chatTab = document.getElementById("chatTab");
+  let guchatTab");
   let guiTab = document.getElementById("guiTab");
-  let chatBtn = document.getElementById("tabChatBtn");
+ iTab = document.getElementById("guiTab");
+  let chatBtn = document.getElementById("tabChatBtn let chatBtn = document.getElementById("tabChatBtn");
   let guiBtn = document.getElementById("tabGuiBtn");
+  let guiBtn = document.getElementById("tabGui");
+  if (tab === "chat") {
+    chatTab.style.display = "Btn");
   if (tab === "chat") {
     chatTab.style.display = "flex";
+    guiTab.style.display = "none";
+    chatflex";
     guiTab.style.display = "none";
     chatBtn.classList.add("active");
     guiBtn.classList.remove("active");
   } else {
     chatTab.style.display = "none";
+Btn.classList.add("active");
+    guiBtn.classList.remove("active");
+  } else {
+    chatTab.style.display = "none    guiTab.style.display = "flex";
+    chatBtn.classList.remove("active");
+    guiBtn.classList.add("active");
+  }
+}
+function toggleSidebar() {
+  document.getElementById("app").classList.toggle("sb-hidden");
+}
+function useSugg(q) {
+  document";
     guiTab.style.display = "flex";
     chatBtn.classList.remove("active");
     guiBtn.classList.add("active");
@@ -2263,8 +2687,22 @@ function useSugg(q) {
 // ======================== INIT ========================
 window.onclick = function(e) {
   if (!e.target.closest(".model-selector")) {
+   .getElementById("messageInput").value = q;
+  sendMessage();
+}
+
+// ======================== INIT ========================
+window.onclick = function(e) {
+  if (!e.target.closest(".model-selector")) {
     document.getElementById("modelDropdown").classList.remove("open");
-    document.getElementById("guiModelDropdown").classList.remove("open");
+    document.getElementById("guiModelDropdown document.getElementById("modelDropdown").classList.remove("open");
+    document.getElementById("guiModelDropdown").classList.remove("").classList.remove("open");
+  }
+  if (e.target.classList.contains("modal-overlay")) e.target.classList.remove("show");
+};
+document.getElementById("messageInput").addEventListener("input", function() {
+  this.style.height = "auto";
+  thisopen");
   }
   if (e.target.classList.contains("modal-overlay")) e.target.classList.remove("show");
 };
@@ -2274,7 +2712,16 @@ document.getElementById("messageInput").addEventListener("input", function() {
 });
 document.getElementById("messageInput").addEventListener("keydown", function(e) {
   if (e.key === "Enter" && !e.shiftKey) {
-    e.preventDefault();
+   .style.height = Math.min(this.scrollHeight, 130) + "px";
+});
+document.getElementById("messageInput").addEventListener("keydown", function(e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault e.preventDefault();
+    sendMessage();
+  }
+});
+document.querySelectorAll(".suggestion-card").forEach(card => {
+  card.addEventListener("click", () => useSugg(card.dataset.query();
     sendMessage();
   }
 });
@@ -2286,7 +2733,20 @@ updateRoleUI();
 updateCreditsUI();
 setStudioStatus(false);
 loadConversations();
+changeLang(lang));
+});
+// Load initial
+updateRoleUI();
+updateCreditsUI();
+setStudioStatus(false);
+loadConversations();
 changeLang(lang);
+// Simulate studio connect after 2 sec
+setTimeout(() => setStudioStatus(true), 2000);
+</script>
+</body>
+</html>
+```);
 // Simulate studio connect after 2 sec
 setTimeout(() => setStudioStatus(true), 2000);
 </script>
