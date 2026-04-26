@@ -21,8 +21,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .version{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;background:rgba(0,229,255,.06);border:1px solid var(--b);border-radius:20px;font-size:9px;color:var(--cyan);margin-bottom:18px;}
 .vdot{width:5px;height:5px;border-radius:50%;background:var(--green);animation:pd 1.8s infinite;}
 @keyframes pd{0%,100%{opacity:1}50%{opacity:.3}}
-.lang-row{display:flex;align-items:center;justify-content:center;gap:6px;margin-bottom:16px;}
-.lang-select{background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:4px 8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;outline:none;cursor:pointer;}
 .step-label{font-size:11px;color:var(--dim);margin-bottom:14px;line-height:1.6;}
 .step-indicator{display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:16px;}
 .step-dot{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'Orbitron',sans-serif;border:1.5px solid var(--b);color:var(--dim);background:transparent;transition:.3s;}
@@ -67,24 +65,13 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 <div class="loading-overlay" id="loadingOverlay">
   <div class="loading-logo">NEXUS AI</div>
   <div class="loading-spinner"></div>
-  <div class="loading-text" id="loadingText">Menyelesaikan login...</div>
+  <div class="loading-text" id="loadingText">Completing login...</div>
 </div>
 <div class="page">
   <div class="box">
     <div class="logo">NEXUS AI</div>
     <div class="tag">Roblox Dev Intelligence</div>
-    <div class="version"><div class="vdot"></div> v10.4 Online</div>
-
-    <div class="lang-row">
-      <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="color:var(--dim);flex-shrink:0;"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
-      <select class="lang-select" id="langSel" onchange="setLang(this.value)">
-        <option value="id">Bahasa Indonesia</option>
-        <option value="en">English</option>
-        <option value="ja">Japanese</option>
-        <option value="ko">Korean</option>
-        <option value="zh">Chinese</option>
-      </select>
-    </div>
+    <div class="version"><div class="vdot"></div> Online</div>
 
     <div class="step-indicator">
       <div class="step-dot active" id="step1Dot">1</div>
@@ -92,10 +79,11 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div class="step-dot" id="step2Dot">2</div>
     </div>
 
+    <!-- PANEL 1: GOOGLE -->
     <div id="panelGoogle" style="display:block;">
-      <div class="step-label" id="stepLabel">Login dengan akun Google kamu</div>
-      <div class="info-box" id="infoBox1">
-        <strong>Langkah 1 dari 2:</strong> Login dengan Google untuk verifikasi identitas kamu.
+      <div class="step-label">Sign in with your Google account</div>
+      <div class="info-box">
+        <strong>Step 1 of 2:</strong> Sign in with Google to verify your identity.
       </div>
       <div class="google-user-preview" id="googlePreview">
         <img class="google-av" id="googleAvImg" src="" alt="" onerror="this.style.opacity='.3'">
@@ -103,37 +91,36 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         <div class="google-email" id="googleEmail">-</div>
       </div>
       <div class="err" id="googleErr"></div>
-      <div class="ld" id="googleLd"><div class="spin"></div><span id="googleLdTxt">Menghubungi Google...</span></div>
+      <div class="ld" id="googleLd"><div class="spin"></div><span>Connecting to Google...</span></div>
       <button class="btn-google" id="googleSignInBtn" onclick="googleSignIn()">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
-        <span id="googleBtnTxt">Lanjutkan dengan Google</span>
+        Continue with Google
       </button>
     </div>
 
+    <!-- PANEL 2: ROBLOX -->
     <div id="panelRoblox" style="display:none;">
-      <div class="step-label" id="stepRobloxLabel">Hubungkan akun Roblox kamu</div>
+      <div class="step-label">Connect your Roblox account</div>
       <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;padding:8px;background:rgba(0,255,170,.04);border-radius:8px;border:1px solid rgba(0,255,170,.2);">
         <img id="googleSmallAv" src="" style="width:28px;height:28px;border-radius:50%;border:1.5px solid rgba(0,255,170,.4);flex-shrink:0;" onerror="this.style.opacity='.3'">
         <div style="min-width:0;text-align:left;flex:1;">
           <div style="font-size:11px;color:white;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" id="googleSmallName">-</div>
           <div style="font-size:9px;color:var(--green);">✓ Google Verified</div>
         </div>
-        <button onclick="logoutGoogle()" style="flex-shrink:0;background:none;border:1px solid var(--b);border-radius:4px;color:var(--dim);font-size:9px;padding:2px 8px;cursor:pointer;font-family:'JetBrains Mono',monospace;">Ganti</button>
+        <button onclick="logoutGoogle()" style="flex-shrink:0;background:none;border:1px solid var(--b);border-radius:4px;color:var(--dim);font-size:9px;padding:2px 8px;cursor:pointer;font-family:'JetBrains Mono',monospace;">Change</button>
       </div>
-      <div class="required-badge">
-        ⚡ ROBLOX WAJIB
-      </div>
-      <div class="info-box" id="infoBox2">
-        <strong>Langkah 2 dari 2:</strong> Akun Roblox <strong>wajib</strong> untuk menggunakan NEXUS AI. Semua data (credits, riwayat chat, settings) disimpan di akun Roblox kamu — bukan di perangkat.
+      <div class="required-badge">⚡ ROBLOX REQUIRED</div>
+      <div class="info-box">
+        <strong>Step 2 of 2:</strong> A Roblox account is <strong>required</strong> to use NEXUS AI. All your data (credits, chat history, settings) is stored in your Roblox account — not on this device.
       </div>
       <div class="err" id="robloxErr"></div>
-      <div class="ld" id="robloxLd"><div class="spin"></div><span id="robloxLdTxt">Menghubungkan Roblox...</span></div>
+      <div class="ld" id="robloxLd"><div class="spin"></div><span>Connecting to Roblox...</span></div>
       <button class="btn" id="robloxLoginBtn" onclick="startRobloxOAuth()" style="background:linear-gradient(135deg,#e63737,#c0392b);display:flex;align-items:center;justify-content:center;gap:8px;">
         <img src="icon/roblox.png" alt="" style="width:16px;height:16px;object-fit:contain;" onerror="this.style.display='none'">
-        <span id="robloxBtnTxt">Hubungkan Roblox</span>
+        Connect Roblox Account
       </button>
-      <div style="font-size:9px;color:var(--dim);text-align:center;margin-top:6px;line-height:1.6;" id="robloxHintTxt">
-        Kamu akan diarahkan ke halaman login Roblox resmi.<br>Data kamu aman dan tidak dibagikan ke pihak lain.
+      <div style="font-size:9px;color:var(--dim);text-align:center;margin-top:6px;line-height:1.6;">
+        You will be redirected to the official Roblox login page.<br>Your data is safe and will not be shared with third parties.
       </div>
     </div>
 
@@ -147,6 +134,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 <script>
 'use strict';
 
+// Floating particles
 (function(){
   var p=document.getElementById('particles');
   for(var i=0;i<18;i++){
@@ -160,342 +148,253 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 var OWNER_USERS = ['FIINYTID25','fiinytid25'];
 var GOOGLE_CLIENT_ID = '';
 var ROBLOX_CLIENT_ID = '';
-var curLang = localStorage.getItem('nexus_lang') || 'id';
 
 async function loadConfig(){
   try{
-    var r = await fetch('/api/main');
+    var r=await fetch('/api/main');
     if(r.ok){
-      var d = await r.json();
-      GOOGLE_CLIENT_ID = d.gmail_key || '';
-      ROBLOX_CLIENT_ID = d.roblox_client_id || '';
-    } else {
-      console.warn('Config not loaded, using empty client IDs');
+      var d=await r.json();
+      GOOGLE_CLIENT_ID=d.gmail_key||'';
+      ROBLOX_CLIENT_ID=d.roblox_client_id||'';
     }
-  } catch(e){
-    console.warn('Failed to load config:', e);
-  }
+  }catch(e){console.warn('Config load failed:',e);}
 }
 
-var LOGIN_LANGS = {
-  id:{
-    step:'Login dengan akun Google kamu',
-    step2:'Hubungkan akun Roblox kamu',
-    googleBtn:'Lanjutkan dengan Google',
-    robloxRequired:'Akun Roblox WAJIB — semua data tersimpan di akun Roblox kamu.',
-    linkRoblox:'Hubungkan Roblox',
-    hint:'Kamu akan diarahkan ke halaman login Roblox resmi.\nData kamu aman dan tidak dibagikan ke pihak lain.',
-    info1:'Langkah 1 dari 2: Login dengan Google untuk verifikasi identitas kamu.',
-    info2:'Langkah 2 dari 2: Akun Roblox wajib. Semua data (credits, riwayat chat, settings) disimpan di akun Roblox kamu.',
-  },
-  en:{
-    step:'Sign in with your Google account',
-    step2:'Connect your Roblox account',
-    googleBtn:'Continue with Google',
-    robloxRequired:'Roblox account is REQUIRED — all data is stored in your Roblox account.',
-    linkRoblox:'Link Roblox',
-    hint:'You will be redirected to the official Roblox login page.\nYour data is safe and not shared with third parties.',
-    info1:'Step 1 of 2: Sign in with Google to verify your identity.',
-    info2:'Step 2 of 2: Roblox account is required. All data (credits, chat history, settings) is stored in your Roblox account.',
-  },
-  ja:{
-    step:'Googleアカウントでログイン',
-    step2:'Robloxアカウントを連携',
-    googleBtn:'Googleで続ける',
-    robloxRequired:'Robloxアカウント必須 — 全データはRobloxアカウントに保存されます。',
-    linkRoblox:'Robloxを連携',
-    hint:'公式Robloxログインページに移動します。\nデータは安全で、第三者に共有されません。',
-    info1:'ステップ1/2: Googleでログインして本人確認を行います。',
-    info2:'ステップ2/2: Robloxアカウントは必須です。全データ（クレジット、チャット履歴）はRobloxアカウントに保存されます。',
-  },
-  ko:{
-    step:'Google 계정으로 로그인',
-    step2:'Roblox 계정 연결',
-    googleBtn:'Google로 계속',
-    robloxRequired:'Roblox 계정 필수 — 모든 데이터는 Roblox 계정에 저장됩니다.',
-    linkRoblox:'Roblox 연결',
-    hint:'공식 Roblox 로그인 페이지로 이동합니다.\n데이터는 안전하며 제3자와 공유되지 않습니다.',
-    info1:'1단계/2: Google로 로그인하여 신원을 확인합니다.',
-    info2:'2단계/2: Roblox 계정이 필요합니다. 모든 데이터(크레딧, 채팅 기록)는 Roblox 계정에 저장됩니다.',
-  },
-  zh:{
-    step:'使用Google账号登录',
-    step2:'连接Roblox账号',
-    googleBtn:'使用Google继续',
-    robloxRequired:'Roblox账号必须 — 所有数据存储在您的Roblox账号中。',
-    linkRoblox:'连接Roblox',
-    hint:'您将被重定向到官方Roblox登录页面。\n您的数据是安全的，不会与第三方共享。',
-    info1:'第1步/2: 使用Google登录验证您的身份。',
-    info2:'第2步/2: 需要Roblox账号。所有数据（积分、聊天记录）存储在您的Roblox账号中。',
-  },
-};
-
-function setLang(l){
-  curLang = l;
-  localStorage.setItem('nexus_lang', l);
-  var t = LOGIN_LANGS[l] || LOGIN_LANGS.id;
-  function st(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
-  st('stepLabel', t.step);
-  st('stepRobloxLabel', t.step2);
-  st('googleBtnTxt', t.googleBtn);
-  st('robloxBtnTxt', t.linkRoblox);
-  st('robloxHintTxt', t.hint);
-  var ib1 = document.getElementById('infoBox1');
-  if(ib1) ib1.innerHTML = t.info1;
-  var ib2 = document.getElementById('infoBox2');
-  if(ib2) ib2.innerHTML = t.info2;
-}
-document.getElementById('langSel').value = curLang;
-setLang(curLang);
-
-function setStep(step) {
-  var s1 = document.getElementById('step1Dot');
-  var s2 = document.getElementById('step2Dot');
-  var sl = document.getElementById('stepLine1');
-  if(step === 1) {
-    s1.className = 'step-dot active';
-    s2.className = 'step-dot';
-    sl.className = 'step-line';
-  } else {
-    s1.className = 'step-dot done';
-    s1.textContent = '✓';
-    s2.className = 'step-dot active';
-    sl.className = 'step-line done';
+function setStep(step){
+  var s1=document.getElementById('step1Dot');
+  var s2=document.getElementById('step2Dot');
+  var sl=document.getElementById('stepLine1');
+  if(step===1){
+    s1.className='step-dot active';
+    s2.className='step-dot';
+    sl.className='step-line';
+  }else{
+    s1.className='step-dot done';
+    s1.textContent='✓';
+    s2.className='step-dot active';
+    sl.className='step-line done';
   }
 }
 
 function showPanel(id){
-  document.getElementById('panelGoogle').style.display = id === 'google' ? 'block' : 'none';
-  document.getElementById('panelRoblox').style.display = id === 'roblox' ? 'block' : 'none';
-  setStep(id === 'google' ? 1 : 2);
+  document.getElementById('panelGoogle').style.display=id==='google'?'block':'none';
+  document.getElementById('panelRoblox').style.display=id==='roblox'?'block':'none';
+  setStep(id==='google'?1:2);
 }
 
 function showRobloxPanel(gUser){
-  var av = document.getElementById('googleSmallAv');
-  if(av) av.src = gUser.picture || '';
-  var nm = document.getElementById('googleSmallName');
-  if(nm) nm.textContent = gUser.name || gUser.email || '';
+  var av=document.getElementById('googleSmallAv');if(av)av.src=gUser.picture||'';
+  var nm=document.getElementById('googleSmallName');if(nm)nm.textContent=gUser.name||gUser.email||'';
   showPanel('roblox');
 }
 
 function logoutGoogle(){
   localStorage.removeItem('nexus_google_tmp');
   document.getElementById('googleErr').classList.remove('show');
-  document.getElementById('googleSignInBtn').disabled = false;
+  document.getElementById('googleSignInBtn').disabled=false;
   document.getElementById('googleLd').classList.remove('show');
   document.getElementById('googlePreview').classList.remove('show');
   showPanel('google');
 }
 
-function showErr(id, msg){
-  var e = document.getElementById(id);
-  if(e){e.textContent = msg; e.classList.add('show');}
+function showErr(id,msg){
+  var e=document.getElementById(id);
+  if(e){e.textContent=msg;e.classList.add('show');}
 }
 
 function googleSignIn(){
-  var errEl = document.getElementById('googleErr');
+  var errEl=document.getElementById('googleErr');
   errEl.classList.remove('show');
   if(!GOOGLE_CLIENT_ID){
-    errEl.textContent = 'Google Client ID belum dikonfigurasi. Hubungi admin.';
+    errEl.textContent='Google Client ID not configured. Please contact the administrator.';
     errEl.classList.add('show');
     return;
   }
-  localStorage.setItem('nexus_lang', curLang);
   document.getElementById('googleLd').classList.add('show');
-  document.getElementById('googleSignInBtn').disabled = true;
-  var redirectUri = encodeURIComponent(window.location.origin + '/api/google-callback');
-  var state = encodeURIComponent('nexus_' + Date.now());
-  window.location.href = 'https://accounts.google.com/o/oauth2/v2/auth'
-    + '?client_id=' + encodeURIComponent(GOOGLE_CLIENT_ID)
-    + '&response_type=code&redirect_uri=' + redirectUri
-    + '&scope=' + encodeURIComponent('openid email profile')
-    + '&state=' + state + '&access_type=offline&prompt=select_account';
+  document.getElementById('googleSignInBtn').disabled=true;
+  var redirectUri=encodeURIComponent(window.location.origin+'/api/google-callback');
+  var state=encodeURIComponent('nexus_'+Date.now());
+  window.location.href='https://accounts.google.com/o/oauth2/v2/auth'
+    +'?client_id='+encodeURIComponent(GOOGLE_CLIENT_ID)
+    +'&response_type=code&redirect_uri='+redirectUri
+    +'&scope='+encodeURIComponent('openid email profile')
+    +'&state='+state+'&access_type=offline&prompt=select_account';
 }
 
 function startRobloxOAuth(){
-  var btn = document.getElementById('robloxLoginBtn');
-  var errEl = document.getElementById('robloxErr');
+  var btn=document.getElementById('robloxLoginBtn');
+  var errEl=document.getElementById('robloxErr');
   errEl.classList.remove('show');
   if(!ROBLOX_CLIENT_ID){
-    errEl.textContent = 'ROBLOX_CLIENT_ID belum dikonfigurasi. Hubungi admin.';
+    errEl.textContent='Roblox Client ID not configured. Please contact the administrator.';
     errEl.classList.add('show');
     return;
   }
-  btn.disabled = true;
+  btn.disabled=true;
   document.getElementById('robloxLd').classList.add('show');
-  localStorage.setItem('nexus_lang', curLang);
-  var redirectUri = encodeURIComponent(window.location.origin + '/api/auth');
-  var state = encodeURIComponent(curLang + '_' + Date.now());
-  window.location.href = 'https://authorize.roblox.com/?client_id=' + ROBLOX_CLIENT_ID
-    + '&response_type=code&redirect_uri=' + redirectUri
-    + '&scope=' + encodeURIComponent('openid profile') + '&state=' + state;
+  var lang=localStorage.getItem('nexus_lang')||'en';
+  var redirectUri=encodeURIComponent(window.location.origin+'/api/auth');
+  var state=encodeURIComponent(lang+'_'+Date.now());
+  window.location.href='https://authorize.roblox.com/?client_id='+ROBLOX_CLIENT_ID
+    +'&response_type=code&redirect_uri='+redirectUri
+    +'&scope='+encodeURIComponent('openid profile')+'&state='+state;
 }
 
 async function loadUserDataFromServer(robloxUsername){
   try{
-    var r = await fetch('/api/sync?user=' + encodeURIComponent(robloxUsername.toLowerCase()));
-    if(r.ok){
-      var d = await r.json();
-      if(d && d.credits !== undefined) return d;
-    }
+    var r=await fetch('/api/sync?user='+encodeURIComponent(robloxUsername.toLowerCase()));
+    if(r.ok){var d=await r.json();if(d&&d.credits!==undefined)return d;}
   }catch(e){}
   return null;
 }
 
-async function finishLogin(gUser, robloxUser){
-  if(!robloxUser || !robloxUser.username){
+async function finishLogin(gUser,robloxUser){
+  if(!robloxUser||!robloxUser.username){
     showPanel('roblox');
-    showErr('robloxErr', 'Login Roblox diperlukan. Silakan login dengan akun Roblox kamu.');
+    showErr('robloxErr','Roblox login is required. Please sign in with your Roblox account.');
     return;
   }
 
-  var ov = document.getElementById('loadingOverlay');
-  var lt = document.getElementById('loadingText');
-  if(ov) ov.classList.add('show');
-  if(lt) lt.textContent = 'Memuat data akun @' + robloxUser.username + '...';
+  var ov=document.getElementById('loadingOverlay');
+  var lt=document.getElementById('loadingText');
+  if(ov)ov.classList.add('show');
+  if(lt)lt.textContent='Loading account data for @'+robloxUser.username+'...';
 
-  var username = robloxUser.username;
-  var isOwner = OWNER_USERS.indexOf(username) !== -1 || OWNER_USERS.indexOf(username.toLowerCase()) !== -1;
+  var username=robloxUser.username;
+  var isOwner=OWNER_USERS.indexOf(username)!==-1||OWNER_USERS.indexOf(username.toLowerCase())!==-1;
 
-  var serverData = await loadUserDataFromServer(username);
-  if(lt) lt.textContent = 'Menyiapkan sesi...';
-  var userData = serverData || {
-    credits: isOwner ? 999999 : 30,
-    convs: [],
-    plan: 'free',
-    lastClaim: null,
-    draftText: {},
-    draftAttach: {},
-    model: {id:'gemini-2.5-flash-lite', provider:'gemini', cost:1, label:'Gemini 2.5 Flash Lite'},
-    language: curLang,
-    roles: isOwner ? ['owner'] : [],
-    loginMethod: 'roblox',
-    robloxId: robloxUser.id,
-    googleEmail: gUser.email || '',
-    createdAt: Date.now(),
+  var serverData=await loadUserDataFromServer(username);
+  if(lt)lt.textContent='Setting up session...';
+
+  var userData=serverData||{
+    credits:isOwner?999999:30,
+    convs:[],
+    plan:'free',
+    lastClaim:null,
+    draftText:{},
+    draftAttach:{},
+    model:{id:'gemini-2.5-flash-lite',provider:'gemini',cost:0,label:'Gemini 2.5 Flash Lite'},
+    language:'en',
+    roles:isOwner?['owner']:[],
+    loginMethod:'roblox',
+    robloxId:robloxUser.id,
+    googleEmail:gUser.email||'',
+    createdAt:Date.now(),
   };
 
-  userData.avatar = (robloxUser.avatar) || gUser.picture || userData.avatar || '';
-  userData.googleEmail = gUser.email || userData.googleEmail || '';
-  userData.robloxId = robloxUser.id || userData.robloxId;
-  userData.loginMethod = 'roblox';
-  userData.lastSeen = Date.now();
-  if(!userData.createdAt) userData.createdAt = Date.now();
+  userData.avatar=(robloxUser.avatar)||gUser.picture||userData.avatar||'';
+  userData.googleEmail=gUser.email||userData.googleEmail||'';
+  userData.robloxId=robloxUser.id||userData.robloxId;
+  userData.loginMethod='roblox';
+  userData.lastSeen=Date.now();
+  if(!userData.createdAt)userData.createdAt=Date.now();
 
-  var session = {
-    user: {
-      id: robloxUser.id,
-      username: username,
-      displayName: robloxUser.displayName || robloxUser.username,
-      avatar: userData.avatar,
-      email: gUser.email || '',
-      robloxId: robloxUser.id,
-      canInject: true,
+  var session={
+    user:{
+      id:robloxUser.id,
+      username:username,
+      displayName:robloxUser.displayName||robloxUser.username,
+      avatar:userData.avatar,
+      email:gUser.email||'',
+      robloxId:robloxUser.id,
+      canInject:true,
     },
-    data: userData,
-    loginTime: Date.now(),
-    version: 2,
+    data:userData,
+    loginTime:Date.now(),
+    version:2,
   };
 
-  localStorage.setItem('nexus_session', JSON.stringify(session));
-  localStorage.setItem('nexus_lang', curLang);
+  localStorage.setItem('nexus_session',JSON.stringify(session));
   localStorage.removeItem('nexus_google_tmp');
 
   try{
-    await fetch('/api/sync', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({user: username.toLowerCase(), data: userData})
-    });
-  } catch(e){}
+    await fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user:username.toLowerCase(),data:userData})});
+  }catch(e){}
 
-  if(lt) lt.textContent = 'Berhasil! Mengalihkan ke NEXUS AI...';
-
-  setTimeout(function(){
-    window.location.replace('/chats');
-  }, 800);
+  if(lt)lt.textContent='Success! Redirecting to NEXUS AI...';
+  setTimeout(function(){window.location.replace('/chats');},800);
 }
 
 (async function init(){
-  var params = new URLSearchParams(window.location.search);
+  var params=new URLSearchParams(window.location.search);
 
+  // Check existing session
   try{
-    var s = localStorage.getItem('nexus_session');
+    var s=localStorage.getItem('nexus_session');
     if(s){
-      var p = JSON.parse(s);
-      if(p && p.user && p.user.username && p.user.robloxId && p.loginTime && (Date.now()-p.loginTime) < 86400000*7){
-        window.location.replace('/chats');
-        return;
+      var p=JSON.parse(s);
+      if(p&&p.user&&p.user.username&&p.user.robloxId&&p.loginTime&&(Date.now()-p.loginTime)<86400000*7){
+        window.location.replace('/chats');return;
       }
       localStorage.removeItem('nexus_session');
     }
-  } catch(e){localStorage.removeItem('nexus_session');}
+  }catch(e){localStorage.removeItem('nexus_session');}
 
   await loadConfig();
 
-  var gup = params.get('google_user');
+  // Handle Google callback
+  var gup=params.get('google_user');
   if(gup){
-    window.history.replaceState({}, '', '/login');
+    window.history.replaceState({},'','/login');
     try{
-      var gUser = JSON.parse(atob(decodeURIComponent(gup)));
-      if(!gUser || !gUser.id) throw new Error('Invalid Google data');
-      localStorage.setItem('nexus_google_tmp', JSON.stringify(gUser));
-      var avImg = document.getElementById('googleAvImg');
-      if(avImg) avImg.src = gUser.picture || '';
-      var nmEl = document.getElementById('googleName');
-      if(nmEl) nmEl.textContent = gUser.name || gUser.email || '';
-      var emEl = document.getElementById('googleEmail');
-      if(emEl) emEl.textContent = gUser.email || '';
+      var gUser=JSON.parse(atob(decodeURIComponent(gup)));
+      if(!gUser||!gUser.id)throw new Error('Invalid Google data');
+      localStorage.setItem('nexus_google_tmp',JSON.stringify(gUser));
+      var avImg=document.getElementById('googleAvImg');if(avImg)avImg.src=gUser.picture||'';
+      var nmEl=document.getElementById('googleName');if(nmEl)nmEl.textContent=gUser.name||gUser.email||'';
+      var emEl=document.getElementById('googleEmail');if(emEl)emEl.textContent=gUser.email||'';
       document.getElementById('googlePreview').classList.add('show');
       showRobloxPanel(gUser);
     }catch(e){
-      showErr('googleErr', 'Gagal memproses data Google: ' + e.message);
+      showErr('googleErr','Failed to process Google data: '+e.message);
       showPanel('google');
     }
     return;
   }
 
-  var gep = params.get('google_error');
+  // Handle Google error
+  var gep=params.get('google_error');
   if(gep){
-    window.history.replaceState({}, '', '/login');
-    showErr('googleErr', 'Login Google gagal: ' + decodeURIComponent(gep));
+    window.history.replaceState({},'','/login');
+    showErr('googleErr','Google sign-in failed: '+decodeURIComponent(gep));
     showPanel('google');
     return;
   }
 
-  var rup = params.get('roblox_user');
+  // Handle Roblox callback
+  var rup=params.get('roblox_user');
   if(rup){
-    window.history.replaceState({}, '', '/login');
+    window.history.replaceState({},'','/login');
     try{
-      var rUser = JSON.parse(atob(decodeURIComponent(rup)));
-      if(!rUser || !rUser.id) throw new Error('Invalid Roblox data');
-      var gTmp = null;
-      try{gTmp = JSON.parse(localStorage.getItem('nexus_google_tmp') || 'null');}catch(e){}
+      var rUser=JSON.parse(atob(decodeURIComponent(rup)));
+      if(!rUser||!rUser.id)throw new Error('Invalid Roblox data');
+      var gTmp=null;
+      try{gTmp=JSON.parse(localStorage.getItem('nexus_google_tmp')||'null');}catch(e){}
       if(!gTmp){
-        localStorage.setItem('nexus_roblox_tmp', JSON.stringify(rUser));
         showPanel('google');
-        showErr('googleErr', 'Sesi Google kadaluarsa. Login Google lagi dulu ya.');
+        showErr('googleErr','Google session expired. Please sign in with Google first.');
         return;
       }
-      await finishLogin(gTmp, rUser);
+      await finishLogin(gTmp,rUser);
     }catch(e){
       showPanel('google');
-      showErr('googleErr', 'Login Roblox gagal: ' + e.message);
+      showErr('googleErr','Roblox login failed: '+e.message);
     }
     return;
   }
 
-  var rep = params.get('roblox_error');
+  // Handle Roblox error
+  var rep=params.get('roblox_error');
   if(rep){
-    window.history.replaceState({}, '', '/login');
-    var gTmp2 = null;
-    try{gTmp2 = JSON.parse(localStorage.getItem('nexus_google_tmp') || 'null');}catch(e){}
+    window.history.replaceState({},'','/login');
+    var gTmp2=null;
+    try{gTmp2=JSON.parse(localStorage.getItem('nexus_google_tmp')||'null');}catch(e){}
     if(gTmp2){
       showRobloxPanel(gTmp2);
-      showErr('robloxErr', 'Login Roblox gagal: ' + decodeURIComponent(rep) + '. Coba lagi.');
-    } else {
+      showErr('robloxErr','Roblox login failed: '+decodeURIComponent(rep)+'. Please try again.');
+    }else{
       showPanel('google');
-      showErr('googleErr', 'Login Roblox gagal: ' + decodeURIComponent(rep));
+      showErr('googleErr','Roblox login failed: '+decodeURIComponent(rep));
     }
     return;
   }
