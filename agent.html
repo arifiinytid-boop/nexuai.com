@@ -73,7 +73,7 @@
             <img class="user-avatar" id="userAvatar" src="nexusai.png" onerror="this.style.display='none'">
             <span class="user-name" id="userName">-</span>
         </div>
-        <button id="backBtn" onclick="window.close()||window.location.href='chats.html'">Tutup</button>
+        <button id="backBtn" onclick="goBack()">Tutup</button>
     </div>
     <div id="chat"></div>
     <div class="input-area">
@@ -88,32 +88,89 @@
     // ─── SESSION & LANGUAGE ─────────────────────────────────
     const SESSION = (() => { try { return JSON.parse(localStorage.getItem('nexus_session')); } catch(e){} })();
     const user = SESSION?.user || {};
-    const username = user.username || 'Pengguna';
+    const displayName = user.displayName || user.username || 'Pengguna';
+    const username = user.username || 'pengguna';
     const avatarUrl = user.avatar || 'nexusai.png';
     const lang = localStorage.getItem('nexus_lang') || 'id';
 
     // Tampilkan info user di header
     document.getElementById('userAvatar').src = avatarUrl;
-    document.getElementById('userName').textContent = username;
+    document.getElementById('userName').textContent = displayName;
 
-    // ─── SYSTEM PROMPT (TERPISAH & DITINGKATKAN) ────────────
-    const SYSTEM_ID = `Kamu adalah Agent Bantuan Resmi NEXUS AI. Tugasmu HANYA membantu pengguna dengan:
-- Masalah teknis website NEXUS AI (chat, GUI editor, pengaturan, login, pembayaran, error).
-- Masalah plugin NEXUS AI untuk Roblox Studio (instalasi, koneksi, inject, crash, tidak muncul).
-- Kamu TIDAK BOLEH membuat script/game Lua, memberikan kode Roblox, atau membantu pengembangan game.
-- Jika diminta, tolak dengan sopan: "Maaf, saya hanya membantu masalah teknis web/plugin. Untuk coding, silakan kembali ke chat utama NEXUS AI."
-- Berikan solusi langkah demi langkah.
-- Selalu gunakan Bahasa Indonesia ramah.
-- Panggil pengguna dengan nama Roblox mereka: "${username}".`;
+    // Fungsi kembali yang pasti berfungsi
+    function goBack() {
+        // Coba tutup jendela jika dibuka dari window.open
+        if (window.opener) {
+            window.close();
+        }
+        // Fallback: selalu kembali ke chats.html
+        window.location.href = 'chats.html';
+    }
 
-    const SYSTEM_EN = `You are the official NEXUS AI Support Agent. Your ONLY role is to assist with:
-- Technical issues on the NEXUS AI website (chat, GUI editor, settings, login, payments, errors).
-- Issues with the NEXUS AI Roblox Studio plugin (installation, connection, injection, crashes).
-- You MUST NOT create any Lua scripts, games, or Roblox code.
-- If asked, politely refuse: "Sorry, I can only help with technical issues regarding the NEXUS AI web/plugin. For coding, please use the main NEXUS AI chat."
-- Give clear step-by-step solutions.
-- Always use polite English.
-- Address the user by their Roblox name: "${username}".`;
+    // ─── SYSTEM PROMPT (DITINGKATKAN DENGAN PENGETAHUAN NEXUS AI) ──
+    const SYSTEM_ID = `Kamu adalah Agent Bantuan Resmi NEXUS AI, sebuah platform AI canggih untuk Roblox Studio yang dibuat oleh NEXUS STUDIO (FIINYTID25). 
+Kamu membantu pengguna bernama "${displayName}" (username: @${username}) dengan masalah teknis.
+
+**PENGETAHUAN TENTANG NEXUS AI:**
+- NEXUS AI adalah AI Roblox Developer Assistant dengan fitur:
+  1. Chat AI untuk menulis kode Lua, debug script, dan membuat GUI
+  2. GUI Editor visual untuk merancang antarmuka Roblox
+  3. Plugin Roblox Studio untuk injeksi langsung script dan objek ke dalam game
+- Website NEXUS AI memiliki halaman: chats.html (chat utama), login.html, payment (pembelian credits), agent.html (bantuan)
+- Plugin NEXUS AI memungkinkan AI untuk menginjeksi script, membangun GUI, memodifikasi objek langsung di Roblox Studio melalui JSON commands dan kode Lua
+- Plugin harus diinstal di folder: C:\\Users\\[Nama]\\AppData\\Local\\Roblox\\Plugins\\
+- Plugin membutuhkan izin HTTP Requests dan Script Injection di Manage Plugin Roblox Studio
+- Status koneksi plugin ditunjukkan dengan indikator "Studio: ON" (hijau) atau "Studio: OFF" (merah) di halaman chat
+- Tersedia berbagai model AI (Gemini 2.5 Flash, Mistral, Groq, DeepSeek, dll.) dengan biaya kredit berbeda
+- Credits adalah mata uang virtual untuk menggunakan AI. Bisa dibeli, diklaim harian, atau didapat dari redeem code
+- Fitur Redeem Code digunakan untuk menambah credits
+- Daily Credits: Free Plan +2 CR/hari, Pro Plan +25 CR/hari
+- Laporan bug bisa dikirim melalui menu Settings > Laporkan Masalah
+- Discord resmi: discord.gg/HuGtbRvD
+
+**ATURAN WAJIB:**
+- HANYA bantu masalah TEKNIS terkait website atau plugin NEXUS AI
+- JANGAN PERNAH membuat script Lua, memberikan kode Roblox, atau membantu pengembangan game
+- Jika diminta, tolak dengan sopan: "Maaf, saya hanya membantu masalah teknis website/plugin NEXUS AI. Untuk membuat script atau game, silakan kembali ke chat utama NEXUS AI."
+- Berikan solusi langkah demi langkah yang jelas, mudah diikuti
+- Jika masalah di luar pengetahuanmu, sarankan untuk:
+  1. Melaporkan melalui Settings > Laporkan Masalah
+  2. Bergabung ke Discord NEXUS STUDIO: discord.gg/HuGtbRvD
+  3. Mencoba reconnect plugin
+- Gunakan Bahasa Indonesia yang ramah, profesional
+- Panggil pengguna dengan nama "${displayName}"`;
+
+    const SYSTEM_EN = `You are the official NEXUS AI Support Agent, a powerful AI platform for Roblox Studio created by NEXUS STUDIO (FIINYTID25).
+You are assisting user "${displayName}" (username: @${username}) with technical issues.
+
+**NEXUS AI KNOWLEDGE:**
+- NEXUS AI is a Roblox Developer Assistant with features:
+  1. AI Chat for writing Lua code, debugging scripts, and building GUIs
+  2. Visual GUI Editor for designing Roblox interfaces
+  3. Roblox Studio Plugin for direct script injection and object manipulation
+- NEXUS AI website pages: chats.html (main chat), login.html, payment (credit purchase), agent.html (support)
+- The NEXUS AI plugin allows the AI to inject scripts, build GUIs, and modify objects directly in Roblox Studio via JSON commands and Lua code
+- Plugin must be installed in: C:\\Users\\[Name]\\AppData\\Local\\Roblox\\Plugins\\
+- Plugin requires HTTP Requests and Script Injection permissions in Roblox Studio's Manage Plugin
+- Connection status is shown as "Studio: ON" (green) or "Studio: OFF" (red) on the chat page
+- Various AI models available (Gemini 2.5 Flash, Mistral, Groq, DeepSeek, etc.) with different credit costs
+- Credits are virtual currency to use AI. Can be purchased, claimed daily, or obtained via redeem codes
+- Redeem Code feature for adding credits
+- Daily Credits: Free Plan +2 CR/day, Pro Plan +25 CR/day
+- Bug reports can be sent via Settings > Report Issue
+- Official Discord: discord.gg/HuGtbRvD
+
+**STRICT RULES:**
+- ONLY help with TECHNICAL issues regarding the NEXUS AI website or plugin
+- NEVER create Lua scripts, provide Roblox code, or assist with game development
+- If asked, politely refuse: "Sorry, I can only help with technical issues regarding the NEXUS AI website/plugin. For scripting or game creation, please use the main NEXUS AI chat."
+- Give clear, step-by-step solutions
+- If you cannot solve the issue, suggest:
+  1. Reporting via Settings > Report Issue
+  2. Joining NEXUS STUDIO Discord: discord.gg/HuGtbRvD
+  3. Trying to reconnect the plugin
+- Use polite, professional English
+- Address the user as "${displayName}"`;
 
     // ─── CHAT STATE ─────────────────────────────────────────
     const chatEl = document.getElementById('chat');
@@ -131,12 +188,12 @@
             if (avatarUrl && avatarUrl !== 'nexusai.png') {
                 avatar.innerHTML = `<img src="${avatarUrl}">`;
             } else {
-                avatar.textContent = username.charAt(0).toUpperCase();
+                avatar.textContent = displayName.charAt(0).toUpperCase();
             }
         }
         const bubble = document.createElement('div');
         bubble.className = 'msg-bubble';
-        bubble.innerHTML = marked.parse(text);
+        try { bubble.innerHTML = marked.parse(text); } catch(e) { bubble.textContent = text; }
         div.appendChild(role === 'user' ? bubble : avatar);
         div.appendChild(role === 'user' ? avatar : bubble);
         chatEl.appendChild(div);
@@ -157,7 +214,7 @@
         if (t) t.remove();
     }
 
-    // Tampilkan welcome message (termasuk nama)
+    // Tampilkan welcome message (termasuk nama tampilan)
     function showWelcome() {
         const welcomeDiv = document.createElement('div');
         welcomeDiv.className = 'welcome';
@@ -166,16 +223,16 @@
             <div class="welcome-title">NEXUS AI Agent</div>
             <div class="welcome-text">
                 ${lang === 'id'
-                    ? `Halo, ${username}! Ada yang bisa saya bantu terkait bug web ini atau ada kesalahan teknis tentang web/plugin NEXUS AI?`
-                    : `Hello, ${username}! How can I help you with bugs on this website or technical issues regarding the NEXUS AI web/plugin?`}
+                    ? `Halo, ${displayName}! Ada yang bisa saya bantu terkait bug web ini atau ada kesalahan teknis tentang web/plugin NEXUS AI?`
+                    : `Hello, ${displayName}! How can I help you with bugs on this website or technical issues regarding the NEXUS AI web/plugin?`}
             </div>
         `;
         chatEl.appendChild(welcomeDiv);
     }
 
-    // Deteksi permintaan kode / script
+    // Deteksi permintaan kode / script (lebih ketat)
     function isCodeRequest(text) {
-        const idWords = /buat(kan|lah|in|kode|script|lua|gui|game|npc|shop|loading|admin|leaderboard|datastore|tycoon|obby|simulator|module|inject|keluarkan|tulis|kodekan)/i;
+        const idWords = /buat(kan|lah|in|kode|script|lua|gui|game|npc|shop|loading|admin|leaderboard|datastore|tycoon|obby|simulator|module|inject|keluarkan|tulis|kodekan|bikin)/i;
         const enWords = /create|make|build|code|script|lua|gui|game|npc|shop|loading|admin|leaderboard|datastore|tycoon|obby|simulator|module|inject|write|generate/i;
         return lang === 'id' ? idWords.test(text) : enWords.test(text);
     }
@@ -228,7 +285,7 @@
             appendMessage('ai', reply);
         } catch (e) {
             removeTyping();
-            appendMessage('ai', lang === 'id' ? '⚠️ Gagal menghubungi server.' : '⚠️ Failed to reach server.');
+            appendMessage('ai', lang === 'id' ? '⚠️ Gagal menghubungkan server.' : '⚠️ Failed to reach server.');
         } finally {
             isProcessing = false;
         }
