@@ -188,6 +188,41 @@ export default async function handler(req, res) {
           max_tokens: max_tokens || 16384,
           temperature: 0.7,
         }),
+
+        // ── GROQ (GRATIS) ─────────────────────────────────────
+    if (provider === 'groq') {
+      const key = process.env.GROQ_API_KEY;
+      if (!key) return res.status(503).json({ error: 'Groq not configured' });
+      const normalized = normalizeMessages(messages, 'groq');
+      const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+        body: JSON.stringify({ model, messages: allMsgs, max_tokens: max_tokens || 16384, temperature: 0.7 }),
+        signal: AbortSignal.timeout(120000),
+      });
+      if (!r.ok) {
+        const e = await r.json().catch(() => ({}));
+        const errMsg = (e.error && e.error.message) || `Groq HTTP ${r.status}`;
+        return res.status(r.status).json({ error: errMsg });
+      }
+      const d = await r.json();
+      const t = d?.choices?.[0]?.message?.content;
+      if (!t) return res.status(500).json({ error: 'Empty Groq response' });
+      return res.status(200).json({ content: t });
+    }
+
+    // ── MISTRAL (GRATIS TIER) ─────────────────────────────
+    if (provider === 'mistral') {
+      const key = process.env.MISTRAL_API_KEY;
+      if (!key) return res.status(503).json({ error: 'Mistral not configured' });
+      const normalized = normalizeMessages(messages, 'mistral');
+      const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
+      const r = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+        body: JSON.stringify({ model, messages: allMsgs, max_tokens: max_tokens || 16384, temperature: 0.7 }),
+        
         signal: AbortSignal.timeout(120000),
       });
       if (!r.ok) {
