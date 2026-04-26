@@ -24,7 +24,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 /* NAVBAR */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 40px;display:flex;align-items:center;gap:12px;background:rgba(3,3,18,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--b);}
 .nav-logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;}
-.nav-ver{font-size:9px;color:var(--dim);padding:2px 8px;border-radius:10px;border:1px solid var(--b);background:rgba(0,229,255,.04);}
 .nav-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pd 1.8s infinite;flex-shrink:0;}
 @keyframes pd{0%,100%{opacity:1}50%{opacity:.3}}
 .nav-status{font-size:9px;color:var(--green);}
@@ -123,6 +122,15 @@ footer a{color:var(--cyan);text-decoration:none;}
 .code-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px;}
 .code-dots{margin-bottom:12px;display:flex;gap:5px;}
 
+/* MYSTERY GATE (new) */
+.mystery-gate{padding:80px 20px;text-align:center;position:relative;z-index:1;background:linear-gradient(180deg,transparent,rgba(136,0,255,.05),transparent);}
+.gate-box{max-width:400px;margin:0 auto;padding:40px 30px;border:1px solid var(--b);border-radius:20px;background:var(--bg2);}
+.gate-icon{font-size:40px;margin-bottom:16px;filter:grayscale(0.3);}
+.gate-title{font-family:'Orbitron',sans-serif;font-size:16px;color:white;margin-bottom:8px;text-transform:uppercase;letter-spacing:2px;}
+.gate-sub{font-size:10px;color:var(--dim);margin-bottom:24px;}
+.gate-btn{padding:12px 32px;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:8px;color:white;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;display:inline-block;letter-spacing:1px;}
+.gate-btn:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 10px 30px rgba(136,0,255,.3);}
+
 /* RESPONSIVE */
 @media(max-width:768px){
   .nav{padding:10px 16px;}
@@ -143,32 +151,31 @@ footer a{color:var(--cyan);text-decoration:none;}
 <nav class="nav">
   <img src="nexusai.png" alt="N" style="width:24px;height:24px;border-radius:6px;object-fit:cover;" onerror="this.style.display='none'">
   <span class="nav-logo">NEXUS AI</span>
-  <span class="nav-ver">V10.4</span>
   <div class="nav-dot"></div>
-  <span class="nav-status">Online</span>
+  <span class="nav-status">Active</span>
   <div class="nav-r">
     <a href="https://discord.gg/HuGtbRvD" target="_blank" class="nav-discord">
       💬 Discord
     </a>
-    <a href="/login" class="nav-login">Login →</a>
+    <a href="/login" class="nav-login">Enter →</a>
   </div>
 </nav>
 
 <section class="hero">
   <div class="hero-badge">
     <div class="nav-dot"></div>
-    AI-Powered · Roblox Studio Direct Injection · V10.4
+    Roblox Studio · Direct Injection · AI Agent
   </div>
   <h1 class="hero-title">
-    Build Roblox Games<br><span>10x Faster</span>
+    Your Game.<br><span>Built Instantly.</span>
   </h1>
   <p class="hero-sub">
-    NEXUS AI adalah asisten AI paling canggih untuk developer Roblox. Tulis Lua, debug script, buat GUI — dan injeksi langsung ke Roblox Studio kamu dengan sekali klik.
+    NEXUS AI is the most advanced AI assistant for Roblox developers. Write Lua, debug scripts, design GUIs — and inject everything directly into your Roblox Studio. No copy-paste, just pure creation.
   </p>
   <div class="hero-cta">
     <a href="/login" class="btn-primary">
       <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      Mulai Gratis
+      Start Building
     </a>
     <a href="https://discord.gg/HuGtbRvD" target="_blank" class="btn-secondary">
       <svg width="13" height="13" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
@@ -176,10 +183,10 @@ footer a{color:var(--cyan);text-decoration:none;}
     </a>
   </div>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-n">50+</div><div class="stat-l">JSON Actions</div></div>
-    <div class="stat"><div class="stat-n">4</div><div class="stat-l">AI Models</div></div>
+    <div class="stat"><div class="stat-n">60+</div><div class="stat-l">Actions</div></div>
+    <div class="stat"><div class="stat-n">7</div><div class="stat-l">AI Models</div></div>
     <div class="stat"><div class="stat-n">FREE</div><div class="stat-l">To Start</div></div>
-    <div class="stat"><div class="stat-n">V10.4</div><div class="stat-l">Latest Version</div></div>
+    <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Possibilities</div></div>
   </div>
   <div class="hero-scroll">
     <svg width="20" height="20" viewBox="0 0 24 24" stroke="var(--dim)" fill="none" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
@@ -188,17 +195,17 @@ footer a{color:var(--cyan);text-decoration:none;}
 
 <div class="screenshots">
   <div style="text-align:center;margin-bottom:40px;">
-    <div class="sec-label">Lihat Aksinya</div>
-    <h2 class="sec-title" style="margin-bottom:8px;">NEXUS AI Bekerja Langsung di Studio</h2>
-    <p class="sec-sub" style="margin-bottom:0;">Dari chat ke code, dari code ke place — semuanya otomatis.</p>
+    <div class="sec-label">See It In Action</div>
+    <h2 class="sec-title" style="margin-bottom:8px;">Your AI That Lives Inside Studio</h2>
+    <p class="sec-sub" style="margin-bottom:0;">Chat, generate, inject. No manual labor — just describe your idea and watch it appear.</p>
   </div>
   <div class="screen-grid">
     <div class="screen-card">
-      <div class="screen-badge">Web App</div>
+      <div class="screen-badge">Web</div>
       <img src="screenshots/screen1.png" alt="NEXUS AI Web Interface" onerror="this.style.height='120px';this.style.background='var(--bg3)';this.alt=''">
       <div class="screen-card-body">
         <div class="screen-card-title">💬 Chat Interface</div>
-        <div class="screen-card-desc">Ketik permintaanmu, NEXUS AI langsung generate JSON command dan script Lua secara otomatis.</div>
+        <div class="screen-card-desc">Type your request — NEXUS AI instantly generates JSON commands and Lua scripts.</div>
       </div>
     </div>
     <div class="screen-card">
@@ -206,83 +213,83 @@ footer a{color:var(--cyan);text-decoration:none;}
       <img src="screenshots/screen2.png" alt="Roblox Studio Plugin" onerror="this.style.height='120px';this.style.background='var(--bg3)';this.alt=''">
       <div class="screen-card-body">
         <div class="screen-card-title">🔌 Studio Plugin</div>
-        <div class="screen-card-desc">Plugin NEXUS AI V10.4 di Roblox Studio — real-time sync, queue system, injeksi otomatis.</div>
+        <div class="screen-card-desc">NEXUS AI plugin in Roblox Studio — real-time sync, queue system, auto-injection.</div>
       </div>
     </div>
     <div class="screen-card">
       <div class="screen-badge">Connected</div>
       <img src="screenshots/screen3.png" alt="Connected State" onerror="this.style.height='120px';this.style.background='var(--bg3)';this.alt=''">
       <div class="screen-card-body">
-        <div class="screen-card-title">✅ Terhubung & Injeksi</div>
-        <div class="screen-card-desc">Saat plugin connected, semua command dari AI langsung masuk ke place kamu — parts, scripts, GUIs!</div>
+        <div class="screen-card-title">✅ Connected & Injecting</div>
+        <div class="screen-card-desc">When the plugin is connected, every AI command goes straight to your place – parts, scripts, GUIs!</div>
       </div>
     </div>
   </div>
 </div>
 
 <section class="section">
-  <div class="sec-label">Fitur Utama</div>
-  <h2 class="sec-title">Semua yang Kamu Butuhkan</h2>
-  <p class="sec-sub">Dari script injection hingga GUI builder — NEXUS AI punya semuanya.</p>
+  <div class="sec-label">Core Features</div>
+  <h2 class="sec-title">Everything You Need</h2>
+  <p class="sec-sub">From script injection to visual GUI builder — NEXUS AI has it all.</p>
   <div class="features-grid">
     <div class="feat">
       <div class="feat-icon" style="background:rgba(0,229,255,.1);">⚡</div>
       <div class="feat-title">Direct Studio Injection</div>
-      <div class="feat-desc">AI langsung inject script dan buat object ke Roblox Studio kamu via plugin. Tidak perlu copy-paste!</div>
+      <div class="feat-desc">AI directly injects scripts and creates objects in your Roblox Studio via plugin. No more copy-paste!</div>
       <span class="feat-tag" style="background:rgba(0,229,255,.08);color:var(--cyan);">Plugin Required</span>
     </div>
     <div class="feat">
       <div class="feat-icon" style="background:rgba(136,0,255,.1);">🧠</div>
       <div class="feat-title">Multiple AI Models</div>
-      <div class="feat-desc">Pilih dari Gemini 2.5 Flash, Gemini 3 Flash, dan model lainnya — semua untuk kebutuhan Roblox dev.</div>
-      <span class="feat-tag" style="background:rgba(0,255,170,.08);color:var(--green);">4 Models Active</span>
+      <div class="feat-desc">Choose from Gemini, DeepSeek, Groq, Mistral, and more — all tuned for Roblox development.</div>
+      <span class="feat-tag" style="background:rgba(0,255,170,.08);color:var(--green);">7 Models Active</span>
     </div>
     <div class="feat">
       <div class="feat-icon" style="background:rgba(255,45,107,.1);">🏗️</div>
-      <div class="feat-title">50+ JSON Actions</div>
-      <div class="feat-desc">create_part, create_gui, inject_script, batch_commands — AI tahu cara membangun apa saja di place kamu.</div>
+      <div class="feat-title">60+ JSON Actions</div>
+      <div class="feat-desc">create_part, create_gui, inject_script, batch_commands — everything you need to construct your game.</div>
       <span class="feat-tag" style="background:rgba(0,229,255,.08);color:var(--cyan);">JSON + Lua</span>
     </div>
     <div class="feat">
       <div class="feat-icon" style="background:rgba(0,255,170,.1);">🎨</div>
-      <div class="feat-title">GUI Builder Visual</div>
-      <div class="feat-desc">Drag-and-drop GUI builder dengan export langsung ke Lua script atau kirim ke Studio.</div>
+      <div class="feat-title">Visual GUI Builder</div>
+      <div class="feat-desc">Drag-and-drop GUI builder with direct export to Lua script or send to Studio.</div>
       <span class="feat-tag" style="background:rgba(0,255,170,.08);color:var(--green);">Drag & Drop</span>
     </div>
     <div class="feat">
       <div class="feat-icon" style="background:rgba(255,214,0,.1);">🔒</div>
-      <div class="feat-title">Login Roblox Account</div>
-      <div class="feat-desc">Data tersimpan per akun Roblox. Pindah device? Credits dan riwayat chat tetap ada.</div>
+      <div class="feat-title">Roblox Account Sync</div>
+      <div class="feat-desc">Your data is saved per Roblox account. Switch devices — credits and chat history stay with you.</div>
       <span class="feat-tag" style="background:rgba(255,214,0,.1);color:var(--yellow);">Persistent Data</span>
     </div>
     <div class="feat">
       <div class="feat-icon" style="background:rgba(0,229,255,.1);">🎮</div>
       <div class="feat-title">Minecraft Support</div>
-      <div class="feat-desc">Bukan cuma Roblox — NEXUS AI juga expert di Minecraft Java modding (Forge/Fabric) dan Bedrock addons.</div>
+      <div class="feat-desc">Not just Roblox — NEXUS AI is also expert in Minecraft Java modding (Forge/Fabric) and Bedrock addons.</div>
       <span class="feat-tag" style="background:rgba(0,229,255,.08);color:var(--cyan);">Bonus Feature</span>
     </div>
   </div>
 </section>
 
 <section class="section" style="padding-top:0;">
-  <div class="sec-label">Cara Kerja</div>
-  <h2 class="sec-title">3 Langkah Simple</h2>
-  <p class="sec-sub">Setup sekali, pakai selamanya.</p>
+  <div class="sec-label">How It Works</div>
+  <h2 class="sec-title">3 Simple Steps</h2>
+  <p class="sec-sub">Setup once, keep building forever.</p>
   <div class="how-grid">
     <div class="step-card">
       <div class="step-num">1</div>
       <div class="step-title">Login & Setup</div>
-      <div class="step-desc">Login dengan Google + Roblox. Install plugin NEXUS AI di Roblox Studio. Download dari Discord kami.</div>
+      <div class="step-desc">Sign in with Google + Roblox. Download the NEXUS AI plugin for Roblox Studio from our Discord.</div>
     </div>
     <div class="step-card">
       <div class="step-num">2</div>
       <div class="step-title">Connect Plugin</div>
-      <div class="step-desc">Buka Roblox Studio, klik NEXUS AI di toolbar, klik CONNECT. Status berubah hijau = siap!</div>
+      <div class="step-desc">Open Roblox Studio, click NEXUS AI in the toolbar, and hit CONNECT. Green light = ready to go!</div>
     </div>
     <div class="step-card">
       <div class="step-num">3</div>
       <div class="step-title">Chat & Build</div>
-      <div class="step-desc">Ketik apa yang mau dibuat. AI langsung inject code + object ke place kamu. Sesimple itu!</div>
+      <div class="step-desc">Describe what you want. AI immediately injects code + objects into your place. That's it!</div>
     </div>
   </div>
 
@@ -292,8 +299,8 @@ footer a{color:var(--cyan);text-decoration:none;}
       <span class="code-dot" style="background:#febc2e;"></span>
       <span class="code-dot" style="background:#28c840;"></span>
     </div>
-    <div style="color:var(--dim);font-size:9px;margin-bottom:8px;">// AI Response → JSON command langsung ke Studio</div>
-    <div><span class="c">// AI akan membuat house dengan batch_commands</span></div>
+    <div style="color:var(--dim);font-size:9px;margin-bottom:8px;">// AI Response → JSON command directly to Studio</div>
+    <div><span class="c">// AI will build a house with batch_commands</span></div>
     <div><span class="k">{</span></div>
     <div style="margin-left:16px;"><span class="n">"action"</span>: <span class="s">"batch_commands"</span>,</div>
     <div style="margin-left:16px;"><span class="n">"commands"</span>: [</div>
@@ -309,35 +316,46 @@ footer a{color:var(--cyan);text-decoration:none;}
 
 <section class="section" style="padding-top:0;">
   <div class="sec-label">AI Models</div>
-  <h2 class="sec-title">Model AI Terbaik</h2>
-  <p class="sec-sub">Pilih model sesuai kebutuhan — mulai dari yang gratis hingga paling powerful.</p>
+  <h2 class="sec-title">Elite Model Collection</h2>
+  <p class="sec-sub">Handpicked models for speed, power, and precision — many completely free.</p>
   <div class="models-grid">
-    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 2.5 Flash Lite<span class="mbadge free">1 CR</span></div>
-    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 2.5 Flash<span class="mbadge free">2 CR</span></div>
-    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 3 Flash<span class="mbadge free">3 CR</span></div>
-    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 3.1 Flash Lite<span class="mbadge free">2 CR</span></div>
-    <div class="model-chip" style="opacity:.5;"><img src="icon/claude.png" alt="" onerror="this.style.display='none'">Claude Sonnet 4.6<span class="mbadge soon">SOON</span></div>
+    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 2.5 Flash Lite<span class="mbadge free">FREE</span></div>
+    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 2.5 Flash<span class="mbadge free">1 CR</span></div>
+    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 3 Flash<span class="mbadge free">FREE</span></div>
+    <div class="model-chip"><img src="icon/groq.png" alt="" onerror="this.style.display='none'">Llama 3.3 70B<span class="mbadge free">FREE</span></div>
+    <div class="model-chip"><img src="icon/mistral.png" alt="" onerror="this.style.display='none'">Mistral Small<span class="mbadge free">FREE</span></div>
+    <div class="model-chip"><img src="icon/deepseek.svg" alt="" onerror="this.style.display='none'">DeepSeek V3<span class="mbadge free">1 CR</span></div>
+    <div class="model-chip" style="opacity:.5;"><img src="icon/claude.png" alt="" onerror="this.style.display='none'">Claude Sonnet<span class="mbadge soon">SOON</span></div>
     <div class="model-chip" style="opacity:.5;"><img src="icon/chatgpt.png" alt="" onerror="this.style.display='none'">GPT-4o<span class="mbadge soon">SOON</span></div>
     <div class="model-chip" style="opacity:.5;"><img src="icon/grok.png" alt="" onerror="this.style.display='none'">Grok 3<span class="mbadge soon">SOON</span></div>
-    <div class="model-chip" style="opacity:.5;">DS DeepSeek R1<span class="mbadge soon">SOON</span></div>
   </div>
 </section>
 
+<div class="mystery-gate">
+  <div class="gate-box">
+    <div class="gate-icon">🔐</div>
+    <div class="gate-title">Unlock Full Access</div>
+    <div class="gate-sub">Only developers inside can experience the real magic. Login to reveal your dashboard, credits, and all AI tools.</div>
+    <a href="/login" class="gate-btn">Enter NEXUS AI</a>
+    <div style="margin-top:14px;font-size:9px;color:var(--dim);">30 free credits waiting · No credit card required</div>
+  </div>
+</div>
+
 <section class="cta-section">
   <div class="cta-box">
-    <div class="cta-free-badge">🎉 GRATIS untuk memulai — 30 CR langsung!</div>
-    <h2 class="cta-title">Siap Build Lebih Cepat?</h2>
-    <p class="cta-sub">Join ribuan Roblox developer yang sudah menggunakan NEXUS AI. Daftar gratis, mulai membangun sekarang.</p>
+    <div class="cta-free-badge">🎉 FREE to start — 30 CR instantly!</div>
+    <h2 class="cta-title">Ready to Build Faster?</h2>
+    <p class="cta-sub">Join thousands of Roblox developers already using NEXUS AI. Sign up free, start building now.</p>
     <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
       <a href="/login" class="btn-primary" style="width:100%;max-width:280px;justify-content:center;font-size:12px;">
-        ⚡ Mulai Gratis Sekarang
+        ⚡ Start Free Now
       </a>
       <a href="https://discord.gg/HuGtbRvD" target="_blank" class="btn-secondary" style="font-size:10px;">
-        Join Discord untuk Plugin & Codes
+        Join Discord for Plugin & Codes
       </a>
     </div>
     <div style="margin-top:20px;font-size:9px;color:var(--dim);">
-      30 Credits gratis saat daftar · +2 CR setiap hari · Tidak perlu kartu kredit
+      30 free credits on signup · +2 CR daily · No credit card needed
     </div>
   </div>
 </section>
@@ -350,7 +368,7 @@ footer a{color:var(--cyan);text-decoration:none;}
     <a href="/terms">Terms</a> · 
     <a href="https://discord.gg/HuGtbRvD">Discord</a>
   </div>
-  <div>V10.4 · nexusai-roblox.vercel.app · © 2026 NEXUS STUDIO</div>
+  <div>nexusai-roblox.vercel.app · © 2026 NEXUS STUDIO</div>
 </footer>
 
 <script>
