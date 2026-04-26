@@ -307,8 +307,11 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           model,
           messages: allMsgs,
-          max_tokens: max_tokens || 1024,
-          temperature: 0.7,
+          "max_completion_tokens": 1124,
+          "top_p": 1,
+          "stream": true,
+          "stop": null,
+          "temperature": 0.7,
         }),
       });
 
