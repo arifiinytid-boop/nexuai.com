@@ -308,9 +308,6 @@ export default async function handler(req, res) {
           model,
           messages: allMsgs,
           "max_completion_tokens": 1124,
-          "top_p": 1,
-          "stream": true,
-          "stop": null,
           "temperature": 0.7,
         }),
       });
