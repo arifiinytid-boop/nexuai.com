@@ -1,6 +1,7 @@
-// api/ai.js — NEXUS AI Server-Side AI Proxy v10.2
+// api/ai.js — NEXUS AI Server-Side AI Proxy v10.3
 // ALL AI calls routed here — API keys NEVER reach the browser
-// Auto-fallback when model is overloaded (503)
+// Supported providers: gemini, claude, openai, openrouter, deepseek
+// Auto-fallback when model is overloaded (503, 429)
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -19,7 +20,6 @@ export default async function handler(req, res) {
       const key = process.env.GEMINI_API_KEY;
       if (!key) return res.status(503).json({ error: 'Gemini not configured' });
 
-      // Model fallback order when primary model is overloaded
       const modelFallbacks = [
         model,
         'gemini-2.5-flash-lite',
@@ -28,7 +28,6 @@ export default async function handler(req, res) {
         'gemini-1.5-flash',
       ];
 
-      // Remove duplicates
       const modelsToTry = [...new Set(modelFallbacks)];
       
       let lastError = null;
@@ -63,11 +62,9 @@ export default async function handler(req, res) {
           if (!r.ok) {
             const errData = await r.json().catch(() => ({}));
             const errMsg = (errData.error && errData.error.message) || `HTTP ${r.status}`;
-            
-            // If overloaded/quota, try next model
             if (r.status === 503 || r.status === 429 || errMsg.includes('overloaded') || errMsg.includes('high demand') || errMsg.includes('quota')) {
               lastError = errMsg;
-              continue; // Try next model
+              continue;
             }
             return res.status(r.status).json({ error: errMsg });
           }
@@ -78,17 +75,15 @@ export default async function handler(req, res) {
             lastError = 'Empty response from ' + tryModel;
             continue;
           }
-          // Return which model actually responded (for transparency)
           return res.status(200).json({ content: text, model_used: tryModel });
         } catch (e) {
           lastError = e.message;
-          if (e.name === 'AbortError' || e.name === 'TimeoutError') continue;
           continue;
         }
       }
       
       return res.status(503).json({ 
-        error: 'All Gemini models are currently overloaded. ' + (lastError || 'Please try again later.') + ' Try switching to a different model.',
+        error: 'All Gemini models are currently overloaded. ' + (lastError || 'Please try again later.'),
         overloaded: true
       });
     }
@@ -126,7 +121,8 @@ export default async function handler(req, res) {
 
     // ── OPENROUTER ────────────────────────────────────────────
     if (provider === 'openrouter') {
-      const key = process.env.OPENROUTER_API_KEY || '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';
+      const key = process.env.OPENROUTER_API_KEY;
+      if (!key) return res.status(503).json({ error: 'OpenRouter not configured' });
       const allMsgs = system ? [{ role: 'system', content: system }, ...messages] : messages;
       const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
@@ -138,6 +134,35 @@ export default async function handler(req, res) {
       const d = await r.json();
       const t = d?.choices?.[0]?.message?.content;
       if (!t) return res.status(500).json({ error: 'Empty OpenRouter response' });
+      return res.status(200).json({ content: t });
+    }
+
+    // ── DEEPSEEK (NATIVE API) ─────────────────────────────────
+    if (provider === 'deepseek') {
+      const key = process.env.DEEPSEEK_API_KEY;
+      if (!key) return res.status(503).json({ error: 'DeepSeek not configured' });
+      const allMsgs = system ? [{ role: 'system', content: system }, ...messages] : messages;
+      const r = await fetch('https://api.deepseek.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${key}`
+        },
+        body: JSON.stringify({
+          model: model,
+          messages: allMsgs,
+          max_tokens: max_tokens || 16384,
+          temperature: 0.7,
+        }),
+        signal: AbortSignal.timeout(120000),
+      });
+      if (!r.ok) {
+        const e = await r.json().catch(() => ({}));
+        return res.status(r.status).json({ error: (e.error && e.error.message) || 'DeepSeek HTTP ' + r.status });
+      }
+      const d = await r.json();
+      const t = d?.choices?.[0]?.message?.content;
+      if (!t) return res.status(500).json({ error: 'Empty DeepSeek response' });
       return res.status(200).json({ content: t });
     }
 
