@@ -617,31 +617,56 @@ var S={
   lastClaim:null,
 };
 
-// ─── COMPLETE MODEL LIST ───────────────────────────────────────────────────
-// AVAILABLE MODELS (aktif)
-var MODEL_LIST=[
-  {grp:'⚡ Google — Gemini Fast'},
-  {id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite',icon:'/icon/gemini.png',badge:'FAST'},
-  {id:'gemini-2.0-flash',prov:'gemini',cost:1,label:'Gemini 2.0 Flash',icon:'/icon/gemini.png',badge:'FAST'},
-  {id:'gemini-3-flash-preview',prov:'gemini',cost:3,label:'Gemini 3 Flash',icon:'/icon/gemini.png',badge:'NEW'},
-  {grp:'🧠 Google — Gemini Smart'},
-  {id:'gemini-2.5-flash',prov:'gemini',cost:2,label:'Gemini 2.5 Flash',icon:'/icon/gemini.png',badge:'SMART'},
-  {id:'gemini-2.5-flash-preview-04-17',prov:'gemini',cost:2,label:'Gemini 2.5 Flash Preview',icon:'/icon/gemini.png'},
-  {id:'gemini-2.5-pro-preview',prov:'gemini',cost:5,label:'Gemini 2.5 Pro Preview',icon:'/icon/gemini.png',badge:'BEST'},
-  {grp:'🔍 DeepSeek'},
-  {id:'deepseek-v4-flash',prov:'deepseek',cost:6,label:'DeepSeek V4',icon:'/icon/deepseek.svg'},
-  {id:'deepseek-v4-pro',prov:'deepseek',cost:11,label:'DeepSeek V4 Pro',icon:'/icon/deepseek.svg'},
-];
-// COMING SOON MODELS (terpisah — tidak ditampilkan di dropdown biasa)
-var MODEL_LIST_SOON=[
-  {grp:'🤖 Anthropic — Claude'},
-  {id:'claude-haiku-4-5',prov:'claude',cost:3,label:'Claude Haiku 4.5',icon:'/icon/claude.png',soon:true},
-  {id:'claude-sonnet-4-6',prov:'claude',cost:7,label:'Claude Sonnet 4.6',icon:'/icon/claude.png',soon:true},
-  {grp:'🌐 OpenAI & Grok'},
-  {id:'gpt-4o-mini',prov:'openai',cost:3,label:'GPT-4o Mini',icon:'/icon/chatgpt.png',soon:true},
-  {id:'x-ai/grok-3-mini-beta',prov:'openrouter',cost:3,label:'Grok 3 Mini',icon:'/icon/grok.png',soon:true},
+// ─── COMPLETE MODEL LIST (GRATIS & AKTIF) ────────────────────────────────
+var MODEL_LIST = [
+  // ⚡ Gemini Fast
+  { grp: '⚡ Google — Gemini Fast' },
+  { id: 'gemini-2.5-flash-lite', prov: 'gemini', cost: 0, label: 'Gemini 2.5 Flash Lite', icon: '/icon/gemini.png', badge: 'FREE' },
+  { id: 'gemini-2.0-flash',       prov: 'gemini', cost: 0, label: 'Gemini 2.0 Flash',       icon: '/icon/gemini.png', badge: 'FREE' },
+  { id: 'gemini-3-flash-preview', prov: 'gemini', cost: 0, label: 'Gemini 3 Flash',         icon: '/icon/gemini.png', badge: 'NEW' },
+
+  // 🧠 Gemini Smart (gratis dengan batas rendah)
+  { grp: '🧠 Google — Gemini Smart' },
+  { id: 'gemini-2.5-flash',                 prov: 'gemini', cost: 1, label: 'Gemini 2.5 Flash',           icon: '/icon/gemini.png', badge: 'SMART' },
+  { id: 'gemini-2.5-flash-preview-04-17',   prov: 'gemini', cost: 1, label: 'Gemini 2.5 Flash Preview',   icon: '/icon/gemini.png' },
+  { id: 'gemini-2.5-pro-preview',           prov: 'gemini', cost: 3, label: 'Gemini 2.5 Pro Preview',     icon: '/icon/gemini.png', badge: 'BEST' },
+
+  // 🦙 Groq (gratis, model LLAMA)
+  { grp: '🦙 Groq — Super Fast & Free' },
+  { id: 'llama-3.1-8b-instant',  prov: 'groq', cost: 0, label: 'Llama 3.1 8B Instant', icon: '/icon/groq.png', badge: 'FREE' },
+  { id: 'llama-3.3-70b-versatile', prov: 'groq', cost: 0, label: 'Llama 3.3 70B Versatile', icon: '/icon/groq.png', badge: 'FREE' },
+  { id: 'mixtral-8x7b-32768',    prov: 'groq', cost: 0, label: 'Mixtral 8x7B',        icon: '/icon/groq.png', badge: 'FREE' },
+
+  // 🌫️ Mistral (gratis tier)
+  { grp: '🌫️ Mistral — Small & Mighty' },
+  { id: 'mistral-small-latest',  prov: 'mistral', cost: 0, label: 'Mistral Small', icon: '/icon/mistral.png', badge: 'FREE' },
+  { id: 'mistral-medium-latest', prov: 'mistral', cost: 0, label: 'Mistral Medium', icon: '/icon/mistral.png', badge: 'FREE' },
+
+  // 🔍 DeepSeek (gratis/ murah)
+  { grp: '🔍 DeepSeek' },
+  { id: 'deepseek-chat',    prov: 'deepseek', cost: 1, label: 'DeepSeek V3 Chat', icon: '/icon/deepseek.svg' },
+  { id: 'deepseek-reasoner',prov: 'deepseek', cost: 2, label: 'DeepSeek R1 Reasoner', icon: '/icon/deepseek.svg' },
+
+  // 🌐 OpenRouter (sudah support banyak model gratis, gunakan kalau tidak ada di atas)
+  { grp: '🌐 OpenRouter — Multi‑Model' },
+  { id: 'meta-llama/llama-3.1-8b-instruct',  prov: 'openrouter', cost: 0, label: 'Llama 3.1 8B (OR)', icon: '/icon/openrouter.png', badge: 'FREE' },
+  { id: 'mistralai/mistral-7b-instruct',    prov: 'openrouter', cost: 0, label: 'Mistral 7B (OR)',   icon: '/icon/openrouter.png', badge: 'FREE' },
 ];
 
+// COMING SOON (berbayar, API key sudah ada tapi dikunci)
+var MODEL_LIST_SOON = [
+  { grp: '🤖 Anthropic — Claude' },
+  { id: 'claude-haiku-4-5',  prov: 'claude', cost: 3, label: 'Claude Haiku 4.5',  icon: '/icon/claude.png', soon: true },
+  { id: 'claude-sonnet-4-6', prov: 'claude', cost: 7, label: 'Claude Sonnet 4.6', icon: '/icon/claude.png', soon: true },
+
+  { grp: '🧠 OpenAI' },
+  { id: 'gpt-4o-mini', prov: 'openai', cost: 3, label: 'GPT-4o Mini', icon: '/icon/chatgpt.png', soon: true },
+  { id: 'gpt-4o',      prov: 'openai', cost: 7, label: 'GPT-4o',      icon: '/icon/chatgpt.png', soon: true },
+
+  { grp: '🤖 Grok (xAI)' },
+  { id: 'x-ai/grok-3-mini-beta', prov: 'openrouter', cost: 3, label: 'Grok 3 Mini', icon: '/icon/grok.png', soon: true },
+];
+  
 // ─── AUTH CHECK ────────────────────────────────────────────────────────────
 (function(){
   try{
