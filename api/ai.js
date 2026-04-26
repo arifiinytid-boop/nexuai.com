@@ -130,7 +130,7 @@ export default async function handler(req, res) {
       const allMsgs = system ? [{ role: 'system', content: system }, ...messages] : messages;
       const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}`, 'HTTP-Referer': 'https://nexusai-com.vercel.app', 'X-Title': 'NEXUS AI' },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}`, 'HTTP-Referer': 'https://nexusai-roblox.vercel.app', 'X-Title': 'NEXUS AI' },
         body: JSON.stringify({ model, messages: allMsgs, max_tokens: max_tokens || 16384, temperature: 0.7 }),
         signal: AbortSignal.timeout(120000),
       });
