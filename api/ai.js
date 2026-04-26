@@ -1,7 +1,27 @@
-// api/ai.js — NEXUS AI Server-Side AI Proxy v10.3
-// ALL AI calls routed here — API keys NEVER reach the browser
-// Supported providers: gemini, claude, openai, openrouter, deepseek
-// Auto-fallback when model is overloaded (503, 429)
+// api/ai.js — NEXUS AI Server-Side AI Proxy v10.4
+function normalizeMessages(msgs, provider) {
+  return msgs.map(m => {
+    let role = m.role;
+    if (provider === 'gemini') {
+      // Gemini: assistant -> model, selain itu user
+      if (role === 'assistant' || role === 'ai' || role === 'model') {
+        role = 'model';
+      } else if (role !== 'user') {
+        role = 'user'; // fallback
+      }
+    } else {
+      // OpenAI, Claude, DeepSeek, OpenRouter: semua pakai 'assistant'
+      if (role === 'assistant' || role === 'ai' || role === 'model') {
+        role = 'assistant';
+      } else if (role === 'system') {
+        role = 'system'; // tetap
+      } else {
+        role = 'user'; // fallback
+      }
+    }
+    return { ...m, role };
+  });
+}
 
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -27,14 +47,16 @@ export default async function handler(req, res) {
         'gemini-1.5-flash-latest',
         'gemini-1.5-flash',
       ];
-
       const modelsToTry = [...new Set(modelFallbacks)];
       
       let lastError = null;
       for (const tryModel of modelsToTry) {
         try {
-          const contents = messages.map(m => ({
-            role: m.role === 'assistant' ? 'model' : 'user',
+          // Normalisasi role khusus Gemini
+          const normalized = normalizeMessages(messages, 'gemini');
+
+          const contents = normalized.map(m => ({
+            role: m.role === 'assistant' ? 'model' : 'user', // masih aman karena sudah jadi 'model' atau 'user'
             parts: Array.isArray(m.content)
               ? m.content.map(c => c.type === 'image' ? { inline_data: { mime_type: c.source.media_type, data: c.source.data } } : { text: c.text || '' })
               : [{ text: String(m.content || '') }],
@@ -92,10 +114,11 @@ export default async function handler(req, res) {
     if (provider === 'claude') {
       const key = process.env.CLAUDE_API_KEY;
       if (!key) return res.status(503).json({ error: 'Claude not configured' });
+      const normalized = normalizeMessages(messages, 'claude');
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: model.replace('anthropic/', ''), max_tokens: max_tokens || 16000, system: system || '', messages }),
+        body: JSON.stringify({ model: model.replace('anthropic/', ''), max_tokens: max_tokens || 16000, system: system || '', messages: normalized }),
         signal: AbortSignal.timeout(120000),
       });
       if (!r.ok) { const e = await r.json().catch(() => ({})); return res.status(r.status).json({ error: (e.error && e.error.message) || 'Claude HTTP ' + r.status }); }
@@ -108,7 +131,8 @@ export default async function handler(req, res) {
     if (provider === 'openai') {
       const key = process.env.OPENAI_API_KEY;
       if (!key) return res.status(503).json({ error: 'OpenAI not configured' });
-      const allMsgs = system ? [{ role: 'system', content: system }, ...messages] : messages;
+      const normalized = normalizeMessages(messages, 'openai');
+      const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
       const bodyObj = { model, messages: allMsgs };
       if (model.startsWith('o')) bodyObj.max_completion_tokens = max_tokens || 32768; else bodyObj.max_tokens = max_tokens || 16384;
       const r = await fetch('https://api.openai.com/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` }, body: JSON.stringify(bodyObj), signal: AbortSignal.timeout(120000) });
@@ -123,14 +147,23 @@ export default async function handler(req, res) {
     if (provider === 'openrouter') {
       const key = process.env.OPENROUTER_API_KEY;
       if (!key) return res.status(503).json({ error: 'OpenRouter not configured' });
-      const allMsgs = system ? [{ role: 'system', content: system }, ...messages] : messages;
+      const normalized = normalizeMessages(messages, 'openrouter');
+      const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
       const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}`, 'HTTP-Referer': 'https://nexusai-roblox.vercel.app', 'X-Title': 'NEXUS AI' },
         body: JSON.stringify({ model, messages: allMsgs, max_tokens: max_tokens || 16384, temperature: 0.7 }),
         signal: AbortSignal.timeout(120000),
       });
-      if (!r.ok) { const e = await r.json().catch(() => ({})); return res.status(r.status).json({ error: (e.error && e.error.message) || 'OpenRouter HTTP ' + r.status }); }
+      if (!r.ok) {
+        const e = await r.json().catch(() => ({}));
+        const errMsg = (e.error && e.error.message) || `OpenRouter HTTP ${r.status}`;
+        // Jika insufficient balance, beri tahu user
+        if (errMsg.toLowerCase().includes('insufficient balance') || e.error?.code === 402) {
+          return res.status(402).json({ error: 'Insufficient Balance — Saldo OpenRouter Anda habis. Silakan isi ulang.' });
+        }
+        return res.status(r.status).json({ error: errMsg });
+      }
       const d = await r.json();
       const t = d?.choices?.[0]?.message?.content;
       if (!t) return res.status(500).json({ error: 'Empty OpenRouter response' });
@@ -141,7 +174,8 @@ export default async function handler(req, res) {
     if (provider === 'deepseek') {
       const key = process.env.DEEPSEEK_API_KEY;
       if (!key) return res.status(503).json({ error: 'DeepSeek not configured' });
-      const allMsgs = system ? [{ role: 'system', content: system }, ...messages] : messages;
+      const normalized = normalizeMessages(messages, 'deepseek');
+      const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
       const r = await fetch('https://api.deepseek.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -158,7 +192,11 @@ export default async function handler(req, res) {
       });
       if (!r.ok) {
         const e = await r.json().catch(() => ({}));
-        return res.status(r.status).json({ error: (e.error && e.error.message) || 'DeepSeek HTTP ' + r.status });
+        const errMsg = (e.error && e.error.message) || `DeepSeek HTTP ${r.status}`;
+        if (errMsg.toLowerCase().includes('insufficient balance') || e.error?.code === 402) {
+          return res.status(402).json({ error: 'Insufficient Balance — Saldo DeepSeek Anda habis. Silakan isi ulang.' });
+        }
+        return res.status(r.status).json({ error: errMsg });
       }
       const d = await r.json();
       const t = d?.choices?.[0]?.message?.content;
