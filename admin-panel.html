@@ -318,6 +318,47 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       </div>
     </div>
   </div>
+    <!-- Redeem Codes Manager -->
+  <div class="card">
+    <div class="card-title" style="justify-content:space-between;">
+      <span style="display:flex;align-items:center;gap:6px;">
+        <svg viewBox="0 0 24 24"><polygon points="12 2 22 8.5 12 15 2 8.5 12 2"/><line x1="12" y1="15" x2="12" y2="22"/><polyline points="2 8.5 12 15 22 8.5"/></svg>
+        Redeem Codes
+      </span>
+      <button class="btn btn-green" style="padding:4px 10px;font-size:8px;" onclick="loadCodes()">Refresh</button>
+    </div>
+
+    <!-- Create Code Form -->
+    <div class="grid" style="margin-bottom:12px;">
+      <div class="form-group">
+        <label class="form-label">Credits</label>
+        <input class="form-input" type="number" id="codeCredits" placeholder="e.g. 50" value="50">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Max Uses</label>
+        <input class="form-input" type="number" id="codeMaxUses" placeholder="e.g. 10" value="10">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Expires In (days, empty = never)</label>
+        <input class="form-input" type="number" id="codeExpiry" placeholder="e.g. 30">
+      </div>
+      <div style="display:flex;align-items:flex-end;">
+        <button class="btn btn-cyan btn-full" onclick="createCode()">
+          <svg viewBox="0 0 24 24" style="width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Create Code
+        </button>
+      </div>
+    </div>
+    <div class="status-text" id="codeStatus"></div>
+
+    <!-- Codes Table -->
+    <div style="overflow-x:auto;margin-top:12px;">
+      <table class="user-table">
+        <thead><tr><th>Code</th><th>Credits</th><th>Uses</th><th>Max</th><th>Expires</th><th>Actions</th></tr></thead>
+        <tbody id="codeTableBody"><tr><td colspan="6" style="text-align:center;color:var(--dim);padding:20px;">Loading codes...</td></tr></tbody>
+      </table>
+    </div>
+  </div>
 
   <!-- User List -->
   <div class="card">
@@ -363,6 +404,105 @@ var currentFoundUser='', currentFoundData={};
 function getEl(id) {
   return document.getElementById(id);
 }
+
+  // ─── REDEEM CODES MANAGEMENT ───────────────────────────────
+async function loadCodes() {
+  var body = getEl('codeTableBody');
+  if (!body) return;
+  body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--dim);">Loading...</td></tr>';
+  try {
+    var token = getEl('adminTokenOverride')?.value || 'nexusadmin2024'; // default dari env
+    var r = await fetch('/api/redeem?list=1&token=' + encodeURIComponent(token));
+    var d = await r.json();
+    var codes = d.codes || [];
+    if (!codes.length) {
+      body.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--dim);">No codes found.</td></tr>';
+      return;
+    }
+    body.innerHTML = codes.map(function(c) {
+      var expired = c.expiresAt ? new Date(c.expiresAt) < new Date() : false;
+      var remaining = c.maxUses - c.uses;
+      return `<tr>
+        <td style="color:var(--cyan);font-weight:700;">${c.code}</td>
+        <td style="color:var(--yellow);">${c.credits} CR</td>
+        <td>${c.uses}</td>
+        <td>${c.maxUses}</td>
+        <td style="color:${expired ? 'var(--pink)' : 'var(--dim)'};">${c.expiresAt ? new Date(c.expiresAt).toLocaleDateString('en-US') : 'Never'}</td>
+        <td>
+          <button class="btn btn-danger" style="padding:2px 8px;font-size:7px;" onclick="deleteCode('${c.code}')">Delete</button>
+        </td>
+      </tr>`;
+    }).join('');
+  } catch(e) {
+    body.innerHTML = '<tr><td colspan="6" style="color:var(--pink);">Error: ' + e.message + '</td></tr>';
+  }
+}
+
+async function createCode() {
+  var credits = getEl('codeCredits').value;
+  var maxUses = getEl('codeMaxUses').value;
+  var expiresInDays = getEl('codeExpiry').value;
+  if (!credits || !maxUses) {
+    setStatus('codeStatus', 'Fill credits and max uses!', 'err');
+    return;
+  }
+  setStatus('codeStatus', 'Creating...', 'info');
+  try {
+    var token = getEl('adminTokenOverride')?.value || 'nexusadmin2024';
+    var r = await fetch('/api/redeem', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        action: 'create',
+        token: token,
+        credits: parseFloat(credits),
+        maxUses: parseInt(maxUses),
+        expiresInDays: expiresInDays ? parseInt(expiresInDays) : null,
+      })
+    });
+    var d = await r.json();
+    if (d.success) {
+      setStatus('codeStatus', 'Code created: ' + d.code.code, 'ok');
+      toast('Code ' + d.code.code + ' created!', 'var(--green)');
+      loadCodes();
+      getEl('codeCredits').value = 50;
+      getEl('codeMaxUses').value = 10;
+      getEl('codeExpiry').value = '';
+    } else {
+      setStatus('codeStatus', 'Error: ' + (d.error || 'Unknown'), 'err');
+    }
+  } catch(e) {
+    setStatus('codeStatus', 'Error: ' + e.message, 'err');
+  }
+}
+
+async function deleteCode(code) {
+  if (!confirm('Delete code ' + code + '?')) return;
+  try {
+    var token = getEl('adminTokenOverride')?.value || 'nexusadmin2024';
+    var r = await fetch('/api/redeem', {
+      method: 'DELETE',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ code: code, token: token })
+    });
+    var d = await r.json();
+    if (d.success) {
+      toast('Code ' + code + ' deleted!', 'var(--pink)');
+      loadCodes();
+    } else {
+      toast('Error: ' + (d.error || '?'), 'var(--pink)');
+    }
+  } catch(e) {
+    toast('Error: ' + e.message, 'var(--pink)');
+  }
+}
+
+// Load codes saat init
+(function() {
+  // Override admin token optional (bisa dari variable global atau input tersembunyi)
+  // Kita tidak perlu token override karena sudah ada di env, tapi untuk jaga-jaga kita biarkan default
+  // loadCodes dipanggil di init
+})();
 
 // IIFE
 (function(){
