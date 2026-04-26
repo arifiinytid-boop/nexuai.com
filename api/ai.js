@@ -276,7 +276,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           model,
           messages: allMsgs,
-          max_tokens: max_tokens || 16384,
+          max_tokens: max_tokens || 32768,
           temperature: 0.7,
         }),
         signal: AbortSignal.timeout(120000),
