@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>NEXUS Agent — Support AI</title>
+<link rel="icon" href="nexusai.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/lua.min.js"></script>
+<style>
+:root{
+  --bg:#030312;--bg2:#06071a;--bg3:#0a0b22;
+  --card:rgba(0,229,255,.04);--hover:rgba(0,229,255,.07);
+  --cyan:#00e5ff;--cyan2:rgba(0,229,255,.35);--cyan3:rgba(0,229,255,.12);
+  --purple:#8800ff;--pink:#ff2d6b;--green:#00ffaa;--yellow:#ffd600;
+  --orange:#ff9500;
+  --text:#b8cfff;--dim:#3a4a7a;
+  --b:rgba(0,229,255,.12);--bb:rgba(0,229,255,.3);
+  --gc:0 0 20px rgba(0,229,255,.15);
+  --agent-accent:#ff9500;--agent-accent2:rgba(255,149,0,.2);
+  --r:8px;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html,body{height:100%;font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:13px;overflow:hidden;}
+body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(255,149,0,.008)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.008)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
+#app{display:flex;flex-direction:column;height:100vh;position:relative;z-index:1;}
+
+/* ─── TOP BAR ─── */
+.top-bar{display:flex;align-items:center;gap:10px;padding:8px 16px;background:var(--bg2);border-bottom:1px solid var(--b);flex-shrink:0;}
+.top-logo{display:flex;align-items:center;gap:8px;}
+.top-logo img{width:28px;height:28px;border-radius:7px;object-fit:cover;}
+.top-logo-text{font-family:'Orbitron',sans-serif;font-weight:900;font-size:11px;background:linear-gradient(135deg,var(--orange),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.top-logo-sub{font-size:8px;color:var(--dim);}
+.top-sep{width:1px;height:24px;background:var(--b);flex-shrink:0;}
+.top-title{font-size:10px;color:var(--text);flex:1;}
+.top-title span{color:var(--orange);}
+.status-badge{display:flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;border:1px solid;font-size:9px;cursor:pointer;flex-shrink:0;transition:.2s;}
+.status-badge.off{border-color:rgba(255,45,107,.3);color:var(--pink);background:rgba(255,45,107,.06);}
+.status-badge.on{border-color:rgba(0,255,170,.3);color:var(--green);background:rgba(0,255,170,.06);}
+.sdot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.sdot.pulse{animation:pd 1.8s infinite;}
+@keyframes pd{0%,100%{opacity:1}50%{opacity:.25}}
+.top-nav-btn{display:flex;align-items:center;gap:5px;padding:5px 11px;border-radius:6px;border:1px solid var(--b);background:transparent;color:var(--dim);font-size:10px;cursor:pointer;transition:.15s;font-family:'JetBrains Mono',monospace;}
+.top-nav-btn:hover{color:var(--cyan);border-color:var(--cyan2);}
+.top-nav-btn svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* ─── PLUGIN BANNER ─── */
+.plug-banner{padding:5px 14px;background:rgba(255,45,107,.08);border-bottom:1px solid rgba(255,45,107,.2);font-size:10px;color:var(--pink);display:flex;align-items:center;gap:7px;flex-shrink:0;}
+.plug-banner svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;flex-shrink:0;}
+.plug-banner a{color:var(--cyan);cursor:pointer;text-decoration:none;}
+.plug-banner.connected{background:rgba(0,255,170,.05);border-color:rgba(0,255,170,.2);color:var(--green);}
+
+/* ─── MSGS ─── */
+#msgs{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:12px;}
+#msgs::-webkit-scrollbar{width:3px;}
+#msgs::-webkit-scrollbar-thumb{background:var(--b);}
+
+/* ─── MSG BUBBLES ─── */
+.msg{display:flex;gap:10px;animation:mi .25s ease;}
+.msg.user{flex-direction:row-reverse;}
+@keyframes mi{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+.av{width:32px;height:32px;border-radius:50%;flex-shrink:0;overflow:hidden;background:var(--bg3);}
+.av img{width:100%;height:100%;object-fit:cover;}
+.av.agent-av{background:linear-gradient(135deg,rgba(255,149,0,.2),rgba(255,214,0,.2));border:1.5px solid rgba(255,149,0,.4);display:flex;align-items:center;justify-content:center;font-size:13px;}
+.mb-wrap{max-width:82%;display:flex;flex-direction:column;gap:3px;min-width:0;}
+.msg-sender{font-size:9px;color:var(--dim);display:flex;align-items:center;gap:5px;padding:0 3px;}
+.msg.user .msg-sender{flex-direction:row-reverse;}
+.bubble{padding:11px 14px;border-radius:10px;line-height:1.72;font-size:12.5px;word-break:break-word;}
+.msg.user .bubble{background:linear-gradient(135deg,rgba(255,149,0,.08),rgba(255,214,0,.06));border:1px solid rgba(255,149,0,.2);border-radius:10px 2px 10px 10px;color:white;}
+.msg.agent .bubble{background:var(--bg2);border:1px solid var(--b);border-radius:2px 10px 10px 10px;color:var(--text);}
+
+/* Welcome message special style */
+.msg.agent.welcome-msg .bubble{background:linear-gradient(135deg,rgba(255,149,0,.06),rgba(136,0,255,.04));border:1px solid rgba(255,149,0,.2);}
+
+/* ─── TYPING INDICATOR ─── */
+.typing-wrap{display:flex;gap:10px;animation:mi .25s ease;}
+.typing-box{background:var(--bg2);border:1px solid var(--b);border-radius:2px 10px 10px 10px;padding:12px 16px;display:flex;align-items:center;gap:10px;}
+.typing-dots{display:flex;gap:4px;align-items:center;}
+.typing-dot{width:6px;height:6px;border-radius:50%;background:var(--orange);animation:tdot 1.2s ease-in-out infinite;}
+.typing-dot:nth-child(2){animation-delay:.2s;}
+.typing-dot:nth-child(3){animation-delay:.4s;}
+@keyframes tdot{0%,80%,100%{transform:scale(.8);opacity:.4}40%{transform:scale(1.2);opacity:1}}
+.typing-label{font-size:10px;color:var(--dim);}
+.tspin{width:12px;height:12px;border:2px solid rgba(255,149,0,.2);border-top-color:var(--orange);border-radius:50%;animation:spin .7s linear infinite;flex-shrink:0;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.cancel-typing-btn{padding:3px 10px;background:rgba(255,45,107,.1);border:1px solid rgba(255,45,107,.3);border-radius:5px;color:var(--pink);font-size:9px;cursor:pointer;transition:.1s;}
+.cancel-typing-btn:hover{background:rgba(255,45,107,.18);}
+
+/* ─── STUDIO INJECT CARD ─── */
+.studio-inject-card{background:rgba(0,255,170,.05);border:1px solid rgba(0,255,170,.2);border-radius:8px;padding:10px 13px;margin:6px 0;font-size:11px;}
+.sc-title{color:var(--green);font-weight:700;font-family:'Orbitron',sans-serif;font-size:9px;letter-spacing:1px;margin-bottom:5px;display:flex;align-items:center;gap:6px;}
+.sc-title svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;}
+.sc-item{color:var(--text);padding:2px 0;display:flex;align-items:center;gap:6px;font-size:10.5px;}
+.sc-item::before{content:"✓";color:var(--green);font-weight:700;}
+
+/* ─── QUICK ACTIONS ─── */
+.quick-actions{display:flex;gap:7px;flex-wrap:wrap;padding:10px 20px 0;flex-shrink:0;}
+.qa-btn{padding:6px 12px;background:var(--card);border:1px solid var(--b);border-radius:20px;font-size:10px;color:var(--dim);cursor:pointer;transition:.15s;white-space:nowrap;}
+.qa-btn:hover{border-color:rgba(255,149,0,.4);color:var(--orange);background:rgba(255,149,0,.06);}
+.quick-actions:empty{display:none;}
+
+/* ─── INPUT ─── */
+.inp-area{padding:10px 16px 12px;border-top:1px solid var(--b);background:var(--bg2);flex-shrink:0;}
+.inp-box{background:var(--bg3);border:1px solid var(--b);border-radius:12px;transition:.2s;overflow:hidden;}
+.inp-box:focus-within{border-color:rgba(255,149,0,.4);box-shadow:0 0 0 2px rgba(255,149,0,.05);}
+#inp{width:100%;background:transparent;border:none;outline:none;color:white;font-family:'JetBrains Mono',monospace;font-size:13px;padding:11px 14px;resize:none;min-height:44px;max-height:130px;line-height:1.55;}
+#inp::placeholder{color:var(--dim);}
+.inp-bar{display:flex;align-items:center;padding:5px 9px;border-top:1px solid var(--b);gap:5px;}
+.inp-l{display:flex;align-items:center;gap:5px;flex:1;}
+.inp-model{display:flex;align-items:center;gap:5px;padding:3px 9px;border-radius:6px;background:var(--card);border:1px solid var(--b);cursor:pointer;transition:.12s;font-size:9.5px;color:var(--dim);max-width:175px;overflow:hidden;flex-shrink:0;}
+.inp-model:hover{border-color:rgba(255,149,0,.4);color:var(--orange);}
+.inp-model img{width:14px;height:14px;border-radius:3px;object-fit:contain;flex-shrink:0;}
+.inp-model-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;font-size:9px;}
+.inp-model-badge{font-size:8px;font-weight:700;flex-shrink:0;}
+.model-dd{position:fixed;background:var(--bg3);border:1px solid var(--b);border-radius:var(--r);z-index:9000;display:none;max-height:360px;overflow-y:auto;box-shadow:0 8px 32px rgba(0,0,0,.9);min-width:260px;}
+.model-dd.open{display:block;}
+.model-dd::-webkit-scrollbar{width:3px;}
+.model-dd::-webkit-scrollbar-thumb{background:var(--b);}
+.mg{padding:6px 11px 3px;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;border-top:1px solid var(--b);}
+.mg:first-child{border-top:none;}
+.mo{padding:7px 11px;display:flex;align-items:center;gap:7px;cursor:pointer;transition:.1s;}
+.mo:hover:not(.disabled){background:var(--hover);}
+.mo.act{background:rgba(255,149,0,.06);}
+.mo.disabled{opacity:.35;cursor:not-allowed;}
+.mo-icon{width:20px;height:20px;border-radius:4px;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center;}
+.mo-icon img{width:100%;height:100%;object-fit:contain;}
+.mo-n{font-size:11px;color:white;flex:1;}
+.mo-s{font-size:9px;color:var(--dim);}
+.mb{font-size:8px;padding:1px 5px;border-radius:3px;font-weight:700;white-space:nowrap;}
+.mb.f{background:rgba(0,255,170,.12);color:var(--green);}
+.mb.s{background:rgba(0,229,255,.12);color:var(--cyan);}
+.mb.p{background:rgba(136,0,255,.15);color:#cc55ff;}
+.btn-send,.btn-cancel{border:none;border-radius:8px;width:34px;height:34px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.18s;flex-shrink:0;}
+.btn-send{background:linear-gradient(135deg,var(--orange),var(--yellow));color:#030312;}
+.btn-send:hover{opacity:.82;transform:scale(1.05);}
+.btn-send svg,.btn-cancel svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;}
+.btn-cancel{background:rgba(255,45,107,.15);border:1px solid rgba(255,45,107,.3);color:var(--pink);}
+.ib{width:27px;height:27px;border-radius:5px;border:1px solid var(--b);background:transparent;color:var(--dim);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s;flex-shrink:0;}
+.ib:hover{color:var(--orange);border-color:rgba(255,149,0,.4);}
+.ib svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.5;}
+
+/* ─── MSG ACTIONS ─── */
+.msg-acts{display:flex;gap:3px;padding:3px 2px;flex-wrap:wrap;align-items:center;}
+.mab{font-size:9px;color:var(--dim);background:none;border:1px solid transparent;cursor:pointer;padding:3px 6px;border-radius:4px;transition:.12s;display:flex;align-items:center;gap:3px;}
+.mab:hover{color:var(--orange);border-color:rgba(255,149,0,.3);background:rgba(255,149,0,.06);}
+.mab svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;}
+
+/* ─── CODE BLOCKS ─── */
+.code-block-wrap{position:relative;margin:8px 0;}
+.code-block-wrap pre{margin:0;border-radius:7px;overflow:hidden;}
+.code-block-wrap pre code.hljs{font-size:11px;line-height:1.55;padding:12px 14px;border-radius:7px;border:1px solid rgba(0,229,255,.1);}
+.code-btns{position:absolute;top:6px;right:7px;display:flex;gap:4px;opacity:0;transition:.15s;z-index:2;}
+.code-block-wrap:hover .code-btns{opacity:1;}
+.cbtn{background:rgba(10,11,34,.9);border:1px solid rgba(0,229,255,.25);border-radius:5px;color:var(--cyan);font-size:9px;padding:3px 8px;cursor:pointer;display:flex;align-items:center;gap:3px;transition:.12s;}
+.cbtn:hover{background:rgba(0,229,255,.15);}
+.cbtn svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;}
+.bubble code:not(.hljs){background:rgba(255,149,0,.08);padding:2px 5px;border-radius:3px;font-size:11px;color:var(--orange);}
+.bubble p{margin-bottom:6px;}.bubble p:last-child{margin-bottom:0;}
+.bubble h1,.bubble h2,.bubble h3{color:var(--orange);margin:10px 0 5px;font-family:'Orbitron',sans-serif;}
+.bubble h1{font-size:14px;}.bubble h2{font-size:13px;}.bubble h3{font-size:12px;}
+.bubble ul,.bubble ol{padding-left:18px;margin-bottom:6px;}
+.bubble li{margin-bottom:3px;line-height:1.65;}
+.bubble strong{color:white;}
+.bubble table{width:100%;border-collapse:collapse;margin:7px 0;font-size:11px;}
+.bubble th,.bubble td{padding:5px 9px;border:1px solid var(--b);}
+.bubble th{background:rgba(255,149,0,.06);color:var(--orange);}
+.bubble blockquote{border-left:3px solid rgba(255,149,0,.4);padding:6px 12px;margin:6px 0;background:rgba(255,149,0,.04);border-radius:0 6px 6px 0;}
+
+/* ─── ATTACH ─── */
+.attach-row{display:flex;gap:7px;margin-bottom:7px;flex-wrap:wrap;}
+.attach-row:empty{display:none;}
+.attach-item{position:relative;}
+.attach-item img{width:54px;height:54px;border-radius:5px;object-fit:cover;border:1px solid var(--b);}
+.attach-file{padding:5px 9px;border:1px solid var(--b);border-radius:5px;font-size:10px;color:var(--orange);background:rgba(255,149,0,.04);display:flex;align-items:center;gap:5px;}
+.attach-rm{position:absolute;top:-5px;right:-5px;width:16px;height:16px;background:var(--pink);border:none;border-radius:50%;color:white;font-size:9px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+
+/* ─── TOAST ─── */
+@keyframes toastIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:none}}
+.hidden{display:none!important;}
+::-webkit-scrollbar{width:2px;height:2px;}
+::-webkit-scrollbar-thumb{background:var(--b);border-radius:2px;}
+
+/* ─── MOBILE ─── */
+@media(max-width:768px){
+  #msgs{padding:8px 10px;gap:8px;}
+  .mb-wrap{max-width:92%;}
+  .bubble{font-size:12px;padding:8px 10px;}
+  .inp-area{padding:6px 8px;}
+  #inp{font-size:12px;padding:8px 10px;min-height:38px;}
+  .inp-model{max-width:120px;}
+  .quick-actions{padding:6px 10px 0;}
+}
+</style>
+</head>
+<body>
+<div id="app" class="hidden">
+
+  <!-- TOP BAR -->
+  <div class="top-bar">
+    <div class="top-logo">
+      <img src="nexusai.png" alt="NEXUS" onerror="this.style.opacity='.4'">
+      <div>
+        <div class="top-logo-text">NEXUS AGENT</div>
+        <div class="top-logo-sub">AI Support Assistant</div>
+      </div>
+    </div>
+    <div class="top-sep"></div>
+    <div class="top-title" id="agentStatusText"><span id="greetUser">Hello!</span> — <span id="agentModeLabel">Support Mode</span></div>
+    <div class="status-badge off" id="studioBadge" onclick="retryStudio()">
+      <div class="sdot pulse" id="studioDot"></div>
+      <span id="studioTxt">Studio: OFF</span>
+    </div>
+    <button class="top-nav-btn" onclick="window.location.href='/chats'">
+      <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <span id="backToNexusBtn">Back to NEXUS AI</span>
+    </button>
+  </div>
+
+  <!-- PLUGIN BANNER -->
+  <div class="plug-banner" id="plugBanner">
+    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+    <span id="plugBannerTxt">Plugin not connected —</span>
+    <a href="/chats" style="color:var(--cyan);">Connect via NEXUS AI →</a>
+  </div>
+
+  <!-- MESSAGES -->
+  <div id="msgs"></div>
+
+  <!-- QUICK ACTIONS -->
+  <div class="quick-actions" id="quickActions"></div>
+
+  <!-- INPUT -->
+  <div class="inp-area">
+    <div class="attach-row" id="attachRow"></div>
+    <div class="inp-box">
+      <textarea id="inp" placeholder="Ask me anything about Roblox development..." rows="1"></textarea>
+      <div class="inp-bar">
+        <div class="inp-l">
+          <label for="fi" class="ib" title="Attach file">
+            <svg viewBox="0 0 24 24"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+          </label>
+          <input type="file" id="fi" accept="image/*,.lua,.txt,.json" style="display:none" onchange="handleFile(event)" multiple>
+          <button class="ib" onclick="clearConv()" title="Clear conversation">
+            <svg viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          </button>
+          <div class="inp-model" id="inpModelBtn" onclick="toggleMDD(event)">
+            <img id="inpMIcon" src="" alt="" onerror="this.style.display='none'" style="width:14px;height:14px;border-radius:3px;">
+            <span class="inp-model-name" id="inpMName">Gemini 2.5 Flash</span>
+            <span class="inp-model-badge" id="inpMBadge" style="color:var(--green);">FREE</span>
+            <svg width="8" height="8" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" style="color:var(--dim);flex-shrink:0;"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+        </div>
+        <button class="btn-cancel hidden" id="cancelBtn" onclick="cancelGen()">
+          <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+        <button class="btn-send" id="sendBtn" onclick="send()">
+          <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="model-dd" id="mDD"></div>
+  </div>
+</div>
+
+<script>
+'use strict';
+
+// ─── STATE ─────────────────────────────────────────────────────────────────
+var SESSION = null;
+var studioConnected = false;
+var studioPollTimer = null;
+var API_URL = '/api/control';
+var curLang = localStorage.getItem('nexus_lang') || 'id';
+var convMsgs = [];
+var isGen = false;
+var cancelCtrl = null;
+var attachments = [];
+var curModel = {id:'gemini-2.5-flash-lite',prov:'gemini',cost:0,label:'Gemini 2.5 Flash Lite',icon:'/icon/gemini.png'};
+
+// ─── MODEL LIST ─────────────────────────────────────────────────────────────
+var MODEL_LIST = [
+  {grp:'⚡ Google Gemini Fast'},
+  {id:'gemini-2.5-flash-lite',prov:'gemini',cost:0,label:'Gemini 2.5 Flash Lite',icon:'/icon/gemini.png',badge:'FREE'},
+  {id:'gemini-2.0-flash',prov:'gemini',cost:0,label:'Gemini 2.0 Flash',icon:'/icon/gemini.png',badge:'FREE'},
+  {grp:'🧠 Google Gemini Smart'},
+  {id:'gemini-2.5-flash',prov:'gemini',cost:1,label:'Gemini 2.5 Flash',icon:'/icon/gemini.png',badge:'SMART'},
+  {id:'gemini-2.5-pro-preview',prov:'gemini',cost:3,label:'Gemini 2.5 Pro',icon:'/icon/gemini.png',badge:'BEST'},
+  {grp:'🦙 Groq — Fast & Free'},
+  {id:'llama-3.1-8b-instant',prov:'groq',cost:0,label:'Llama 3.1 8B Instant',icon:'/icon/groq.ico',badge:'FREE'},
+  {id:'llama-3.3-70b-versatile',prov:'groq',cost:0,label:'Llama 3.3 70B',icon:'/icon/groq.ico',badge:'FREE'},
+  {grp:'🌫️ Mistral'},
+  {id:'mistral-small-latest',prov:'mistral',cost:0,label:'Mistral Small',icon:'/icon/mistral.png',badge:'FREE'},
+];
+
+// ─── LANGS ──────────────────────────────────────────────────────────────────
+var LANG_LABELS = {
+  id:{
+    welcome:'Halo {name}! 👋\n\nSaya **NEXUS Agent**, asisten AI yang siap membantu kamu dengan semua pertanyaan seputar **Roblox Development**.\n\nSaya bisa membantu kamu dengan:\n- 🎓 **Tutorial & Panduan** — Cara membuat sistem, GUI, script Lua\n- 🐛 **Debug & Troubleshoot** — Temukan dan perbaiki bug\n- 💡 **Ide & Konsep** — Saran desain game, mekanik, struktur\n- 📖 **Penjelasan API** — Semua tentang Roblox API\n- ⚡ **Build Langsung** — Jika Studio terhubung, saya bisa inject langsung!\n\n**Ada yang bisa saya bantu?**',
+    studioOn:'Studio: ON',studioOff:'Studio: OFF',
+    connected:'Plugin terhubung — saya siap build langsung ke Studio kamu!',
+    disconnected:'Plugin belum terhubung —',
+    placeholder:'Tanya apa saja tentang Roblox...',
+    cancelTxt:'Batal',
+    backBtn:'Kembali ke NEXUS AI',
+    agentMode:'Mode Asisten',
+    greet:'Hei',
+    quickActions:['Cara buat DataStore','Debug script saya','Buat GUI keren','Cara pakai RemoteEvent','Optimasi performa game','Cara buat NPC AI'],
+    clearConfirm:'Hapus semua percakapan?',
+  },
+  en:{
+    welcome:'Hello {name}! 👋\n\nI\'m **NEXUS Agent**, your AI assistant for all things **Roblox Development**.\n\nI can help you with:\n- 🎓 **Tutorials & Guides** — How to build systems, GUIs, Lua scripts\n- 🐛 **Debug & Troubleshoot** — Find and fix bugs\n- 💡 **Ideas & Concepts** — Game design advice, mechanics, structure\n- 📖 **API Explanations** — Everything about the Roblox API\n- ⚡ **Direct Build** — If Studio is connected, I can inject directly!\n\n**What can I help you with?**',
+    studioOn:'Studio: ON',studioOff:'Studio: OFF',
+    connected:'Plugin connected — I\'m ready to build directly in your Studio!',
+    disconnected:'Plugin not connected —',
+    placeholder:'Ask me anything about Roblox development...',
+    cancelTxt:'Cancel',
+    backBtn:'Back to NEXUS AI',
+    agentMode:'Support Mode',
+    greet:'Hello',
+    quickActions:['How to use DataStore','Debug my script','Make a cool GUI','How to use RemoteEvent','Optimize game performance','How to make NPC AI'],
+    clearConfirm:'Clear all messages?',
+  }
+};
+
+function T(){return LANG_LABELS[curLang]||LANG_LABELS.en;}
+
+// ─── AUTH ────────────────────────────────────────────────────────────────────
+(function(){
+  try{
+    var s=localStorage.getItem('nexus_session');
+    if(!s){window.location.replace('/login');return;}
+    var p=JSON.parse(s);
+    if(!p||!p.user||!p.user.username){localStorage.removeItem('nexus_session');window.location.replace('/login');return;}
+    if((Date.now()-p.loginTime)>=86400000*7){localStorage.removeItem('nexus_session');window.location.replace('/login');return;}
+    SESSION=p;
+    document.getElementById('app').classList.remove('hidden');
+  }catch(e){localStorage.removeItem('nexus_session');window.location.replace('/login');}
+})();
+
+// ─── UTILS ──────────────────────────────────────────────────────────────────
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function toast(msg,col,dur){
+  document.querySelectorAll('.nx-toast').forEach(function(x){x.remove();});
+  var t=document.createElement('div');t.className='nx-toast';
+  t.textContent=msg;
+  t.style.cssText='position:fixed;bottom:22px;right:22px;background:var(--bg3);border:1px solid var(--b);border-radius:8px;padding:9px 15px;font-size:11px;z-index:9999;color:'+(col||'var(--orange)')+';animation:toastIn .2s ease;pointer-events:none;';
+  document.body.appendChild(t);setTimeout(function(){t.remove();},(dur||2800));
+}
+function safeMarked(md){
+  try{if(typeof marked==='undefined')return esc(md);return marked.parse(String(md||''));}
+  catch(e){return esc(md);}
+}
+
+// ─── STUDIO ─────────────────────────────────────────────────────────────────
+function setStudioStatus(on){
+  studioConnected=on;
+  var t=T();
+  var badge=document.getElementById('studioBadge');
+  var dot=document.getElementById('studioDot');
+  var txt=document.getElementById('studioTxt');
+  var banner=document.getElementById('plugBanner');
+  var bannerTxt=document.getElementById('plugBannerTxt');
+  if(on){
+    if(badge)badge.className='status-badge on';
+    if(dot)dot.className='sdot pulse';
+    if(txt)txt.textContent=t.studioOn;
+    if(banner)banner.className='plug-banner connected';
+    if(bannerTxt)bannerTxt.textContent=t.connected;
+  }else{
+    if(badge)badge.className='status-badge off';
+    if(dot)dot.className='sdot pulse';
+    if(txt)txt.textContent=t.studioOff;
+    if(banner)banner.className='plug-banner';
+    if(bannerTxt)bannerTxt.textContent=t.disconnected;
+  }
+}
+async function checkStudio(){
+  if(!SESSION)return;
+  var username=(SESSION.user.username||'').toLowerCase();
+  try{
+    var r=await fetch(API_URL+'?check=1&user='+encodeURIComponent(username),{signal:AbortSignal.timeout(5000)});
+    if(r.ok){var d=await r.json();setStudioStatus(d._pluginConnected===true||d.connected===true||d.online===true);}
+    else setStudioStatus(false);
+  }catch(e){setStudioStatus(false);}
+}
+async function retryStudio(){toast('Reconnecting...');await checkStudio();}
+function startStudioPoll(){
+  if(studioPollTimer)clearInterval(studioPollTimer);
+  checkStudio();
+  studioPollTimer=setInterval(checkStudio,5000);
+}
+
+// ─── SYSTEM PROMPT ──────────────────────────────────────────────────────────
+function buildAgentSysPrompt(){
+  var u=SESSION?SESSION.user:{username:'Developer',displayName:'Developer'};
+  var dn=u.displayName||u.username||'Developer';
+  var un=u.username||'Unknown';
+  var now=new Date();
+  var isID=curLang==='id';
+
+  var lines=[];
+  lines.push('╔══════════════════════════════════════════════════════╗');
+  lines.push('║  NEXUS AGENT — ROBLOX DEVELOPMENT SUPPORT AI        ║');
+  lines.push('╚══════════════════════════════════════════════════════╝');
+  lines.push('');
+  lines.push('👤 User: "'+dn+'" (@'+un+') | Time: '+now.toLocaleString());
+  lines.push('🔌 Studio: '+(studioConnected?'✅ CONNECTED':'❌ OFFLINE'));
+  lines.push('');
+
+  if(isID){
+    lines.push('═══════════════ IDENTITAS KAMU ═══════════════');
+    lines.push('Kamu adalah NEXUS Agent — asisten AI khusus support untuk Roblox developer.');
+    lines.push('Dibuat oleh NEXUS STUDIO. Kamu BERBEDA dari NEXUS AI (yang fokus build & inject).');
+    lines.push('');
+    lines.push('Peran utamamu:');
+    lines.push('• 🎓 MENGAJARKAN cara membuat sesuatu langkah demi langkah');
+    lines.push('• 🐛 MEMBANTU debug, troubleshoot, dan menemukan bug');
+    lines.push('• 💡 MEMBERIKAN ide, saran arsitektur, dan best practice');
+    lines.push('• 📖 MENJELASKAN Roblox API, konsep Lua/Luau, sistem game');
+    lines.push('• ⚡ BUILD & INJECT langsung jika Studio terhubung dan user meminta');
+    lines.push('');
+    lines.push('═══════════════ BAHASA & GAYA ═══════════════');
+    lines.push('• WAJIB balas dalam Bahasa Indonesia yang ramah, jelas, dan mudah dipahami');
+    lines.push('• Gunakan kata "kamu" untuk user dan "saya" untuk diri sendiri');
+    lines.push('• Jadilah GURU yang sabar — jelaskan dengan analogi sederhana jika perlu');
+    lines.push('• Gunakan emoji secukupnya agar terasa lebih hidup dan engaging');
+    lines.push('• Untuk topik teknis, berikan penjelasan bertahap (step-by-step)');
+    lines.push('• JANGAN sok tahu — jika tidak yakin, katakan dan saran cari referensi');
+    lines.push('');
+    lines.push('═══════════════ CARA MENJAWAB ═══════════════');
+    lines.push('');
+    lines.push('🔴 JIKA DITANYA CARA/HOW-TO:');
+    lines.push('  → Jelaskan konsepnya terlebih dahulu (1-2 kalimat)');
+    lines.push('  → Berikan langkah-langkah yang jelas dan terurut');
+    lines.push('  → Sertakan contoh kode yang relevan dan bisa langsung dicoba');
+    lines.push('  → Tambahkan tips/catatan penting di akhir');
+    lines.push('  → Tanya apakah ada yang masih kurang jelas');
+    lines.push('');
+    lines.push('🔴 JIKA DITANYA DEBUG/ERROR:');
+    lines.push('  → Analisis pesan error dengan cermat');
+    lines.push('  → Identifikasi kemungkinan penyebab (1-3 kemungkinan)');
+    lines.push('  → Berikan solusi untuk setiap kemungkinan');
+    lines.push('  → Sertakan kode yang sudah diperbaiki');
+    lines.push('  → Jelaskan MENGAPA error terjadi agar tidak terulang');
+    lines.push('');
+    lines.push('🔴 JIKA DITANYA IDE/SARAN:');
+    lines.push('  → Berikan 2-4 opsi dengan pro & con masing-masing');
+    lines.push('  → Rekomendasikan satu opsi terbaik dengan alasan yang jelas');
+    lines.push('  → Pertimbangkan skala, performa, dan kemudahan implementasi');
+    lines.push('');
+    lines.push('🔴 JIKA DIMINTA BUILD/BUAT (Studio OFFLINE):');
+    lines.push('  → Berikan kode Lua LENGKAP dalam blok ```lua');
+    lines.push('  → Tambahkan instruksi cara memasang di Studio');
+    lines.push('  → Sertakan komentar dalam kode untuk memandu konfigurasi');
+    lines.push('  → Jelaskan bagian-bagian penting dari kode');
+    lines.push('');
+
+    if(studioConnected){
+      lines.push('═══════════════ STUDIO TERHUBUNG — INJECT MODE ═══════════════');
+      lines.push('✅ STUDIO ONLINE — Kamu BISA dan HARUS inject langsung!');
+      lines.push('');
+      lines.push('🔴 JIKA DIMINTA BUILD/BUAT/INJECT (Studio ONLINE):');
+      lines.push('  → LANGSUNG buat dan inject, JANGAN hanya berikan kode teks');
+      lines.push('  → Gunakan ```json untuk JSON actions (create_part, create_gui, dll)');
+      lines.push('  → Gunakan ```lua untuk script injection (dengan header wajib)');
+      lines.push('  → Setelah inject, beri tahu apa yang sudah dibuat dan cara pakainya');
+      lines.push('  → JANGAN tampilkan blok kode di teks akhir — semuanya sudah otomatis');
+      lines.push('');
+      lines.push('📌 HEADER LUA WAJIB:');
+      lines.push('  -- name: NamaScript');
+      lines.push('  -- parent: ServiceName');
+      lines.push('  -- script_type: Script/LocalScript/ModuleScript');
+      lines.push('');
+      lines.push('📌 JSON ACTIONS TERSEDIA:');
+      lines.push('  inject_script, create_gui, create_part, batch_create,');
+      lines.push('  create_remote, create_folder, set_lighting, batch_commands, dll.');
+      lines.push('');
+      lines.push('📌 CONTOH RESPON BENAR (user minta buat):');
+      lines.push('  "✅ Sudah saya buat dan inject ke Studio! [deskripsi fitur]');
+      lines.push('   Untuk mengkonfigurasi, ubah variabel [X] di baris [Y]."');
+    }
+
+    lines.push('');
+    lines.push('═══════════════ ATURAN KODE ═══════════════');
+    lines.push('• Gunakan task.wait() bukan wait()');
+    lines.push('• Selalu gunakan game:GetService() untuk akses service');
+    lines.push('• Bungkus DataStore calls dalam pcall()');
+    lines.push('• Validasi input dari client di server');
+    lines.push('• Gunakan TweenService untuk animasi, bukan loop');
+    lines.push('• Sebutkan jika ada catatan keamanan penting');
+    lines.push('');
+    lines.push('═══════════════ YANG TIDAK BOLEH ═══════════════');
+    lines.push('• JANGAN berikan backdoor, remote spy, atau script berbahaya');
+    lines.push('• JANGAN berikan exploit tools atau bypass sistem Roblox');
+    lines.push('• JANGAN berikan kode yang sengaja merusak game orang lain');
+    lines.push('• JANGAN jawab pertanyaan di luar topik Roblox/pemrograman/game dev');
+    lines.push('');
+    lines.push('═══════════════ PENUTUP ═══════════════');
+    lines.push('Jadilah asisten yang benar-benar membantu! Tidak hanya menjawab,');
+    lines.push('tapi MENDIDIK developer agar mereka bisa mandiri dan berkembang.');
+    lines.push('Setiap jawaban adalah kesempatan untuk membuat developer lebih baik.');
+  } else {
+    lines.push('═══════════════ YOUR IDENTITY ═══════════════');
+    lines.push('You are NEXUS Agent — a specialized AI support assistant for Roblox developers.');
+    lines.push('Created by NEXUS STUDIO. You are DIFFERENT from NEXUS AI (which focuses on building & injecting).');
+    lines.push('');
+    lines.push('Your primary roles:');
+    lines.push('• 🎓 TEACH how to build things step by step');
+    lines.push('• 🐛 HELP debug, troubleshoot, and find bugs');
+    lines.push('• 💡 PROVIDE ideas, architecture advice, and best practices');
+    lines.push('• 📖 EXPLAIN the Roblox API, Lua/Luau concepts, game systems');
+    lines.push('• ⚡ BUILD & INJECT directly if Studio is connected and user requests it');
+    lines.push('');
+    lines.push('═══════════════ LANGUAGE & STYLE ═══════════════');
+    lines.push('• ALWAYS respond in clear, friendly, easy-to-understand English');
+    lines.push('• Be a PATIENT TEACHER — use simple analogies when needed');
+    lines.push('• Use emojis in moderation to keep responses lively and engaging');
+    lines.push('• For technical topics, provide step-by-step explanations');
+    lines.push('• Be honest — if unsure, say so and suggest where to find the answer');
+    lines.push('');
+    lines.push('═══════════════ HOW TO ANSWER ═══════════════');
+    lines.push('');
+    lines.push('🔴 IF ASKED HOW-TO:');
+    lines.push('  → Explain the concept first (1-2 sentences)');
+    lines.push('  → Give clear, ordered steps');
+    lines.push('  → Include relevant, ready-to-use code examples');
+    lines.push('  → Add important tips/notes at the end');
+    lines.push('  → Ask if anything is still unclear');
+    lines.push('');
+    lines.push('🔴 IF ASKED TO DEBUG/ERROR:');
+    lines.push('  → Analyze the error message carefully');
+    lines.push('  → Identify possible causes (1-3 possibilities)');
+    lines.push('  → Provide a solution for each possibility');
+    lines.push('  → Include the fixed code');
+    lines.push('  → Explain WHY the error happened so it doesn\'t repeat');
+    lines.push('');
+    lines.push('🔴 IF ASKED FOR IDEAS/ADVICE:');
+    lines.push('  → Provide 2-4 options with pros & cons for each');
+    lines.push('  → Recommend one best option with clear reasoning');
+    lines.push('  → Consider scale, performance, and ease of implementation');
+    lines.push('');
+    lines.push('🔴 IF ASKED TO BUILD (Studio OFFLINE):');
+    lines.push('  → Provide COMPLETE Lua code in ```lua blocks');
+    lines.push('  → Add instructions on how to place it in Studio');
+    lines.push('  → Include comments in the code to guide configuration');
+    lines.push('  → Explain the important parts of the code');
+    lines.push('');
+
+    if(studioConnected){
+      lines.push('═══════════════ STUDIO CONNECTED — INJECT MODE ═══════════════');
+      lines.push('✅ STUDIO ONLINE — You CAN and SHOULD inject directly!');
+      lines.push('');
+      lines.push('🔴 IF ASKED TO BUILD/CREATE/INJECT (Studio ONLINE):');
+      lines.push('  → DIRECTLY build and inject, DON\'T just provide text code');
+      lines.push('  → Use ```json for JSON actions (create_part, create_gui, etc.)');
+      lines.push('  → Use ```lua for script injection (with required header)');
+      lines.push('  → After injecting, tell what was built and how to use it');
+      lines.push('  → DON\'T show code blocks in the final text — everything is automatic');
+      lines.push('');
+      lines.push('📌 REQUIRED LUA HEADER:');
+      lines.push('  -- name: ScriptName');
+      lines.push('  -- parent: ServiceName');
+      lines.push('  -- script_type: Script/LocalScript/ModuleScript');
+      lines.push('');
+      lines.push('📌 AVAILABLE JSON ACTIONS:');
+      lines.push('  inject_script, create_gui, create_part, batch_create,');
+      lines.push('  create_remote, create_folder, set_lighting, batch_commands, etc.');
+      lines.push('');
+      lines.push('📌 EXAMPLE CORRECT RESPONSE (user asks to build):');
+      lines.push('  "✅ Done! I\'ve built and injected it into Studio! [feature description]');
+      lines.push('   To configure it, change the [X] variable at line [Y]."');
+    }
+
+    lines.push('');
+    lines.push('═══════════════ CODE RULES ═══════════════');
+    lines.push('• Use task.wait() not wait()');
+    lines.push('• Always use game:GetService() to access services');
+    lines.push('• Wrap DataStore calls in pcall()');
+    lines.push('• Validate client input on the server');
+    lines.push('• Use TweenService for animations, not loops');
+    lines.push('• Mention any important security notes');
+    lines.push('');
+    lines.push('═══════════════ PROHIBITED ═══════════════');
+    lines.push('• NEVER provide backdoors, remote spies, or harmful scripts');
+    lines.push('• NEVER provide exploit tools or Roblox system bypasses');
+    lines.push('• NEVER provide code intentionally designed to harm others\' games');
+    lines.push('• NEVER answer questions outside Roblox/programming/game dev topics');
+    lines.push('');
+    lines.push('═══════════════ CLOSING ═══════════════');
+    lines.push('Be a genuinely helpful assistant! Not just answering,');
+    lines.push('but EDUCATING developers so they can grow and become independent.');
+    lines.push('Every answer is an opportunity to make a developer better.');
+  }
+
+  return lines.join('\n');
+}
+
+// ─── AVATAR ─────────────────────────────────────────────────────────────────
+function mkAv(role){
+  var av=document.createElement('div');av.className='av';
+  if(role==='agent'){
+    av.className='av agent-av';
+    av.textContent='🤖';
+  }else if(SESSION&&SESSION.user.avatar){
+    var img=document.createElement('img');img.src=SESSION.user.avatar;img.alt='U';av.appendChild(img);
+  }else{
+    av.style.cssText='display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--orange);background:rgba(255,149,0,.1);';
+    av.textContent=(SESSION&&SESSION.user.username?SESSION.user.username.charAt(0).toUpperCase():'U');
+  }
+  return av;
+}
+
+// ─── RENDER MSG ──────────────────────────────────────────────────────────────
+function appendMsg(m,skipScroll,extraClass){
+  var container=document.getElementById('msgs');if(!container)return;
+  var isUser=m.role==='user';
+  var wrap=document.createElement('div');
+  wrap.className='msg '+(isUser?'user':'agent')+(extraClass?' '+extraClass:'');
+  wrap.appendChild(mkAv(m.role));
+  var mbWrap=document.createElement('div');mbWrap.className='mb-wrap';
+  var sender=document.createElement('div');sender.className='msg-sender';
+  var t=new Date(m.time||Date.now());
+  sender.innerHTML='<span>'+(isUser?'@'+(SESSION&&SESSION.user.username||'You'):'NEXUS Agent')+'</span><span>'+t.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+'</span>';
+  mbWrap.appendChild(sender);
+  var bubble=document.createElement('div');bubble.className='bubble';
+  var content=String(m.content||'');
+  var codeRe=/```(\w*)\n?([\s\S]*?)```/g;
+  var codeBlocks=[];
+  var processed=content.replace(codeRe,function(match,lang,code){
+    var idx=codeBlocks.length;codeBlocks.push({lang:lang||'',code:code.trim()});return '%%CB_'+idx+'%%';
+  });
+  var parts=processed.split(/(%%CB_\d+%%)/);
+  parts.forEach(function(part){
+    var cm=part.match(/%%CB_(\d+)%%/);
+    if(cm){
+      var cb=codeBlocks[parseInt(cm[1])];
+      var wrap2=document.createElement('div');wrap2.className='code-block-wrap';
+      var pre=document.createElement('pre');
+      var codeEl=document.createElement('code');
+      codeEl.className=cb.lang?'language-'+cb.lang:'';
+      codeEl.textContent=cb.code;
+      pre.appendChild(codeEl);wrap2.appendChild(pre);
+      var btns=document.createElement('div');btns.className='code-btns';
+      btns.innerHTML='<button class="cbtn" onclick="copyCode(this)"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copy</button>';
+      wrap2.appendChild(btns);
+      try{hljs.highlightElement(codeEl);}catch(err){}
+      bubble.appendChild(wrap2);
+    }else if(part.trim()){
+      var div=document.createElement('div');div.innerHTML=safeMarked(part);bubble.appendChild(div);
+    }
+  });
+  if(m.injected&&m.injected.length){
+    var card=document.createElement('div');card.className='studio-inject-card';
+    card.innerHTML='<div class="sc-title"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>INJECTED TO STUDIO</div>'+
+      m.injected.map(function(it){return '<div class="sc-item">'+esc(it)+'</div>';}).join('');
+    bubble.appendChild(card);
+  }
+  mbWrap.appendChild(bubble);
+  if(!isUser){
+    var acts=document.createElement('div');acts.className='msg-acts';
+    acts.innerHTML=
+      '<button class="mab" onclick="copyMsgText(this)" title="Copy"><svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>'+
+      '<button class="mab" onclick="retrySend(this)" title="Retry"><svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg></button>';
+    mbWrap.appendChild(acts);
+  }
+  wrap.appendChild(mbWrap);
+  container.appendChild(wrap);
+  if(!skipScroll)container.scrollTop=container.scrollHeight;
+}
+
+// ─── TYPING INDICATOR ────────────────────────────────────────────────────────
+var typingEl=null;
+function showTyping(){
+  rmTyping();
+  var container=document.getElementById('msgs');if(!container)return;
+  var wrap=document.createElement('div');wrap.className='typing-wrap';
+  wrap.appendChild(mkAv('agent'));
+  var box=document.createElement('div');box.className='typing-box';
+  box.innerHTML='<div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div><span class="typing-label">NEXUS Agent is thinking...</span><button class="cancel-typing-btn" onclick="cancelGen()">'+T().cancelTxt+'</button>';
+  wrap.appendChild(box);container.appendChild(wrap);
+  container.scrollTop=container.scrollHeight;
+  typingEl=wrap;
+}
+function rmTyping(){
+  if(typingEl){typingEl.remove();typingEl=null;}
+  document.querySelectorAll('.typing-wrap').forEach(function(e){e.remove();});
+}
+
+// ─── CANCEL ─────────────────────────────────────────────────────────────────
+function cancelGen(){
+  if(cancelCtrl)cancelCtrl.abort();
+  isGen=false;cancelCtrl=null;rmTyping();
+  var s=document.getElementById('sendBtn');var c=document.getElementById('cancelBtn');
+  if(s)s.classList.remove('hidden');if(c)c.classList.add('hidden');
+  toast(T().cancelTxt,'var(--yellow)');
+}
+
+// ─── INJECT (reuse from chats logic) ────────────────────────────────────────
+function parseLuaBlocks(text){
+  var blocks=[];
+  var re=/```(?:lua|luau)\s*([\s\S]*?)```/g,m;
+  while((m=re.exec(text))!==null){var code=m[1].trim();if(code.length<10)continue;if(/^\s*[\[{]/.test(code)&&/"action"\s*:/.test(code))continue;blocks.push(code);}
+  return blocks;
+}
+function parseJsonBlocks(text){
+  var cmds=[];
+  var re=/```json\s*([\s\S]*?)```/g,m;
+  while((m=re.exec(text))!==null){try{var parsed=JSON.parse(m[1].trim());var items=Array.isArray(parsed)?parsed:[parsed];items.forEach(function(item){if(item&&item.action)cmds.push(item);});}catch(e){}}
+  return cmds;
+}
+function detectScriptParent(code){
+  if(/DataStoreService|PlayerAdded|PlayerRemoving|OnServerEvent/.test(code))return{parent:'ServerScriptService',type:'Script'};
+  if(/Players\.LocalPlayer|PlayerGui|StarterPlayerScripts|UserInputService/.test(code))return{parent:'StarterGui',type:'LocalScript'};
+  if(/^\s*local\s+\w+\s*=\s*\{\}|return\s+\{/.test(code))return{parent:'ReplicatedStorage',type:'ModuleScript'};
+  return{parent:'ServerScriptService',type:'Script'};
+}
+function makeScriptName(prompt,index,code){
+  if(code){var nm=code.match(/--\s*name:\s*([\w_]+)/i);if(nm&&nm[1]&&nm[1].length>2)return nm[1];}
+  var lower=(prompt||'').toLowerCase();
+  var kw=[['loading','LoadingScreen_Client'],['shop','ShopSystem_Server'],['leaderboard','Leaderboard_Server'],['admin','AdminSystem_Server'],['coin','CoinSystem_Server'],['datastore','DataStore_Module'],['gui','GUIScript_Client'],['npc','NPCBehavior_Server'],['weapon','WeaponSystem'],['tool','ToolHandler']];
+  for(var i=0;i<kw.length;i++){if(lower.includes(kw[i][0]))return kw[i][1]+(index>0?'_'+(index+1):'');}
+  return'AgentScript'+(index>0?'_'+(index+1):'');
+}
+async function autoInjectToStudio(aiResponse,userPrompt){
+  if(!studioConnected)return null;
+  var summary=[];
+  var username=(SESSION?SESSION.user.username:'').toLowerCase();
+  var jsonCmds=parseJsonBlocks(aiResponse);
+  if(jsonCmds.length>0){
+    try{
+      var r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'batch_commands',commands:jsonCmds,_user:SESSION?SESSION.user.username:'web',_target_user:username,target:username})});
+      if(r.ok){var rd=await r.json();if(rd.pushed>0){jsonCmds.forEach(function(cmd){if(cmd.action&&cmd.action!=='none')summary.push('+'+cmd.action+(cmd.name?': '+cmd.name:''));});}}
+    }catch(e){}
+  }
+  var luaBlocks=parseLuaBlocks(aiResponse);
+  for(var i=0;i<luaBlocks.length;i++){
+    var code=luaBlocks[i];
+    var info=detectScriptParent(code);
+    var sName=makeScriptName(userPrompt,i,code);
+    var tm=code.match(/--\s*script_type:\s*(\w+)/i);if(tm)info.type=tm[1];
+    var pm=code.match(/--\s*parent:\s*([\w.]+)/i);if(pm)info.parent=pm[1];
+    try{
+      var r2=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({type:'inject_command',command:{action:'inject_script',name:sName,parent:info.parent,script_type:info.type,code:code},_user:SESSION?SESSION.user.username:'web',_target_user:username,target:username})});
+      if(r2.ok){var rd2=await r2.json();if(rd2.status==='ok'||rd2.pushed>0)summary.push(info.type+': '+sName+' → '+info.parent);}
+    }catch(e){}
+    if(luaBlocks.length>1)await new Promise(function(res){setTimeout(res,300);});
+  }
+  return summary.length>0?summary:null;
+}
+
+// ─── SEND ────────────────────────────────────────────────────────────────────
+async function send(){
+  if(isGen)return;
+  var inp=document.getElementById('inp');
+  var txt=(inp?inp.value.trim():'');
+  var atts=attachments.slice();
+  if(!txt&&!atts.length)return;
+
+  isGen=true;cancelCtrl=new AbortController();
+  var sendBtn=document.getElementById('sendBtn');var cancelBtn=document.getElementById('cancelBtn');
+  if(sendBtn)sendBtn.classList.add('hidden');if(cancelBtn)cancelBtn.classList.remove('hidden');
+  if(inp)inp.value='';if(inp)inp.style.height='auto';
+
+  // Hide quick actions after first message
+  var qa=document.getElementById('quickActions');if(qa)qa.innerHTML='';
+
+  var userMsg={role:'user',content:txt,time:Date.now()};
+  if(atts.length)userMsg.attachments=atts;
+  convMsgs.push(userMsg);
+  appendMsg(userMsg);
+  attachments=[];renderAttachRow();
+
+  showTyping();
+
+  var apiMsgs=convMsgs.slice(-20).map(function(m){
+    var content=m.content||'';
+    if(Array.isArray(m.content)){return{role:m.role==='user'?'user':'model',content:m.content};}
+    return{role:m.role==='user'?'user':'model',content:String(content)};
+  });
+  // Replace last user msg with attachments if any
+  var lastM={role:'user',content:txt};
+  if(atts.length){
+    var contentArr=[{type:'text',text:txt}];
+    atts.forEach(function(a){if(a.type==='image')contentArr.push({type:'image',source:{type:'base64',media_type:a.mime,data:a.data}});});
+    lastM.content=contentArr;
+  }
+  apiMsgs[apiMsgs.length-1]=lastM;
+
+  var sysPrompt=buildAgentSysPrompt();
+  var aiText='';
+  try{
+    var body={provider:curModel.prov||'gemini',model:curModel.id,messages:apiMsgs,system:sysPrompt,max_tokens:32768};
+    var response=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:cancelCtrl.signal});
+    if(!response.ok){
+      var errData=await response.json().catch(function(){return{};});
+      throw new Error(errData.error||'API error '+response.status);
+    }
+    var rd=await response.json();
+    aiText=rd.content||'';
+  }catch(e){
+    if(e.name==='AbortError'){isGen=false;cancelCtrl=null;if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');rmTyping();return;}
+    aiText='**Error getting response**\n\n'+e.message+'\n\n💡 Try switching models or check your connection.';
+  }
+  rmTyping();
+
+  var hasError=aiText&&(aiText.startsWith('**Error')||aiText.startsWith('**Gagal'));
+  var injected=null;
+  var displayText=aiText;
+
+  if(studioConnected&&!hasError){
+    injected=await autoInjectToStudio(aiText,txt);
+    displayText=aiText.replace(/```json[\s\S]*?```/g,'').replace(/```lua[\s\S]*?```/g,'').trim();
+    if(!displayText||displayText.length<10){
+      displayText=curLang==='id'
+        ?'✅ Selesai! Semua komponen telah dibuat dan dimasukkan ke Roblox Studio.'
+        :'✅ Done! All components have been built and injected into Roblox Studio.';
+    }
+  }
+
+  var aiMsg={role:'agent',content:displayText,time:Date.now()};
+  if(injected)aiMsg.injected=injected;
+  aiMsg._rawContent=aiText;
+  convMsgs.push(aiMsg);
+  appendMsg(aiMsg);
+
+  isGen=false;cancelCtrl=null;
+  if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');
+}
+
+// ─── WELCOME MESSAGE ─────────────────────────────────────────────────────────
+async function sendWelcome(){
+  var t=T();
+  var dn=SESSION&&SESSION.user&&(SESSION.user.displayName||SESSION.user.username)||'Developer';
+  var welcomeText=t.welcome.replace('{name}',dn);
+  var aiMsg={role:'agent',content:welcomeText,time:Date.now()};
+  convMsgs.push(aiMsg);
+  appendMsg(aiMsg,false,'welcome-msg');
+}
+
+// ─── QUICK ACTIONS ────────────────────────────────────────────────────────────
+function renderQuickActions(){
+  var qa=document.getElementById('quickActions');if(!qa)return;
+  var t=T();
+  qa.innerHTML=t.quickActions.map(function(q){
+    return '<button class="qa-btn" onclick="useQuickAction(\''+esc(q)+'\')">'+(curLang==='id'?'':'')+''+q+'</button>';
+  }).join('');
+}
+function useQuickAction(q){
+  var inp=document.getElementById('inp');if(inp){inp.value=q;inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,130)+'px';}
+  send();
+}
+
+// ─── RETRY ───────────────────────────────────────────────────────────────────
+function retrySend(btn){
+  var msgEl=btn.closest('.msg.agent');if(!msgEl)return;
+  var msgs=document.querySelectorAll('.msg');
+  var idx=Array.from(msgs).indexOf(msgEl);
+  if(idx>0&&convMsgs[idx-1]&&convMsgs[idx-1].role==='user'){
+    var inp=document.getElementById('inp');if(inp){inp.value=convMsgs[idx-1].content;send();}
+  }
+}
+
+// ─── COPY ─────────────────────────────────────────────────────────────────────
+function copyCode(btn){
+  var pre=btn.closest('.code-block-wrap').querySelector('pre code');
+  if(pre)navigator.clipboard.writeText(pre.textContent).then(function(){toast('Copied!');});
+}
+function copyMsgText(btn){
+  var bubble=btn.closest('.mb-wrap').querySelector('.bubble');
+  if(bubble)navigator.clipboard.writeText(bubble.innerText||bubble.textContent).then(function(){toast('Copied!');});
+}
+
+// ─── CLEAR ────────────────────────────────────────────────────────────────────
+function clearConv(){
+  if(!confirm(T().clearConfirm))return;
+  convMsgs=[];
+  var container=document.getElementById('msgs');if(container)container.innerHTML='';
+  renderQuickActions();
+  sendWelcome();
+}
+
+// ─── ATTACHMENTS ─────────────────────────────────────────────────────────────
+function handleFile(e){
+  var files=Array.from(e.target.files||[]);
+  files.forEach(function(file){
+    if(file.type.startsWith('image/')){
+      var reader=new FileReader();reader.onload=function(ev){attachments.push({type:'image',name:file.name,mime:file.type,data:ev.target.result.split(',')[1]});renderAttachRow();};reader.readAsDataURL(file);
+    }else{
+      var reader=new FileReader();reader.onload=function(ev){attachments.push({type:'file',name:file.name,text:ev.target.result});renderAttachRow();};reader.readAsText(file);
+    }
+  });
+  e.target.value='';
+}
+function renderAttachRow(){
+  var row=document.getElementById('attachRow');if(!row)return;
+  row.innerHTML=attachments.map(function(a,i){
+    if(a.type==='image')return '<div class="attach-item"><img src="data:'+a.mime+';base64,'+a.data+'" alt=""><button class="attach-rm" onclick="removeAttach('+i+')">×</button></div>';
+    return '<div class="attach-item"><div class="attach-file">📄 '+esc(a.name)+'</div><button class="attach-rm" onclick="removeAttach('+i+')">×</button></div>';
+  }).join('');
+}
+function removeAttach(i){attachments.splice(i,1);renderAttachRow();}
+
+// ─── MODEL UI ─────────────────────────────────────────────────────────────────
+function updateModelUI(){
+  var el=document.getElementById('inpMName');if(el)el.textContent=curModel.label||curModel.id;
+  var badge=document.getElementById('inpMBadge');
+  if(badge){badge.textContent=(curModel.cost||0)===0?'FREE':(curModel.cost||0)+' CR';badge.style.color=curModel.cost<=0?'var(--green)':curModel.cost<=1?'var(--cyan)':'var(--yellow)';}
+  var icon=document.getElementById('inpMIcon');if(icon){icon.src=curModel.icon||'';icon.style.display=curModel.icon?'':'none';}
+}
+function toggleMDD(e){
+  e.stopPropagation();
+  var dd=document.getElementById('mDD');if(!dd)return;
+  var html='';
+  MODEL_LIST.forEach(function(m){
+    if(m.grp){html+='<div class="mg">'+esc(m.grp)+'</div>';return;}
+    var isAct=m.id===curModel.id;
+    var cls='mo'+(isAct?' act':'');
+    var badgeHtml='<span class="mb '+(m.cost<=0?'f':m.cost<=2?'s':'p')+'">'+(m.cost<=0?'FREE':m.cost+' CR')+'</span>';
+    var iconHtml=m.icon?'<img src="'+m.icon+'" onerror="this.style.display=\'none\'" style="width:18px;height:18px;object-fit:contain;border-radius:3px;">':'<div style="width:18px;height:18px;border-radius:3px;background:rgba(255,149,0,.1);display:flex;align-items:center;justify-content:center;font-size:9px;">AI</div>';
+    html+='<div class="'+cls+'" onclick="selModel(\''+m.id+'\')"><div class="mo-icon">'+iconHtml+'</div><div><div class="mo-n">'+esc(m.label||m.id)+'</div><div class="mo-s">'+esc(m.prov||'')+'</div></div>'+badgeHtml+'</div>';
+  });
+  dd.innerHTML=html;
+  var btn=document.getElementById('inpModelBtn');
+  if(btn){var rect=btn.getBoundingClientRect();dd.style.bottom=(window.innerHeight-rect.top+4)+'px';dd.style.left=rect.left+'px';dd.style.right='auto';}
+  dd.classList.toggle('open');
+}
+function selModel(id){
+  var m=MODEL_LIST.find(function(x){return x.id===id;});if(!m||m.grp)return;
+  curModel=m;updateModelUI();
+  var dd=document.getElementById('mDD');if(dd)dd.classList.remove('open');
+  toast('Model: '+m.label,'var(--orange)');
+}
+
+// ─── INIT ─────────────────────────────────────────────────────────────────────
+async function initAgent(){
+  if(!SESSION)return;
+  curLang=localStorage.getItem('nexus_lang')||'id';
+  var t=T();
+
+  // Update UI labels
+  var backBtn=document.getElementById('backToNexusBtn');if(backBtn)backBtn.textContent=t.backBtn;
+  var agentMode=document.getElementById('agentModeLabel');if(agentMode)agentMode.textContent=t.agentMode;
+  var greetUser=document.getElementById('greetUser');if(greetUser)greetUser.textContent=t.greet+', @'+(SESSION.user.username||'Developer')+'!';
+  var inpEl=document.getElementById('inp');if(inpEl)inpEl.placeholder=t.placeholder;
+
+  updateModelUI();
+  startStudioPoll();
+
+  // Wait for studio check to complete before showing welcome
+  await checkStudio();
+
+  // Show quick actions
+  renderQuickActions();
+
+  // Show welcome message
+  await sendWelcome();
+}
+
+// ─── EVENT LISTENERS ──────────────────────────────────────────────────────────
+document.getElementById('inp').addEventListener('input',function(){
+  this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px';
+});
+document.getElementById('inp').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
+});
+window.addEventListener('click',function(e){
+  var mdd=document.getElementById('mDD');
+  if(mdd&&!mdd.contains(e.target)&&document.getElementById('inpModelBtn')&&!document.getElementById('inpModelBtn').contains(e.target))mdd.classList.remove('open');
+});
+
+initAgent();
+</script>
+</body>
+</html>
