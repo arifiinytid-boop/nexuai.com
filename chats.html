@@ -129,6 +129,13 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .bubble table{width:100%;border-collapse:collapse;margin:7px 0;font-size:11px;}
 .bubble th,.bubble td{padding:5px 9px;border:1px solid var(--b);}
 .bubble th{background:rgba(0,229,255,.06);color:var(--cyan);}
+/* Message action buttons */
+.msg-acts{display:flex;gap:3px;padding:3px 2px;flex-wrap:wrap;align-items:center;}
+.mab{font-size:9px;color:var(--dim);background:none;border:1px solid transparent;cursor:pointer;padding:3px 6px;border-radius:4px;transition:.12s;display:flex;align-items:center;gap:3px;}
+.mab:hover{color:var(--cyan);border-color:var(--b);background:var(--card);}
+.mab.liked{color:var(--green);border-color:rgba(0,255,170,.3);}
+.mab.disliked{color:var(--pink);border-color:rgba(255,45,107,.3);}
+.mab svg{width:11px;height:11px;stroke:currentColor;fill:none;stroke-width:2;}
 .attach-row{display:flex;gap:7px;margin-bottom:7px;flex-wrap:wrap;}
 .attach-row:empty{display:none;}
 .attach-item{position:relative;}
@@ -531,7 +538,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div class="settings-title">Download Plugin V10.4</div>
       <div class="settings-row" style="flex-direction:column;gap:5px;align-items:flex-start;">
         <div style="font-size:10px;color:var(--dim);">Install NEXUS AI Plugin di Roblox Studio</div>
-        <button class="settings-btn" onclick="window.open('https://create.roblox.com/store/asset/91870814099475/NEXUS-AI?viewFromStudio=true&keyword=&searchId=53d02006-3efd-4d1f-8cdf-574a51e60a99')">Download via create.roblox</button>
+        <button class="settings-btn" onclick="window.open('https://discord.gg/HuGtbRvD','_blank')">Download via Discord</button>
       </div>
     </div>
     <div class="settings-section">
@@ -727,11 +734,43 @@ async function loadAdminIds(){
 // ─── LANG ──────────────────────────────────────────────────────────────────
 function applyLang(){
   var t=LANGS[curLang]||LANGS.id;
+  // Input
   var el=document.getElementById('inp');if(el)el.placeholder=t.placeholder;
+  // Sidebar
   var nc=document.getElementById('newChatLbl');if(nc)nc.textContent=t.newchat;
   var rc=document.getElementById('recentLbl');if(rc)rc.textContent=t.recent;
   var ls=document.getElementById('langSelector');if(ls)ls.value=curLang;
+  // Welcome screen
+  var wt=document.getElementById('welcomeText');
+  if(wt)wt.textContent=curLang==='id'
+    ?'AI Roblox cerdas — tulis Lua, debug script, buat GUI. Connect plugin untuk inject langsung ke Studio!'
+    :'Smart Roblox AI — write Lua, debug scripts, build GUIs. Connect plugin to inject directly into Studio!';
+  // Studio status
+  setStudioStatus(studioConnected);
+  // Think toggle label
+  var tl=document.getElementById('thinkLabel');if(tl)tl.textContent=curLang==='id'?'Think':'Think';
+  // Chat title if default
+  var ct=document.getElementById('chatTitle');
+  if(ct&&(ct.textContent==='NEXUS AI — Roblox Dev Assistant'||ct.textContent==='NEXUS AI — Roblox Dev Asisten'))
+    ct.textContent=curLang==='id'?'NEXUS AI — Asisten Roblox':'NEXUS AI — Roblox Dev Assistant';
+  // Plugin banner
+  var bannerTxt=document.getElementById('plugBannerTxt');
+  if(bannerTxt)bannerTxt.textContent=studioConnected?t.connected:t.disconnected;
+  // Sugg cards (rerender)
+  var suggEls=document.querySelectorAll('.sugg');
+  var suggDataId=['Buat loading screen profesional untuk game Roblox saya dengan animasi progress bar dan tips random',
+    'Buat shop GUI lengkap untuk Roblox dengan item, tombol beli, harga, coins, dan animasi smooth',
+    'Buat sistem DataStore leaderboard untuk game Roblox dengan Coins, Level, dan Win menggunakan ProfileService pattern',
+    'Buat sistem admin commands lengkap untuk Roblox dengan kick, ban, give, speed, fly, dan UI panel yang rapi'];
+  var suggDataEn=['Create a professional loading screen for my Roblox game with progress bar animation and random tips',
+    'Create a complete shop GUI for Roblox with items, buy button, price, coins, and smooth animations',
+    'Create a DataStore leaderboard system for Roblox with Coins, Level, and Win using ProfileService pattern',
+    'Create a complete admin commands system for Roblox with kick, ban, give, speed, fly, and a clean UI panel'];
+  // Help button lang
+  var hbtn=document.getElementById('helpBtn');
+  if(hbtn)hbtn.textContent=curLang==='id'?'Butuh Bantuan?':'Need Help?';
   updateModelUI();
+  renderConvs();
 }
 function changeLang(l){curLang=l;localStorage.setItem('nexus_lang',l);applyLang();renderConvs();}
 
@@ -1000,7 +1039,25 @@ function toggleGuiMDD(e){
   e.stopPropagation();
   var dd=document.getElementById('guiMDD');
   if(!dd)return;
-  dd.innerHTML=buildModelDDHtml();
+  // Build with GUI context - onclick calls selGuiModel instead of selModel
+  var html='';
+  MODEL_LIST.forEach(function(m){
+    if(m.grp){html+='<div class="mg">'+esc(m.grp)+'</div>';return;}
+    var isAct=m.id===S.guiModel.id;
+    var cls='mo'+(isAct?' act':'');
+    var badgeHtml='';
+    if(m.badge){var bc=m.badge==='FAST'?'f':m.badge==='BEST'||m.badge==='NEW'?'p':'s';badgeHtml='<span class="mb '+bc+'">'+m.badge+'</span>';}
+    else{badgeHtml='<span class="mb '+(m.cost<=1?'f':m.cost<=2?'s':'p')+'">'+m.cost+' CR</span>';}
+    var iconHtml=m.icon?'<img src="'+m.icon+'" onerror="this.style.display='none'" style="width:18px;height:18px;object-fit:contain;border-radius:3px;">':'<div style="width:18px;height:18px;border-radius:3px;background:rgba(0,229,255,.1);font-size:9px;display:flex;align-items:center;justify-content:center;">AI</div>';
+    html+='<div class="'+cls+'" onclick="selGuiModel('/'+m.id+'/')">'+'<div class="mo-icon">'+iconHtml+'</div>'+'<div><div class="mo-n">'+esc(m.label||m.id)+'</div><div class="mo-s">'+esc(m.prov||'')+'</div></div>'+badgeHtml+'</div>';
+  });
+  html+='<div class="mg" style="color:rgba(255,45,107,.6);border-top:1px solid rgba(255,45,107,.15);">COMING SOON</div>';
+  MODEL_LIST_SOON.forEach(function(m){
+    if(m.grp){html+='<div class="mg" style="opacity:.5;">'+esc(m.grp)+'</div>';return;}
+    var iconHtml=m.icon?'<img src="'+m.icon+'" style="width:18px;height:18px;opacity:.4;object-fit:contain;border-radius:3px;">':'<div style="width:18px;height:18px;opacity:.3;font-size:9px;">AI</div>';
+    html+='<div class="mo disabled"><div class="mo-icon">'+iconHtml+'</div><div><div class="mo-n" style="opacity:.4;">'+esc(m.label||m.id)+'<span style="font-size:8px;color:var(--pink);margin-left:5px;">Soon</span></div><div class="mo-s" style="opacity:.4;">'+esc(m.prov||'')+'</div></div><span class="mb" style="opacity:.3;background:rgba(100,100,100,.1);color:#888;">'+m.cost+' CR</span></div>';
+  });
+  dd.innerHTML=html;
   var btn=document.getElementById('guiModelBtn');
   if(btn){var rect=btn.getBoundingClientRect();dd.style.top=rect.bottom+'px';dd.style.left=rect.left+'px';}
   dd.classList.toggle('open');
@@ -1010,6 +1067,7 @@ function selGuiModel(id){
   if(!m||m.grp||m.soon)return;
   S.guiModel=m;updateModelUI();
   var dd=document.getElementById('guiMDD');if(dd)dd.classList.remove('open');
+  toast((curLang==='id'?'Model UI: ':'UI Model: ')+m.label,'var(--cyan)');
 }
 
 // ─── RENDER MSGS ───────────────────────────────────────────────────────────
@@ -1092,10 +1150,29 @@ function appendMsg(m,skipScroll){
   mbWrap.appendChild(bubble);
   if(!isUser){
     var acts=document.createElement('div');acts.className='msg-acts';
-    acts.innerHTML='<button class="mab" onclick="copyMsgText(this)" title="Copy" style="font-size:9.5px;color:var(--dim);background:none;border:none;cursor:pointer;padding:2px 7px;border-radius:3px;"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>';
+    acts.innerHTML=
+      '<button class="mab" onclick="copyMsgText(this)" title="'+(curLang==='id'?'Salin':'Copy')+'">'+
+        '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>'+
+      '</button>'+
+      '<button class="mab" onclick="retryMsg(this)" title="'+(curLang==='id'?'Ulangi':'Retry')+'">'+
+        '<svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>'+
+      '</button>'+
+      '<button class="mab '+(m._liked?'liked':'')+'" onclick="likeMsg(this,true)" title="'+(curLang==='id'?'Suka':'Like')+'">'+
+        '<svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>'+
+      '</button>'+
+      '<button class="mab '+(m._disliked?'disliked':'')+'" onclick="likeMsg(this,false)" title="'+(curLang==='id'?'Tidak Suka':'Dislike')+'">'+
+        '<svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3zm7-13h2.67A2.31 2.31 0 0122 4v7a2.31 2.31 0 01-2.33 2H17"/></svg>'+
+      '</button>'+
+      '<button class="mab" onclick="shareChat()" title="'+(curLang==='id'?'Bagikan Chat':'Share Chat')+'">'+
+        '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>'+
+      '</button>';
     mbWrap.appendChild(acts);
-  }
-  wrap.appendChild(mbWrap);
+  } else {
+    // User message: copy button
+    var uActs=document.createElement('div');uActs.style.cssText='display:flex;gap:3px;padding:3px 2px;justify-content:flex-end;';
+    uActs.innerHTML='<button class="mab" onclick="copyMsgText(this)" title="'+(curLang==='id'?'Salin':'Copy')+'"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>';
+    mbWrap.appendChild(uActs);
+  }  wrap.appendChild(mbWrap);
   container.appendChild(wrap);
   if(!skipScroll)container.scrollTop=container.scrollHeight;
 }
@@ -1565,23 +1642,19 @@ async function send(){
     }
     aiText='**'+(curLang==='id'?'Gagal mendapatkan respons':'Failed to get response')+'**\n\n'+e.message+'\n\n'+(curLang==='id'?'💡 Coba ganti model atau periksa koneksi internet.':'💡 Try switching the model or check your connection.');
   }
-  // ... bagian sebelumnya tetap sama hingga rmThinking()
-rmThinking();
+  rmThinking();
 
-// Potongan kredit (tidak berubah)
 if(!isOwner() && !isAdmin() && aiText && !aiText.startsWith('**Gagal') && !aiText.startsWith('**Failed')){
     S.credits = Math.max(-10, S.credits - (S.model.cost || 1));
     updateCreds();
 }
 
-// ========== PERBAIKAN MULAI DI SINI ==========
 var injected = null;
-var displayText = aiText;   // <-- FIX: gunakan aiText (bukan aItext)
+var displayText = aiText;
 
 if (typeof connected !== 'undefined' && connected && aiText && aiText.startsWith("***")) {
     injected = await autoInjectToStudio(aiText, lastUserPrompt);
     
-    // Hapus blok ```json ... ``` dan ```lua ... ```
     displayText = aiText
         .replace(/```json[\s\S]*?```/g, '')
         .replace(/```lua[\s\S]*?```/g, '')
@@ -1601,9 +1674,8 @@ var aiMsg = {
 };
 if (injected) aiMsg.injected = injected;
 
-cv.msgs.push(aiMsg);   // <-- FIX: msgs (bukan mes)
+cv.msgs.push(aiMsg);
 
-// Simpan full AI text (dengan JSON/Lua) untuk konteks percakapan berikutnya
 var lastAiMsg = cv.msgs[cv.msgs.length - 1];
 lastAiMsg._rawContent = aiText;
 
@@ -1903,39 +1975,24 @@ async function initApp(){
   }
 }
 
-// ========== EVENT LISTENERS ==========
-document.querySelectorAll('.ov').forEach(function(ov) {
-    ov.addEventListener('click', function(e) {
-        e.preventDefault();
-        e.stopPropagation();
-    });
+// ─── EVENT LISTENERS ───────────────────────────────────────────────────────
+document.querySelectorAll('.ov').forEach(function(ov){
+  ov.addEventListener('click',function(e){if(e.target===ov)ov.classList.remove('show');});
+});
+document.getElementById('inp').addEventListener('input',function(){
+  this.style.height='auto';this.style.height=Math.min(this.scrollHeight,130)+'px';saveDraft();
+});
+document.getElementById('inp').addEventListener('keydown',function(e){
+  if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();}
+});
+window.addEventListener('click',function(e){
+  var mdd=document.getElementById('mDD');
+  if(mdd&&!mdd.contains(e.target)&&!document.getElementById('inpModelBtn').contains(e.target))mdd.classList.remove('open');
+  var gmdd=document.getElementById('guiMDD');
+  if(gmdd&&!gmdd.contains(e.target)&&!document.getElementById('guiModelBtn').contains(e.target))gmdd.classList.remove('open');
 });
 
-document.getElementById('inp').addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.max(this.scrollHeight, 130) + 'px';
-    saveDraft();
-});
-
-document.getElementById('inp').addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        send();
-    }
-});
-
-window.addEventListener('click', function(e) {
-    var md5 = document.getElementById('md0');
-    if (md5 && !md5.contains(e.target) && !document.getElementById('inpModelBtn').contains(e.target)) {
-        md5.classList.remove('opened');
-    }
-    var gmd5 = document.getElementById('guiModelBtn');
-    if (gmd5 && !gmd5.contains(e.target) && !document.getElementById('guiModelBtn').contains(e.target)) {
-        gmd5.classList.remove('opened');
-    }
-});
 initApp();
-  
 </script>
 </body>
 </html>
