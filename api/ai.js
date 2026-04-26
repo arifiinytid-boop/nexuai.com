@@ -307,7 +307,7 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           model,
           messages: allMsgs,
-          max_tokens: max_tokens || 16384,
+          max_tokens: max_tokens || 1024,
           temperature: 0.7,
         }),
       });
