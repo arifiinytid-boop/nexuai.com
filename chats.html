@@ -49,6 +49,11 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .btn-nc{margin:0 12px 6px;padding:7px 11px;background:rgba(0,229,255,.06);border:1px solid var(--b);border-radius:var(--r);color:var(--cyan);font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px;width:calc(100% - 24px);}
 .btn-nc:hover{border-color:var(--cyan);background:var(--hover);}
 .btn-nc svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
+/* --- TOMBOL BUTUH BANTUAN --- */
+.help-btn{margin:0 12px 6px;padding:8px 12px;background:rgba(255,214,0,.06);border:1px solid rgba(255,214,0,.2);border-radius:var(--r);color:var(--yellow);font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px;width:calc(100% - 24px);}
+.help-btn:hover{background:rgba(255,214,0,.1);border-color:rgba(255,214,0,.4);}
+.help-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+/* --- END --- */
 .sec-lbl{padding:4px 14px 2px;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;flex-shrink:0;}
 .convs{flex:1;overflow-y:auto;padding:3px 7px;}
 .convs::-webkit-scrollbar{width:2px;}
@@ -288,11 +293,11 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
   <!-- SIDEBAR -->
   <div id="sb">
     <div class="sb-head">
-      <!-- FIX: Use nexusai.png instead of "N" -->
       <div class="sb-logo"><img src="nexusai.png" alt="NEXUS" onerror="this.parentElement.style.background='linear-gradient(135deg,#00e5ff,#8800ff)';this.style.display='none'"></div>
       <div>
         <div class="sb-logo-text">NEXUS AI</div>
-        <div class="sb-logo-sub" id="verLbl">V10.4 · Roblox Dev</div>
+        <!-- versi dihapus dari sini -->
+        <div class="sb-logo-sub" id="verLbl">Roblox Dev</div>
       </div>
     </div>
     <div class="sb-user">
@@ -319,6 +324,12 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span id="newChatLbl">Percakapan Baru</span>
     </button>
+    <!-- TOMBOL BUTUH BANTUAN -->
+    <button class="help-btn" onclick="window.location.href='agent.html'" id="helpBtn">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M9 15c.83 1.67 2.83 2.5 5 2.5s4.17-.83 5-2.5"/></svg>
+      <span id="helpBtnText">Butuh Bantuan?</span>
+    </button>
+    <!-- END TOMBOL -->
     <div class="sec-lbl" id="recentLbl">Riwayat Chat</div>
     <div class="convs" id="convList"><div class="conv-empty" id="noConvLbl">Belum ada percakapan</div></div>
     <div class="sb-footer">Made by <span style="color:var(--cyan)">NEXUS STUDIO</span><br>YouTube: <span style="color:rgba(0,229,255,.6)">NEXUS STUDIO</span></div>
@@ -572,7 +583,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     </div>
   </div>
 </div>
-
+  
 <script>
 'use strict';
 var WEB_VERSION='V10.4';
@@ -793,8 +804,8 @@ function applyLang(){
     'Create a DataStore leaderboard system for Roblox with Coins, Level, and Win using ProfileService pattern',
     'Create a complete admin commands system for Roblox with kick, ban, give, speed, fly, and a clean UI panel'];
   // Help button lang
-  var hbtn=document.getElementById('helpBtn');
-  if(hbtn)hbtn.textContent=curLang==='id'?'Butuh Bantuan?':'Need Help?';
+  var helpBtn=document.getElementById('helpBtnText');
+  if(helpBtn)helpBtn.textContent=curLang==='id'?'Butuh Bantuan?':'Need Help?';
   updateModelUI();
   renderConvs();
 }
@@ -2336,6 +2347,14 @@ window.addEventListener('click',function(e){
 });
 
 initApp();
+  // ... (seluruh kode JavaScript yang sama, hanya tambahkan updateHelpBtn di applyLang)
+  function applyLang(){
+    var t=LANGS[curLang]||LANGS.id;
+    // ... seperti aslinya ...
+    // Update tombol bantuan
+    var helpBtn=document.getElementById('helpBtnText');
+    if(helpBtn)helpBtn.textContent=curLang==='id'?'Butuh Bantuan?':'Need Help?';
+  }
 </script>
 </body>
 </html>
