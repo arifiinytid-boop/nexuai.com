@@ -106,74 +106,34 @@ function getScriptList(u) {
   return null;
 }
 
-// ─── VALID ACTIONS (COMPLETE LIST) ────────────────────────
+// ─── VALID ACTIONS ────────────────────────────────────────
 const VALID_ACTIONS = new Set([
-  'none',
-  // Script management
-  'read_script', 'edit_script', 'list_scripts', 'scan_workspace',
+  'none', 'read_script', 'edit_script', 'list_scripts', 'scan_workspace',
   'get_logs', 'search_instances', 'get_output', 'print_output',
-  // Script inject
   'inject_script', 'batch_inject', 'run_lua', 'batch_modify',
-  // Parts / Geometry
   'create_part', 'batch_create', 'create_wedge', 'create_cylinder',
   'create_sphere', 'create_truss', 'create_model', 'insert_model',
-  'clone_object', 'create_mesh',
-  // Folders / Organization
-  'create_folder',
-  // Remotes / Events
-  'create_remote', 'batch_remote',
-  // Values
-  'create_value', 'set_value',
-  // NPC / Characters
+  'clone_object', 'create_mesh', 'create_folder',
+  'create_remote', 'batch_remote', 'create_value', 'set_value',
   'create_npc', 'create_humanoid', 'modify_humanoid',
-  // GUI
   'create_gui', 'create_billboard', 'create_surface_gui',
-  // Interaction
   'create_proximity_prompt', 'create_click_detector', 'create_selectbox',
-  // Joints / Constraints
   'weld_parts', 'create_weld', 'create_attachment', 'create_motor6d',
-  'create_constraint', 'create_hinge',
-  // Tools / Equipment
-  'create_tool', 'create_seat', 'create_hat',
-  // Effects
-  'create_particle', 'create_light', 'add_effect',
-  'create_fire', 'create_smoke', 'create_sparkles',
-  'create_trail', 'create_beam',
-  // Sound
-  'create_sound',
-  // Terrain / World
-  'fill_terrain', 'clear_terrain', 'change_baseplate',
-  'create_sky', 'create_water', 'create_atmosphere',
-  // Spawn
-  'create_spawn',
-  // Lighting
-  'set_lighting',
-  // Animation
-  'create_animation',
-  // Decals / Textures
-  'place_decal', 'place_texture',
-  // Teams
-  'create_team',
-  // Building helpers
+  'create_constraint', 'create_hinge', 'create_tool', 'create_seat', 'create_hat',
+  'create_particle', 'create_light', 'add_effect', 'create_fire', 'create_smoke',
+  'create_sparkles', 'create_trail', 'create_beam', 'create_sound',
+  'fill_terrain', 'clear_terrain', 'change_baseplate', 'create_sky',
+  'create_water', 'create_atmosphere', 'create_spawn', 'set_lighting',
+  'create_animation', 'place_decal', 'place_texture', 'create_team',
   'create_door', 'create_window', 'create_stairs', 'create_ramp',
   'create_tree', 'create_rock', 'create_wall',
-  // Object manipulation
   'modify_part', 'set_property', 'copy_properties',
   'move_object', 'rotate_object', 'resize_object',
   'select_object', 'delete_object', 'delete_multiple',
   'group_parts', 'ungroup_model', 'anchor_all', 'unanchor_all',
-  // Generic instance creation
-  'create_instance',
-  // Workspace
-  'read_workspace', 'workspace_data',
-  // Batch
-  'batch_commands',
-  // Camera
-  'set_camera',
-  // Misc
-  'set_game_info', 'clear_workspace', 'teleport_player',
-  // play test
-  'play_test', 'run_test', 'stop_test',
+  'create_instance', 'read_workspace', 'workspace_data',
+  'batch_commands', 'set_camera', 'set_game_info', 'clear_workspace',
+  'teleport_player', 'play_test', 'run_test', 'stop_test',
 ]);
 
 // ─── RATE LIMITING (simple per-user) ──────────────────────
