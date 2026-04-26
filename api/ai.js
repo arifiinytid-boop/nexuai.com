@@ -1,29 +1,22 @@
-// api/ai.js — NEXUS AI Server-Side AI Proxy v10.4
+// api/ai.js — NEXUS AI Server-Side AI Proxy v10.6
+
 function normalizeMessages(msgs, provider) {
   return msgs.map(m => {
     let role = m.role;
     if (provider === 'gemini') {
-      // Gemini: assistant -> model, selain itu user
-      if (role === 'assistant' || role === 'ai' || role === 'model') {
-        role = 'model';
-      } else if (role !== 'user') {
-        role = 'user'; // fallback
-      }
+      if (role === 'assistant' || role === 'ai' || role === 'model') role = 'model';
+      else if (role !== 'user') role = 'user';
     } else {
-      // OpenAI, Claude, DeepSeek, OpenRouter: semua pakai 'assistant'
-      if (role === 'assistant' || role === 'ai' || role === 'model') {
-        role = 'assistant';
-      } else if (role === 'system') {
-        role = 'system'; // tetap
-      } else {
-        role = 'user'; // fallback
-      }
+      if (role === 'assistant' || role === 'ai' || role === 'model') role = 'assistant';
+      else if (role === 'system') role = 'system';
+      else role = 'user';
     }
     return { ...m, role };
   });
 }
 
 export default async function handler(req, res) {
+  // CORS + preflight
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -33,9 +26,13 @@ export default async function handler(req, res) {
   try {
     const body = req.body || {};
     const { provider, model, messages, system, max_tokens } = body;
-    if (!provider || !model || !messages) return res.status(400).json({ error: 'provider, model, messages required' });
+    if (!provider || !model || !messages) {
+      return res.status(400).json({ error: 'provider, model, messages required' });
+    }
 
-    // ── GEMINI ────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────
+    // 1. GEMINI
+    // ──────────────────────────────────────────────────────────
     if (provider === 'gemini') {
       const key = process.env.GEMINI_API_KEY;
       if (!key) return res.status(503).json({ error: 'Gemini not configured' });
@@ -48,17 +45,17 @@ export default async function handler(req, res) {
         'gemini-1.5-flash',
       ];
       const modelsToTry = [...new Set(modelFallbacks)];
-      
+
       let lastError = null;
       for (const tryModel of modelsToTry) {
         try {
-          // Normalisasi role khusus Gemini
           const normalized = normalizeMessages(messages, 'gemini');
-
           const contents = normalized.map(m => ({
-            role: m.role === 'assistant' ? 'model' : 'user', // masih aman karena sudah jadi 'model' atau 'user'
+            role: m.role === 'assistant' ? 'model' : 'user',
             parts: Array.isArray(m.content)
-              ? m.content.map(c => c.type === 'image' ? { inline_data: { mime_type: c.source.media_type, data: c.source.data } } : { text: c.text || '' })
+              ? m.content.map(c => c.type === 'image'
+                  ? { inline_data: { mime_type: c.source.media_type, data: c.source.data } }
+                  : { text: c.text || '' })
               : [{ text: String(m.content || '') }],
           }));
 
@@ -103,64 +100,115 @@ export default async function handler(req, res) {
           continue;
         }
       }
-      
-      return res.status(503).json({ 
-        error: 'All Gemini models are currently overloaded. ' + (lastError || 'Please try again later.'),
-        overloaded: true
+
+      return res.status(503).json({
+        error: 'All Gemini models are currently overloaded. ' + (lastError || ''),
+        overloaded: true,
       });
     }
 
-    // ── CLAUDE ────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────
+    // 2. CLAUDE (Anthropic)
+    // ──────────────────────────────────────────────────────────
     if (provider === 'claude') {
       const key = process.env.CLAUDE_API_KEY;
       if (!key) return res.status(503).json({ error: 'Claude not configured' });
+
       const normalized = normalizeMessages(messages, 'claude');
       const r = await fetch('https://api.anthropic.com/v1/messages', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': key, 'anthropic-version': '2023-06-01' },
-        body: JSON.stringify({ model: model.replace('anthropic/', ''), max_tokens: max_tokens || 16000, system: system || '', messages: normalized }),
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': key,
+          'anthropic-version': '2023-06-01',
+        },
+        body: JSON.stringify({
+          model: model.replace('anthropic/', ''),
+          max_tokens: max_tokens || 16000,
+          system: system || '',
+          messages: normalized,
+        }),
         signal: AbortSignal.timeout(120000),
       });
-      if (!r.ok) { const e = await r.json().catch(() => ({})); return res.status(r.status).json({ error: (e.error && e.error.message) || 'Claude HTTP ' + r.status }); }
+
+      if (!r.ok) {
+        const e = await r.json().catch(() => ({}));
+        return res.status(r.status).json({ error: (e.error && e.error.message) || 'Claude HTTP ' + r.status });
+      }
       const d = await r.json();
-      if (d.content?.[0]?.text) return res.status(200).json({ content: d.content[0].text });
-      return res.status(500).json({ error: 'Empty Claude response' });
+      const t = d.content?.[0]?.text;
+      if (!t) return res.status(500).json({ error: 'Empty Claude response' });
+      return res.status(200).json({ content: t });
     }
 
-    // ── OPENAI ────────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────
+    // 3. OPENAI
+    // ──────────────────────────────────────────────────────────
     if (provider === 'openai') {
       const key = process.env.OPENAI_API_KEY;
       if (!key) return res.status(503).json({ error: 'OpenAI not configured' });
+
       const normalized = normalizeMessages(messages, 'openai');
       const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
       const bodyObj = { model, messages: allMsgs };
-      if (model.startsWith('o')) bodyObj.max_completion_tokens = max_tokens || 32768; else bodyObj.max_tokens = max_tokens || 16384;
-      const r = await fetch('https://api.openai.com/v1/chat/completions', { method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` }, body: JSON.stringify(bodyObj), signal: AbortSignal.timeout(120000) });
-      if (!r.ok) { const e = await r.json().catch(() => ({})); return res.status(r.status).json({ error: (e.error && e.error.message) || 'OpenAI HTTP ' + r.status }); }
+      if (model.startsWith('o')) {
+        bodyObj.max_completion_tokens = max_tokens || 32768;
+      } else {
+        bodyObj.max_tokens = max_tokens || 16384;
+      }
+
+      const r = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${key}`,
+        },
+        body: JSON.stringify(bodyObj),
+        signal: AbortSignal.timeout(120000),
+      });
+
+      if (!r.ok) {
+        const e = await r.json().catch(() => ({}));
+        return res.status(r.status).json({ error: (e.error && e.error.message) || 'OpenAI HTTP ' + r.status });
+      }
       const d = await r.json();
       const t = d?.choices?.[0]?.message?.content;
       if (!t) return res.status(500).json({ error: 'Empty OpenAI response' });
       return res.status(200).json({ content: t });
     }
 
-    // ── OPENROUTER ────────────────────────────────────────────
+    // ──────────────────────────────────────────────────────────
+    // 4. OPENROUTER
+    // ──────────────────────────────────────────────────────────
     if (provider === 'openrouter') {
       const key = process.env.OPENROUTER_API_KEY;
       if (!key) return res.status(503).json({ error: 'OpenRouter not configured' });
+
       const normalized = normalizeMessages(messages, 'openrouter');
       const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
+
       const r = await fetch('https://openrouter.ai/api/v1/chat/completions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}`, 'HTTP-Referer': 'https://nexusai-roblox.vercel.app', 'X-Title': 'NEXUS AI' },
-        body: JSON.stringify({ model, messages: allMsgs, max_tokens: max_tokens || 16384, temperature: 0.7 }),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${key}`,
+          'HTTP-Referer': 'https://nexusai-roblox.vercel.app',
+          'X-Title': 'NEXUS AI',
+        },
+        body: JSON.stringify({
+          model,
+          messages: allMsgs,
+          max_tokens: max_tokens || 16384,
+          temperature: 0.7,
+        }),
         signal: AbortSignal.timeout(120000),
       });
+
       if (!r.ok) {
         const e = await r.json().catch(() => ({}));
         const errMsg = (e.error && e.error.message) || `OpenRouter HTTP ${r.status}`;
-        // Jika insufficient balance, beri tahu user
         if (errMsg.toLowerCase().includes('insufficient balance') || e.error?.code === 402) {
-          return res.status(402).json({ error: 'Insufficient Balance — Saldo OpenRouter Anda habis. Silakan isi ulang.' });
+          return res.status(402).json({ error: 'Insufficient Balance — Saldo OpenRouter Anda habis.' });
         }
         return res.status(r.status).json({ error: errMsg });
       }
@@ -170,66 +218,36 @@ export default async function handler(req, res) {
       return res.status(200).json({ content: t });
     }
 
-    // ── DEEPSEEK (NATIVE API) ─────────────────────────────────
+    // ──────────────────────────────────────────────────────────
+    // 5. DEEPSEEK (native)
+    // ──────────────────────────────────────────────────────────
     if (provider === 'deepseek') {
       const key = process.env.DEEPSEEK_API_KEY;
       if (!key) return res.status(503).json({ error: 'DeepSeek not configured' });
+
       const normalized = normalizeMessages(messages, 'deepseek');
       const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
+
       const r = await fetch('https://api.deepseek.com/v1/chat/completions', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${key}`
+          'Authorization': `Bearer ${key}`,
         },
         body: JSON.stringify({
-          model: model,
+          model,
           messages: allMsgs,
           max_tokens: max_tokens || 16384,
           temperature: 0.7,
         }),
-
-        // ── GROQ (GRATIS) ─────────────────────────────────────
-    if (provider === 'groq') {
-      const key = process.env.GROQ_API_KEY;
-      if (!key) return res.status(503).json({ error: 'Groq not configured' });
-      const normalized = normalizeMessages(messages, 'groq');
-      const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
-      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-        body: JSON.stringify({ model, messages: allMsgs, max_tokens: max_tokens || 16384, temperature: 0.7 }),
         signal: AbortSignal.timeout(120000),
       });
-      if (!r.ok) {
-        const e = await r.json().catch(() => ({}));
-        const errMsg = (e.error && e.error.message) || `Groq HTTP ${r.status}`;
-        return res.status(r.status).json({ error: errMsg });
-      }
-      const d = await r.json();
-      const t = d?.choices?.[0]?.message?.content;
-      if (!t) return res.status(500).json({ error: 'Empty Groq response' });
-      return res.status(200).json({ content: t });
-    }
 
-    // ── MISTRAL (GRATIS TIER) ─────────────────────────────
-    if (provider === 'mistral') {
-      const key = process.env.MISTRAL_API_KEY;
-      if (!key) return res.status(503).json({ error: 'Mistral not configured' });
-      const normalized = normalizeMessages(messages, 'mistral');
-      const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
-      const r = await fetch('https://api.mistral.ai/v1/chat/completions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-        body: JSON.stringify({ model, messages: allMsgs, max_tokens: max_tokens || 16384, temperature: 0.7 }),
-        
-        signal: AbortSignal.timeout(120000),
-      });
       if (!r.ok) {
         const e = await r.json().catch(() => ({}));
         const errMsg = (e.error && e.error.message) || `DeepSeek HTTP ${r.status}`;
         if (errMsg.toLowerCase().includes('insufficient balance') || e.error?.code === 402) {
-          return res.status(402).json({ error: 'Insufficient Balance — Saldo DeepSeek Anda habis. Silakan isi ulang.' });
+          return res.status(402).json({ error: 'Insufficient Balance — Saldo DeepSeek Anda habis.' });
         }
         return res.status(r.status).json({ error: errMsg });
       }
@@ -239,6 +257,79 @@ export default async function handler(req, res) {
       return res.status(200).json({ content: t });
     }
 
+    // ──────────────────────────────────────────────────────────
+    // 6. GROQ (gratis, kompatibel OpenAI)
+    // ──────────────────────────────────────────────────────────
+    if (provider === 'groq') {
+      const key = process.env.GROQ_API_KEY;
+      if (!key) return res.status(503).json({ error: 'Groq not configured' });
+
+      const normalized = normalizeMessages(messages, 'groq');
+      const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
+
+      const r = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${key}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: allMsgs,
+          max_tokens: max_tokens || 16384,
+          temperature: 0.7,
+        }),
+        signal: AbortSignal.timeout(120000),
+      });
+
+      if (!r.ok) {
+        const e = await r.json().catch(() => ({}));
+        return res.status(r.status).json({ error: (e.error && e.error.message) || 'Groq HTTP ' + r.status });
+      }
+      const d = await r.json();
+      const t = d?.choices?.[0]?.message?.content;
+      if (!t) return res.status(500).json({ error: 'Empty Groq response' });
+      return res.status(200).json({ content: t });
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // 7. MISTRAL (gratis tier)
+    // ──────────────────────────────────────────────────────────
+    if (provider === 'mistral') {
+      const key = process.env.MISTRAL_API_KEY;
+      if (!key) return res.status(503).json({ error: 'Mistral not configured' });
+
+      const normalized = normalizeMessages(messages, 'mistral');
+      const allMsgs = system ? [{ role: 'system', content: system }, ...normalized] : normalized;
+
+      const r = await fetch('https://api.mistral.ai/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${key}`,
+        },
+        body: JSON.stringify({
+          model,
+          messages: allMsgs,
+          max_tokens: max_tokens || 16384,
+          temperature: 0.7,
+        }),
+        signal: AbortSignal.timeout(120000),
+      });
+
+      if (!r.ok) {
+        const e = await r.json().catch(() => ({}));
+        return res.status(r.status).json({ error: (e.error && e.error.message) || 'Mistral HTTP ' + r.status });
+      }
+      const d = await r.json();
+      const t = d?.choices?.[0]?.message?.content;
+      if (!t) return res.status(500).json({ error: 'Empty Mistral response' });
+      return res.status(200).json({ content: t });
+    }
+
+    // ──────────────────────────────────────────────────────────
+    // Unknown provider
+    // ──────────────────────────────────────────────────────────
     return res.status(400).json({ error: 'Unknown provider: ' + provider });
 
   } catch (e) {
