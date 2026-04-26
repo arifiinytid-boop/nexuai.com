@@ -1,6 +1,7 @@
-// api/sync.js — NEXUS AI User Data Sync v3
+// api/sync.js — NEXUS AI User Data Sync v4
 // Persistent storage via Vercel KV (keyed by Roblox username)
 // Owner/Admin by Roblox User ID (from OWNER_IDS / ADMIN_IDS env vars)
+// Secure: credits/plan/roles/banned hanya bisa diubah oleh admin
 
 let kv = null;
 let kvReady = false;
@@ -51,15 +52,13 @@ async function listUsers() {
       const result = {};
       for (const k of keys) {
         const userKey = k.replace('nexusai:', '');
-        // Skip internal keys (start with _)
-        if (userKey.startsWith('_')) continue;
+        if (userKey.startsWith('_')) continue; // skip internal keys
         const data = await kvClient.get(k);
         if (data) result[userKey] = data;
       }
       return result;
     } catch(e) { console.error('listUsers error:', e.message); }
   }
-  // Return memStore but filter internal keys
   const filtered = {};
   for (const [k,v] of Object.entries(memStore)) {
     if (!k.startsWith('_')) filtered[k] = v;
@@ -67,9 +66,7 @@ async function listUsers() {
   return filtered;
 }
 
-// Parse Owner/Admin IDs from env vars
-// Format: "userId1:Name1,userId2:Name2,userId3:Name3"
-// or just "userId1,userId2,userId3"
+// ─── Owner / Admin dari Env ───────────────────────────────
 function parseIdList(envStr) {
   return (envStr || '').split(',').map(s => {
     const parts = s.trim().split(':');
@@ -79,7 +76,6 @@ function parseIdList(envStr) {
 
 function getOwnerIds() {
   const fromEnv = parseIdList(process.env.OWNER_IDS);
-  // Default: FIINYTID25 user ID
   if (fromEnv.length === 0) return [{ id: '128649548', name: 'FIINYTID25' }];
   return fromEnv;
 }
@@ -90,21 +86,16 @@ function getAdminIds() {
 
 function isOwnerById(userId) {
   const uid = String(userId).trim();
-  return getOwnerIds().some(o => {
-    const oid = String(o.id || o).trim();
-    return oid === uid;
-  });
+  return getOwnerIds().some(o => String(o.id).trim() === uid);
 }
 
 function isAdminById(userId) {
   if (isOwnerById(userId)) return true;
   const uid = String(userId).trim();
-  return getAdminIds().some(a => {
-    const aid = String(a.id || a).trim();
-    return aid === uid;
-  });
+  return getAdminIds().some(a => String(a.id).trim() === uid);
 }
 
+// ─── EXPORT HANDLER ───────────────────────────────────────
 module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
@@ -114,7 +105,9 @@ module.exports = async (req, res) => {
 
   const userKey = (req.query.user || '').toLowerCase().trim();
 
-  // ── GET ──────────────────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════
+  // GET
+  // ═══════════════════════════════════════════════════════════
   if (req.method === 'GET') {
     if (req.query.list === '1') {
       const all = await listUsers();
@@ -122,129 +115,170 @@ module.exports = async (req, res) => {
     }
     if (!userKey) return res.json(null);
     const data = await getUser(userKey);
-    // Auto-set unlimited credits for owner/admin (if userId known)
+    // Auto-set unlimited credits untuk owner/admin saat GET
     if (data && data.robloxId && isOwnerById(data.robloxId)) {
       data.credits = 999999;
       data.plan = 'owner';
       data.roles = ['owner', 'admin'];
     } else if (data && data.robloxId && isAdminById(data.robloxId)) {
-      if ((data.credits || 0) < 999999) data.credits = 999999;
+      data.credits = 999999;
       if (!data.roles) data.roles = ['admin'];
       if (!data.roles.includes('admin')) data.roles.push('admin');
     }
     return res.json(data);
   }
 
-  // ── POST ─────────────────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════
+  // POST
+  // ═══════════════════════════════════════════════════════════
   if (req.method === 'POST') {
     try {
       const body = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
       const { user, data, action } = body || {};
 
-      // ─── Admin actions ───────────────────────────────────────────────────
-      if (action === 'give-credits') {
-        const { target, amount } = body;
-        if (!target || isNaN(amount)) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.credits = parseFloat(((existing.credits || 0) + parseFloat(amount)).toFixed(4));
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true, newCredits: existing.credits, user: target });
-      }
-
-      if (action === 'set-plan') {
-        const { target, plan } = body;
-        if (!target || !plan) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.plan = plan;
-        if (plan === 'pro' || plan === 'owner') {
-          existing.credits = Math.max(existing.credits || 0, 200);
+      // ─── ADMIN ACTIONS ──────────────────────────────────
+      if (action) {
+        // give-credits: bisa ke user yang belum pernah login
+        if (action === 'give-credits') {
+          const { target, amount } = body;
+          if (!target || isNaN(amount)) return res.status(400).json({ error: 'Invalid params' });
+          const existing = await getUser(target.toLowerCase()) || {};
+          existing.credits = parseFloat(((existing.credits || 0) + parseFloat(amount)).toFixed(4));
+          existing._updated = Date.now();
+          await setUser(target.toLowerCase(), existing);
+          return res.json({ success: true, newCredits: existing.credits, user: target });
         }
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
+
+        if (action === 'set-plan') {
+          const { target, plan } = body;
+          if (!target || !plan) return res.status(400).json({ error: 'Invalid params' });
+          const existing = await getUser(target.toLowerCase()) || {};
+          existing.plan = plan;
+          if (plan === 'pro' || plan === 'owner') {
+            existing.credits = Math.max(existing.credits || 0, 200);
+          }
+          existing._updated = Date.now();
+          await setUser(target.toLowerCase(), existing);
+          return res.json({ success: true });
+        }
+
+        if (action === 'reset-credits') {
+          const { target } = body;
+          if (!target) return res.status(400).json({ error: 'Invalid params' });
+          const existing = await getUser(target.toLowerCase()) || {};
+          existing.credits = 30;
+          existing._updated = Date.now();
+          await setUser(target.toLowerCase(), existing);
+          return res.json({ success: true });
+        }
+
+        if (action === 'ban') {
+          const { target, reason } = body;
+          if (!target) return res.status(400).json({ error: 'Invalid params' });
+          const existing = await getUser(target.toLowerCase()) || {};
+          existing.banned = true;
+          existing.banReason = reason || 'No reason given';
+          existing.bannedAt = Date.now();
+          existing._updated = Date.now();
+          await setUser(target.toLowerCase(), existing);
+          return res.json({ success: true });
+        }
+
+        if (action === 'unban') {
+          const { target } = body;
+          if (!target) return res.status(400).json({ error: 'Invalid params' });
+          const existing = await getUser(target.toLowerCase()) || {};
+          existing.banned = false;
+          existing.banReason = null;
+          existing.unbannedAt = Date.now();
+          existing._updated = Date.now();
+          await setUser(target.toLowerCase(), existing);
+          return res.json({ success: true });
+        }
+
+        if (action === 'add-admin') {
+          const { target, requesterUserId } = body;
+          if (!isOwnerById(requesterUserId)) return res.status(403).json({ error: 'Owner only' });
+          const existing = await getUser(target.toLowerCase()) || {};
+          existing.roles = existing.roles || [];
+          if (!existing.roles.includes('admin')) existing.roles.push('admin');
+          existing.credits = 999999;
+          existing._updated = Date.now();
+          await setUser(target.toLowerCase(), existing);
+          return res.json({ success: true });
+        }
+
+        return res.status(400).json({ error: 'Unknown action' });
       }
 
-      if (action === 'reset-credits') {
-        const { target } = body;
-        if (!target) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.credits = 30;
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
-      }
-
-      if (action === 'ban') {
-        const { target, reason } = body;
-        if (!target) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.banned = true;
-        existing.banReason = reason || 'No reason given';
-        existing.bannedAt = Date.now();
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
-      }
-
-      if (action === 'unban') {
-        const { target } = body;
-        if (!target) return res.json({ error: 'Invalid params' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.banned = false;
-        existing.banReason = null;
-        existing.unbannedAt = Date.now();
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
-      }
-
-      if (action === 'add-admin') {
-        // Only owner can add admins via web console
-        // (actual admin list is in env vars - this just sets a role flag in user data)
-        const { target, requesterUserId } = body;
-        if (!isOwnerById(requesterUserId)) return res.json({ error: 'Owner only' });
-        const existing = await getUser(target.toLowerCase()) || {};
-        existing.roles = existing.roles || [];
-        if (!existing.roles.includes('admin')) existing.roles.push('admin');
-        existing.credits = 999999;
-        existing._updated = Date.now();
-        await setUser(target.toLowerCase(), existing);
-        return res.json({ success: true });
-      }
-
-      // ─── Normal user data sync ───────────────────────────────────────────
-      if (!user || !data) return res.json({ error: 'Missing user or data' });
+      // ─── NORMAL USER SYNC ───────────────────────────────
+      if (!user || !data) return res.status(400).json({ error: 'Missing user or data' });
       const key = user.toLowerCase();
 
-      // Check if user is banned
-      const existingData = await getUser(key);
-      if (existingData && existingData.banned) {
-        return res.status(403).json({ error: 'Account banned', reason: existingData.banReason || 'Violation of ToS' });
+      // Cek apakah user di-ban
+      const existing = await getUser(key);
+      if (existing && existing.banned) {
+        return res.status(403).json({ error: 'Account banned', reason: existing.banReason || 'Violation of ToS' });
       }
 
-      // Auto-set credits/roles for owner/admin based on userId
-      let saveData = { ...data, _updated: Date.now() };
-      if (data.robloxId && isOwnerById(data.robloxId)) {
-        saveData.credits = 999999;
-        saveData.plan = 'owner';
-        saveData.roles = ['owner', 'admin'];
-      } else if (data.robloxId && isAdminById(data.robloxId)) {
-        saveData.credits = 999999;
-        saveData.roles = saveData.roles || [];
-        if (!saveData.roles.includes('admin')) saveData.roles.push('admin');
+      // Field yang TIDAK BOLEH diubah oleh client:
+      // credits, plan, roles, banned, googleEmail, robloxId
+      // (googleEmail & robloxId hanya di-set saat login pertama)
+      const safeFields = [
+        'convs', 'curConv', 'model', 'lastClaim', 'guiModel',
+        'draftText', 'draftAttach', 'avatar', 'displayName',
+        'settings', 'preferences'
+      ];
+
+      const newData = {};
+      // Ambil hanya field aman dari data yang dikirim client
+      for (const field of safeFields) {
+        if (data[field] !== undefined) newData[field] = data[field];
       }
 
-      await setUser(key, saveData);
-      return res.json({ success: true });
+      // Gabung dengan existing data (jika ada), pertahankan field kontrol
+      const merged = existing
+        ? { ...existing, ...newData, _updated: Date.now() }
+        : {
+            ...newData,
+            credits: 30,               // default kredit pertama
+            plan: 'free',
+            roles: [],
+            banned: false,
+            robloxId: data.robloxId || '',
+            googleEmail: data.googleEmail || '',
+            _updated: Date.now()
+          };
+
+      // Pastikan robloxId & googleEmail tidak hilang (kalau sudah ada)
+      if (existing) {
+        if (!merged.robloxId) merged.robloxId = existing.robloxId;
+        if (!merged.googleEmail) merged.googleEmail = existing.googleEmail;
+      }
+
+      // Auto-set owner/admin berdasarkan robloxId (fallback jika dari env)
+      if (merged.robloxId && isOwnerById(merged.robloxId)) {
+        merged.credits = 999999;
+        merged.plan = 'owner';
+        merged.roles = ['owner', 'admin'];
+      } else if (merged.robloxId && isAdminById(merged.robloxId)) {
+        merged.credits = 999999;
+        merged.roles = merged.roles || [];
+        if (!merged.roles.includes('admin')) merged.roles.push('admin');
+      }
+
+      await setUser(key, merged);
+      return res.json({ success: true, data: merged });
     } catch (e) {
       return res.status(400).json({ error: e.message });
     }
   }
 
-  // ── DELETE ───────────────────────────────────────────────────────────────
+  // ═══════════════════════════════════════════════════════════
+  // DELETE
+  // ═══════════════════════════════════════════════════════════
   if (req.method === 'DELETE') {
-    if (!userKey) return res.json({ error: 'Missing user' });
+    if (!userKey) return res.status(400).json({ error: 'Missing user' });
     try {
       const kvClient = await initKV();
       if (kvClient && kvReady) { await kvClient.del('nexusai:' + userKey); }
