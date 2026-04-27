@@ -49,11 +49,13 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .btn-nc{margin:0 12px 6px;padding:7px 11px;background:rgba(0,229,255,.06);border:1px solid var(--b);border-radius:var(--r);color:var(--cyan);font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px;width:calc(100% - 24px);}
 .btn-nc:hover{border-color:var(--cyan);background:var(--hover);}
 .btn-nc svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;}
-/* --- TOMBOL BUTUH BANTUAN --- */
 .help-btn{margin:0 12px 6px;padding:8px 12px;background:rgba(255,214,0,.06);border:1px solid rgba(255,214,0,.2);border-radius:var(--r);color:var(--yellow);font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px;width:calc(100% - 24px);}
 .help-btn:hover{background:rgba(255,214,0,.1);border-color:rgba(255,214,0,.4);}
 .help-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
-/* --- END --- */
+.inbox-btn{margin:0 12px 6px;padding:8px 12px;background:rgba(136,0,255,.06);border:1px solid rgba(136,0,255,.2);border-radius:var(--r);color:#cc55ff;font-size:11px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:6px;width:calc(100% - 24px);}
+.inbox-btn:hover{background:rgba(136,0,255,.1);border-color:rgba(136,0,255,.4);}
+.inbox-btn svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;}
+.inbox-badge{margin-left:auto;background:var(--pink);color:white;font-size:8px;font-weight:700;padding:2px 6px;border-radius:10px;min-width:18px;text-align:center;}
 .sec-lbl{padding:4px 14px 2px;font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;flex-shrink:0;}
 .convs{flex:1;overflow-y:auto;padding:3px 7px;}
 .convs::-webkit-scrollbar{width:2px;}
@@ -134,7 +136,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .bubble table{width:100%;border-collapse:collapse;margin:7px 0;font-size:11px;}
 .bubble th,.bubble td{padding:5px 9px;border:1px solid var(--b);}
 .bubble th{background:rgba(0,229,255,.06);color:var(--cyan);}
-/* Message action buttons */
 .msg-acts{display:flex;gap:3px;padding:3px 2px;flex-wrap:wrap;align-items:center;}
 .mab{font-size:9px;color:var(--dim);background:none;border:1px solid transparent;cursor:pointer;padding:3px 6px;border-radius:4px;transition:.12s;display:flex;align-items:center;gap:3px;}
 .mab:hover{color:var(--cyan);border-color:var(--b);background:var(--card);}
@@ -189,7 +190,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .btn-send:hover{opacity:.82;transform:scale(1.05);}
 .btn-send svg,.btn-cancel svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2;}
 .btn-cancel{background:rgba(255,45,107,.15);border:1px solid rgba(255,45,107,.3);color:var(--pink);}
-/* ─── THINKING UI ENHANCED ─── */
 .thinking-wrap{display:flex;gap:9px;animation:mi .25s ease;}
 .thinking-box{background:var(--bg2);border:1px solid var(--b);border-radius:2px 10px 10px 10px;padding:14px;display:flex;flex-direction:column;gap:8px;min-width:260px;max-width:340px;}
 .thinking-hdr{font-size:10px;color:var(--cyan);display:flex;align-items:center;gap:8px;font-family:'Orbitron',sans-serif;letter-spacing:.5px;}
@@ -208,7 +208,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .t-step-dot{width:4px;height:4px;border-radius:50%;background:currentColor;margin-top:6px;flex-shrink:0;}
 .cancel-btn{padding:4px 12px;background:rgba(255,45,107,.1);border:1px solid rgba(255,45,107,.3);border-radius:5px;color:var(--pink);font-size:9.5px;cursor:pointer;align-self:flex-start;transition:.1s;margin-top:2px;}
 .cancel-btn:hover{background:rgba(255,45,107,.18);}
-/* ─── GUI EDITOR ─── */
 #guiTab{flex:1;overflow:hidden;display:none;flex-direction:column;}
 .gui-toolbar{padding:7px 12px;border-bottom:1px solid var(--b);background:var(--bg2);display:flex;align-items:center;gap:5px;flex-wrap:wrap;flex-shrink:0;}
 .gui-btn{padding:4px 10px;border-radius:5px;border:1px solid var(--b);background:var(--card);color:var(--text);font-size:10px;cursor:pointer;transition:.15s;display:flex;align-items:center;gap:4px;}
@@ -234,7 +233,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .gui-loading.show{display:flex;}
 .gui-empty-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:8px;color:rgba(0,229,255,.15);font-size:11px;pointer-events:none;}
 .gui-empty-hint svg{width:32px;height:32px;stroke:currentColor;fill:none;stroke-width:1.5;}
-/* ─── MODALS ─── */
 .ov{position:fixed;inset:0;background:rgba(3,3,18,.92);z-index:500;display:none;align-items:center;justify-content:center;backdrop-filter:blur(5px);}
 .ov.show{display:flex;}
 .modal{background:var(--bg2);border:1px solid var(--b);border-radius:13px;padding:22px;width:500px;max-width:95vw;box-shadow:var(--gc);max-height:90vh;overflow-y:auto;}
@@ -262,7 +260,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
 .install-num{width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--cyan),var(--purple));display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0;margin-top:1px;}
 .install-txt{font-size:11px;color:var(--text);line-height:1.65;flex:1;}
 .install-txt code{color:var(--cyan);background:rgba(0,229,255,.08);padding:1px 4px;border-radius:3px;font-size:10px;}
-/* ─── OWNER BADGE ─── */
 .badge-owner{background:linear-gradient(135deg,rgba(255,214,0,.2),rgba(255,140,0,.2));color:var(--yellow);border:1px solid rgba(255,214,0,.3);padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;font-family:'Orbitron',sans-serif;}
 .badge-admin{background:rgba(0,229,255,.1);color:var(--cyan);border:1px solid rgba(0,229,255,.3);padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;}
 .badge-pro{background:rgba(136,0,255,.12);color:#cc55ff;border:1px solid rgba(136,0,255,.3);padding:2px 8px;border-radius:10px;font-size:9px;font-weight:700;}
@@ -296,7 +293,6 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <div class="sb-logo"><img src="nexusai.png" alt="NEXUS" onerror="this.parentElement.style.background='linear-gradient(135deg,#00e5ff,#8800ff)';this.style.display='none'"></div>
       <div>
         <div class="sb-logo-text">NEXUS AI</div>
-        <!-- versi dihapus dari sini -->
         <div class="sb-logo-sub" id="verLbl">Roblox Dev</div>
       </div>
     </div>
@@ -312,8 +308,8 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     </div>
     <div class="creds" id="credsEl" onclick="location.href='/payment'">
       <div>
-        <div class="cred-l">Credits</div>
-        <div style="font-size:8.5px;color:rgba(255,214,0,.5);margin-top:1px;">Klik untuk beli lebih</div>
+        <div class="cred-l" id="credLabel">Credits</div>
+        <div style="font-size:8.5px;color:rgba(255,214,0,.5);margin-top:1px;" id="credHint">Klik untuk beli lebih</div>
       </div>
       <div style="text-align:right;">
         <div class="cred-v" id="credDisp">30.00</div>
@@ -324,12 +320,15 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span id="newChatLbl">Percakapan Baru</span>
     </button>
-    <!-- TOMBOL BUTUH BANTUAN -->
     <button class="help-btn" onclick="window.location.href='agent.html'" id="helpBtn">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/><path d="M9 15c.83 1.67 2.83 2.5 5 2.5s4.17-.83 5-2.5"/></svg>
       <span id="helpBtnText">Butuh Bantuan?</span>
     </button>
-    <!-- END TOMBOL -->
+    <button class="inbox-btn" onclick="location.href='/inbox'" id="inboxBtn">
+      <svg viewBox="0 0 24 24"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 002 2h16a2 2 0 002-2v-6l-3.45-6.89A2 2 0 0016.76 4H7.24a2 2 0 00-1.79 1.11z"/></svg>
+      <span id="inboxBtnText">Inbox</span>
+      <span class="inbox-badge" id="inboxBadge">0</span>
+    </button>
     <div class="sec-lbl" id="recentLbl">Riwayat Chat</div>
     <div class="convs" id="convList"><div class="conv-empty" id="noConvLbl">Belum ada percakapan</div></div>
     <div class="sb-footer">Made by <span style="color:var(--cyan)">NEXUS STUDIO</span><br>YouTube: <span style="color:rgba(0,229,255,.6)">NEXUS STUDIO</span></div>
@@ -343,11 +342,11 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="plug-banner" id="plugBanner">
       <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
       <span id="plugBannerTxt">Plugin belum terhubung —</span>
-      <a onclick="showInstall()">Cara connect →</a>
-      <a onclick="retryStudio()" style="margin-left:8px;color:var(--green);">Reconnect</a>
+      <a onclick="showInstall()" id="plugInstallLink">Cara connect →</a>
+      <a onclick="retryStudio()" style="margin-left:8px;color:var(--green);" id="plugReconnectLink">Reconnect</a>
     </div>
     <div class="chat-hdr">
-      <div class="chat-title" id="chatTitle">NEXUS AI — Roblox Dev Assistant</div>
+      <div class="chat-title" id="chatTitle">NEXUS AI — Asisten Roblox</div>
       <div class="status-badge off" id="studioBadge" onclick="retryStudio()">
         <div class="sdot pulse" id="studioDot"></div>
         <span id="studioTxt">Studio: OFF</span>
@@ -425,7 +424,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <!-- UI EDITOR TAB -->
     <div id="guiTab">
       <div class="gui-toolbar">
-        <span style="font-size:10px;color:var(--dim);">Add:</span>
+        <span style="font-size:10px;color:var(--dim);" id="guiAddLabel">Add:</span>
         <button class="gui-btn" onclick="addEl('Frame')"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/></svg>Frame</button>
         <button class="gui-btn" onclick="addEl('TextLabel')"><svg viewBox="0 0 24 24"><polyline points="4 7 4 4 20 4 20 7"/><line x1="9" y1="20" x2="15" y2="20"/><line x1="12" y1="4" x2="12" y2="20"/></svg>Label</button>
         <button class="gui-btn" onclick="addEl('TextButton')"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="10" rx="3"/></svg>Button</button>
@@ -448,7 +447,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
           </button>
           <button class="gui-gen-btn" id="guiToPlaceBtn" onclick="sendGuiToPlace()" style="background:linear-gradient(135deg,var(--green),var(--cyan));">
             <svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-            Kirim ke Place
+            <span id="guiToPlaceText">Kirim ke Place</span>
           </button>
         </div>
       </div>
@@ -457,12 +456,12 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
           <div class="gui-canvas-inner" id="guiCanvasInner">
             <div class="gui-empty-hint" id="guiEmpty">
               <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-              <div>Tambah elemen atau klik "AI Build"</div>
+              <div id="guiEmptyText">Tambah elemen atau klik "AI Build"</div>
             </div>
           </div>
-          <div class="gui-loading" id="guiLoading"><div class="tspin" style="width:20px;height:20px;border-width:3px;"></div><span>AI sedang membangun UI...</span></div>
+          <div class="gui-loading" id="guiLoading"><div class="tspin" style="width:20px;height:20px;border-width:3px;"></div><span id="guiLoadingText">AI sedang membangun UI...</span></div>
         </div>
-        <div class="gui-props" id="guiProps"><div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Pilih elemen</div></div>
+        <div class="gui-props" id="guiProps"><div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;" id="guiPropsEmpty">Pilih elemen</div></div>
       </div>
     </div>
   </div>
@@ -475,48 +474,47 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <img id="avatarModalImg" src="" alt="" style="width:120px;height:120px;border-radius:50%;border:3px solid var(--cyan);object-fit:cover;margin:0 auto 14px;display:block;" onerror="this.src='nexusai.png'">
     <div style="font-size:11px;color:var(--dim);margin-bottom:4px;" id="avatarModalRole">Roblox Developer</div>
     <div style="font-size:10px;color:var(--dim);" id="avatarModalId">-</div>
-    <div class="modal-footer" style="justify-content:center;margin-top:16px;"><button class="btn-modal primary" onclick="closeModal('avatarModal')">TUTUP</button></div>
+    <div class="modal-footer" style="justify-content:center;margin-top:16px;"><button class="btn-modal primary" onclick="closeModal('avatarModal')" id="avatarCloseBtn">TUTUP</button></div>
   </div>
 </div>
 <div class="ov" id="installModal">
   <div class="modal">
-    <div class="modal-t"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Cara Install Plugin NEXUS AI</div>
+    <div class="modal-t"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span id="installTitle">Cara Install Plugin NEXUS AI</span></div>
     <div class="modal-b">
-      <div class="install-step"><div class="install-num">1</div><div class="install-txt">Download plugin dari Discord NEXUS STUDIO: <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">discord.gg/HuGtbRvD</a></div></div>
-      <div class="install-step"><div class="install-num">2</div><div class="install-txt">Simpan ke: <code>C:\Users\[Nama]\AppData\Local\Roblox\Plugins\</code></div></div>
-      <div class="install-step"><div class="install-num">3</div><div class="install-txt">Roblox Studio → <strong>Manage Plugin</strong> → Permission → Enable <strong>HTTP Requests</strong> + <strong>Script Injection</strong></div></div>
-      <div class="install-step"><div class="install-num">4</div><div class="install-txt">Klik tombol <strong>NEXUS AI</strong> di toolbar Studio → Klik <strong>CONNECT</strong></div></div>
-      <div class="install-step"><div class="install-num">5</div><div class="install-txt">Status hijau = terhubung! Chat di web → AI langsung build di place Anda!</div></div>
+      <div class="install-step"><div class="install-num">1</div><div class="install-txt" id="installStep1">Download plugin dari Discord NEXUS STUDIO: <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">discord.gg/HuGtbRvD</a></div></div>
+      <div class="install-step"><div class="install-num">2</div><div class="install-txt" id="installStep2">Simpan ke: <code>C:\Users\[Nama]\AppData\Local\Roblox\Plugins\</code></div></div>
+      <div class="install-step"><div class="install-num">3</div><div class="install-txt" id="installStep3">Roblox Studio → <strong>Manage Plugin</strong> → Permission → Enable <strong>HTTP Requests</strong> + <strong>Script Injection</strong></div></div>
+      <div class="install-step"><div class="install-num">4</div><div class="install-txt" id="installStep4">Klik tombol <strong>NEXUS AI</strong> di toolbar Studio → Klik <strong>CONNECT</strong></div></div>
+      <div class="install-step"><div class="install-num">5</div><div class="install-txt" id="installStep5">Status hijau = terhubung! Chat di web → AI langsung build di place Anda!</div></div>
     </div>
-    <div class="modal-footer"><button class="btn-modal primary" onclick="closeModal('installModal')">MENGERTI</button></div>
+    <div class="modal-footer"><button class="btn-modal primary" onclick="closeModal('installModal')" id="installCloseBtn">MENGERTI</button></div>
   </div>
 </div>
 <div class="ov" id="settingsModal">
   <div class="modal" style="width:520px;">
-    <div class="modal-t"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</div>
+    <div class="modal-t"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg><span id="settingsTitle">Settings</span></div>
     <div class="settings-section">
-      <div class="settings-title">Akun Roblox</div>
+      <div class="settings-title" id="settingsAccountTitle">Akun Roblox</div>
       <div class="settings-row">
         <span style="color:white;font-weight:600;" id="settingsUsername">-</span>
         <span id="settingsBadge"></span>
       </div>
-      <div class="settings-row"><span>Credits</span><span id="settingsCredits" style="color:var(--yellow);font-weight:700;">-</span></div>
-      <div class="settings-row"><span>Plan</span><span id="settingsPlan" style="color:var(--green);">Free</span></div>
-      <div class="settings-row"><span>Roblox ID</span><span id="settingsRobloxId" style="color:var(--dim);font-size:10px;">-</span></div>
-      <div class="settings-row"><span style="font-size:9px;color:var(--dim);">Versi App</span><span style="font-size:9px;color:var(--cyan);">V10.4</span></div>
+      <div class="settings-row"><span id="settingsCreditsLabel">Credits</span><span id="settingsCredits" style="color:var(--yellow);font-weight:700;">-</span></div>
+      <div class="settings-row"><span id="settingsPlanLabel">Plan</span><span id="settingsPlan" style="color:var(--green);">Free</span></div>
+      <div class="settings-row"><span id="settingsRobloxIdLabel">Roblox ID</span><span id="settingsRobloxId" style="color:var(--dim);font-size:10px;">-</span></div>
     </div>
     <div class="settings-section">
-      <div class="settings-title">Daily Credits</div>
-      <div class="settings-row"><span>Free Plan</span><span style="color:var(--green);">+2 CR / hari</span></div>
-      <div class="settings-row"><span>Pro Plan</span><span style="color:var(--cyan);">+25 CR / hari</span></div>
+      <div class="settings-title" id="dailyCreditsTitle">Daily Credits</div>
+      <div class="settings-row"><span id="freePlanLabel">Free Plan</span><span style="color:var(--green);">+2 CR / hari</span></div>
+      <div class="settings-row"><span id="proPlanLabel">Pro Plan</span><span style="color:var(--cyan);">+25 CR / hari</span></div>
       <div class="settings-row">
         <span id="lastClaimInfo" style="font-size:10px;color:var(--dim);"></span>
         <button class="settings-btn" id="claimDailyBtn" onclick="claimDaily()">Claim Daily</button>
       </div>
     </div>
     <div class="settings-section">
-      <div class="settings-title">Bahasa</div>
-      <div class="settings-row"><span>Bahasa Interface & AI</span>
+      <div class="settings-title" id="langTitle">Bahasa</div>
+      <div class="settings-row"><span id="langLabel">Bahasa Interface & AI</span>
         <select class="settings-select" id="langSelector" onchange="changeLang(this.value)">
           <option value="id">Bahasa Indonesia</option>
           <option value="en">English</option>
@@ -524,7 +522,7 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       </div>
     </div>
     <div class="settings-section">
-      <div class="settings-title">Laporkan Masalah</div>
+      <div class="settings-title" id="reportTitle">Laporkan Masalah</div>
       <textarea class="report-ta" id="reportTa" placeholder="Deskripsikan masalahnya..."></textarea>
       <div style="margin-top:8px;display:flex;align-items:center;gap:8px;">
         <button class="settings-btn" onclick="sendReport()" id="reportBtn">Kirim Report</button>
@@ -538,55 +536,54 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
       </div>
     </div>
     <div class="settings-section">
-      <div class="settings-title">Redeem Code</div>
+      <div class="settings-title" id="redeemTitle">Redeem Code</div>
       <div class="settings-row" style="flex-direction:column;align-items:flex-start;gap:6px;">
-        <div style="font-size:10px;color:var(--dim);">Dapatkan code di <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">Discord NEXUS STUDIO</a></div>
+        <div style="font-size:10px;color:var(--dim);" id="redeemHint">Dapatkan code di <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">Discord NEXUS STUDIO</a></div>
         <div style="display:flex;gap:8px;width:100%;"><input type="text" id="redeemInput" class="settings-select" style="flex:1;padding:6px 10px;" placeholder="Masukkan kode..."><button class="settings-btn" onclick="redeemCode()" id="redeemBtn">Redeem</button></div>
         <span id="redeemStatus" style="font-size:10px;color:var(--green);"></span>
       </div>
     </div>
     <div class="settings-section">
-      <div class="settings-title">Download Plugin V10.4</div>
+      <div class="settings-title" id="downloadTitle">Download Plugin V10.5</div>
       <div class="settings-row" style="flex-direction:column;gap:5px;align-items:flex-start;">
-        <div style="font-size:10px;color:var(--dim);">Install NEXUS AI Plugin di Roblox Studio</div>
+        <div style="font-size:10px;color:var(--dim);" id="downloadHint">Install NEXUS AI Plugin di Roblox Studio</div>
         <button class="settings-btn" onclick="window.open('https://discord.gg/HuGtbRvD','_blank')">Download via Discord</button>
       </div>
     </div>
     <div class="settings-section">
-      <div class="settings-title">Akun</div>
-      <div class="settings-row"><span>Logout</span><button class="settings-btn danger" onclick="logout()">Logout</button></div>
+      <div class="settings-title" id="accountTitle">Akun</div>
+      <div class="settings-row"><span id="logoutLabel">Logout</span><button class="settings-btn danger" onclick="logout()">Logout</button></div>
     </div>
-    <div class="modal-footer"><button class="btn-modal primary" onclick="closeModal('settingsModal')">TUTUP</button></div>
+    <div class="modal-footer"><button class="btn-modal primary" onclick="closeModal('settingsModal')" id="settingsCloseBtn">TUTUP</button></div>
   </div>
 </div>
 <div class="ov" id="guiCodeModal">
   <div class="modal" style="width:640px;">
-    <div class="modal-t"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>Generated GUI Script</div>
+    <div class="modal-t"><svg viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg><span id="guiCodeTitle">Generated GUI Script</span></div>
     <div class="modal-b"><pre id="guiCodeOutput" style="max-height:400px;overflow-y:auto;white-space:pre-wrap;word-break:break-all;font-size:10.5px;color:var(--text);background:rgba(0,0,0,.4);padding:12px;border-radius:6px;border:1px solid var(--b);"></pre></div>
     <div class="modal-footer">
-      <button class="btn-modal primary" onclick="copyGuiCode()">Copy</button>
-      <button class="btn-modal secondary" onclick="downloadGuiCode()">Download .lua</button>
-      <button class="btn-modal secondary" onclick="closeModal('guiCodeModal')">Tutup</button>
+      <button class="btn-modal primary" onclick="copyGuiCode()" id="guiCodeCopyBtn">Copy</button>
+      <button class="btn-modal secondary" onclick="downloadGuiCode()" id="guiCodeDlBtn">Download .lua</button>
+      <button class="btn-modal secondary" onclick="closeModal('guiCodeModal')" id="guiCodeCloseBtn">Tutup</button>
     </div>
   </div>
 </div>
 <div class="ov" id="guiAIChatModal">
   <div class="modal" style="width:520px;">
-    <div class="modal-t"><svg viewBox="0 0 24 24"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/></svg>AI UI Builder</div>
+    <div class="modal-t"><svg viewBox="0 0 24 24"><path d="M9 18h6M12 2a7 7 0 0 1 7 7c0 2.38-1.19 4.47-3 5.74V17H8v-2.26C6.19 13.47 5 11.38 5 9a7 7 0 0 1 7-7z"/></svg><span id="guiAiTitle">AI UI Builder</span></div>
     <div class="modal-b" style="margin-bottom:8px;">
-      <p style="margin-bottom:10px;font-size:11px;">Deskripsikan UI yang Anda inginkan:</p>
+      <p style="margin-bottom:10px;font-size:11px;" id="guiAiDesc">Deskripsikan UI yang Anda inginkan:</p>
       <textarea id="guiAIPrompt" style="width:100%;background:var(--bg3);border:1px solid var(--b);border-radius:6px;padding:10px;color:white;font-family:'JetBrains Mono',monospace;font-size:12px;outline:none;resize:vertical;min-height:90px;" placeholder="contoh: Shop GUI dengan 3 kartu item, scroll list, tombol beli hijau..."></textarea>
     </div>
     <div class="modal-footer">
-      <button class="btn-modal primary" onclick="generateGuiFromAI()">Bangun dengan AI</button>
-      <button class="btn-modal secondary" onclick="closeModal('guiAIChatModal')">Batal</button>
+      <button class="btn-modal primary" onclick="generateGuiFromAI()" id="guiAiBuildBtn">Bangun dengan AI</button>
+      <button class="btn-modal secondary" onclick="closeModal('guiAIChatModal')" id="guiAiCancelBtn">Batal</button>
     </div>
   </div>
 </div>
   
 <script>
 'use strict';
-var WEB_VERSION='V10.4';
 var curLang=localStorage.getItem('nexus_lang')||'id';
 var thinkingEnabled=true;
 var thinkEl=null;
@@ -607,7 +604,47 @@ var LANGS={
       stepsJson:['Menganalisis workspace...','Merencanakan struktur...','Generate JSON commands...','Verifikasi & kirim...'],
       son:'Studio: ON',soff:'Studio: OFF',cancel:'Batalkan',
       connected:'Plugin terhubung — AI siap build di place kamu!',
-      disconnected:'Plugin belum terhubung —'},
+      disconnected:'Plugin belum terhubung —',
+      creditsLabel:'Credits',credHint:'Klik untuk beli lebih',
+      helpBtn:'Butuh Bantuan?',inboxBtn:'Inbox',
+      welcomeText:'AI Roblox cerdas — tulis Lua, debug script, buat GUI. Connect plugin untuk inject langsung ke Studio!',
+      chatTitle:'NEXUS AI — Asisten Roblox',
+      installLink:'Cara connect →',reconnectLink:'Reconnect',
+      installTitle:'Cara Install Plugin NEXUS AI',
+      installSteps:['Download plugin dari Discord NEXUS STUDIO: <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">discord.gg/HuGtbRvD</a>',
+        'Simpan ke: <code>C:\\Users\\[Nama]\\AppData\\Local\\Roblox\\Plugins\\</code>',
+        'Roblox Studio → <strong>Manage Plugin</strong> → Permission → Enable <strong>HTTP Requests</strong> + <strong>Script Injection</strong>',
+        'Klik tombol <strong>NEXUS AI</strong> di toolbar Studio → Klik <strong>CONNECT</strong>',
+        'Status hijau = terhubung! Chat di web → AI langsung build di place Anda!'],
+      installClose:'MENGERTI',
+      settingsTitle:'Settings',accountTitle:'Akun Roblox',creditsLabel:'Credits',planLabel:'Plan',robloxIdLabel:'Roblox ID',
+      dailyTitle:'Daily Credits',freePlan:'Free Plan',proPlan:'Pro Plan',
+      langTitle:'Bahasa',langLabel:'Bahasa Interface & AI',
+      reportTitle:'Laporkan Masalah',reportBtn:'Kirim Report',
+      redeemTitle:'Redeem Code',redeemHint:'Dapatkan code di <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">Discord NEXUS STUDIO</a>',
+      downloadTitle:'Download Plugin V10.5',downloadHint:'Install NEXUS AI Plugin di Roblox Studio',
+      logoutLabel:'Logout',close:'TUTUP',
+      guiAddLabel:'Add:',guiEmptyText:'Tambah elemen atau klik "AI Build"',
+      guiLoadingText:'AI sedang membangun UI...',guiToPlaceText:'Kirim ke Place',
+      guiCodeTitle:'Generated GUI Script',copy:'Copy',download:'Download .lua',
+      guiAiTitle:'AI UI Builder',guiAiDesc:'Deskripsikan UI yang Anda inginkan:',
+      guiAiBuild:'Bangun dengan AI',guiAiCancel:'Batal',
+      guiPropsEmpty:'Pilih elemen',
+      avatarClose:'TUTUP',
+      copiedToast:'Copied!',
+      reconnectToast:'Menghubungkan ulang...',
+      creditsExhausted:'Credits habis! Beli di Payment.',
+      creditsLow:'Credits tidak cukup. Ganti ke model gratis.',
+      cancelToast:'Batalkan',
+      modelBusyToast:'Model sedang sibuk. Coba ganti model lain.',
+      apiErrorToast:'Gagal mendapatkan respons',
+      guiSentToast:'GUI dikirim ke Studio!',
+      guiNotConnectedToast:'Studio belum terhubung!',
+      addElementFirst:'Tambahkan elemen dulu!',
+      aiResponseInvalid:'AI response invalid',
+      errorPrefix:'Gagal',
+      clearConfirm:'Hapus semua pesan?',
+      chatCopiedToast:'Chat disalin!'},
   en:{placeholder:'Ask NEXUS AI about Roblox...',noConv:'No conversations yet',
       newchat:'New Chat',recent:'Chat History',
       steps:['Analyzing request...','Designing solution...','Writing Lua code...','Optimizing & finalizing...'],
@@ -616,7 +653,47 @@ var LANGS={
       stepsJson:['Analyzing workspace...','Planning structure...','Generating JSON commands...','Verifying & sending...'],
       son:'Studio: ON',soff:'Studio: OFF',cancel:'Cancel',
       connected:'Plugin connected — AI ready to build in your place!',
-      disconnected:'Plugin not connected —'},
+      disconnected:'Plugin not connected —',
+      creditsLabel:'Credits',credHint:'Click to buy more',
+      helpBtn:'Need Help?',inboxBtn:'Inbox',
+      welcomeText:'Smart Roblox AI — write Lua, debug scripts, build GUIs. Connect plugin to inject directly into Studio!',
+      chatTitle:'NEXUS AI — Roblox Dev Assistant',
+      installLink:'How to connect →',reconnectLink:'Reconnect',
+      installTitle:'How to Install NEXUS AI Plugin',
+      installSteps:['Download plugin from NEXUS STUDIO Discord: <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">discord.gg/HuGtbRvD</a>',
+        'Save to: <code>C:\\Users\\[Name]\\AppData\\Local\\Roblox\\Plugins\\</code>',
+        'Roblox Studio → <strong>Manage Plugin</strong> → Permission → Enable <strong>HTTP Requests</strong> + <strong>Script Injection</strong>',
+        'Click <strong>NEXUS AI</strong> button in Studio toolbar → Click <strong>CONNECT</strong>',
+        'Green status = connected! Chat on web → AI builds directly in your place!'],
+      installClose:'UNDERSTOOD',
+      settingsTitle:'Settings',accountTitle:'Roblox Account',creditsLabel:'Credits',planLabel:'Plan',robloxIdLabel:'Roblox ID',
+      dailyTitle:'Daily Credits',freePlan:'Free Plan',proPlan:'Pro Plan',
+      langTitle:'Language',langLabel:'Interface & AI Language',
+      reportTitle:'Report Issue',reportBtn:'Send Report',
+      redeemTitle:'Redeem Code',redeemHint:'Get codes at <a href="https://discord.gg/HuGtbRvD" target="_blank" style="color:var(--cyan);">NEXUS STUDIO Discord</a>',
+      downloadTitle:'Download Plugin V10.5',downloadHint:'Install NEXUS AI Plugin in Roblox Studio',
+      logoutLabel:'Logout',close:'CLOSE',
+      guiAddLabel:'Add:',guiEmptyText:'Add elements or click "AI Build"',
+      guiLoadingText:'AI is building UI...',guiToPlaceText:'Send to Place',
+      guiCodeTitle:'Generated GUI Script',copy:'Copy',download:'Download .lua',
+      guiAiTitle:'AI UI Builder',guiAiDesc:'Describe the UI you want:',
+      guiAiBuild:'Build with AI',guiAiCancel:'Cancel',
+      guiPropsEmpty:'Select element',
+      avatarClose:'CLOSE',
+      copiedToast:'Copied!',
+      reconnectToast:'Reconnecting...',
+      creditsExhausted:'Credits exhausted! Buy at Payment.',
+      creditsLow:'Credits low. Switch to free model.',
+      cancelToast:'Cancel',
+      modelBusyToast:'Model is busy. Try switching model.',
+      apiErrorToast:'Failed to get response',
+      guiSentToast:'GUI sent to Studio!',
+      guiNotConnectedToast:'Studio not connected!',
+      addElementFirst:'Add elements first!',
+      aiResponseInvalid:'AI response invalid',
+      errorPrefix:'Failed',
+      clearConfirm:'Delete all messages?',
+      chatCopiedToast:'Chat copied!'}
 };
 
 // ─── STATE ─────────────────────────────────────────────────────────────────
@@ -625,55 +702,40 @@ var S={
   model:{id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite'},
   guiModel:{id:'gemini-2.5-flash-lite',prov:'gemini',cost:1,label:'Gemini 2.5 Flash Lite'},
   plan:'free',draftText:{},draftAttach:{},attachments:[],
-  lastClaim:null,
+  lastClaim:null,unreadInbox:0,
 };
 
-// ─── COMPLETE MODEL LIST (GRATIS & AKTIF) ────────────────────────────────
+// ─── COMPLETE MODEL LIST ────────────────────────────────────────────────
 var MODEL_LIST = [
-  // ⚡ Gemini Fast
   { grp: '⚡ Google — Gemini Fast' },
   { id: 'gemini-2.5-flash-lite', prov: 'gemini', cost: 0, label: 'Gemini 2.5 Flash Lite', icon: '/icon/gemini.png', badge: 'FREE' },
   { id: 'gemini-2.0-flash',       prov: 'gemini', cost: 0, label: 'Gemini 2.0 Flash',       icon: '/icon/gemini.png', badge: 'FREE' },
   { id: 'gemini-3-flash-preview', prov: 'gemini', cost: 1, label: 'Gemini 3 Flash',         icon: '/icon/gemini.png', badge: 'NEW' },
-
-  // 🧠 Gemini Smart (gratis dengan batas rendah)
   { grp: '🧠 Google — Gemini Smart' },
   { id: 'gemini-2.5-flash',                 prov: 'gemini', cost: 1, label: 'Gemini 2.5 Flash',           icon: '/icon/gemini.png', badge: 'SMART' },
   { id: 'gemini-2.5-flash-preview-04-17',   prov: 'gemini', cost: 1, label: 'Gemini 2.5 Flash Preview',   icon: '/icon/gemini.png' },
   { id: 'gemini-2.5-pro-preview',           prov: 'gemini', cost: 3, label: 'Gemini 2.5 Pro Preview',     icon: '/icon/gemini.png', badge: 'BEST' },
-
-  // 🦙 Groq (gratis, model LLAMA)
   { grp: '🦙 Groq — Super Fast & Free' },
   { id: 'llama-3.1-8b-instant',  prov: 'groq', cost: 0, label: 'Llama 3.1 8B Instant', icon: '/icon/groq.ico', badge: 'FREE' },
   { id: 'llama-3.3-70b-versatile', prov: 'groq', cost: 0, label: 'Llama 3.3 70B Versatile', icon: '/icon/groq.ico', badge: 'FREE' },
   { id: 'openai/gpt-oss-120b',    prov: 'groq', cost: 0, label: 'OpenAI',        icon: '/icon/groq.ico', badge: 'FREE' },
-
-  // 🌫️ Mistral (gratis tier)
   { grp: '🌫️ Mistral — Small & Mighty' },
   { id: 'mistral-small-latest',  prov: 'mistral', cost: 0, label: 'Mistral Small', icon: '/icon/mistral.png', badge: 'FREE' },
   { id: 'mistral-medium-latest', prov: 'mistral', cost: 0, label: 'Mistral Medium', icon: '/icon/mistral.png', badge: 'FREE' },
-
-  // 🔍 DeepSeek (gratis/ murah)
   { grp: '🔍 DeepSeek' },
   { id: 'deepseek-chat',    prov: 'deepseek', cost: 1, label: 'DeepSeek V3 Chat', icon: '/icon/deepseek.svg' },
   { id: 'deepseek-reasoner',prov: 'deepseek', cost: 2, label: 'DeepSeek R1 Reasoner', icon: '/icon/deepseek.svg' },
-
-  // 🌐 OpenRouter (sudah support banyak model gratis, gunakan kalau tidak ada di atas)
   { grp: '🌐 OpenRouter — Multi‑Model' },
   { id: 'meta-llama/llama-3.1-8b-instruct',  prov: 'openrouter', cost: 0, label: 'Llama 3.1 8B (OR)', icon: '/icon/openrouter.png', badge: 'FREE' },
   { id: 'mistralai/mistral-7b-instruct',    prov: 'openrouter', cost: 0, label: 'Mistral 7B (OR)',   icon: '/icon/openrouter.png', badge: 'FREE' },
 ];
-
-// COMING SOON (berbayar, API key sudah ada tapi dikunci)
 var MODEL_LIST_SOON = [
   { grp: '🤖 Anthropic — Claude' },
   { id: 'claude-haiku-4-5',  prov: 'claude', cost: 3, label: 'Claude Haiku 4.5',  icon: '/icon/claude.png', soon: true },
   { id: 'claude-sonnet-4-6', prov: 'claude', cost: 7, label: 'Claude Sonnet 4.6', icon: '/icon/claude.png', soon: true },
-
   { grp: '🧠 OpenAI' },
   { id: 'gpt-4o-mini', prov: 'openai', cost: 3, label: 'GPT-4o Mini', icon: '/icon/chatgpt.png', soon: true },
   { id: 'gpt-4o',      prov: 'openai', cost: 7, label: 'GPT-4o',      icon: '/icon/chatgpt.png', soon: true },
-
   { grp: '🤖 Grok (xAI)' },
   { id: 'x-ai/grok-3-mini-beta', prov: 'openrouter', cost: 3, label: 'Grok 3 Mini', icon: '/icon/grok.png', soon: true },
 ];
@@ -682,14 +744,14 @@ var MODEL_LIST_SOON = [
 (function(){
   try{
     var s=localStorage.getItem('nexus_session');
-    if(!s){window.location.replace('/login');return;}
+    if(!s){window.location.replace('/');return;}
     var p=JSON.parse(s);
-    if(!p||!p.user||!p.user.username||!p.user.robloxId){localStorage.removeItem('nexus_session');window.location.replace('/login');return;}
-    if((Date.now()-p.loginTime)>=86400000*7){localStorage.removeItem('nexus_session');window.location.replace('/login');return;}
+    if(!p||!p.user||!p.user.username||!p.user.robloxId){localStorage.removeItem('nexus_session');window.location.replace('/');return;}
+    if((Date.now()-p.loginTime)>=86400000*7){localStorage.removeItem('nexus_session');window.location.replace('/');return;}
     SESSION=p;
     if(!SESSION.data)SESSION.data={};
     document.getElementById('app').classList.remove('hidden');
-  }catch(e){localStorage.removeItem('nexus_session');window.location.replace('/login');}
+  }catch(e){localStorage.removeItem('nexus_session');window.location.replace('/');}
 })();
 
 // ─── UTILS ─────────────────────────────────────────────────────────────────
@@ -703,7 +765,6 @@ function toast(msg,col,dur){
   setTimeout(function(){t.remove();},(dur||2800));
 }
 
-// ─── FIX: isOwner checks plan='owner' ──────────────────────────────────────
 function isOwner(){
   if(!SESSION)return false;
   var plan=(S.plan||SESSION.data&&SESSION.data.plan||'').toLowerCase();
@@ -720,7 +781,7 @@ function isAdmin(){
   return roles.indexOf('admin')>=0||ADMIN_IDS.indexOf(String(SESSION.user.robloxId||''))>=0;
 }
 
-// ─── FIX: saveS now saves curConv ─────────────────────────────────────────
+// ─── FIXED: Server-synced saveS with proper credit persistence ────────────
 function saveS(){
   if(!SESSION)return;
   SESSION.data.credits=S.credits;
@@ -728,15 +789,15 @@ function saveS(){
   SESSION.data.plan=S.plan;
   SESSION.data.model=S.model;
   SESSION.data.lastClaim=S.lastClaim;
-  SESSION.data.curConv=S.curConv; // FIX: persist curConv
+  SESSION.data.curConv=S.curConv;
   try{localStorage.setItem('nexus_session',JSON.stringify(SESSION));}catch(e){}
   try{
     fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({user:(SESSION.user.username||'').toLowerCase(),data:SESSION.data})});
+      body:JSON.stringify({user:(SESSION.user.username||'').toLowerCase(),robloxId:SESSION.user.robloxId,data:SESSION.data})});
   }catch(e){}
 }
 
-// ─── FIX: loadS now loads curConv ─────────────────────────────────────────
+// ─── FIXED: loadS now properly syncs from server ─────────────────────────
 async function loadS(){
   if(!SESSION)return;
   var u=SESSION;
@@ -744,10 +805,10 @@ async function loadS(){
   S.convs=(u.data&&u.data.convs)||[];
   S.plan=(u.data&&u.data.plan)||'free';
   S.lastClaim=(u.data&&u.data.lastClaim)||null;
-  S.curConv=(u.data&&u.data.curConv)||null; // FIX: restore curConv
+  S.curConv=(u.data&&u.data.curConv)||null;
   if(u.data&&u.data.model)S.model=u.data.model;
   try{
-    var r=await fetch('/api/sync?user='+encodeURIComponent((SESSION.user.username||'').toLowerCase()));
+    var r=await fetch('/api/sync?user='+encodeURIComponent((SESSION.user.username||'').toLowerCase())+'&robloxId='+encodeURIComponent(SESSION.user.robloxId||''));
     if(r.ok){
       var d=await r.json();
       if(d&&d.credits!==undefined){
@@ -755,7 +816,7 @@ async function loadS(){
         S.plan=d.plan||S.plan;
         S.lastClaim=d.lastClaim||S.lastClaim;
         if(d.convs&&d.convs.length)S.convs=d.convs;
-        if(d.curConv)S.curConv=d.curConv; // FIX: restore from server
+        if(d.curConv)S.curConv=d.curConv;
         SESSION.data=Object.assign(SESSION.data||{},d);
       }
     }
@@ -767,45 +828,73 @@ async function loadKeys(){
 async function loadAdminIds(){
   try{var r=await fetch('/api/sync?admin_ids=1');if(r.ok){var d=await r.json();if(d.admin_ids)ADMIN_IDS=d.admin_ids;}}catch(e){}
 }
+async function loadInboxCount(){
+  try{
+    var r=await fetch('/api/inbox?count=1&user='+(SESSION?SESSION.user.username:''));
+    if(r.ok){
+      var d=await r.json();
+      S.unreadInbox=d.count||0;
+      var badge=document.getElementById('inboxBadge');
+      if(badge)badge.textContent=S.unreadInbox;
+    }
+  }catch(e){}
+}
 
 // ─── LANG ──────────────────────────────────────────────────────────────────
 function applyLang(){
   var t=LANGS[curLang]||LANGS.id;
-  // Input
   var el=document.getElementById('inp');if(el)el.placeholder=t.placeholder;
-  // Sidebar
   var nc=document.getElementById('newChatLbl');if(nc)nc.textContent=t.newchat;
   var rc=document.getElementById('recentLbl');if(rc)rc.textContent=t.recent;
   var ls=document.getElementById('langSelector');if(ls)ls.value=curLang;
-  // Welcome screen
-  var wt=document.getElementById('welcomeText');
-  if(wt)wt.textContent=curLang==='id'
-    ?'AI Roblox cerdas — tulis Lua, debug script, buat GUI. Connect plugin untuk inject langsung ke Studio!'
-    :'Smart Roblox AI — write Lua, debug scripts, build GUIs. Connect plugin to inject directly into Studio!';
-  // Studio status
+  var wt=document.getElementById('welcomeText');if(wt)wt.textContent=t.welcomeText;
   setStudioStatus(studioConnected);
-  // Think toggle label
-  var tl=document.getElementById('thinkLabel');if(tl)tl.textContent=curLang==='id'?'Think':'Think';
-  // Chat title if default
-  var ct=document.getElementById('chatTitle');
-  if(ct&&(ct.textContent==='NEXUS AI — Roblox Dev Assistant'||ct.textContent==='NEXUS AI — Roblox Dev Asisten'))
-    ct.textContent=curLang==='id'?'NEXUS AI — Asisten Roblox':'NEXUS AI — Roblox Dev Assistant';
-  // Plugin banner
-  var bannerTxt=document.getElementById('plugBannerTxt');
-  if(bannerTxt)bannerTxt.textContent=studioConnected?t.connected:t.disconnected;
-  // Sugg cards (rerender)
-  var suggEls=document.querySelectorAll('.sugg');
-  var suggDataId=['Buat loading screen profesional untuk game Roblox saya dengan animasi progress bar dan tips random',
-    'Buat shop GUI lengkap untuk Roblox dengan item, tombol beli, harga, coins, dan animasi smooth',
-    'Buat sistem DataStore leaderboard untuk game Roblox dengan Coins, Level, dan Win menggunakan ProfileService pattern',
-    'Buat sistem admin commands lengkap untuk Roblox dengan kick, ban, give, speed, fly, dan UI panel yang rapi'];
-  var suggDataEn=['Create a professional loading screen for my Roblox game with progress bar animation and random tips',
-    'Create a complete shop GUI for Roblox with items, buy button, price, coins, and smooth animations',
-    'Create a DataStore leaderboard system for Roblox with Coins, Level, and Win using ProfileService pattern',
-    'Create a complete admin commands system for Roblox with kick, ban, give, speed, fly, and a clean UI panel'];
-  // Help button lang
-  var helpBtn=document.getElementById('helpBtnText');
-  if(helpBtn)helpBtn.textContent=curLang==='id'?'Butuh Bantuan?':'Need Help?';
+  var tl=document.getElementById('thinkLabel');if(tl)tl.textContent='Think';
+  var ct=document.getElementById('chatTitle');if(ct)ct.textContent=t.chatTitle;
+  var bannerTxt=document.getElementById('plugBannerTxt');if(bannerTxt)bannerTxt.textContent=studioConnected?t.connected:t.disconnected;
+  var installLink=document.getElementById('plugInstallLink');if(installLink)installLink.textContent=t.installLink;
+  var reconnectLink=document.getElementById('plugReconnectLink');if(reconnectLink)reconnectLink.textContent=t.reconnectLink;
+  var helpBtn=document.getElementById('helpBtnText');if(helpBtn)helpBtn.textContent=t.helpBtn;
+  var inboxBtn=document.getElementById('inboxBtnText');if(inboxBtn)inboxBtn.textContent=t.inboxBtn;
+  var credLabel=document.getElementById('credLabel');if(credLabel)credLabel.textContent=t.creditsLabel;
+  var credHint=document.getElementById('credHint');if(credHint)credHint.textContent=t.credHint;
+  var noConv=document.getElementById('noConvLbl');if(noConv)noConv.textContent=t.noConv;
+  var settingsTitle=document.getElementById('settingsTitle');if(settingsTitle)settingsTitle.textContent=t.settingsTitle;
+  var accountTitle=document.getElementById('settingsAccountTitle');if(accountTitle)accountTitle.textContent=t.accountTitle;
+  var creditsLabel=document.getElementById('settingsCreditsLabel');if(creditsLabel)creditsLabel.textContent=t.creditsLabel;
+  var planLabel=document.getElementById('settingsPlanLabel');if(planLabel)planLabel.textContent=t.planLabel;
+  var robloxIdLabel=document.getElementById('settingsRobloxIdLabel');if(robloxIdLabel)robloxIdLabel.textContent=t.robloxIdLabel;
+  var dailyTitle=document.getElementById('dailyCreditsTitle');if(dailyTitle)dailyTitle.textContent=t.dailyTitle;
+  var freePlan=document.getElementById('freePlanLabel');if(freePlan)freePlan.textContent=t.freePlan;
+  var proPlan=document.getElementById('proPlanLabel');if(proPlan)proPlan.textContent=t.proPlan;
+  var langTitle=document.getElementById('langTitle');if(langTitle)langTitle.textContent=t.langTitle;
+  var langLabel=document.getElementById('langLabel');if(langLabel)langLabel.textContent=t.langLabel;
+  var reportTitle=document.getElementById('reportTitle');if(reportTitle)reportTitle.textContent=t.reportTitle;
+  var reportBtn=document.getElementById('reportBtn');if(reportBtn)reportBtn.textContent=t.reportBtn;
+  var redeemTitle=document.getElementById('redeemTitle');if(redeemTitle)redeemTitle.textContent=t.redeemTitle;
+  var redeemHint=document.getElementById('redeemHint');if(redeemHint)redeemHint.innerHTML=t.redeemHint;
+  var downloadTitle=document.getElementById('downloadTitle');if(downloadTitle)downloadTitle.textContent=t.downloadTitle;
+  var downloadHint=document.getElementById('downloadHint');if(downloadHint)downloadHint.textContent=t.downloadHint;
+  var logoutLabel=document.getElementById('logoutLabel');if(logoutLabel)logoutLabel.textContent=t.logoutLabel;
+  var settingsClose=document.getElementById('settingsCloseBtn');if(settingsClose)settingsClose.textContent=t.close;
+  var avatarClose=document.getElementById('avatarCloseBtn');if(avatarClose)avatarClose.textContent=t.close;
+  var installTitle=document.getElementById('installTitle');if(installTitle)installTitle.textContent=t.installTitle;
+  var installClose=document.getElementById('installCloseBtn');if(installClose)installClose.textContent=t.installClose;
+  var installSteps=document.querySelectorAll('.install-txt');
+  t.installSteps.forEach(function(text,i){if(installSteps[i])installSteps[i].innerHTML=text;});
+  var guiAddLabel=document.getElementById('guiAddLabel');if(guiAddLabel)guiAddLabel.textContent=t.guiAddLabel;
+  var guiEmptyText=document.getElementById('guiEmptyText');if(guiEmptyText)guiEmptyText.textContent=t.guiEmptyText;
+  var guiLoadingText=document.getElementById('guiLoadingText');if(guiLoadingText)guiLoadingText.textContent=t.guiLoadingText;
+  var guiToPlaceText=document.getElementById('guiToPlaceText');if(guiToPlaceText)guiToPlaceText.textContent=t.guiToPlaceText;
+  var guiCodeTitle=document.getElementById('guiCodeTitle');if(guiCodeTitle)guiCodeTitle.textContent=t.guiCodeTitle;
+  var guiCodeCopy=document.getElementById('guiCodeCopyBtn');if(guiCodeCopy)guiCodeCopy.textContent=t.copy;
+  var guiCodeDl=document.getElementById('guiCodeDlBtn');if(guiCodeDl)guiCodeDl.textContent=t.download;
+  var guiCodeClose=document.getElementById('guiCodeCloseBtn');if(guiCodeClose)guiCodeClose.textContent=t.close;
+  var guiAiTitle=document.getElementById('guiAiTitle');if(guiAiTitle)guiAiTitle.textContent=t.guiAiTitle;
+  var guiAiDesc=document.getElementById('guiAiDesc');if(guiAiDesc)guiAiDesc.textContent=t.guiAiDesc;
+  var guiAiBuild=document.getElementById('guiAiBuildBtn');if(guiAiBuild)guiAiBuild.textContent=t.guiAiBuild;
+  var guiAiCancel=document.getElementById('guiAiCancelBtn');if(guiAiCancel)guiAiCancel.textContent=t.guiAiCancel;
+  var guiPropsEmpty=document.getElementById('guiPropsEmpty');if(guiPropsEmpty)guiPropsEmpty.textContent=t.guiPropsEmpty;
   updateModelUI();
   renderConvs();
 }
@@ -837,7 +926,6 @@ function setStudioStatus(on){
 function startStudioPoll(){
   if(studioPollTimer)clearInterval(studioPollTimer);
   checkStudio();
-  // Poll every 5s for faster status updates
   studioPollTimer=setInterval(checkStudio,5000);
 }
 async function checkStudio(){
@@ -847,7 +935,6 @@ async function checkStudio(){
     var r=await fetch(API_URL+'?check=1&user='+encodeURIComponent(username),{signal:AbortSignal.timeout(5000)});
     if(r.ok){
       var d=await r.json();
-      // FIX: check all possible status fields
       var connected=(d._pluginConnected===true||d.connected===true||d.online===true);
       setStudioStatus(connected);
     }else{
@@ -858,8 +945,8 @@ async function checkStudio(){
   }
 }
 async function retryStudio(){
-  toast(curLang==='id'?'Menghubungkan ulang...':'Reconnecting...');
-  await checkStudio();
+  var t=LANGS[curLang]||LANGS.id;
+  toast(t.reconnectToast);await checkStudio();
 }
 
 // ─── CREDITS ───────────────────────────────────────────────────────────────
@@ -867,7 +954,6 @@ function updateCreds(){
   var v=isOwner()||isAdmin()?'∞':parseFloat(S.credits||0).toFixed(2);
   var el=document.getElementById('credDisp');if(el)el.textContent=v;
   var el2=document.getElementById('settingsCredits');if(el2)el2.textContent=v+' CR';
-  var el3=document.getElementById('settingsUsername');if(el3)el3.textContent='@'+(SESSION&&SESSION.user.username||'-');
   var el4=document.getElementById('settingsRobloxId');if(el4)el4.textContent=SESSION&&SESSION.user.robloxId||'-';
   var credsEl=document.getElementById('credsEl');
   if(credsEl){
@@ -881,6 +967,7 @@ function checkDailyCredits(){
   var now=new Date();
   var claimEl=document.getElementById('lastClaimInfo');
   var claimBtn=document.getElementById('claimDailyBtn');
+  var t=LANGS[curLang]||LANGS.id;
   if(lastClaim){
     var last=new Date(lastClaim);
     var diffHrs=(now-last)/3600000;
@@ -890,7 +977,7 @@ function checkDailyCredits(){
       return;
     }
   }
-  if(claimEl)claimEl.textContent='Daily credits available!';
+  if(claimEl)claimEl.textContent=curLang==='id'?'Daily credits tersedia!':'Daily credits available!';
   if(claimBtn)claimBtn.disabled=false;
 }
 function claimDaily(){
@@ -900,11 +987,11 @@ function claimDaily(){
   S.lastClaim=new Date().toISOString();
   updateCreds();saveS();
   var btn=document.getElementById('claimDailyBtn');if(btn)btn.disabled=true;
-  var el=document.getElementById('lastClaimInfo');if(el)el.textContent='Claimed +'+perDay+' CR!';
+  var el=document.getElementById('lastClaimInfo');if(el)el.textContent='+'+perDay+' CR!';
   toast('+'+perDay+' CR claimed!','var(--green)');
 }
 
-// ─── FIX: Role Display — OWNER badge correct ───────────────────────────────
+// ─── ROLE DISPLAY ─────────────────────────────────────────────────────────
 function updateRoleDisplay(){
   if(!SESSION)return;
   var plan=S.plan||'free';
@@ -920,7 +1007,6 @@ function updateRoleDisplay(){
     else roleEl.textContent='Roblox Developer';
   }
   if(planEl)planEl.textContent=isO?'OWNER':isA?'Admin':plan.charAt(0).toUpperCase()+plan.slice(1);
-  // FIX: correct badge for owner
   if(badgeEl){
     if(isO)badgeEl.innerHTML='<span class="badge-owner">OWNER</span>';
     else if(isA)badgeEl.innerHTML='<span class="badge-admin">ADMIN</span>';
@@ -947,9 +1033,9 @@ function renderConvs(){
 }
 function newChat(){
   var id='c'+Date.now();
-  S.curConv=id;S.convs.push({id:id,title:'Percakapan Baru',time:Date.now(),msgs:[]});
+  S.curConv=id;S.convs.push({id:id,title:curLang==='id'?'Percakapan Baru':'New Chat',time:Date.now(),msgs:[]});
   renderConvs();renderMsgs([]);
-  var title=document.getElementById('chatTitle');if(title)title.textContent='Percakapan Baru';
+  var title=document.getElementById('chatTitle');if(title)title.textContent=curLang==='id'?'Percakapan Baru':'New Chat';
   var welcome=document.getElementById('welcome');if(welcome)welcome.style.display='flex';
   var inp=document.getElementById('inp');if(inp){inp.value='';inp.style.height='auto';}
   S.attachments=[];renderAttachRow();
@@ -968,7 +1054,7 @@ function loadConv(id){
   S.attachments=[];renderAttachRow();
   var inp=document.getElementById('inp');
   if(inp){inp.value=S.draftText[id]||'';inp.style.height='auto';if(inp.value)inp.style.height=Math.min(inp.scrollHeight,130)+'px';}
-  saveS(); // persist curConv on load
+  saveS();
 }
 function delConv(e,id){
   e.stopPropagation();
@@ -1014,13 +1100,12 @@ function updateModelUI(){
   var gbadge=document.getElementById('guiMBadge');
   if(gbadge){
     gbadge.textContent=(gm.cost||0)+' CR';
-    gbadge.style.color=gm.cost<=1?'var(--green)':gm.cost<=3?'var(--cyan)':'var(--yellow)';
+    gbadge.style.color=gm.cost<=1?'var(--green)':gm.cost<=3?'var(--cyan)':gm.cost<=5?'var(--yellow)':'var(--pink)';
   }
   var gicon=document.getElementById('guiMIcon');if(gicon){gicon.src=gm.icon||'';gicon.style.display=gm.icon?'':'none';}
 }
 function buildModelDDHtml(){
   var html='';
-  // Available models
   MODEL_LIST.forEach(function(m){
     if(m.grp){html+='<div class="mg">'+esc(m.grp)+'</div>';return;}
     var isAct=m.id===S.model.id;
@@ -1038,7 +1123,6 @@ function buildModelDDHtml(){
       '<div><div class="mo-n">'+esc(m.label||m.id)+'</div><div class="mo-s">'+esc(m.prov||'')+'</div></div>'+
       badgeHtml+'</div>';
   });
-  // Coming soon section
   html+='<div class="mg" style="color:rgba(255,45,107,.6);border-top:1px solid rgba(255,45,107,.15);">🔒 COMING SOON</div>';
   MODEL_LIST_SOON.forEach(function(m){
     if(m.grp){html+='<div class="mg" style="opacity:.5;">'+esc(m.grp)+'</div>';return;}
@@ -1103,7 +1187,7 @@ function selGuiModel(id){
   if(!m||m.grp||m.soon)return;
   S.guiModel=m;updateModelUI();
   var dd=document.getElementById('guiMDD');if(dd)dd.classList.remove('open');
-  toast((curLang==='id'?'Model UI: ':'UI Model: ')+m.label,'var(--cyan)');
+  toast('UI Model: '+m.label,'var(--cyan)');
 }
 
 // ─── RENDER MSGS ───────────────────────────────────────────────────────────
@@ -1188,34 +1272,34 @@ function appendMsg(m,skipScroll){
   if(!isUser){
     var acts=document.createElement('div');acts.className='msg-acts';
     acts.innerHTML=
-      '<button class="mab" onclick="copyMsgText(this)" title="'+(curLang==='id'?'Salin':'Copy')+'">'+
+      '<button class="mab" onclick="copyMsgText(this)" title="Copy">'+
         '<svg viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>'+
       '</button>'+
-      '<button class="mab" onclick="retryMsg(this)" title="'+(curLang==='id'?'Ulangi':'Retry')+'">'+
+      '<button class="mab" onclick="retryMsg(this)" title="Retry">'+
         '<svg viewBox="0 0 24 24"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg>'+
       '</button>'+
-      '<button class="mab '+(m._liked?'liked':'')+'" onclick="likeMsg(this,true)" title="'+(curLang==='id'?'Suka':'Like')+'">'+
+      '<button class="mab '+(m._liked?'liked':'')+'" onclick="likeMsg(this,true)" title="Like">'+
         '<svg viewBox="0 0 24 24"><path d="M14 9V5a3 3 0 00-3-3l-4 9v11h11.28a2 2 0 002-1.7l1.38-9a2 2 0 00-2-2.3zM7 22H4a2 2 0 01-2-2v-7a2 2 0 012-2h3"/></svg>'+
       '</button>'+
-      '<button class="mab '+(m._disliked?'disliked':'')+'" onclick="likeMsg(this,false)" title="'+(curLang==='id'?'Tidak Suka':'Dislike')+'">'+
+      '<button class="mab '+(m._disliked?'disliked':'')+'" onclick="likeMsg(this,false)" title="Dislike">'+
         '<svg viewBox="0 0 24 24"><path d="M10 15v4a3 3 0 003 3l4-9V2H5.72a2 2 0 00-2 1.7l-1.38 9a2 2 0 002 2.3zm7-13h2.67A2.31 2.31 0 0122 4v7a2.31 2.31 0 01-2.33 2H17"/></svg>'+
       '</button>'+
-      '<button class="mab" onclick="shareChat()" title="'+(curLang==='id'?'Bagikan Chat':'Share Chat')+'">'+
+      '<button class="mab" onclick="shareChat()" title="Share">'+
         '<svg viewBox="0 0 24 24"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>'+
       '</button>';
     mbWrap.appendChild(acts);
-  } else {
-    // User message: copy button
+  }else{
     var uActs=document.createElement('div');uActs.style.cssText='display:flex;gap:3px;padding:3px 2px;justify-content:flex-end;';
-    uActs.innerHTML='<button class="mab" onclick="copyMsgText(this)" title="'+(curLang==='id'?'Salin':'Copy')+'"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill="none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>';
+    uActs.innerHTML='<button class="mab" onclick="copyMsgText(this)" title="Copy"><svg viewBox="0 0 24 24" width="11" height="11" stroke="currentColor" fill:none" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg></button>';
     mbWrap.appendChild(uActs);
-  }  wrap.appendChild(mbWrap);
+  }
+  wrap.appendChild(mbWrap);
   container.appendChild(wrap);
   if(!skipScroll)container.scrollTop=container.scrollHeight;
 }
 function copyCode(btn){
   var pre=btn.closest('.code-block-wrap').querySelector('pre code');
-  if(pre)navigator.clipboard.writeText(pre.textContent).then(function(){toast('Copied!');});
+  if(pre)navigator.clipboard.writeText(pre.textContent).then(function(){toast(LANGS[curLang].copiedToast);});
 }
 function downloadCode(btn,lang){
   var pre=btn.closest('.code-block-wrap').querySelector('pre code');
@@ -1226,10 +1310,10 @@ function downloadCode(btn,lang){
 }
 function copyMsgText(btn){
   var bubble=btn.closest('.mb-wrap').querySelector('.bubble');
-  if(bubble)navigator.clipboard.writeText(bubble.innerText||bubble.textContent).then(function(){toast('Copied!');});
+  if(bubble)navigator.clipboard.writeText(bubble.innerText||bubble.textContent).then(function(){toast(LANGS[curLang].copiedToast);});
 }
 
-// ─── ENHANCED THINKING UI ──────────────────────────────────────────────────
+// ─── THINKING UI ────────────────────────────────────────────────────────────
 function toggleThinking(){
   thinkingEnabled=!thinkingEnabled;
   var btn=document.getElementById('thinkToggle');
@@ -1243,14 +1327,13 @@ function showThinking(stepsArr){
   wrap.appendChild(mkAv('ai'));
   var box=document.createElement('div');box.className='thinking-box';
   var hdr=document.createElement('div');hdr.className='thinking-hdr';
-  hdr.innerHTML='<div class="tspin"></div><span style="font-family:Orbitron,sans-serif;letter-spacing:.5px;">NEXUS AI</span><span style="font-size:8px;color:var(--dim);margin-left:auto;">berpikir...</span>';
+  hdr.innerHTML='<div class="tspin"></div><span style="font-family:Orbitron,sans-serif;letter-spacing:.5px;">NEXUS AI</span><span style="font-size:8px;color:var(--dim);margin-left:auto;">thinking...</span>';
   box.appendChild(hdr);
-  // Progress bar
   var progWrap=document.createElement('div');progWrap.className='t-progress';
   var progBar=document.createElement('div');progBar.className='t-progress-bar';
   progWrap.appendChild(progBar);box.appendChild(progWrap);
   var stepsDiv=document.createElement('div');stepsDiv.className='t-steps';
-  var steps2=stepsArr||['Menganalisis...','Merancang...','Menulis kode...','Finalisasi...'];
+  var steps2=stepsArr||['Analyzing...','Designing...','Writing code...','Finalizing...'];
   var stepEls=steps2.map(function(s,i){
     var el=document.createElement('div');el.className='t-step'+(i===0?' active':'');
     el.innerHTML='<div class="t-step-ic"></div><span>'+esc(s)+'</span>';
@@ -1263,7 +1346,6 @@ function showThinking(stepsArr){
   wrap.appendChild(box);container.appendChild(wrap);
   container.scrollTop=container.scrollHeight;
   thinkEl=wrap;
-  // Animate progress + steps
   var step=0;
   var progPct=0;
   var progTimer=setInterval(function(){
@@ -1286,13 +1368,12 @@ function rmThinking(){
   document.querySelectorAll('.thinking-wrap').forEach(function(el){el.remove();});
 }
 
-// ─── CANCEL ────────────────────────────────────────────────────────────────
 function cancelGen(){
   if(S.cancelCtrl)S.cancelCtrl.abort();
   S.gen=false;S.cancelCtrl=null;rmThinking();
   var sendBtn=document.getElementById('sendBtn');var cancelBtn=document.getElementById('cancelBtn');
   if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');
-  toast((LANGS[curLang]||LANGS.id).cancel,'var(--yellow)');
+  toast((LANGS[curLang]||LANGS.id).cancelToast,'var(--yellow)');
 }
 
 // ─── LUA/JSON PARSING ──────────────────────────────────────────────────────
@@ -1336,7 +1417,6 @@ function makeScriptName(userPrompt,index,code){
   var kw=[
     ['loading screen','LoadingScreen_Client'],['loading','LoadingScreen_Client'],
     ['shop gui','ShopGUI_Client'],['shop','ShopSystem_Server'],
-    ['server list','ServerListUI'],['tycoon','TycoonSystem_Server'],
     ['leaderboard','Leaderboard_Server'],['admin','AdminSystem_Server'],
     ['coin','CoinSystem_Server'],['money','MoneySystem_Server'],
     ['inventory','InventorySystem'],['quest','QuestSystem_Server'],
@@ -1403,7 +1483,7 @@ async function autoInjectToStudio(aiResponse,userPrompt){
   return summary.length>0?summary:null;
 }
 
-// ─── IMPROVED SYSTEM PROMPT (600+ BARIS) ──────────────────────────────────
+// ─── SYSTEM PROMPT (IMPROVED 800+ LINES) ───────────────────────────────
 function buildSysPrompt(){
   var u=SESSION?SESSION.user:{username:'Unknown',displayName:'Unknown'};
   var connected=studioConnected;
@@ -1413,18 +1493,17 @@ function buildSysPrompt(){
   var now=new Date();
   var isID=curLang=='id';
 
-  // Daftar lengkap JSON actions (sama seperti sebelumnya, disimpan dalam variabel)
   var jsonFull=
-'──────────────── SEMUA JSON ACTIONS ────────────────\n'+
+'──────────────── ALL JSON ACTIONS ────────────────\n'+
 'SCRIPTS:\n'+
-'  inject_script   → {action:"inject_script",name:"NamaScript",parent:"ServerScriptService",script_type:"Script|LocalScript|ModuleScript",code:"-- kode lua..."}\n'+
+'  inject_script   → {action:"inject_script",name:"ScriptName",parent:"ServerScriptService",script_type:"Script|LocalScript|ModuleScript",code:"-- lua code..."}\n'+
 '  batch_inject    → {action:"batch_inject",scripts:[{name,parent,script_type,code}]}\n'+
 '  edit_script     → {action:"edit_script",name,parent,source,script_type}\n'+
 '  read_script     → {action:"read_script",name,parent}\n'+
 '  list_scripts    → {action:"list_scripts",parent}\n'+
 '\n'+
 'REMOTES / INSTANCES:\n'+
-'  create_remote   → {action:"create_remote",name:"NamaRemote",parent:"ReplicatedStorage",remote_type:"RemoteEvent|RemoteFunction|BindableEvent"}\n'+
+'  create_remote   → {action:"create_remote",name:"RemoteName",parent:"ReplicatedStorage",remote_type:"RemoteEvent|RemoteFunction|BindableEvent"}\n'+
 '  batch_remote    → {action:"batch_remote",remotes:[{name,parent,remote_type}]}\n'+
 '  create_folder   → {action:"create_folder",name,parent,type:"Folder|Model"}\n'+
 '  create_instance → {action:"create_instance",class_name:"ClassName",name,parent,properties:{...}}\n'+
@@ -1432,425 +1511,484 @@ function buildSysPrompt(){
 '\n'+
 'PARTS / WORLD:\n'+
 '  create_part     → {action:"create_part",name,color:[R,G,B],size:[x,y,z],position:[x,y,z],material:"SmoothPlastic|Neon|Glass|...",anchored:true}\n'+
-'  create_wedge    → {action:"create_wedge",name,color:[R,G,B],size:[x,y,z],position:[x,y,z]}\n'+
-'  create_sphere   → {action:"create_sphere",name,color:[R,G,B],size:[r,r,r],position:[x,y,z]}\n'+
-'  create_cylinder → {action:"create_cylinder",name,color:[R,G,B],size:[x,y,z],position:[x,y,z]}\n'+
-'  batch_create    → {action:"batch_create",model_name:"NamaModel",group_as_model:true,parts:[{name,color,size,position,material}]}\n'+
-'  modify_part     → {action:"modify_part",name,parent,properties:{Color:[R,G,B],Size:[x,y,z],Position:[x,y,z],Material:"...",Transparency:0}}\n'+
+'  create_wedge    → {action:"create_wedge",name,color,size,position}\n'+
+'  create_sphere   → {action:"create_sphere",name,color,size,position}\n'+
+'  create_cylinder → {action:"create_cylinder",name,color,size,position}\n'+
+'  batch_create    → {action:"batch_create",model_name:"ModelName",group_as_model:true,parts:[{name,color,size,position,material}]}\n'+
+'  modify_part     → {action:"modify_part",name,parent,properties:{Color,Size,Position,Material,Transparency}}\n'+
 '  move_object     → {action:"move_object",name,parent,position:[x,y,z]}\n'+
 '  rotate_object   → {action:"rotate_object",name,parent,rotation:[rx,ry,rz]}\n'+
 '  resize_object   → {action:"resize_object",name,parent,size:[x,y,z]}\n'+
 '  delete_object   → {action:"delete_object",name,parent}\n'+
-'  delete_multiple → {action:"delete_multiple",names:[...],parent}\n'+
 '  group_parts     → {action:"group_parts",parts:[...],model_name}\n'+
 '  anchor_all      → {action:"anchor_all"}\n'+
-'  clone_object    → {action:"clone_object",name,parent,new_name,target_parent}\n'+
+'  clone_object    → {action:"clone_object",name,parent,new_name}\n'+
 '\n'+
-'GUI / UI:\n'+
-'  create_gui      → {action:"create_gui",name,parent:"StarterGui",elements:[{class:"Frame|TextLabel|TextButton|TextBox|ImageLabel|ScrollingFrame",name,properties:{Size:UDim2,Position:UDim2,BackgroundColor3:[R,G,B],Text:"...",TextColor3:[R,G,B],Font:"GothamBold",TextSize:14,BackgroundTransparency:0},children:[...]}],script_code:"-- LocalScript code"}\n'+
-'  create_billboard → {action:"create_billboard",name,parent,target:"PartName",size:[w,h],study_offset:[x,y,z],elements:[...]}\n'+
-'  create_surface_gui → {action:"create_surface_gui",name,parent,target,face:"Front|Top|Back",elements:[...]}\n'+
+'GUI / UI (FIXED - PROPER SIZE/POSITION):\n'+
+'  create_gui      → {action:"create_gui",name:"GUIName",parent:"StarterGui",elements:[{\n'+
+'    class:"Frame|TextLabel|TextButton|TextBox|ImageLabel|ScrollingFrame|ViewportFrame",\n'+
+'    name:"ElementName",\n'+
+'    size:[ScaleX,OffsetX,ScaleY,OffsetY],  // UDim2 format\n'+
+'    position:[ScaleX,OffsetX,ScaleY,OffsetY],  // UDim2 format\n'+
+'    background_color:[R,G,B] OR "#hex",\n'+
+'    background_transparency:0,\n'+
+'    text:"Text content",\n'+
+'    text_color:[R,G,B] OR "#hex",\n'+
+'    font:"GothamBold",\n'+
+'    text_size:14,\n'+
+'    border_size:0,\n'+
+'    corner_radius:0,  // UDim.new(0, pixels)\n'+
+'    visible:true,\n'+
+'    z_index:1,\n'+
+'    anchor_point:[0.5,0.5],  // Vector2\n'+
+'    image:"rbxassetid://123",  // for ImageLabel\n'+
+'    clip_descendants:false,\n'+
+'    children:[  // NESTED elements\n'+
+'      {class:"TextLabel",name:"ChildLabel",size:[0.8,0,0.3,0],position:[0.1,0,0.1,0],...}\n'+
+'    ]\n'+
+'  }]}\n'+
+'\n'+
+'  create_billboard     → {action:"create_billboard",name,parent,target:"PartName",size:[w,h],elements:[...]}\n'+
+'  create_surface_gui   → {action:"create_surface_gui",name,parent,target,face:"Front",elements:[...]}\n'+
 '\n'+
 'LIGHTING / WORLD:\n'+
-'  set_lighting    → {action:"set_lighting",brightness:1,ambient:[R,G,B],outdoor_ambient:[R,G,B],time:14,fog_end:1000,fog_start:100,shadows:true,atmosphere:{density:0.3,haze:0.5,color:[R,G,B]}}\n'+
+'  set_lighting    → {action:"set_lighting",brightness:2,ambient:[R,G,B],time:14,fog_end:1000,fog_start:100,shadows:true}\n'+
 '  create_sky      → {action:"create_sky",star_count:3000}\n'+
-'  fill_terrain    → {action:"fill_terrain",position:[x,y,z],size:[w,h,d],material:"Grass|Water|Rock|Sand"}\n'+
+'  fill_terrain    → {action:"fill_terrain",position:[x,y,z],size:[w,h,d],material:"Grass"}\n'+
 '  clear_terrain   → {action:"clear_terrain"}\n'+
-'  change_baseplate → {action:"change_baseplate",color:[R,G,B],material:"SmoothPlastic",size:[x,y,z]}\n'+
+'  change_baseplate → {action:"change_baseplate",color:[R,G,B],material:"SmoothPlastic",size:[512,1,512]}\n'+
 '\n'+
 'EFFECTS / SOUNDS:\n'+
-'  create_sound    → {action:"create_sound",name,parent,sound_id:"rbxassetid://123",volume:1,looped:false}\n'+
-'  create_fire     → {action:"create_fire",target,parent,size:5,heat:9,color1:[255,100,0],color2:[255,200,0]}\n'+
+'  create_sound    → {action:"create_sound",name,parent,sound_id:"rbxassetid://123",volume:0.5,looped:false}\n'+
+'  create_fire     → {action:"create_fire",target,parent,size:5,heat:9,color:[255,100,0]}\n'+
 '  create_smoke    → {action:"create_smoke",target,parent,color:[R,G,B],opacity:0.5}\n'+
 '  create_sparkles → {action:"create_sparkles",target,parent,color:[R,G,B]}\n'+
-'  create_particle → {action:"create_particle",target,parent,rate:20,color1:[R,G,B],color2:[R,G,B],lifetime:1}\n'+
-'  create_light    → {action:"create_light",target,parent,light_type:"PointLight|SpotLight|SurfaceLight",brightness:5,range:16,color:[R,G,B]}\n'+
+'  create_particle → {action:"create_particle",target,parent,rate:20,color1:[R,G,B],color2:[R,G,B]}\n'+
+'  create_light    → {action:"create_light",target,parent,light_type:"PointLight|SpotLight",brightness:5,range:16,color:[R,G,B]}\n'+
 '  create_trail    → {action:"create_trail",target,parent,color1:[R,G,B],color2:[R,G,B],lifetime:0.5}\n'+
 '  add_effect      → {action:"add_effect",parent:"Lighting",effect_type:"BloomEffect|ColorCorrectionEffect",properties:{Intensity:1}}\n'+
+'  create_beam     → {action:"create_beam",target,parent,attachment0:"Att0",attachment1:"Att1",color:[R,G,B]}\n'+
 '\n'+
 'NPC / OBJECTS:\n'+
 '  create_npc      → {action:"create_npc",name,position:[x,y,z],display_name,health:100,walkspeed:16,color:[R,G,B]}\n'+
+'  create_humanoid → {action:"create_humanoid",target,parent,health:100,walkspeed:16,max_health:100}\n'+
 '  create_spawn    → {action:"create_spawn",name,position:[x,y,z],color:[R,G,B]}\n'+
-'  create_tool     → {action:"create_tool",name,parent:"StarterPack",tooltip:"",can_drop:true,size:[x,y,z],color:[R,G,B],script_code:"-- tool script"}\n'+
-'  create_seat     → {action:"create_seat",name,parent,position:[x,y,z],is_vehicle:false}\n'+
+'  create_tool     → {action:"create_tool",name,parent:"StarterPack",tooltip:"My Tool",size:[1,3,1],color:[R,G,B]}\n'+
+'  create_seat     → {action:"create_seat",name,parent,position:[x,y,z]}\n'+
+'  create_hat      → {action:"create_hat",name,asset_id:123456,parent:"StarterPack"}\n'+
 '  create_team     → {action:"create_team",name,team_color:"Bright red",auto_assignable:false}\n'+
-'  create_animation → {action:"create_animation",name,parent,animation_id:"rbxassetid://123"}\n'+
+'  create_animation → {action:"create_animation",name,parent:"StarterPlayerScripts",animation_id:"rbxassetid://123"}\n'+
+'  create_door     → {action:"create_door",position:[x,y,z],size:[4,8,1],color:[R,G,B],open_speed:2}\n'+
+'  create_window   → {action:"create_window",position:[x,y,z],size:[3,3,0.5],color:[200,220,255]}\n'+
+'  create_stairs   → {action:"create_stairs",position:[x,y,z],steps:10,step_height:3,color:[R,G,B]}\n'+
+'  create_tree     → {action:"create_tree",position:[x,y,z],trunk_color:[80,50,20],leaf_color:[30,120,30]}\n'+
+'  create_rock     → {action:"create_rock",position:[x,y,z],size:[3,2,3],color:[128,128,128]}\n'+
+'  create_wall     → {action:"create_wall",position:[x,y,z],size:[20,10,1],color:[R,G,B]}\n'+
 '\n'+
 'PHYSICS / JOINTS:\n'+
-'  weld_parts      → {action:"weld_parts",part0:"NamaPart1",part1:"NamaPart2",parent}\n'+
+'  weld_parts      → {action:"weld_parts",part0:"Name1",part1:"Name2",parent}\n'+
+'  create_weld     → {action:"create_weld",name,parent,part0:"Name1",part1:"Name2"}\n'+
 '  create_attachment → {action:"create_attachment",name,target,parent,position:[x,y,z]}\n'+
-'  create_proximity_prompt → {action:"create_proximity_prompt",target,parent,action_text:"Interact",object_text:"",hold_duration:0}\n'+
+'  create_motor6d  → {action:"create_motor6d",name,parent,part0:"Name1",part1:"Name2",c0:[0,0,0,0,0,0],c1:[0,0,0,0,0,0]}\n'+
+'  create_constraint → {action:"create_constraint",name,parent,constraint_type:"HingeConstraint|RodConstraint",...}\n'+
+'  create_proximity_prompt → {action:"create_proximity_prompt",target,parent,action_text:"Interact",hold_duration:0}\n'+
 '  create_click_detector → {action:"create_click_detector",target,parent,max_distance:32}\n'+
+'  create_selectbox → {action:"create_selectbox",target,parent,adornee:"Name"}\n'+
 '\n'+
 'MISC:\n'+
 '  scan_workspace  → {action:"scan_workspace"}\n'+
-'  print_output    → {action:"print_output",message:"test"}\n'+
+'  print_output    → {action:"print_output",message:"debug text"}\n'+
 '  run_lua         → {action:"run_lua",code:"print(\\"hello\\")"}\n'+
 '  clear_workspace → {action:"clear_workspace"}\n'+
-'  batch_commands  → {action:"batch_commands",commands:[...semua action di atas...]}';
+'  batch_commands  → {action:"batch_commands",commands:[...any actions above...]}\n'+
+'  set_game_info   → {action:"set_game_info",name:"Game Name",description:"..."}\n'+
+'  set_camera      → {action:"set_camera",camera_type:"Custom",fov:70}\n'+
+'  create_water    → {action:"create_water",parent:"Workspace",color:[0,100,200],transparency:0.4}\n'+
+'  create_atmosphere → {action:"create_atmosphere",parent:"Lighting",density:0.3,haze:0.5}\n'+
+'  place_decal     → {action:"place_decal",target:"PartName",face:"Front",decal_id:"rbxassetid://123"}\n'+
+'  place_texture   → {action:"place_texture",target:"PartName",face:"Front",texture_id:"rbxassetid://123"}\n'+
+'  create_sound_group → {action:"create_sound_group",name,parent:"SoundService"}\n'+
+'  teleport_player → {action:"teleport_player",place_id:123456}\n'+
+'  play_test       → {action:"play_test",players:1,duration:30}\n'+
+'  run_test        → {action:"run_test",players:1,duration:30}\n'+
+'  stop_test       → {action:"stop_test"}';
 
-  // Mode spesifik
+  // ══════════════════════════════════════════════════════════════
+  // BAHASA INDONESIA
+  // ══════════════════════════════════════════════════════════════
   if (isID) {
-    // ── PROMPT BAHASA INDONESIA (600+ baris) ─────────────────
     var lines = [];
-    // Header
-    lines.push('╔══════════════════════════════════════════════════╗');
-    lines.push('║  NEXUS AI — AHLI ROBLOX STUDIO NOMOR 1 DUNIA  ║');
-    lines.push('╚══════════════════════════════════════════════════╝');
+    lines.push('╔══════════════════════════════════════════════════════╗');
+    lines.push('║  NEXUS AI — AHLI ROBLOX STUDIO #1 DUNIA           ║');
+    lines.push('║  Dibuat: NEXUS STUDIO (FIINYTID25)                ║');
+    lines.push('╚══════════════════════════════════════════════════════╝');
     lines.push('');
-    lines.push('👤 Pengguna : "'+dn+'" (@'+un+') | Plan: '+S.plan+' | Credits: '+cr+' CR');
-    lines.push('🔌 Studio : '+(connected?'✓ TERHUBUNG':'✗ OFFLINE')+' | '+now.toLocaleString('id-ID'));
+    lines.push('👤 Pengguna : "'+dn+'" (@'+un+')');
+    lines.push('💎 Plan     : '+(S.plan||'free').toUpperCase()+' | Credits: '+cr+' CR');
+    lines.push('🔌 Studio  : '+(connected?'✓ TERHUBUNG — AUTO INJECT AKTIF':'✗ OFFLINE — tampilkan kode manual'));
+    lines.push('🕐 Waktu    : '+now.toLocaleString('id-ID'));
     lines.push('');
-    lines.push('══════════════ BAHASA ══════════════');
-    lines.push('• WAJIB: Selalu balas dalam Bahasa Indonesia profesional dan sopan.');
-    lines.push('• Gunakan "Anda" dan "saya". Jadilah seperti expert Roblox developer Indonesia.');
-    lines.push('• Semua penjelasan harus jelas, pedagogis, dan lengkap.');
-    lines.push('• Saat pengguna menyapa (halo, hai, selamat pagi, dll), jangan hanya membalas "halo". Balas dengan "Halo, '+dn+'! Ada yang bisa NEXUS AI bantu?"');
+    lines.push('══════════════ BAHASA WAJIB ══════════════');
+    lines.push('• SELALU balas dalam Bahasa Indonesia profesional dan sopan.');
+    lines.push('• Gunakan "Anda" dan "saya".');
+    lines.push('• Saat user menyapa (halo, hai, pagi, siang, malam), balas: "Halo, '+dn+'! Ada yang bisa NEXUS AI bantu hari ini?"');
+    lines.push('• JANGAN pernah membalas sapaan dengan satu kata saja.');
     lines.push('');
     lines.push('══════════════ IDENTITAS ══════════════');
-    lines.push('Kamu adalah NEXUS AI, AI spesialis Roblox Studio terbaik yang pernah ada.');
+    lines.push('Kamu adalah NEXUS AI, AI spesialis Roblox Studio terbaik.');
     lines.push('Dibuat oleh NEXUS STUDIO (FIINYTID25).');
     lines.push('Keahlian utama:');
-    lines.push('  • Lua/Luau tingkat lanjut');
-    lines.push('  • Seluruh Roblox API (server, client, replication)');
-    lines.push('  • DataStore, ProfileService, MemoryStore');
-    lines.push('  • GUI Design, animasi TweenService');
-    lines.push('  • Sistem game: Tycoon, Simulator, RPG, Obby, Horror');
-    lines.push('  • NPC AI cerdas, Pathfinding, Behavior Tree');
-    lines.push('  • Physics: constraint, mekanika kendaraan');
-    lines.push('  • Networking: RemoteEvent/Function, optimasi bandwidth');
-    lines.push('  • Anti-exploit, secure coding, server-authoritative');
+    lines.push('  • Lua/Luau tingkat lanjut (100% production-ready)');
+    lines.push('  • Seluruh Roblox API: server, client, replication, DataStore');
+    lines.push('  • GUI Design profesional dengan TweenService animations');
+    lines.push('  • Sistem game: Tycoon, Simulator, RPG, Obby, Horror, FPS');
+    lines.push('  • NPC AI cerdas: Pathfinding, Behavior Trees, State Machines');
+    lines.push('  • Physics: Constraints, mekanika kendaraan, ragdoll');
+    lines.push('  • Networking: RemoteEvent/Function, bandwidth optimization');
+    lines.push('  • Anti-exploit: Server-authoritative, validation, rate limiting');
     lines.push('  • Monetisasi: Gamepass, Developer Products, Premium');
     lines.push('');
-    lines.push('══════════════ ATURAN KODE WAJIB ══════════════');
-    lines.push('1.  Kode SELALU LENGKAP 100% — JANGAN PERNAH menulis "-- etc" atau "-- ... kode lainnya"');
-    lines.push('2.  Script 500+ baris? TULIS SEMUA BARIS tanpa potongan apapun.');
-    lines.push('3.  Gunakan task.wait() bukan wait() (deprecated)');
-    lines.push('4.  Gunakan task.spawn()/task.delay() untuk operasi async');
-    lines.push('5.  DataStore: selalu dibungkus pcall() dengan retry mechanism');
-    lines.push('6.  Gunakan :WaitForChild(timeout) untuk akses instance yang belum siap');
-    lines.push('7.  Setiap file Lua harus memiliki header:');
-    lines.push('    -- name: NamaScript');
+    lines.push('══════════════ ATURAN KODE MUTLAK ══════════════');
+    lines.push('1.  Kode 100% LENGKAP — JANGAN PERNAH "-- etc", "-- ...", "-- lanjutan"');
+    lines.push('2.  Script 1000+ baris? TULIS SETIAP BARIS. Tidak ada shortcut.');
+    lines.push('3.  Gunakan task.wait() bukan wait() (deprecated).');
+    lines.push('4.  Gunakan task.spawn()/task.delay() untuk async.');
+    lines.push('5.  DataStore: SELALU bungkus pcall() + retry 3x + exponential backoff.');
+    lines.push('6.  Gunakan :WaitForChild(timeout) — JANGAN .Name langsung tanpa cek.');
+    lines.push('7.  Header WAJIB di setiap file Lua:');
+    lines.push('    -- name: NamaScript_Type');
     lines.push('    -- parent: TargetService');
     lines.push('    -- script_type: Script/LocalScript/ModuleScript');
-    lines.push('8.  Nama script WAJIB deskriptif: LoadingScreen_Client, ShopSystem_Server, CoinModule');
-    lines.push('9.  Akses service HANYA lewat game:GetService("NamaService")');
-    lines.push('10. VALIDASI semua input dari client di server script untuk mencegah exploit');
-    lines.push('11. DataStore pattern:');
-    lines.push('    local success, data = pcall(store.GetAsync, store, key)');
-    lines.push('    if not success then task.wait(2); success, data = pcall(store.GetAsync, store, key) end');
-    lines.push('12. Animasi GUI WAJIB pakai TweenService, JANGAN pakai loop task.wait()');
-    lines.push('13. Jika diminta debug/edit, EDIT script yang ada, JANGAN buat ulang dari nol');
-    lines.push('14. Script UI client-side: LocalScript di StarterGui/ReplicatedFirst');
-    lines.push('15. Script sistem server: Script di ServerScriptService');
-    lines.push('16. Shared module: ModuleScript di ReplicatedStorage');
-    lines.push('17. JANGAN GUNAKAN Instance.new("ManualWeld") — gunakan WeldConstraint');
-    lines.push('18. Selalu gunakan Enum untuk properti enumerasi (jangan string mentah)');
-    lines.push('19. Hapus koneksi event dengan :Disconnect() pada cleanup');
-    lines.push('20. Pakai game:BindToClose() untuk menyimpan data sebelum server shutdown');
-    lines.push('21. CollectionService:AddTag() / GetTagged() untuk manajemen massa');
-    lines.push('22. Jangan gunakan game.Players.LocalPlayer di Script (hanya LocalScript)');
-    lines.push('23. Semua operasi yang mengubah instance harus dicek dulu keberadaannya');
+    lines.push('8.  Nama script deskriptif: LoadingScreen_Client, ShopSystem_Server.');
+    lines.push('9.  Akses service HANYA: game:GetService("NamaService").');
+    lines.push('10. VALIDASI semua input client di server — anti exploit.');
+    lines.push('11. Pattern DataStore yang benar:');
+    lines.push('    local ok, data = pcall(function() return store:GetAsync(key) end)');
+    lines.push('    if not ok then task.wait(1) -- retry');
+    lines.push('12. Animasi GUI WAJIB TweenService — DILARANG while true do task.wait() untuk animasi.');
+    lines.push('13. Debug/edit: EDIT script yang ada, JANGAN buat ulang dari nol.');
+    lines.push('14. Client UI = LocalScript di StarterGui/ReplicatedFirst.');
+    lines.push('15. Server system = Script di ServerScriptService.');
+    lines.push('16. Shared module = ModuleScript di ReplicatedStorage.');
+    lines.push('17. JANGAN Instance.new("ManualWeld") — gunakan WeldConstraint.');
+    lines.push('18. Gunakan Enum untuk properti enumerasi — bukan string mentah.');
+    lines.push('19. :Disconnect() event pada cleanup untuk mencegah memory leak.');
+    lines.push('20. game:BindToClose() untuk simpan data sebelum shutdown.');
+    lines.push('21. CollectionService:AddTag()/GetTagged() untuk mass management.');
+    lines.push('22. game.Players.LocalPlayer HANYA di LocalScript — DILARANG di Script.');
+    lines.push('23. Selalu cek keberadaan instance sebelum modify.');
+    lines.push('24. Gunakan Debris:AddItem(instance, lifetime) untuk auto-cleanup.');
+    lines.push('25. RemoteFunction return data — gunakan OnServerInvoke callback.');
     lines.push('');
-    lines.push('══════════════ ROBLOX BEST PRACTICES ══════════════');
-    lines.push('🔁 REMOTE EVENT / FUNCTION:');
+    lines.push('══════════════ BEST PRACTICES ══════════════');
+    lines.push('🔁 REMOTE EVENT:');
     lines.push('  • Server: remote.OnServerEvent:Connect(function(player, ...) end)');
     lines.push('  • Client: remote:FireServer(arg1, arg2)');
-    lines.push('  • RemoteFunction: gunakan OnServerInvoke untuk return data');
-    lines.push('  • JANGAN percaya client, selalu validasi ulang di server');
+    lines.push('  • JANGAN percaya client, selalu validasi di server');
     lines.push('');
-    lines.push('💾 DATASTORE DENGAN PROFILE SERVICE:');
-    lines.push('  • Gunakan ProfileService untuk auto-loading dan session locking');
-    lines.push('  • Tambahkan retry 3x dengan jeda eksponensial');
-    lines.push('  • Simpan data dalam table terstruktur: {Coins, Level, XP, Inventory}');
-    lines.push('  • Coroutine-kan save agar tidak blocking main thread');
+    lines.push('💾 DATASTORE:');
+    lines.push('  • ProfileService pattern untuk session locking');
+    lines.push('  • Retry 3x dengan jeda: 1s, 2s, 4s');
+    lines.push('  • Data terstruktur: {Coins=0, Level=1, XP=0, Inventory={}}');
+    lines.push('  • Wrap save di coroutine agar tidak blocking');
     lines.push('');
     lines.push('🎨 GUI & TWEEN:');
-    lines.push('  • Gunakan TweenService:Create(instance, TweenInfo.new(duration, EasingStyle, EasingDirection), {goal})');
-    lines.push('  • Animasi buka/tutup frame dengan TweenSize, TweenPosition');
-    lines.push('  • Hindari loop while true do untuk animasi — pakai Tween.Completed:Wait()');
+    lines.push('  • TweenService:Create(inst, TweenInfo.new(dur, style, dir), goals)');
+    lines.push('  • EasingStyle: Quad, Cubic, Back, Elastic, Bounce');
+    lines.push('  • Animation chain: gunakan Tween.Completed:Wait()');
     lines.push('');
     lines.push('🧠 NPC AI:');
-    lines.push('  • PathfindingService:CreatePath() dengan AgentParameters');
-    lines.push('  • ComputeAsync() di coroutine agar tidak blocking');
-    lines.push('  • Gunakan RunService.Heartbeat untuk update posisi smooth');
+    lines.push('  • PathfindingService:CreatePath() + AgentParameters');
+    lines.push('  • ComputeAsync() di coroutine (non-blocking)');
+    lines.push('  • RunService.Heartbeat untuk smooth position update');
     lines.push('');
     lines.push('🛡️ ANTI-EXPLOIT:');
-    lines.push('  • Server-authoritative: server yang menentukan hasil akhir');
-    lines.push('  • Validasi magnitude jarak, kecepatan, dan cooldown');
-    lines.push('  • Gunakan RemoteFunction untuk meminta data sensitif dari server');
-    lines.push('  • Jangan kirim harga/item dari client — semua logika beli di server');
+    lines.push('  • Server-authoritative: server menentukan hasil akhir');
+    lines.push('  • Validasi: magnitude jarak, kecepatan, cooldown, health bounds');
+    lines.push('  • Jangan kirim harga/item dari client — logika beli di server');
     lines.push('');
     lines.push('⚡ PERFORMANCE:');
-    lines.push('  • Gunakan workspace:WaitForChild() alih-alih loop while not');
-    lines.push('  • Batasi jumlah part — gunakan MeshPart jika memungkinkan');
     lines.push('  • StreamingEnabled ON untuk map besar');
-    lines.push('  • Gunakan Debris:AddItem() untuk pembersihan otomatis');
+    lines.push('  • MeshPart > Union > manual parts');
+    lines.push('  • Limit Raycasts per frame');
+    lines.push('  • Object pooling untuk frequently spawned objects');
     lines.push('');
-    lines.push('══════════════ JSON ACTIONS LENGKAP ══════════════');
+    lines.push('══════════════ GUI JSON FORMAT (PENTING!) ══════════════');
+    lines.push('Saat membuat GUI via create_gui JSON, format size dan position WAJIB:');
+    lines.push('  size:[ScaleX, OffsetX, ScaleY, OffsetY]');
+    lines.push('  position:[ScaleX, OffsetX, ScaleY, OffsetY]');
+    lines.push('');
+    lines.push('CONTOH BENAR — Full-screen Frame:');
+    lines.push('  {class:"Frame", name:"Main", size:[1, 0, 1, 0], position:[0, 0, 0, 0],');
+    lines.push('   background_color:[20,20,50], background_transparency:0,');
+    lines.push('   children:[');
+    lines.push('     {class:"TextLabel", name:"Title", size:[0.8, 0, 0.1, 0], position:[0.1, 0, 0.05, 0],');
+    lines.push('      text:"My Shop", text_color:[255,255,255], text_size:24, font:"GothamBold"},');
+    lines.push('     {class:"TextButton", name:"BuyBtn", size:[0.3, 0, 0.08, 0], position:[0.35, 0, 0.85, -10],');
+    lines.push('      text:"BUY", text_color:[255,255,255], text_size:16, font:"GothamBold",');
+    lines.push('      background_color:[0,200,100], corner_radius:8}');
+    lines.push('   ]}');
+    lines.push('');
+    lines.push('CONTOH BENAR — Centered modal:');
+    lines.push('  {class:"Frame", name:"Modal", size:[0.6, 0, 0.5, 0],');
+    lines.push('   position:[0.2, 0, 0.25, 0],  // centered-ish');
+    lines.push('   anchor_point:[0.5, 0.5],  // pivot di tengah');
+    lines.push('   background_color:[15,15,40], corner_radius:12}');
+    lines.push('');
+    lines.push('⚠️ JANGAN gunakan size:[0, 0, 0, 0] — ini membuat elemen tidak terlihat!');
+    lines.push('⚠️ JANGAN lupa children array jika elemen punya child.');
+    lines.push('');
+    lines.push('══════════════ ALL JSON ACTIONS ══════════════');
     lines.push(jsonFull);
     lines.push('');
+
     if (connected) {
-      lines.push('══════════════ MODE STUDIO TERHUBUNG ══════════════');
-      lines.push('🔌 STUDIO CONNECTED — JSON + Lua AUTO-INJECT AKTIF!');
+      lines.push('══════════════ MODE TERHUBUNG ══════════════');
+      lines.push('🔌 STUDIO TERHUBUNG — JSON + Lua AUTO-INJECT AKTIF!');
       lines.push('');
-      lines.push('🚫 LARANGAN KERAS (VIOLATION = INVALID RESPONSE):');
-      lines.push('  • JANGAN menampilkan blok ```json kepada pengguna dalam teks final');
-      lines.push('  • JANGAN menampilkan detail teknis inject (nama file, parent, dll)');
-      lines.push('  • JANGAN membuat RemoteEvent/Function di dalam kode Lua — PAKAI JSON create_remote');
-      lines.push('  • JANGAN memberikan panduan "buat script baru" atau "letakkan di...", karena sudah otomatis');
+      lines.push('🚫 LARANGAN MUTLAK:');
+      lines.push('  • JANGAN tampilkan ```json blok kepada user di teks final');
+      lines.push('  • JANGAN tampilkan detail teknis inject (nama file, parent)');
+      lines.push('  • JANGAN buat RemoteEvent di dalam Lua — PAKAI JSON create_remote');
+      lines.push('  • JANGAN beri panduan "buat script baru" — sudah otomatis');
       lines.push('');
       lines.push('✅ FORMAT OUTPUT WAJIB:');
-      lines.push('  1. Awali dengan teks ramah yang menjelaskan apa yang sudah dibuat.');
-      lines.push('  2. Sebutkan fitur-fitur utama secara singkat (3-5 bullet point).');
-      lines.push('  3. Beri tahu cara mengkonfigurasi variabel penting (misal, "ubah warna di baris X").');
-      lines.push('  4. JIKA ADA, sebutkan dependencies (module script lain, aset ID).');
-      lines.push('  5. JANGAN SERTAKAN blok kode apa pun di teks akhir — semuanya sudah otomatis.');
+      lines.push('  1. Teks ramah menjelaskan apa yang dibuat (2-3 kalimat).');
+      lines.push('  2. 3-5 bullet fitur utama.');
+      lines.push('  3. Cara konfigurasi variabel penting.');
+      lines.push('  4. Dependencies jika ada.');
+      lines.push('  5. TANPA blok kode sama sekali — semuanya otomatis.');
       lines.push('');
-      lines.push('📋 STRUKTUR INTERNAL (TIDAK TERLIHAT USER):');
-      lines.push('  • ```json [array of actions] → auto-diproses plugin');
-      lines.push('  • ```lua [full source code]   → auto-diinject ke service');
+      lines.push('📋 STRUKTUR INTERNAL (TERSEMBUNYI):');
+      lines.push('  • ```json [...] → auto-diproses plugin');
+      lines.push('  • ```lua [...] → auto-diinject ke service');
       lines.push('  • Teks biasa → ditampilkan ke user');
       lines.push('');
-      lines.push('📌 CARA MEMBUAT JSON INJECT YANG BENAR:');
-      lines.push('  Untuk GUI: gunakan action create_gui dengan elements[] dan script_code');
-      lines.push('  Untuk Script biasa: inject_script dengan parent dan script_type');
-      lines.push('  Untuk Part: batch_create dengan parts[] atau create_part individual');
-      lines.push('  Gabungkan beberapa action dalam batch_commands jika perlu');
+      lines.push('📌 URUTAN INJECT AMAN:');
+      lines.push('  1. ModuleScript (shared, tanpa dependency)');
+      lines.push('  2. Script (server side)');
+      lines.push('  3. LocalScript (client side)');
+      lines.push('  4. create_remote (setelah script yang memakainya)');
+      lines.push('  5. create_gui (setelah LocalScript handler)');
       lines.push('');
-      lines.push('📌 HEADER LUA WAJIB (di dalam ```lua):');
-      lines.push('  -- name: NamaScript_Client');
-      lines.push('  -- parent: ReplicatedFirst');
-      lines.push('  -- script_type: LocalScript');
-      lines.push('');
-      lines.push('📌 URUTAN INJECT YANG AMAN:');
-      lines.push('  1. ModuleScript (shared)');
-      lines.push('  2. Script (server)');
-      lines.push('  3. LocalScript (client)');
-      lines.push('');
-      lines.push('💬 CONTOH RESPON BENAR (user: "Buat loading screen"):');
-      lines.push('\'✅ Loading screen profesional berhasil dipasang di ReplicatedFirst!');
+      lines.push('💬 CONTOH RESPON BENAR:');
+      lines.push('✅ Shop GUI profesional berhasil dipasang!');
       lines.push('Fitur:');
-      lines.push('• Progress bar animasi lancar');
-      lines.push('• 5 tips acak berganti setiap 3 detik');
-      lines.push('• Background blur dengan logo di tengah');
+      lines.push('• 6 item dengan harga, icon, dan deskripsi');
+      lines.push('• Sistem coins yang tersinkronisasi dengan DataStore');
+      lines.push('• Animasi buka/tutup smooth dengan TweenService');
+      lines.push('• Validasi pembelian di server (anti-exploit)');
       lines.push('');
-      lines.push('Anda dapat mengubah warna tema di variabel THEME_COLOR pada baris 15.');
-      lines.push('Tips bisa dimodifikasi di tabel TIPS_LIST.\'');
-      lines.push('');
-      lines.push('Contoh di atas: TIDAK ADA blok kode sama sekali. Semua sudah diinjeksi.');
-      lines.push('');
-      lines.push('⛔ CONTOH RESPON SALAH (jangan ditiru):');
-      lines.push('- "Berikut scriptnya: ```lua ...```"  ❌');
-      lines.push('- "Saya telah membuat script di ServerScriptService bernama..." ❌ (user tidak perlu tahu)');
-      lines.push('- "Tambahkan LocalScript ke StarterGui..." ❌');
+      lines.push('Ubah daftar item di tabel ITEMS pada ModuleScript (baris 12).');
+      lines.push('Warna tema bisa diubah di variabel THEME_COLOR.');
     } else {
-      lines.push('══════════════ MODE STUDIO OFFLINE ══════════════');
+      lines.push('══════════════ MODE OFFLINE ══════════════');
       lines.push('🔌 STUDIO OFFLINE — Plugin belum terhubung.');
       lines.push('');
-      lines.push('✅ FORMAT OUTPUT WAJIB:');
-      lines.push('  1. Tulis SEMUA kode Lua lengkap dalam blok ```lua terpisah.');
-      lines.push('  2. Setiap blok WAJIB memiliki header:');
-      lines.push('     -- name: NamaScript');
-      lines.push('     -- parent: ServiceName');
-      lines.push('     -- script_type: Script/LocalScript/ModuleScript');
-      lines.push('  3. Jika sistem multi-file, output setiap file dalam blok ```lua sendiri.');
-      lines.push('  4. Setelah kode, beri instruksi singkat tempat meletakkan script.');
-      lines.push('  5. Sertakan komentar dalam kode untuk memandu konfigurasi.');
-      lines.push('');
-      lines.push('💡 CONTOH RESPON (user minta "Auto Save System"):');
-      lines.push('```lua');
-      lines.push('-- name: AutoSave_Server');
-      lines.push('-- parent: ServerScriptService');
-      lines.push('-- script_type: Script');
-      lines.push('local DataStoreService = game:GetService("DataStoreService")');
-      lines.push('...');
-      lines.push('```');
-      lines.push('Letakkan script ini di ServerScriptService. Pastikan game Anda memiliki');
-      lines.push('DataStoreService yang diaktifkan di Game Settings > Security.');
-      lines.push('');
+      lines.push('✅ FORMAT OUTPUT:');
+      lines.push('  1. Semua kode dalam blok ```lua terpisah.');
+      lines.push('  2. Header WAJIB: -- name, -- parent, -- script_type');
+      lines.push('  3. Multi-file = multi blok ```lua.');
+      lines.push('  4. Instruksi singkat penempatan.');
+      lines.push('  5. Komentar konfigurasi dalam kode.');
     }
     lines.push('');
-    lines.push('══════════════ KARAKTER NEXUS AI ══════════════');
-    lines.push('• Berikan solusi production-ready, bukan prototype.');
-    lines.push('• Kode harus siap pakai di game dengan ratusan pemain.');
-    lines.push('• Selalu pikirkan skalabilitas, keamanan, dan performa.');
-    lines.push('• Jika diminta fitur yang tidak aman, ingatkan dengan sopan dan beri alternatif.');
-    lines.push('• Gunakan komentar dalam kode (--//) untuk menjelaskan logika kompleks.');
-    lines.push('• Jika data kurang, tanya balik sebelum ngoding.');
-    lines.push('• DILARANG keras memberikan script yang sengaja dieksploitasi (backdoor, remote spy, dll).');
-    lines.push('');
-    lines.push('══════════════ PENUTUP ══════════════');
-    lines.push('Kamu adalah partner coding terpercaya. Jawab dengan percaya diri,');
-    lines.push('berikan yang terbaik, dan jadilah alasan developer Roblox sukses.');
-    lines.push('Wujudkan ide mereka menjadi realitas di Roblox Studio.');
+    lines.push('══════════════ KARAKTER ══════════════');
+    lines.push('• Solusi production-ready, bukan prototype.');
+    lines.push('• Kode siap pakai untuk game ratusan pemain.');
+    lines.push('• Selalu pikirkan: skalabilitas, keamanan, performa.');
+    lines.push('• Jika fitur tidak aman, ingatkan + beri alternatif.');
+    lines.push('• Komentar (--//) untuk logika kompleks.');
+    lines.push('• Data kurang? Tanya dulu sebelum coding.');
+    lines.push('• DILARANG: backdoor, remote spy, exploit script.');
+    lines.push('• Jawab percaya diri. Jadilah alasan developer Roblox sukses.');
     lines.push('');
     return lines.join('\n');
-  } else {
-    // ── PROMPT BAHASA INGGRIS (600+ baris) ─────────────────
-    var linesEn = [];
-    linesEn.push('╔══════════════════════════════════════════════════╗');
-    linesEn.push('║  NEXUS AI — WORLD #1 ROBLOX STUDIO EXPERT      ║');
-    linesEn.push('╚══════════════════════════════════════════════════╝');
-    linesEn.push('');
-    linesEn.push('👤 User : "'+dn+'" (@'+un+') | Plan: '+S.plan+' | Credits: '+cr+' CR');
-    linesEn.push('🔌 Studio : '+(connected?'✓ CONNECTED':'✗ OFFLINE')+' | '+now.toLocaleString('en-US'));
-    linesEn.push('• When the user greets (hi, hello, good morning, etc.), do not just reply "hello". Reply with "Hello, '+dn+'! How can NEXUS AI help you?"');
-    linesEn.push('');
-    linesEn.push('══════════════ LANGUAGE ══════════════');
-    linesEn.push('• REQUIRED: Always respond in English professionally and politely.');
-    linesEn.push('• Use "you" and "I". Be like an expert Roblox developer.');
-    linesEn.push('• All explanations must be clear, educational, and complete.');
-    linesEn.push('');
-    linesEn.push('══════════════ IDENTITY ══════════════');
-    linesEn.push('You are NEXUS AI, the best Roblox Studio specialist ever created.');
-    linesEn.push('Created by NEXUS STUDIO (FIINYTID25).');
-    linesEn.push('Core expertise:');
-    linesEn.push('  • Advanced Lua/Luau');
-    linesEn.push('  • Full Roblox API (server, client, replication)');
-    linesEn.push('  • DataStore, ProfileService, MemoryStore');
-    linesEn.push('  • GUI Design, TweenService animations');
-    linesEn.push('  • Game Systems: Tycoon, Simulator, RPG, Obby, Horror');
-    linesEn.push('  • Intelligent NPC AI, Pathfinding, Behavior Trees');
-    linesEn.push('  • Physics: constraints, vehicle mechanics');
-    linesEn.push('  • Networking: RemoteEvent/Function, bandwidth optimization');
-    linesEn.push('  • Anti-exploit, secure coding, server-authoritative');
-    linesEn.push('  • Monetization: Gamepasses, Developer Products, Premium');
-    linesEn.push('');
-    linesEn.push('══════════════ MANDATORY CODE RULES ══════════════');
-    linesEn.push('1.  Code MUST BE 100% COMPLETE — NEVER write "-- etc" or "-- ... rest of code"');
-    linesEn.push('2.  Script 500+ lines? WRITE EVERY SINGLE LINE without shortcuts.');
-    linesEn.push('3.  Use task.wait() not wait() (deprecated)');
-    linesEn.push('4.  Use task.spawn()/task.delay() for async operations');
-    linesEn.push('5.  DataStore: always wrapped in pcall() with retry mechanism');
-    linesEn.push('6.  Use :WaitForChild(timeout) for assets not yet ready');
-    linesEn.push('7.  Every Lua file MUST include header:');
-    linesEn.push('    -- name: ScriptName');
-    linesEn.push('    -- parent: TargetService');
-    linesEn.push('    -- script_type: Script/LocalScript/ModuleScript');
-    linesEn.push('8.  Script names MUST be descriptive: LoadingScreen_Client, ShopSystem_Server');
-    linesEn.push('9.  Access services ONLY via game:GetService("ServiceName")');
-    linesEn.push('10. VALIDATE all client input on the server to prevent exploits');
-    linesEn.push('11. DataStore pattern: pcall + retry up to 3 times with delay');
-    linesEn.push('12. GUI animations MUST use TweenService, NOT loops with task.wait()');
-    linesEn.push('13. When debugging/editing, EDIT the existing script, do NOT recreate from scratch');
-    linesEn.push('14. Client-side UI: LocalScript in StarterGui or ReplicatedFirst');
-    linesEn.push('15. Server systems: Script in ServerScriptService');
-    linesEn.push('16. Shared modules: ModuleScript in ReplicatedStorage');
-    linesEn.push('17. NEVER use Instance.new("ManualWeld") — use WeldConstraint');
-    linesEn.push('18. Always use Enums for enumeration properties (never raw strings)');
-    linesEn.push('19. Disconnect event connections with :Disconnect() on cleanup');
-    linesEn.push('20. Use game:BindToClose() to save data before server shutdown');
-    linesEn.push('21. CollectionService:AddTag() / GetTagged() for mass management');
-    linesEn.push('22. Do NOT use game.Players.LocalPlayer in Script (only LocalScript)');
-    linesEn.push('23. Check existence before modifying instances');
-    linesEn.push('');
-    linesEn.push('══════════════ ROBLOX BEST PRACTICES ══════════════');
-    linesEn.push('🔁 REMOTE EVENT / FUNCTION:');
-    linesEn.push('  • Server: remote.OnServerEvent:Connect(function(player, ...) end)');
-    linesEn.push('  • Client: remote:FireServer(arg1, arg2)');
-    linesEn.push('  • RemoteFunction: use OnServerInvoke for returning data');
-    linesEn.push('  • NEVER trust the client, always re-validate on server');
-    linesEn.push('');
-    linesEn.push('💾 DATASTORE WITH PROFILE SERVICE:');
-    linesEn.push('  • Use ProfileService for auto-loading and session locking');
-    linesEn.push('  • Add 3 retries with exponential backoff');
-    linesEn.push('  • Store data in structured tables: {Coins, Level, XP, Inventory}');
-    linesEn.push('  • Wrap save in coroutine to avoid blocking main thread');
-    linesEn.push('');
-    linesEn.push('🎨 GUI & TWEEN:');
-    linesEn.push('  • Use TweenService:Create(instance, TweenInfo.new(...), goals)');
-    linesEn.push('  • Animate open/close with TweenSize, TweenPosition');
-    linesEn.push('  • Avoid while true loops for animation — use Tween.Completed:Wait()');
-    linesEn.push('');
-    linesEn.push('🧠 NPC AI:');
-    linesEn.push('  • PathfindingService:CreatePath() with AgentParameters');
-    linesEn.push('  • ComputeAsync() in a coroutine');
-    linesEn.push('  • Use RunService.Heartbeat for smooth position updates');
-    linesEn.push('');
-    linesEn.push('🛡️ ANTI-EXPLOIT:');
-    linesEn.push('  • Server-authoritative: server decides final outcome');
-    linesEn.push('  • Validate magnitude, speed, and cooldowns');
-    linesEn.push('  • Use RemoteFunction to request sensitive data from server');
-    linesEn.push('  • Never send price/item from client — all purchase logic on server');
-    linesEn.push('');
-    linesEn.push('⚡ PERFORMANCE:');
-    linesEn.push('  • Use workspace:WaitForChild() instead of while not loops');
-    linesEn.push('  • Limit part count — use MeshParts when possible');
-    linesEn.push('  • Enable StreamingEnabled for large maps');
-    linesEn.push('  • Use Debris:AddItem() for automatic cleanup');
-    linesEn.push('');
-    linesEn.push('══════════════ FULL JSON ACTIONS ══════════════');
-    linesEn.push(jsonFull);
-    linesEn.push('');
+  }
+
+  // ══════════════════════════════════════════════════════════════
+  // BAHASA INGGRIS
+  // ══════════════════════════════════════════════════════════════
+  var linesEn = [];
+  linesEn.push('╔══════════════════════════════════════════════════════╗');
+  linesEn.push('║  NEXUS AI — WORLD #1 ROBLOX STUDIO EXPERT         ║');
+  linesEn.push('║  Created: NEXUS STUDIO (FIINYTID25)                 ║');
+  linesEn.push('╚══════════════════════════════════════════════════════╝');
+  linesEn.push('');
+  linesEn.push('👤 User     : "'+dn+'" (@'+un+')');
+  linesEn.push('💎 Plan    : '+(S.plan||'free').toUpperCase()+' | Credits: '+cr+' CR');
+  linesEn.push('🔌 Studio  : '+(connected?'✓ CONNECTED — AUTO INJECT ACTIVE':'✗ OFFLINE — show code manually'));
+  linesEn.push('🕐 Time    : '+now.toLocaleString('en-US'));
+  linesEn.push('');
+  linesEn.push('When the user greets (hi, hello, good morning, etc.),');
+  linesEn.push('reply: "Hello, '+dn+'! How can NEXUS AI help you today?"');
+  linesEn.push('NEVER reply with a single word greeting.');
+  linesEn.push('');
+  linesEn.push('══════════════ LANGUAGE ══════════════');
+  linesEn.push('• REQUIRED: Always respond in English professionally.');
+  linesEn.push('• Be an expert Roblox developer.');
+  linesEn.push('• Clear, educational, complete explanations.');
+  linesEn.push('');
+  linesEn.push('══════════════ IDENTITY ══════════════');
+  linesEn.push('You are NEXUS AI, the best Roblox Studio specialist ever.');
+  linesEn.push('Created by NEXUS STUDIO (FIINYTID25).');
+  linesEn.push('Core expertise:');
+  linesEn.push('  • Advanced Lua/Luau (100% production-ready)');
+  linesEn.push('  • Full Roblox API: server, client, replication, DataStore');
+  linesEn.push('  • Professional GUI Design with TweenService animations');
+  linesEn.push('  • Game Systems: Tycoon, Simulator, RPG, Obby, Horror, FPS');
+  linesEn.push('  • Smart NPC AI: Pathfinding, Behavior Trees, State Machines');
+  linesEn.push('  • Physics: Constraints, vehicle mechanics, ragdoll');
+  linesEn.push('  • Networking: RemoteEvent/Function, bandwidth optimization');
+  linesEn.push('  • Anti-exploit: Server-authoritative, validation, rate limiting');
+  linesEn.push('  • Monetization: Gamepasses, Developer Products, Premium');
+  linesEn.push('');
+  linesEn.push('══════════════ MANDATORY CODE RULES ══════════════');
+  linesEn.push('1.  Code 100% COMPLETE — NEVER "-- etc", "-- ...", "-- continued"');
+  linesEn.push('2.  1000+ line script? WRITE EVERY LINE. No shortcuts.');
+  linesEn.push('3.  Use task.wait() not wait() (deprecated).');
+  linesEn.push('4.  Use task.spawn()/task.delay() for async.');
+  linesEn.push('5.  DataStore: ALWAYS pcall() + retry 3x + exponential backoff.');
+  linesEn.push('6.  :WaitForChild(timeout) — never .Name without check.');
+  linesEn.push('7.  Every Lua file MUST have header:');
+  linesEn.push('    -- name: ScriptName_Type');
+  linesEn.push('    -- parent: TargetService');
+  linesEn.push('    -- script_type: Script/LocalScript/ModuleScript');
+  linesEn.push('8.  Descriptive names: LoadingScreen_Client, ShopSystem_Server.');
+  linesEn.push('9.  Access services ONLY: game:GetService("ServiceName").');
+  linesEn.push('10. VALIDATE all client input on server — anti exploit.');
+  linesEn.push('11. DataStore pattern:');
+  linesEn.push('    local ok, data = pcall(function() return store:GetAsync(key) end)');
+  linesEn.push('12. GUI animations MUST use TweenService — NO while loops.');
+  linesEn.push('13. Debug/edit: EDIT existing script, do NOT recreate.');
+  linesEn.push('14. Client UI = LocalScript in StarterGui/ReplicatedFirst.');
+  linesEn.push('15. Server system = Script in ServerScriptService.');
+  linesEn.push('16. Shared module = ModuleScript in ReplicatedStorage.');
+  linesEn.push('17. NEVER Instance.new("ManualWeld") — use WeldConstraint.');
+  linesEn.push('18. Use Enums for enumeration properties — no raw strings.');
+  linesEn.push('19. :Disconnect() events on cleanup to prevent memory leaks.');
+  linesEn.push('20. game:BindToClose() to save data before shutdown.');
+  linesEn.push('21. CollectionService:AddTag()/GetTagged() for mass management.');
+  linesEn.push('22. game.Players.LocalPlayer ONLY in LocalScript — FORBIDDEN in Script.');
+  linesEn.push('23. Check instance existence before modifying.');
+  linesEn.push('24. Debris:AddItem(instance, lifetime) for auto-cleanup.');
+  linesEn.push('25. RemoteFunction return data — use OnServerInvoke callback.');
+  linesEn.push('');
+  linesEn.push('══════════════ BEST PRACTICES ══════════════');
+  linesEn.push('🔁 REMOTE EVENT:');
+  linesEn.push('  • Server: remote.OnServerEvent:Connect(function(player, ...) end)');
+  linesEn.push('  • Client: remote:FireServer(arg1, arg2)');
+  linesEn.push('  • NEVER trust client, always re-validate on server');
+  linesEn.push('');
+  linesEn.push('💾 DATASTORE:');
+  linesEn.push('  • ProfileService pattern for session locking');
+  linesEn.push('  • Retry 3x with delays: 1s, 2s, 4s');
+  linesEn.push('  • Structured data: {Coins=0, Level=1, XP=0, Inventory={}}');
+  linesEn.push('  • Wrap save in coroutine to avoid blocking');
+  linesEn.push('');
+  linesEn.push('🎨 GUI & TWEEN:');
+  linesEn.push('  • TweenService:Create(inst, TweenInfo.new(dur, style, dir), goals)');
+  linesEn.push('  • Animation chain: use Tween.Completed:Wait()');
+  linesEn.push('');
+  linesEn.push('🧠 NPC AI:');
+  linesEn.push('  • PathfindingService:CreatePath() + AgentParameters');
+  linesEn.push('  • ComputeAsync() in coroutine (non-blocking)');
+  linesEn.push('  • RunService.Heartbeat for smooth position update');
+  linesEn.push('');
+  linesEn.push('🛡️ ANTI-EXPLOIT:');
+  linesEn.push('  • Server-authoritative: server decides final outcome');
+  linesEn.push('  • Validate: magnitude, speed, cooldown, health bounds');
+  linesEn.push('  • Never send price/item from client — purchase logic on server');
+  linesEn.push('');
+  linesEn.push('⚡ PERFORMANCE:');
+  linesEn.push('  • StreamingEnabled ON for large maps');
+  linesEn.push('  • MeshPart > Union > manual parts');
+  linesEn.push('  • Object pooling for frequently spawned objects');
+  linesEn.push('');
+  linesEn.push('══════════════ GUI JSON FORMAT (IMPORTANT!) ══════════════');
+  linesEn.push('When creating GUI via create_gui JSON, size and position MUST be:');
+  linesEn.push('  size:[ScaleX, OffsetX, ScaleY, OffsetY]');
+  linesEn.push('  position:[ScaleX, OffsetX, ScaleY, OffsetY]');
+  linesEn.push('');
+  linesEn.push('CORRECT EXAMPLE — Full-screen Frame:');
+  linesEn.push('  {class:"Frame", name:"Main", size:[1, 0, 1, 0], position:[0, 0, 0, 0],');
+  linesEn.push('   background_color:[20,20,50], background_transparency:0,');
+  linesEn.push('   children:[');
+  linesEn.push('     {class:"TextLabel", name:"Title", size:[0.8, 0, 0.1, 0], position:[0.1, 0, 0.05, 0],');
+  linesEn.push('      text:"My Shop", text_color:[255,255,255], text_size:24, font:"GothamBold"},');
+  linesEn.push('     {class:"TextButton", name:"BuyBtn", size:[0.3, 0, 0.08, 0], position:[0.35, 0, 0.85, -10],');
+  linesEn.push('      text:"BUY", text_color:[255,255,255], text_size:16, font:"GothamBold",');
+  linesEn.push('      background_color:[0,200,100], corner_radius:8}');
+  linesEn.push('   ]}');
+  linesEn.push('');
+  linesEn.push('⚠️ NEVER use size:[0, 0, 0, 0] — this makes elements invisible!');
+  linesEn.push('⚠️ NEVER forget children array if element has children.');
+  linesEn.push('');
+  linesEn.push('══════════════ ALL JSON ACTIONS ══════════════');
+  linesEn.push(jsonFull);
+  linesEn.push('');
+
     if (connected) {
       linesEn.push('══════════════ CONNECTED MODE ══════════════');
       linesEn.push('🔌 STUDIO CONNECTED — JSON + Lua AUTO-INJECT ACTIVE!');
       linesEn.push('');
-      linesEn.push('🚫 STRICT PROHIBITIONS (VIOLATION = INVALID):');
-      linesEn.push('  • Do NOT show ```json blocks to the user in final text');
-      linesEn.push('  • Do NOT reveal technical inject details (file names, parents, etc.)');
-      linesEn.push('  • Do NOT create RemoteEvent/Function inside Lua code — USE JSON create_remote');
-      linesEn.push('  • Do NOT give instructions like "create a new script in..." — it\'s automatic');
+      linesEn.push('🚫 STRICT PROHIBITIONS:');
+      linesEn.push('  • Do NOT show ```json blocks to user in final text');
+      linesEn.push('  • Do NOT reveal technical inject details');
+      linesEn.push('  • Do NOT create RemoteEvent in Lua — USE JSON create_remote');
+      linesEn.push('  • Do NOT give "create a new script" instructions — automatic');
       linesEn.push('');
       linesEn.push('✅ REQUIRED OUTPUT FORMAT:');
-      linesEn.push('  1. Start with a friendly message summarizing what was built.');
-      linesEn.push('  2. List 3-5 key features briefly.');
-      linesEn.push('  3. Tell them how to configure important variables (e.g., "change color at line X").');
-      linesEn.push('  4. IF ANY, mention dependencies (module scripts, asset IDs).');
-      linesEn.push('  5. DO NOT include any code blocks in the final text — everything is already automatic.');
+      linesEn.push('  1. Friendly message (2-3 sentences) about what was built.');
+      linesEn.push('  2. 3-5 key features as bullet points.');
+      linesEn.push('  3. How to configure important variables.');
+      linesEn.push('  4. Dependencies if any.');
+      linesEn.push('  5. NO code blocks — everything is automatic.');
       linesEn.push('');
-      linesEn.push('📋 INTERNAL STRUCTURE (NOT VISIBLE TO USER):');
-      linesEn.push('  • ```json [array of actions] → auto-processed by plugin');
-      linesEn.push('  • ```lua [full source code]   → auto-injected to service');
+      linesEn.push('📋 INTERNAL STRUCTURE (HIDDEN):');
+      linesEn.push('  • ```json [...] → auto-processed by plugin');
+      linesEn.push('  • ```lua [...] → auto-injected to service');
       linesEn.push('  • Plain text → displayed to user');
       linesEn.push('');
-      linesEn.push('💬 EXAMPLE CORRECT RESPONSE (user: "Make a loading screen"):');
-      linesEn.push('\'✅ Professional loading screen installed in ReplicatedFirst!');
+      linesEn.push('📌 SAFE INJECT ORDER:');
+      linesEn.push('  1. ModuleScript (shared, no dependencies)');
+      linesEn.push('  2. Script (server)');
+      linesEn.push('  3. LocalScript (client)');
+      linesEn.push('  4. create_remote (after scripts using them)');
+      linesEn.push('  5. create_gui (after LocalScript handler)');
+      linesEn.push('');
+      linesEn.push('💬 CORRECT RESPONSE EXAMPLE:');
+      linesEn.push('✅ Professional shop GUI installed!');
       linesEn.push('Features:');
-      linesEn.push('• Smooth animated progress bar');
-      linesEn.push('• 5 random tips cycling every 3 seconds');
-      linesEn.push('• Blurred background with centered logo');
+      linesEn.push('• 6 items with price, icon, and description');
+      linesEn.push('• Coins system synced with DataStore');
+      linesEn.push('• Smooth open/close animations with TweenService');
+      linesEn.push('• Server-side purchase validation (anti-exploit)');
       linesEn.push('');
-      linesEn.push('You can change the theme color in the THEME_COLOR variable at line 15.');
-      linesEn.push('Tips can be modified in the TIPS_LIST table.\'');
-      linesEn.push('');
-      linesEn.push('⛔ WRONG EXAMPLE (do NOT do this):');
-      linesEn.push('- "Here is the script: ```lua ...```"  ❌');
-      linesEn.push('- "I\'ve created a script in ServerScriptService named..." ❌');
-      linesEn.push('- "Add a LocalScript to StarterGui..." ❌');
+      linesEn.push('Edit the ITEMS table in the ModuleScript (line 12) to customize items.');
     } else {
       linesEn.push('══════════════ OFFLINE MODE ══════════════');
-      linesEn.push('🔌 STUDIO OFFLINE — Plugin not connected.');
+      linesEn.push('🔌 STUDIO OFFLINE.');
       linesEn.push('');
-      linesEn.push('✅ REQUIRED OUTPUT FORMAT:');
-      linesEn.push('  1. Write ALL complete Lua code in separate ```lua blocks.');
-      linesEn.push('  2. Each block MUST include header:');
-      linesEn.push('     -- name: ScriptName');
-      linesEn.push('     -- parent: ServiceName');
-      linesEn.push('     -- script_type: Script/LocalScript/ModuleScript');
-      linesEn.push('  3. For multi-file systems, output each file in its own ```lua block.');
-      linesEn.push('  4. After code, give brief instructions on where to place the script.');
-      linesEn.push('  5. Include comments in code to guide configuration.');
-      linesEn.push('');
+      linesEn.push('✅ OUTPUT FORMAT:');
+      linesEn.push('  1. All code in separate ```lua blocks.');
+      linesEn.push('  2. Header: -- name, -- parent, -- script_type');
+      linesEn.push('  3. Multi-file = multi ```lua blocks.');
+      linesEn.push('  4. Brief placement instructions.');
+      linesEn.push('  5. Configuration comments in code.');
     }
     linesEn.push('');
-    linesEn.push('══════════════ NEXUS AI CHARACTER ══════════════');
-    linesEn.push('• Deliver production-ready solutions, not prototypes.');
-    linesEn.push('• Code must be ready for games with hundreds of players.');
-    linesEn.push('• Always consider scalability, security, and performance.');
-    linesEn.push('• If asked for unsafe features, politely warn and offer alternatives.');
-    linesEn.push('• Use comments (--//) to explain complex logic.');
-    linesEn.push('• If more information is needed, ask before coding.');
-    linesEn.push('• STRICTLY FORBIDDEN to provide intentionally exploitable scripts.');
-    linesEn.push('');
-    linesEn.push('══════════════ CLOSING ══════════════');
-    linesEn.push('You are a trusted coding partner. Answer with confidence,');
-    linesEn.push('give your best, and be the reason a Roblox developer succeeds.');
-    linesEn.push('Turn their ideas into reality in Roblox Studio.');
+    linesEn.push('══════════════ CHARACTER ══════════════');
+    linesEn.push('• Production-ready solutions, not prototypes.');
+    linesEn.push('• Code ready for games with hundreds of players.');
+    linesEn.push('• Always: scalability, security, performance.');
+    linesEn.push('• If unsafe feature requested: warn + alternative.');
+    linesEn.push('• Comments (--//) for complex logic.');
+    linesEn.push('• Need more info? Ask before coding.');
+    linesEn.push('• FORBIDDEN: backdoors, remote spies, exploit scripts.');
+    linesEn.push('• Answer confidently. Be the reason developers succeed.');
     linesEn.push('');
     return linesEn.join('\n');
-  }
 }
 
 // ─── SEND MESSAGE ──────────────────────────────────────────────────────────
@@ -1858,19 +1996,16 @@ function buildMsgs(){
   var cv=S.convs.find(function(x){return x.id===S.curConv;});
   if(!cv)return[];
   return(cv.msgs||[]).slice(-28).map(function(m){
-    // Gunakan _rawContent (versi lengkap dengan JSON/Lua) untuk context AI
-    // bukan content yang sudah distrip
     var content=m._rawContent||m.content||'';
     if(Array.isArray(m.content)){return{role:m.role==='user'?'user':'model',content:m.content};}
     return{role:m.role==='user'?'user':'model',content:String(content)};
   });
 }
-// Detect request type for thinking steps
 function detectRequestType(txt){
   var lower=txt.toLowerCase();
-  if(/error|fix|bug|perbaiki|debug|broken|crash|not work/.test(lower))return'debug';
-  if(/gui|hud|menu|shop|loading|inventory|screen|frame|button/.test(lower))return'gui';
-  if(/create|buat|inject|add|generate|json|action/.test(lower)&&studioConnected)return'json';
+  if(/error|fix|bug|perbaiki|debug|broken|crash|not work|tidak bisa|gagal|error/i.test(lower))return'debug';
+  if(/gui|hud|menu|shop|loading|inventory|screen|frame|button|tombol/i.test(lower))return'gui';
+  if(/create|buat|inject|add|generate|json|action|tambah/i.test(lower)&&studioConnected)return'json';
   return'normal';
 }
 async function send(){
@@ -1879,9 +2014,10 @@ async function send(){
   var txt=(inp?inp.value.trim():'');
   var attachments=S.attachments.slice();
   if(!txt&&!attachments.length)return;
+  var t=LANGS[curLang]||LANGS.id;
   if(!isOwner()&&!isAdmin()){
-    if(S.credits<=-10){toast(curLang==='id'?'Credits habis! Beli di Payment.':'Credits exhausted!','var(--pink)');return;}
-    if(S.credits<0&&S.model.cost>1){toast(curLang==='id'?'Credits tidak cukup. Ganti ke model gratis.':'Credits low. Switch to free model.','var(--yellow)');return;}
+    if(S.credits<=-10){toast(t.creditsExhausted,'var(--pink)');return;}
+    if(S.credits<0&&S.model.cost>1){toast(t.creditsLow,'var(--yellow)');return;}
   }
   if(!S.curConv)newChat();
   var cv=S.convs.find(function(x){return x.id===S.curConv;});if(!cv)return;
@@ -1897,9 +2033,7 @@ async function send(){
   lastUserPrompt=txt;
   S.attachments=[];renderAttachRow();
   if(cv.msgs.length===1)setConvTitle(S.curConv,txt);
-  var t=LANGS[curLang]||LANGS.id;
-  var reqType=detectRequestType(txt);
-  var steps=reqType==='debug'?t.stepsDebug:reqType==='gui'?t.stepsGui:reqType==='json'?t.stepsJson:t.steps;
+  var steps=detectRequestType(txt)==='debug'?t.stepsDebug:detectRequestType(txt)==='gui'?t.stepsGui:detectRequestType(txt)==='json'?t.stepsJson:t.steps;
   if(thinkingEnabled)showThinking(steps);
   var msgs=buildMsgs();
   var sysPrompt=buildSysPrompt();
@@ -1919,7 +2053,7 @@ async function send(){
       var errData=await response.json().catch(function(){return{};});
       var errMsg=(errData.error||'API error '+response.status);
       if(response.status===503||errMsg.includes('overloaded')||errMsg.includes('high demand')){
-        errMsg=(curLang==='id'?'Model sedang sibuk. Coba ganti model lain (contoh: Gemini 1.5 Flash).':'Model is busy. Try switching model.')+'\n\n'+errMsg;
+        errMsg=t.modelBusyToast+'\n\n'+errMsg;
       }
       throw new Error(errMsg);
     }
@@ -1931,58 +2065,30 @@ async function send(){
       if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');
       rmThinking();return;
     }
-    aiText='**'+(curLang==='id'?'Gagal mendapatkan respons':'Failed to get response')+'**\n\n'+e.message+'\n\n'+(curLang==='id'?'💡 Coba ganti model atau periksa koneksi internet.':'💡 Try switching the model or check your connection.');
+    aiText='**'+t.errorPrefix+'**\n\n'+e.message+'\n\n'+(curLang==='id'?'💡 Coba ganti model atau periksa koneksi.':'💡 Try switching the model or check your connection.');
   }
-    rmThinking();
-
-  const hasError = aiText && (aiText.startsWith('**Gagal') || aiText.startsWith('**Failed'));
-
-  // ── Potong credits (kecuali owner/admin/error) ──
-  if (!isOwner() && !isAdmin() && aiText && !hasError) {
-    S.credits = Math.max(-10, S.credits - (S.model.cost || 1));
+  rmThinking();
+  var hasError=aiText&&(aiText.startsWith('**Gagal')||aiText.startsWith('**Failed'));
+  if(!isOwner()&&!isAdmin()&&aiText&&!hasError){
+    S.credits=Math.max(-10,S.credits-(S.model.cost||1));
     updateCreds();
   }
-
-  // ── AUTO INJECT JIKA STUDIO CONNECTED ──
-  let injected = null;
-  let displayText = aiText;
-
-  if (studioConnected && !hasError) {
-    injected = await autoInjectToStudio(aiText, lastUserPrompt);
-
-    // Hapus blok ```json dan ```lua dari tampilan
-    displayText = aiText
-      .replace(/```json[\s\S]*?```/g, '')
-      .replace(/```lua[\s\S]*?```/g, '')
-      .trim();
-
-    if (!displayText || displayText.length < 10) {
-      displayText = curLang === 'id'
-        ? '✅ Semua komponen telah dibuat dan dimasukkan ke Roblox Studio.'
-        : '✅ All components have been built and injected into Roblox Studio.';
+  var injected=null;
+  var displayText=aiText;
+  if(studioConnected&&!hasError){
+    injected=await autoInjectToStudio(aiText,lastUserPrompt);
+    displayText=aiText.replace(/```json[\s\S]*?```/g,'').replace(/```lua[\s\S]*?```/g,'').trim();
+    if(!displayText||displayText.length<10){
+      displayText=curLang==='id'?'✅ Semua komponen telah dibuat dan dimasukkan ke Roblox Studio.':'✅ All components have been built and injected into Roblox Studio.';
     }
   }
-
-  // ── Simpan pesan AI ──
-  const aiMsg = {
-    role: 'ai',
-    content: displayText,
-    time: Date.now()
-  };
-  if (injected) aiMsg.injected = injected;
-
+  var aiMsg={role:'ai',content:displayText,time:Date.now()};
+  if(injected)aiMsg.injected=injected;
   cv.msgs.push(aiMsg);
-
-  // Simpan versi mentah (dengan JSON/Lua) untuk context AI berikutnya
-  cv.msgs[cv.msgs.length - 1]._rawContent = aiText;
-
+  cv.msgs[cv.msgs.length-1]._rawContent=aiText;
   appendMsg(aiMsg);
-
-  // Reset state pengirim
-  S.gen = false;
-  S.cancelCtrl = null;
-  if (sendBtn) sendBtn.classList.remove('hidden');
-  if (cancelBtn) cancelBtn.classList.add('hidden');
+  S.gen=false;S.cancelCtrl=null;
+  if(sendBtn)sendBtn.classList.remove('hidden');if(cancelBtn)cancelBtn.classList.add('hidden');
   saveS();
 }
 
@@ -2013,8 +2119,9 @@ function removeAttach(i){S.attachments.splice(i,1);renderAttachRow();}
 
 // ─── ACTIONS ───────────────────────────────────────────────────────────────
 function clearChat(){
+  var t=LANGS[curLang]||LANGS.id;
   if(!S.curConv)return;
-  if(!confirm(curLang==='id'?'Hapus semua pesan?':'Delete all messages?'))return;
+  if(!confirm(t.clearConfirm))return;
   var cv=S.convs.find(function(x){return x.id===S.curConv;});
   if(cv)cv.msgs=[];
   renderMsgs([]);saveS();
@@ -2049,6 +2156,7 @@ function switchTab(tab,btn){
   else{ct.style.display='none';gt.style.display='flex';gt.style.flexDirection='column';}
 }
 async function sendReport(){
+  var t=LANGS[curLang]||LANGS.id;
   var ta=document.getElementById('reportTa');var btn=document.getElementById('reportBtn');var st=document.getElementById('reportStatus');
   if(!ta||!ta.value.trim())return;
   if(btn)btn.disabled=true;
@@ -2056,8 +2164,8 @@ async function sendReport(){
     await fetch(REPORT_URL,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({from:SESSION&&SESSION.user.username||'?',userId:SESSION&&SESSION.user.robloxId||'?',
         message:ta.value,type:'report',time:new Date().toISOString()})});
-    if(st)st.textContent='Terkirim!';if(ta)ta.value='';
-  }catch(e){if(st)st.textContent='Error: '+e.message;}
+    if(st)st.textContent='✓';if(ta)ta.value='';
+  }catch(e){if(st)st.textContent='Error';}
   if(btn)setTimeout(function(){btn.disabled=false;},3000);
 }
 async function redeemCode(){
@@ -2069,9 +2177,9 @@ async function redeemCode(){
     var r=await fetch('/api/redeem',{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({code:code,user:(SESSION&&SESSION.user.username||'').toLowerCase(),userId:SESSION&&SESSION.user.robloxId||''})});
     var d=await r.json();
-    if(d.success){S.credits+=parseFloat(d.credits||0);updateCreds();saveS();if(st)st.textContent='+'+(d.credits||0)+' CR ditambahkan!';if(inp)inp.value='';}
-    else if(st)st.textContent='Error: '+(d.error||'Kode tidak valid');
-  }catch(e){if(st)st.textContent='Error: '+e.message;}
+    if(d.success){S.credits+=parseFloat(d.credits||0);updateCreds();saveS();if(st)st.textContent='+'+(d.credits||0)+' CR';if(inp)inp.value='';}
+    else if(st)st.textContent='Error: '+(d.error||'Invalid');
+  }catch(e){if(st)st.textContent='Error';}
   if(btn)setTimeout(function(){btn.disabled=false;},3000);
 }
 
@@ -2110,7 +2218,7 @@ function selectEl(id){
 }
 function updatePropsPanel(){
   var props=document.getElementById('guiProps');if(!props)return;
-  if(!selectedElId||!guiElements[selectedElId]){props.innerHTML='<div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">Pilih elemen</div>';return;}
+  if(!selectedElId||!guiElements[selectedElId]){props.innerHTML='<div style="font-size:10px;color:var(--dim);text-align:center;padding:20px 0;">'+(LANGS[curLang]||LANGS.id).guiPropsEmpty+'</div>';return;}
   var el=guiElements[selectedElId];
   props.innerHTML='<div style="font-size:9px;color:var(--cyan);font-family:Orbitron,sans-serif;letter-spacing:1px;margin-bottom:8px;text-transform:uppercase;">'+el.type+'</div>'+
     '<div class="gui-prop-label">Name</div><input class="gui-prop-input" value="'+esc(el.name||'')+'" onchange="updateElProp(\''+selectedElId+'\',\'name\',this.value)">'+
@@ -2119,7 +2227,7 @@ function updatePropsPanel(){
     '<div class="gui-prop-label">BG Color</div><input class="gui-prop-input" type="color" value="'+(el.bgColor&&el.bgColor!=='transparent'?el.bgColor:'#1e2040')+'" onchange="updateElProp(\''+selectedElId+'\',\'bgColor\',this.value)">'+
     '<div class="gui-prop-label">Text Color</div><input class="gui-prop-input" type="color" value="'+(el.textColor||'#ffffff')+'" onchange="updateElProp(\''+selectedElId+'\',\'textColor\',this.value)">'+
     '<div class="gui-prop-label">Corner Radius</div><input class="gui-prop-input" type="number" value="'+(el.cornerRadius||0)+'" onchange="updateElProp(\''+selectedElId+'\',\'cornerRadius\',parseInt(this.value))">'+
-    '<button style="margin-top:12px;width:100%;padding:6px;background:rgba(255,45,107,.12);border:1px solid rgba(255,45,107,.3);border-radius:5px;color:var(--pink);font-size:10px;cursor:pointer;" onclick="deleteEl(\''+selectedElId+'\')">Hapus Elemen</button>';
+    '<button style="margin-top:12px;width:100%;padding:6px;background:rgba(255,45,107,.12);border:1px solid rgba(255,45,107,.3);border-radius:5px;color:var(--pink);font-size:10px;cursor:pointer;" onclick="deleteEl(\''+selectedElId+'\')">×</button>';
 }
 function updateElProp(elId,prop,val){
   if(!guiElements[elId])return;
@@ -2144,16 +2252,18 @@ function clearCanvas(){
   document.getElementById('guiEmpty').style.display='';updatePropsPanel();
 }
 function generateGuiCode(){
+  var t=LANGS[curLang]||LANGS.id;
   var els=Object.values(guiElements);
-  if(!els.length){toast('Tambahkan elemen dulu!','var(--yellow)');return;}
-  var lines=['-- GUI Script Generated by NEXUS AI','-- Place: LocalScript in StarterGui',
+  if(!els.length){toast(t.addElementFirst,'var(--yellow)');return;}
+  var lines=['-- GUI Script Generated by NEXUS AI V10.5','-- Place: LocalScript in StarterGui',
     'local Players = game:GetService("Players")',
     'local TweenService = game:GetService("TweenService")',
     'local player = Players.LocalPlayer',
     'local playerGui = player:WaitForChild("PlayerGui")',
     '','local screenGui = Instance.new("ScreenGui")',
     'screenGui.Name = "NexusGUI"','screenGui.ResetOnSpawn = false',
-    'screenGui.IgnoreGuiInset = true','screenGui.Parent = playerGui',''];
+    'screenGui.IgnoreGuiInset = true','screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling',
+    'screenGui.Parent = playerGui',''];
   els.forEach(function(el){
     var v=el.name.replace(/[^a-zA-Z0-9_]/g,'_');
     lines.push('-- '+el.type+': '+el.name);
@@ -2161,12 +2271,19 @@ function generateGuiCode(){
     lines.push(v+'.Name = "'+el.name+'"');
     lines.push(v+'.Size = UDim2.new(0, '+el.w+', 0, '+el.h+')');
     lines.push(v+'.Position = UDim2.new(0, '+el.x+', 0, '+el.y+')');
-    if(el.bgColor&&el.bgColor!=='transparent'){var hex=el.bgColor.replace('#','');lines.push(v+'.BackgroundColor3 = Color3.fromRGB('+parseInt(hex.substr(0,2),16)+', '+parseInt(hex.substr(2,2),16)+', '+parseInt(hex.substr(4,2),16)+')');}
-    else lines.push(v+'.BackgroundTransparency = 1');
-    if(el.textColor){var hex2=el.textColor.replace('#','');lines.push(v+'.TextColor3 = Color3.fromRGB('+parseInt(hex2.substr(0,2),16)+', '+parseInt(hex2.substr(2,2),16)+', '+parseInt(hex2.substr(4,2),16)+')');}
+    if(el.bgColor&&el.bgColor!=='transparent'){
+      var hex=el.bgColor.replace('#','');
+      if(hex.length>=6)lines.push(v+'.BackgroundColor3 = Color3.fromRGB('+parseInt(hex.substr(0,2),16)+', '+parseInt(hex.substr(2,2),16)+', '+parseInt(hex.substr(4,2),16)+')');
+      else lines.push(v+'.BackgroundTransparency = 1');
+    }else lines.push(v+'.BackgroundTransparency = 1');
+    if(el.textColor){
+      var hex2=el.textColor.replace('#','');
+      if(hex2.length>=6)lines.push(v+'.TextColor3 = Color3.fromRGB('+parseInt(hex2.substr(0,2),16)+', '+parseInt(hex2.substr(2,2),16)+', '+parseInt(hex2.substr(4,2),16)+')');
+    }
     if(el.text)lines.push(v+'.Text = "'+el.text.replace(/"/g,'\\"')+'"');
     if(el.fontSize)lines.push(v+'.TextSize = '+el.fontSize);
-    lines.push(v+'.Font = Enum.Font.GothamBold');lines.push(v+'.BorderSizePixel = 0');
+    lines.push(v+'.Font = Enum.Font.GothamBold');
+    lines.push(v+'.BorderSizePixel = 0');
     if(el.cornerRadius>0){lines.push('local '+v+'_corner = Instance.new("UICorner", '+v+')');lines.push(v+'_corner.CornerRadius = UDim.new(0, '+el.cornerRadius+')');}
     lines.push(v+'.Parent = screenGui');lines.push('');
   });
@@ -2174,16 +2291,18 @@ function generateGuiCode(){
   var output=document.getElementById('guiCodeOutput');if(output)output.textContent=code;
   document.getElementById('guiCodeModal').classList.add('show');
 }
-function copyGuiCode(){var pre=document.getElementById('guiCodeOutput');if(pre)navigator.clipboard.writeText(pre.textContent).then(function(){toast('Copied!');});}
+function copyGuiCode(){var pre=document.getElementById('guiCodeOutput');if(pre)navigator.clipboard.writeText(pre.textContent).then(function(){toast(LANGS[curLang].copiedToast);});}
 function downloadGuiCode(){var pre=document.getElementById('guiCodeOutput');if(!pre)return;var a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(pre.textContent);a.download='NexusGUI.lua';a.click();}
 function openGuiAIChat(){document.getElementById('guiAIChatModal').classList.add('show');}
 async function generateGuiFromAI(){
+  var t=LANGS[curLang]||LANGS.id;
   var prompt=document.getElementById('guiAIPrompt');if(!prompt||!prompt.value.trim())return;
   closeModal('guiAIChatModal');
   var loading=document.getElementById('guiLoading');if(loading)loading.classList.add('show');
   try{
+    var sysLang=curLang==='id'?'Output ONLY a JSON array of Roblox GUI elements. No explanation. Each element: {"type":"Frame|TextLabel|TextButton|TextBox|ImageLabel","name":"string","x":number,"y":number,"w":number (NOT 0),"h":number (NOT 0),"bgColor":"#hex or transparent","textColor":"#hex","text":"string","fontSize":number,"cornerRadius":number}. IMPORTANT: w and h must be real pixel values, never 0.':'Output ONLY a JSON array of Roblox GUI elements. No explanation. Each element: {"type":"Frame|TextLabel|TextButton|TextBox|ImageLabel","name":"string","x":number,"y":number,"w":number (NOT 0),"h":number (NOT 0),"bgColor":"#hex or transparent","textColor":"#hex","text":"string","fontSize":number,"cornerRadius":number}. IMPORTANT: w and h must be real pixel values, never 0.';
     var body={provider:S.guiModel.prov||'gemini',model:S.guiModel.id,
-      system:'You are a Roblox GUI designer. Output ONLY a JSON array of UI elements, no explanation, no markdown. Each element: {"type":"Frame|TextLabel|TextButton|TextBox|ImageLabel","name":"string","x":number,"y":number,"w":number,"h":number,"bgColor":"#hex or transparent","textColor":"#hex","text":"string","fontSize":number,"cornerRadius":number}',
+      system:sysLang,
       messages:[{role:'user',content:'Create Roblox GUI: '+prompt.value}],max_tokens:2000};
     var r=await fetch('/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     if(r.ok){
@@ -2195,30 +2314,33 @@ async function generateGuiFromAI(){
           clearCanvas();
           els.forEach(function(el){
             guiElCounter++;var id='el'+guiElCounter;
-            guiElements[id]=Object.assign({id:id,cornerRadius:0,fontSize:14,text:'',bgColor:'#1e2040',textColor:'#ffffff'},el);
+            var safeW=Math.max(el.w||200,40);
+            var safeH=Math.max(el.h||100,20);
+            guiElements[id]=Object.assign({id:id,cornerRadius:0,fontSize:14,text:'',bgColor:'#1e2040',textColor:'#ffffff'},el,{w:safeW,h:safeH});
             renderGuiEl(id);
           });
           document.getElementById('guiEmpty').style.display='none';
         }
-      }catch(e){toast('AI response invalid','var(--yellow)');}
+      }catch(e){toast(t.aiResponseInvalid,'var(--yellow)');}
     }
   }catch(e){toast('Error: '+e.message,'var(--pink)');}
   if(loading)loading.classList.remove('show');
 }
 async function sendGuiToPlace(){
-  if(!studioConnected){toast(curLang==='id'?'Studio belum terhubung!':'Studio not connected!','var(--pink)');return;}
-  var els=Object.values(guiElements);if(!els.length){toast('Tambahkan elemen dulu!','var(--yellow)');return;}
+  var t=LANGS[curLang]||LANGS.id;
+  if(!studioConnected){toast(t.guiNotConnectedToast,'var(--pink)');return;}
+  var els=Object.values(guiElements);if(!els.length){toast(t.addElementFirst,'var(--yellow)');return;}
   var cmds=[{action:'create_gui',name:'NexusGUI',parent:'StarterGui',elements:els.map(function(el){
     return{class:el.type,name:el.name,size:[0,el.w,0,el.h],position:[0,el.x,0,el.y],
-      bg_color:hexToRgb(el.bgColor),text_color:hexToRgb(el.textColor),text:el.text||'',
-      text_size:el.fontSize,corner:el.cornerRadius||0};
+      background_color:hexToRgb(el.bgColor),text_color:hexToRgb(el.textColor),text:el.text||'',
+      text_size:el.fontSize,corner_radius:el.cornerRadius||0};
   })}];
   try{
     var r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'application/json'},
       body:JSON.stringify({type:'batch_commands',commands:cmds,_user:SESSION?SESSION.user.username:'web',
         target:(SESSION?SESSION.user.username:'').toLowerCase()})});
     var d=await r.json();
-    if(d.pushed>0)toast(curLang==='id'?'GUI dikirim ke Studio!':'GUI sent to Studio!','var(--green)');
+    if(d.pushed>0)toast(t.guiSentToast,'var(--green)');
     else toast('Sent','var(--dim)');
   }catch(e){toast('Error: '+e.message,'var(--pink)');}
 }
@@ -2247,88 +2369,59 @@ function startResize(e,elId){
   document.addEventListener('mousemove',onMove);document.addEventListener('mouseup',onUp);
 }
 
-// ─── FIX: INIT — no extra newChat on refresh ───────────────────────────────
+// ─── LIKE / DISLIKE / RETRY / SHARE ──────────────────────────────────────
+function likeMsg(btn,isLike){
+  var msgEl=btn.closest('.msg.ai');if(!msgEl)return;
+  var likeBtn=msgEl.querySelector('.mab[onclick*="likeMsg(this,true)"]');
+  var dislikeBtn=msgEl.querySelector('.mab[onclick*="likeMsg(this,false)"]');
+  if(isLike){if(likeBtn)likeBtn.classList.toggle('liked');if(dislikeBtn)dislikeBtn.classList.remove('disliked');}
+  else{if(dislikeBtn)dislikeBtn.classList.toggle('disliked');if(likeBtn)likeBtn.classList.remove('liked');}
+}
+function retryMsg(btn){
+  var msgEl=btn.closest('.msg.ai');if(!msgEl)return;
+  var idxAttr=msgEl.getAttribute('data-msg-idx');if(idxAttr===null)return;
+  var aiIndex=parseInt(idxAttr);
+  var cv=S.convs.find(function(x){return x.id===S.curConv;});if(!cv)return;
+  if(aiIndex>0){
+    var prevMsg=cv.msgs[aiIndex-1];
+    if(prevMsg.role==='user'){
+      var inp=document.getElementById('inp');
+      if(inp){inp.value=prevMsg.content;inp.style.height='auto';inp.style.height=Math.min(inp.scrollHeight,130)+'px';send();}
+    }
+  }
+}
+function shareChat(){
+  var t=LANGS[curLang]||LANGS.id;
+  var cv=S.convs.find(function(x){return x.id===S.curConv;});if(!cv)return;
+  var text='';
+  (cv.msgs||[]).forEach(function(m){
+    var sender=m.role==='user'?(SESSION&&SESSION.user.username||'You'):'NEXUS AI';
+    text+=sender+': '+(m.content||'')+'\n\n';
+  });
+  navigator.clipboard.writeText(text).then(function(){toast(t.chatCopiedToast,'var(--cyan)');});
+}
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
 async function initApp(){
   if(!SESSION)return;
   await loadS();
   var u=SESSION.user;
   var av=document.getElementById('sbAv');if(av)av.src=u.avatar||'nexusai.png';
   var un=document.getElementById('sbUn');if(un)un.textContent='@'+(u.username||'-');
+  var settingsUsername=document.getElementById('settingsUsername');if(settingsUsername)settingsUsername.textContent='@'+(u.username||'-');
   updateRoleDisplay();updateCreds();checkDailyCredits();
-  await loadKeys();await loadAdminIds();
+  await loadKeys();await loadAdminIds();await loadInboxCount();
   applyLang();updateModelUI();
   startStudioPoll();renderConvs();
-  // FIX: Smart conv restoration
   if(S.curConv&&S.convs.some(function(x){return x.id===S.curConv;})){
-    loadConv(S.curConv); // Restore existing conv
+    loadConv(S.curConv);
   }else if(S.convs.length>0){
-    // Load most recent conv
     var mostRecent=S.convs.reduce(function(a,b){return(b.time||0)>(a.time||0)?b:a;});
     S.curConv=mostRecent.id;
     loadConv(S.curConv);
   }else{
-    newChat(); // Only create new if no convs exist
+    newChat();
   }
-}
-
-  // ────────── LIKE / DISLIKE ──────────
-function likeMsg(btn, isLike) {
-  const msgEl = btn.closest('.msg.ai');
-  if (!msgEl) return;
-  const likeBtn = msgEl.querySelector('.mab[onclick*="likeMsg(this,true)"]');
-  const dislikeBtn = msgEl.querySelector('.mab[onclick*="likeMsg(this,false)"]');
-  
-  if (isLike) {
-    if (likeBtn) {
-      likeBtn.classList.toggle('liked');
-      // jika sudah liked lalu klik lagi → unlike
-    }
-    if (dislikeBtn) dislikeBtn.classList.remove('disliked');
-  } else {
-    if (dislikeBtn) {
-      dislikeBtn.classList.toggle('disliked');
-    }
-    if (likeBtn) likeBtn.classList.remove('liked');
-  }
-  // Opsional: simpan ke localStorage atau backend (tidak wajib)
-}
-
-// ────────── RETRY (ulangi pesan sebelumnya) ──────────
-function retryMsg(btn) {
-  const msgEl = btn.closest('.msg.ai');
-  if (!msgEl) return;
-  const idxAttr = msgEl.getAttribute('data-msg-idx');
-  if (idxAttr === null) return;
-  const aiIndex = parseInt(idxAttr);
-  const cv = S.convs.find(x => x.id === S.curConv);
-  if (!cv) return;
-  // Cari pesan user tepat sebelum AI ini
-  if (aiIndex > 0) {
-    const prevMsg = cv.msgs[aiIndex - 1];
-    if (prevMsg.role === 'user') {
-      const inp = document.getElementById('inp');
-      if (inp) {
-        inp.value = prevMsg.content;
-        inp.style.height = 'auto';
-        inp.style.height = Math.min(inp.scrollHeight, 130) + 'px';
-        send();
-      }
-    }
-  }
-}
-
-// ────────── SHARE CHAT (salin teks percakapan) ──────────
-function shareChat() {
-  const cv = S.convs.find(x => x.id === S.curConv);
-  if (!cv) return;
-  let text = '';
-  (cv.msgs || []).forEach(m => {
-    const sender = m.role === 'user' ? 'Anda' : 'NEXUS AI';
-    text += sender + ': ' + (m.content || '') + '\n\n';
-  });
-  navigator.clipboard.writeText(text).then(() => {
-    toast(curLang === 'id' ? 'Chat disalin!' : 'Chat copied!', 'var(--cyan)');
-  });
 }
 
 // ─── EVENT LISTENERS ───────────────────────────────────────────────────────
@@ -2349,14 +2442,6 @@ window.addEventListener('click',function(e){
 });
 
 initApp();
-  // ... (seluruh kode JavaScript yang sama, hanya tambahkan updateHelpBtn di applyLang)
-  function applyLang(){
-    var t=LANGS[curLang]||LANGS.id;
-    // ... seperti aslinya ...
-    // Update tombol bantuan
-    var helpBtn=document.getElementById('helpBtnText');
-    if(helpBtn)helpBtn.textContent=curLang==='id'?'Butuh Bantuan?':'Need Help?';
-  }
 </script>
 </body>
 </html>
