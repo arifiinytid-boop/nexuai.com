@@ -316,6 +316,10 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         <div style="font-size:8.5px;color:rgba(255,214,0,.5);">CR</div>
       </div>
     </div>
+    <button class="btn-nc" onclick="location.href='/dashboard'">
+      <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+      <span>Dashboard</span>
+    </button>
     <button class="btn-nc" onclick="newChat()">
       <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       <span id="newChatLbl">Percakapan Baru</span>
@@ -785,11 +789,12 @@ function isAdmin(){
 function saveS(){
   if(!SESSION)return;
   SESSION.data.credits=S.credits;
-  SESSION.data.convs=S.convs;
+  SESSION.data.convs=S.allConvs || S.convs;
   SESSION.data.plan=S.plan;
   SESSION.data.model=S.model;
   SESSION.data.lastClaim=S.lastClaim;
   SESSION.data.curConv=S.curConv;
+  SESSION.data.projects=S.projects || SESSION.data.projects;
   try{localStorage.setItem('nexus_session',JSON.stringify(SESSION));}catch(e){}
   try{
     fetch('/api/sync',{method:'POST',headers:{'Content-Type':'application/json'},
@@ -815,8 +820,13 @@ async function loadS(){
         S.credits=parseFloat(d.credits)||0;
         S.plan=d.plan||S.plan;
         S.lastClaim=d.lastClaim||S.lastClaim;
-        if(d.convs&&d.convs.length)S.convs=d.convs;
+        if(d.convs&&d.convs.length){
+          S.allConvs=d.convs;
+          if(S.currentProjectId) S.convs = S.allConvs.filter(c => c.projectId === S.currentProjectId);
+          else S.convs = S.allConvs;
+        }
         if(d.curConv)S.curConv=d.curConv;
+        if(d.projects) S.projects = d.projects;
         SESSION.data=Object.assign(SESSION.data||{},d);
       }
     }
@@ -1033,7 +1043,11 @@ function renderConvs(){
 }
 function newChat(){
   var id='c'+Date.now();
-  S.curConv=id;S.convs.push({id:id,title:curLang==='id'?'Percakapan Baru':'New Chat',time:Date.now(),msgs:[]});
+  var cv={id:id,title:curLang==='id'?'Percakapan Baru':'New Chat',time:Date.now(),msgs:[],projectId: S.currentProjectId};
+  S.curConv=id;
+  if(!S.convs) S.convs=[];
+  S.convs.push(cv);
+  if(S.allConvs && S.currentProjectId) S.allConvs.push(cv);
   renderConvs();renderMsgs([]);
   var title=document.getElementById('chatTitle');if(title)title.textContent=curLang==='id'?'Percakapan Baru':'New Chat';
   var welcome=document.getElementById('welcome');if(welcome)welcome.style.display='flex';
@@ -2401,10 +2415,40 @@ function shareChat(){
   navigator.clipboard.writeText(text).then(function(){toast(t.chatCopiedToast,'var(--cyan)');});
 }
 
-// ─── INIT ──────────────────────────────────────────────────────────────────
+// ─── PROJECT HANDLING ───────────────────────────────────────────────────────
+function getProjectIdFromUrl() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const idFromQuery = urlParams.get('id');
+  if (idFromQuery) return idFromQuery;
+  
+  const pathParts = window.location.pathname.split('/');
+  const chatsIndex = pathParts.indexOf('chats');
+  if (chatsIndex !== -1 && pathParts[chatsIndex + 1]) {
+    return pathParts[chatsIndex + 1];
+  }
+  return null;
+}
+
 async function initApp(){
   if(!SESSION)return;
   await loadS();
+  
+  const projectId = getProjectIdFromUrl();
+  if (projectId) {
+    S.currentProjectId = projectId;
+    const project = (SESSION.data && SESSION.data.projects || []).find(p => p.id === projectId);
+    const chatTitle = document.getElementById('chatTitle');
+    if (chatTitle) {
+      chatTitle.textContent = project ? `Project: ${project.name}` : `Project ID: ${projectId}`;
+    }
+    // Filter conversations for this project
+    S.allConvs = S.convs || [];
+    S.convs = S.allConvs.filter(c => c.projectId === projectId);
+  } else {
+    S.currentProjectId = null;
+    // Default behavior if no project ID
+  }
+
   var u=SESSION.user;
   var av=document.getElementById('sbAv');if(av)av.src=u.avatar||'nexusai.png';
   var un=document.getElementById('sbUn');if(un)un.textContent='@'+(u.username||'-');
@@ -2413,11 +2457,12 @@ async function initApp(){
   await loadKeys();await loadAdminIds();await loadInboxCount();
   applyLang();updateModelUI();
   startStudioPoll();renderConvs();
-  if(S.curConv&&S.convs.some(function(x){return x.id===S.curConv;})){
+  
+  if(S.curConv && S.convs.some(function(x){return x.id===S.curConv;})){
     loadConv(S.curConv);
   }else if(S.convs.length>0){
-    var mostRecent=S.convs.reduce(function(a,b){return(b.time||0)>(a.time||0)?b:a;});
-    S.curConv=mostRecent.id;
+    var mostRecent = S.convs.reduce(function(a,b){return(b.time||0)>(a.time||0)?b:a;});
+    S.curConv = mostRecent.id;
     loadConv(S.curConv);
   }else{
     newChat();
