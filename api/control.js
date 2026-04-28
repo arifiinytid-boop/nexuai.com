@@ -18,6 +18,7 @@ function wsFile(u)       { return `${TMP}/nw_${san(u)}.json`; }
 function scriptFile(u)   { return `${TMP}/ns_${san(u)}.json`; }
 function scriptListF(u)  { return `${TMP}/nsl_${san(u)}.json`; }
 function logSvcFile(u)   { return `${TMP}/nlg_${san(u)}.json`; }
+function projectFile(u)  { return `${TMP}/nprj_${san(u)}.json`; }  // ← NEW
 const LOG_FILE  = `${TMP}/nexus_log.json`;
 const HIST_FILE = `${TMP}/nexus_hist.json`;
 
@@ -32,7 +33,6 @@ function saveQueue(u, arr) {
 function pushQueue(u, cmd) {
   const q = getQueue(u);
   q.push({ ...cmd, _ts: Date.now() });
-  // Limit queue size to 200 to prevent memory issues
   if (q.length > 200) q.splice(0, q.length - 200);
   saveQueue(u, q);
 }
@@ -45,7 +45,6 @@ function bumpPoll(u) {
 function lastPoll(u) {
   try { return parseInt(readFileSync(pollFile(u), 'utf8') || '0'); } catch(_) { return 0; }
 }
-// Plugin is online if it polled within last 7 seconds
 function isOnline(u) { return (Date.now() - lastPoll(u)) < 7000; }
 
 // ─── OUTPUT HELPERS ───────────────────────────────────────
@@ -105,6 +104,23 @@ function getScriptList(u) {
   return null;
 }
 
+// ─── PROJECT HELPERS (NEW) ────────────────────────────────
+function saveProject(u, data) {
+  try {
+    writeFileSync(projectFile(u), JSON.stringify({
+      projectId: data.projectId || '',
+      projectName: data.projectName || '',
+      updatedAt: Date.now(),
+    }));
+  } catch(_) {}
+}
+function getProject(u) {
+  try {
+    if (existsSync(projectFile(u))) return JSON.parse(readFileSync(projectFile(u), 'utf8'));
+  } catch(_) {}
+  return { projectId: '', projectName: '', updatedAt: 0 };
+}
+
 // ─── VALID ACTIONS ────────────────────────────────────────
 const VALID_ACTIONS = new Set([
   'none', 'read_script', 'edit_script', 'list_scripts', 'scan_workspace',
@@ -133,9 +149,10 @@ const VALID_ACTIONS = new Set([
   'create_instance', 'read_workspace', 'workspace_data',
   'batch_commands', 'set_camera', 'set_game_info', 'clear_workspace',
   'teleport_player', 'play_test', 'run_test', 'stop_test',
+  'set_project',  // ← NEW
 ]);
 
-// ─── RATE LIMITING (simple per-user) ──────────────────────
+// ─── RATE LIMITING ────────────────────────────────────────
 const rateLimits = new Map();
 function checkRateLimit(user, maxPerMinute = 120) {
   const now = Date.now();
@@ -167,7 +184,7 @@ export default async function handler(req, res) {
         web_version: WEB_VERSION,
         update_url: 'https://discord.gg/HuGtbRvD',
         changelog: 'V10.5: Enhanced validation, rate limiting, full classname support, batch improvements',
-        features: ['LogService', 'Script Read/Edit/Create', 'Workspace Scan', 'Full Classname Support', 'Batch Commands', '50+ Actions'],
+        features: ['LogService', 'Script Read/Edit/Create', 'Workspace Scan', 'Full Classname Support', 'Batch Commands', '50+ Actions', 'Project Name'],
       });
     }
 
@@ -199,6 +216,7 @@ export default async function handler(req, res) {
     if (req.query.check) {
       const u = san(req.query.user || '');
       const online = isOnline(u);
+      const project = getProject(u);
       return res.status(200).json({
         _pluginConnected: online,
         connected: online,
@@ -208,7 +226,15 @@ export default async function handler(req, res) {
         queueLength: getQueue(u).length,
         required_plugin_version: REQUIRED_PLUGIN_VERSION,
         web_version: WEB_VERSION,
+        currentProject: project,  // ← NEW: project info in status check
       });
+    }
+
+    // ── Get current project (NEW) ──────────────────────────
+    if (req.query.get_project) {
+      const u = san(req.query.user || '');
+      const project = getProject(u);
+      return res.status(200).json({ ok: true, ...project });
     }
 
     // ── Get plugin output ──────────────────────────────────
@@ -271,13 +297,14 @@ export default async function handler(req, res) {
     if (!pu) return res.status(400).json({ error: 'user required', queue: [] });
     bumpPoll(pu);
     const q = getQueue(pu);
-    // Clear queue after delivering
+    const project = getProject(pu);  // ← NEW: include project in poll
     if (q.length > 0) clearQueue(pu);
     return res.status(200).json({
       queue: q,
       count: q.length,
       required_plugin_version: REQUIRED_PLUGIN_VERSION,
       web_version: WEB_VERSION,
+      currentProject: project,  // ← Plugin sees project name on every poll
     });
   }
 
@@ -303,12 +330,30 @@ export default async function handler(req, res) {
     // ── Status check ───────────────────────────────────────
     if (body.type === 'status') {
       const u = san(body.user || '');
+      const project = getProject(u);
       return res.status(200).json({
         connected: isOnline(u),
         online: isOnline(u),
         lastPoll: lastPoll(u),
         required_plugin_version: REQUIRED_PLUGIN_VERSION,
         web_version: WEB_VERSION,
+        currentProject: project,  // ← NEW
+      });
+    }
+
+    // ── Set current project (NEW) ──────────────────────────
+    if (body.type === 'set_project' || body.action === 'set_project') {
+      const u = san(body._user || body.user || '');
+      if (!u) return res.status(400).json({ error: 'user required' });
+      saveProject(u, {
+        projectId: String(body.projectId || '').substring(0, 100),
+        projectName: String(body.projectName || '').substring(0, 100),
+      });
+      pushLog({ action: 'set_project', user: u, projectId: body.projectId, projectName: body.projectName });
+      return res.status(200).json({
+        status: 'ok',
+        projectId: body.projectId,
+        projectName: body.projectName,
       });
     }
 
@@ -410,7 +455,7 @@ export default async function handler(req, res) {
       });
     }
 
-    // ── JSON executor (parse ```json blocks from AI text) ──
+    // ── JSON executor ──────────────────────────────────────
     if (body.type === 'execute_json' && body.text) {
       const target = san(body._target_user || body._user || '');
       if (!target) return res.status(400).json({ error: '_target_user required' });
