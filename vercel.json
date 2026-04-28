@@ -1,8 +1,8 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/chat",          "destination": "/chats.html" },
-    { "source": "/chats",         "destination": "/chats.html" },
+    { "source": "/dashboard",     "destination": "/dashboard.html" },
+    { "source": "/chats/:id",     "destination": "/chats.html?id=:id" },
     { "source": "/login",         "destination": "/login.html" },
     { "source": "/",              "destination": "/index.html" },
     { "source": "/payment",       "destination": "/payment.html" },
@@ -11,7 +11,6 @@
     { "source": "/terms",         "destination": "/terms.html" },
     { "source": "/admin-panel",   "destination": "/admin-panel.html" },
     { "source": "/inbox",         "destination": "/inbox.html" },
-    { "source": "/ui-editor",     "destination": "/chats.html" },
     { "source": "/agent",         "destination": "/agent.html" }
   ],
   "headers": [
