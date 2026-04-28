@@ -227,7 +227,7 @@ module.exports = async (req, res) => {
       const safeFields = [
         'convs', 'curConv', 'model', 'lastClaim', 'guiModel',
         'draftText', 'draftAttach', 'avatar', 'displayName',
-        'settings', 'preferences'
+        'settings', 'preferences', 'projects'
       ];
 
       const newData = {};
