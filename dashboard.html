@@ -95,6 +95,15 @@
       color: #fff; font-family: 'JetBrains Mono', monospace; font-size: 14px;
       outline: none; transition: 0.3s;
     }
+    /* PERBAIKAN: placeholder lebih redup */
+    .project-input::placeholder {
+      color: var(--dim);
+      opacity: 0.7;
+    }
+    .chat-input-area input::placeholder {
+      color: var(--dim);
+      opacity: 0.7;
+    }
     .btn-create {
       background: linear-gradient(135deg, var(--cyan), var(--purple));
       color: #030312; border: none; border-radius: 8px; padding: 0 30px;
@@ -126,7 +135,7 @@
     .btn-del:hover { background: var(--pink); color: #fff; }
     .empty-state { text-align: center; padding: 100px 0; color: var(--dim); grid-column: 1 / -1; }
 
-    /* tambahan untuk chat view */
+    /* tampilan chat */
     .chat-container {
       background: var(--bg2); border: 1px solid var(--b); border-radius: var(--r);
       padding: 30px; min-height: 60vh; display: flex; flex-direction: column; gap: 20px;
@@ -169,14 +178,12 @@
   </div>
 </nav>
 
-<!-- Container yang akan menampilkan DASHBOARD atau CHAT -->
 <div id="appContainer" class="main"></div>
 
 <script>
   let SESSION = null;
   let USER_DATA = null;
 
-  // ---------- Auth & init ----------
   async function checkAuth() {
     const sessionStr = localStorage.getItem('nexus_session');
     if (!sessionStr) { window.location.href = '/login'; return; }
@@ -191,7 +198,6 @@
 
     await loadUserData();
     document.getElementById('loader').style.display = 'none';
-    // Setelah data siap, jalankan router
     router();
   }
 
@@ -207,19 +213,18 @@
     }
   }
 
-  // ---------- Router sederhana ----------
+  // ---------- ROUTER ----------
   function router() {
     const path = window.location.pathname;
     const match = path.match(/^\/chats\/(.+)$/);
     if (match) {
-      const projectId = match[1];
-      renderChatView(projectId);
+      renderChatView(match[1]);   // /chats/xxxx
     } else {
-      renderDashboardView();
+      renderDashboardView();      // /dashboard atau /
     }
   }
 
-  // ---------- Tampilan Dashboard ----------
+  // ---------- DASHBOARD VIEW ----------
   function renderDashboardView() {
     const container = document.getElementById('appContainer');
     container.innerHTML = `
@@ -290,12 +295,11 @@
     `).join('');
   }
 
-  // ---------- Tampilan Chat ----------
+  // ---------- CHAT VIEW ----------
   function renderChatView(projectId) {
     const project = USER_DATA.projects.find(p => p.id === projectId);
     const projectName = project ? project.name : 'Unknown Project';
-    const container = document.getElementById('appContainer');
-    container.innerHTML = `
+    document.getElementById('appContainer').innerHTML = `
       <div class="chat-container">
         <div class="chat-header">
           <div>
@@ -317,19 +321,16 @@
       </div>
     `;
 
-    // Fungsi kirim pesan (contoh dasar, bisa dikembangkan)
     window.sendMessage = function() {
       const input = document.getElementById('chatInput');
       const msg = input.value.trim();
       if (!msg) return;
-      const messagesDiv = document.getElementById('chatMessages');
-      messagesDiv.innerHTML += `<p style="color:var(--green); margin:8px 0;"><strong>You:</strong> ${msg}</p>`;
+      document.getElementById('chatMessages').innerHTML += `<p style="color:var(--green); margin:8px 0;"><strong>You:</strong> ${msg}</p>`;
       input.value = '';
-      // Di sini kamu bisa panggil API AI-mu
     };
   }
 
-  // ---------- CRUD functions ----------
+  // ---------- CRUD ----------
   async function createProject() {
     const nameInput = document.getElementById('projectName');
     const name = nameInput.value.trim();
@@ -356,9 +357,8 @@
         body: JSON.stringify({ user: SESSION.user.username, data: USER_DATA })
       });
       if (res.ok) {
-        // Navigasi clean (menggunakan History API agar tidak reload)
         window.history.pushState(null, '', `/chats/${pid}`);
-        router();
+        router();  // tampilkan chat view
       } else {
         alert("Failed to save project.");
       }
@@ -368,10 +368,8 @@
   async function deleteProject(e, id) {
     e.stopPropagation();
     if (!confirm("Delete this project? All chat history in this project will be hidden (not deleted).")) return;
-    
     USER_DATA.projects = USER_DATA.projects.filter(p => p.id !== id);
     renderProjects();
-
     try {
       await fetch('/api/sync', {
         method: 'POST',
@@ -390,8 +388,7 @@
     window.location.href = '/chats?settings=true';
   }
 
-  // ---------- Jalankan ----------
-  window.addEventListener('popstate', router); // biar tombol back/forward browser bekerja
+  window.addEventListener('popstate', router); // dukung navigasi browser
   checkAuth();
 </script>
 </body>
