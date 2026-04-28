@@ -99,19 +99,32 @@ body::before {
 
 .header {
     margin-bottom: 40px;
+    display: flex;
+    align-items: center;
+    gap: 25px;
 }
 
-.header h1 {
+.header-icon {
+    width: 80px;
+    height: 80px;
+    background: var(--bg2);
+    border: 1px solid var(--b);
+    border-radius: 16px;
+    padding: 15px;
+    box-shadow: 0 0 30px rgba(0, 229, 255, 0.1);
+}
+
+.header-text h1 {
     font-family: 'Orbitron', sans-serif;
     font-size: 32px;
     font-weight: 900;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     background: linear-gradient(to right, #fff, var(--dim));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
 
-.header p {
+.header-text p {
     color: var(--dim);
     font-size: 14px;
 }
@@ -230,7 +243,6 @@ body::before {
 .project-id {
     font-size: 10px;
     color: var(--dim);
-    margin-bottom: 20px;
     display: block;
 }
 
@@ -259,6 +271,7 @@ body::before {
     text-align: center;
     padding: 100px 0;
     color: var(--dim);
+    grid-column: 1 / -1;
 }
 
 .empty-state svg {
@@ -317,8 +330,11 @@ body::before {
 
 <div class="main">
     <header class="header">
-        <h1>Welcome, <span id="welcomeName" style="color: var(--cyan);">Dev</span></h1>
-        <p>Manage your projects and AI interactions from one central hub.</p>
+        <img src="studio.png" class="header-icon" alt="Studio Hub">
+        <div class="header-text">
+            <h1>Welcome, <span id="welcomeName" style="color: var(--cyan);">Dev</span></h1>
+            <p>Nexus AI Project Hub — Create and manage your Roblox AI sessions.</p>
+        </div>
     </header>
 
     <div class="create-card">
@@ -374,11 +390,14 @@ async function checkAuth() {
 
 async function loadUserData() {
     try {
-        const res = await fetch(`/api/sync?user=${SESSION.user.username}`);
-        USER_DATA = await res.json();
+        const res = await fetch(`/api/sync?user=${encodeURIComponent(SESSION.user.username)}`);
+        const data = await res.json();
+        USER_DATA = data || { projects: [] };
         renderProjects();
     } catch (e) {
         console.error("Failed to load user data", e);
+        USER_DATA = { projects: [] };
+        renderProjects();
     }
 }
 
@@ -398,8 +417,11 @@ function renderProjects() {
 
     grid.innerHTML = projects.map(p => `
         <div class="project-item" onclick="openProject('${p.id}')">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:15px;">
+                <img src="studio.png" alt="Studio" style="width:32px; height:32px; border-radius:6px; background:rgba(0,0,0,0.2); padding:4px;">
+                <span class="project-id">ID: ${p.id}</span>
+            </div>
             <h3>${p.name}</h3>
-            <span class="project-id">ID: ${p.id}</span>
             <div class="project-meta">
                 <div class="meta-item">Created: <span>${new Date(p.createdAt).toLocaleDateString()}</span></div>
                 <div class="meta-item">Status: <span style="color: var(--green)">Active</span></div>
@@ -424,7 +446,7 @@ async function createProject() {
         createdAt: new Date().toISOString()
     };
 
-    if (!USER_DATA) USER_DATA = { user: SESSION.user.username, data: {} };
+    if (!USER_DATA) USER_DATA = { projects: [] };
     if (!USER_DATA.projects) USER_DATA.projects = [];
     USER_DATA.projects.unshift(newProject);
 
