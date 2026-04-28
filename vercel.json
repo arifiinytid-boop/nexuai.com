@@ -3,14 +3,16 @@
   "rewrites": [
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/chats/:id", "destination": "/chats.html?id=:id" },
+    { "source": "/chats", "destination": "/chats.html" },
     { "source": "/login", "destination": "/login.html" },
-    { "source": "/payment", "destination": "/payment.html" },
-    { "source": "/setup-discord-app", "destination": "/setup-discord-app.html" },
-    { "source": "/privacy", "destination": "/privacy.html" },
-    { "source": "/terms", "destination": "/terms.html" },
     { "source": "/admin-panel", "destination": "/admin-panel.html" },
     { "source": "/inbox", "destination": "/inbox.html" },
-    { "source": "/agent", "destination": "/agent.html" }
+    { "source": "/payment", "destination": "/payment.html" },
+    { "source": "/privacy", "destination": "/privacy.html" },
+    { "source": "/terms", "destination": "/terms.html" },
+    { "source": "/agent", "destination": "/agent.html" },
+    { "source": "/api/(.*)", "destination": "/api/$1" },
+    { "source": "/(.*)", "destination": "/$1" }
   ],
   "headers": [
     {
@@ -23,3 +25,4 @@
     }
   ]
 }
+
