@@ -143,6 +143,19 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
     <div class="stat-box"><div class="stat-num" id="stCredits">—</div><div class="stat-label">Total Credits</div></div>
   </div>
 
+  <!-- Admin Settings -->
+  <div class="card" style="border-color: var(--pink);">
+    <div class="card-title" style="color: var(--pink);">
+      <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      Admin Authentication
+    </div>
+    <div class="form-group">
+      <label class="form-label">Admin Security Token</label>
+      <input class="form-input" type="password" id="adminTokenOverride" placeholder="Enter ADMIN_TOKEN..." value="nexusadmin2024">
+      <div style="font-size: 8px; color: var(--dim); margin-top: 4px;">Must match ADMIN_TOKEN in your environment variables.</div>
+    </div>
+  </div>
+
   <!-- ROW 1 -->
   <div class="grid">
     <!-- User Lookup -->
@@ -316,6 +329,27 @@ body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0
         </button>
         <div class="status-text" id="inboxStatus"></div>
       </div>
+    </div>
+  </div>
+
+  <!-- Project Explorer -->
+  <div class="card">
+    <div class="card-title">
+      <svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" fill="none" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+      Project Explorer
+    </div>
+    <div class="form-group">
+      <label class="form-label">Filter by Project ID</label>
+      <div style="display: flex; gap: 8px;">
+        <input class="form-input" id="searchProjectId" placeholder="Enter Project ID...">
+        <button class="btn btn-cyan" onclick="filterByProject()">Filter</button>
+      </div>
+    </div>
+    <div style="overflow-x:auto;margin-top:12px;">
+      <table class="user-table">
+        <thead><tr><th>Project Name</th><th>ID</th><th>Owner</th><th>Created At</th><th>Actions</th></tr></thead>
+        <tbody id="projectTableBody"><tr><td colspan="5" style="text-align:center;color:var(--dim);padding:20px;">Load users to see projects.</td></tr></tbody>
+      </table>
     </div>
   </div>
     <!-- Redeem Codes Manager -->
@@ -793,7 +827,55 @@ async function loadUsers(){
     var stPro = getEl('stPro'); if(stPro) stPro.textContent=pro;
     var stOnline = getEl('stOnline'); if(stOnline) stOnline.textContent=active;
     var stCredits = getEl('stCredits'); if(stCredits) stCredits.textContent=credits.toFixed(0);
+    renderProjectsList();
   }catch(e){}
+}
+
+function renderProjectsList() {
+    var body = getEl('projectTableBody');
+    if (!body) return;
+    var html = '';
+    var projectsFound = false;
+    
+    allUsers.forEach(([username, data]) => {
+        if (data.projects && Array.isArray(data.projects)) {
+            data.projects.forEach(p => {
+                projectsFound = true;
+                html += `<tr>
+                    <td style="color:var(--cyan);font-weight:700;">${p.name || 'Unnamed'}</td>
+                    <td style="font-family:monospace;">${p.id}</td>
+                    <td style="color:var(--yellow);">@${username}</td>
+                    <td style="color:var(--dim);">${p.createdAt ? new Date(p.createdAt).toLocaleDateString() : '—'}</td>
+                    <td>
+                        <button class="btn btn-secondary" style="padding:2px 8px;font-size:7px;" onclick="viewProjectDetails('${p.id}', '${username}')">View Info</button>
+                    </td>
+                </tr>`;
+            });
+        }
+    });
+
+    if (!projectsFound) {
+        body.innerHTML = '<tr><td colspan="5" style="text-align:center;color:var(--dim);padding:20px;">No projects found across users.</td></tr>';
+    } else {
+        body.innerHTML = html;
+    }
+}
+
+function filterByProject() {
+    var id = getEl('searchProjectId').value.trim();
+    var rows = document.querySelectorAll('#projectTableBody tr');
+    rows.forEach(row => {
+        var rowId = row.cells[1]?.textContent;
+        if (!id || (rowId && rowId.includes(id))) {
+            row.style.display = '';
+        } else {
+            row.style.display = 'none';
+        }
+    });
+}
+
+function viewProjectDetails(pid, owner) {
+    alert(`Project Details:\nID: ${pid}\nOwner: @${owner}\nMore detailed analytics coming soon!`);
 }
 
 async function loadLogs(){
