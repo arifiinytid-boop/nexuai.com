@@ -1,6 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
+    { "source": "/", "destination": "/index.html" },
     { "source": "/dashboard", "destination": "/dashboard.html" },
     { "source": "/chats/:id", "destination": "/chats.html?id=:id" },
     { "source": "/chats", "destination": "/chats.html" },
