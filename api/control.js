@@ -2,7 +2,7 @@
 import { readFileSync, writeFileSync, existsSync } from 'fs';
 
 const TMP = '/tmp';
-export const REQUIRED_PLUGIN_VERSION = 'V1.1.7';
+export const REQUIRED_PLUGIN_VERSION = 'V1.1.8';
 export const WEB_VERSION = 'V10.4';
 
 // ─── SANITIZE ─────────────────────────────────────────────
