@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>404 — NEXUS AI</title>
+<link rel="icon" href="nexusai.png" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #030312;
+  --bg2: #06071a;
+  --bg3: #0a0b22;
+  --cyan: #00e5ff;
+  --cyan2: rgba(0,229,255,.35);
+  --cyan3: rgba(0,229,255,.12);
+  --purple: #8800ff;
+  --pink: #ff2d6b;
+  --green: #00ffaa;
+  --yellow: #ffd600;
+  --text: #b8cfff;
+  --dim: #3a4a7a;
+  --b: rgba(0,229,255,.12);
+  --bb: rgba(0,229,255,.3);
+  --r: 8px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  font-family: 'JetBrains Mono', monospace;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  overflow: hidden;
+}
+
+/* Grid background */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    linear-gradient(rgba(0,229,255,.012) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,255,.012) 1px, transparent 1px);
+  background-size: 40px 40px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Scanline overlay */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,.06) 2px,
+    rgba(0,0,0,.06) 4px
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ambient glow blobs */
+.blob {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(120px);
+  pointer-events: none;
+  z-index: 0;
+  animation: blobDrift 8s ease-in-out infinite alternate;
+}
+.blob-1 {
+  width: 500px; height: 500px;
+  background: rgba(136,0,255,.07);
+  top: -150px; left: -100px;
+}
+.blob-2 {
+  width: 400px; height: 400px;
+  background: rgba(0,229,255,.05);
+  bottom: -100px; right: -80px;
+  animation-delay: -4s;
+}
+.blob-3 {
+  width: 300px; height: 300px;
+  background: rgba(255,45,107,.04);
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  animation-delay: -2s;
+}
+
+@keyframes blobDrift {
+  from { transform: translate(0,0) scale(1); }
+  to { transform: translate(30px, 20px) scale(1.08); }
+}
+
+/* Page wrapper */
+.page {
+  position: relative;
+  z-index: 1;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Top bar */
+.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  height: 46px;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--b);
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  gap: 10px;
+  z-index: 10;
+  animation: slideDown .5s ease both;
+}
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.topbar-logo {
+  width: 26px; height: 26px;
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  display: flex; align-items: center; justify-content: center;
+}
+.topbar-logo img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.topbar-name {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900;
+  font-size: 12px;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: 1px;
+}
+.topbar-sep {
+  color: var(--dim);
+  font-size: 11px;
+  margin: 0 2px;
+}
+.topbar-sub {
+  font-size: 9px;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+.topbar-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.topbar-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--pink);
+  animation: pulse 1.8s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .4; transform: scale(.7); }
+}
+.topbar-status {
+  font-size: 9px;
+  color: var(--pink);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+}
+
+/* Main 404 content */
+.main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  animation: fadeUp .7s ease .1s both;
+}
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: none; }
+}
+
+/* Glitch 404 number */
+.error-code {
+  font-family: 'Orbitron', sans-serif;
+  font-size: clamp(80px, 16vw, 160px);
+  font-weight: 900;
+  line-height: 1;
+  position: relative;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(0,229,255,.15);
+  margin-bottom: 4px;
+}
+.error-code::before,
+.error-code::after {
+  content: '404';
+  position: absolute;
+  inset: 0;
+  font-family: 'Orbitron', sans-serif;
+  font-size: inherit;
+  font-weight: 900;
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: glitch1 3.5s infinite;
+}
+.error-code::before {
+  animation: glitch1 3.5s infinite;
+  clip-path: polygon(0 0, 100% 0, 100% 40%, 0 40%);
+}
+.error-code::after {
+  animation: glitch2 3.5s infinite;
+  clip-path: polygon(0 60%, 100% 60%, 100% 100%, 0 100%);
+}
+@keyframes glitch1 {
+  0%,94%,100% { transform: none; opacity: 1; }
+  95% { transform: translate(-3px, 1px) skewX(-2deg); opacity: .9; }
+  97% { transform: translate(3px, -1px) skewX(1deg); opacity: .85; }
+}
+@keyframes glitch2 {
+  0%,94%,100% { transform: none; opacity: 1; }
+  95% { transform: translate(3px, -2px) skewX(2deg); opacity: .9; }
+  97% { transform: translate(-2px, 1px) skewX(-1deg); opacity: .85; }
+}
+
+/* Code-style label */
+.code-label {
+  font-size: 9px;
+  color: var(--dim);
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.code-label::before,
+.code-label::after {
+  content: '';
+  display: block;
+  width: 30px;
+  height: 1px;
+  background: var(--b);
+}
+
+/* Terminal card */
+.terminal {
+  background: var(--bg2);
+  border: 1px solid var(--b);
+  border-radius: 12px;
+  overflow: hidden;
+  max-width: 500px;
+  width: 100%;
+  margin-bottom: 24px;
+  animation: fadeUp .7s ease .25s both;
+  box-shadow: 0 16px 64px rgba(0,0,0,.7), 0 0 0 1px rgba(0,229,255,.04) inset;
+}
+.terminal-hdr {
+  padding: 8px 14px;
+  background: var(--bg3);
+  border-bottom: 1px solid var(--b);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.t-dot {
+  width: 9px; height: 9px;
+  border-radius: 50%;
+}
+.t-dot.r { background: rgba(255,45,107,.7); }
+.t-dot.y { background: rgba(255,214,0,.6); }
+.t-dot.g { background: rgba(0,255,170,.55); }
+.terminal-path {
+  font-size: 9px;
+  color: var(--dim);
+  margin-left: auto;
+  letter-spacing: .5px;
+}
+.terminal-body {
+  padding: 14px 18px;
+  text-align: left;
+  font-size: 11.5px;
+  line-height: 2;
+}
+.t-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  opacity: 0;
+  animation: typeIn .3s ease forwards;
+}
+.t-line:nth-child(1) { animation-delay: .4s; }
+.t-line:nth-child(2) { animation-delay: .75s; }
+.t-line:nth-child(3) { animation-delay: 1.1s; }
+.t-line:nth-child(4) { animation-delay: 1.45s; }
+.t-line:nth-child(5) { animation-delay: 1.8s; }
+@keyframes typeIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to { opacity: 1; transform: none; }
+}
+.t-prompt { color: var(--cyan); flex-shrink: 0; }
+.t-prompt.err { color: var(--pink); }
+.t-prompt.ok { color: var(--green); }
+.t-prompt.warn { color: var(--yellow); }
+.t-text { color: var(--text); }
+.t-text .hl { color: var(--cyan); }
+.t-text .err { color: var(--pink); }
+.t-text .ok { color: var(--green); }
+.t-text .warn { color: var(--yellow); }
+.t-text .dim { color: var(--dim); }
+
+/* Cursor blink */
+.cursor {
+  display: inline-block;
+  width: 7px; height: 14px;
+  background: var(--cyan);
+  border-radius: 1px;
+  margin-left: 3px;
+  vertical-align: middle;
+  animation: blink .8s step-end infinite;
+  opacity: 0;
+  animation-delay: 2.2s;
+  animation-fill-mode: forwards;
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Action buttons */
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  animation: fadeUp .7s ease .45s both;
+}
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-family: 'Orbitron', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  cursor: pointer;
+  border: none;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: .18s;
+}
+.btn-primary {
+  background: linear-gradient(135deg, var(--cyan), var(--purple));
+  color: white;
+}
+.btn-primary:hover { opacity: .82; transform: scale(1.04); }
+.btn-secondary {
+  background: rgba(0,229,255,.06);
+  border: 1px solid var(--b);
+  color: var(--cyan);
+}
+.btn-secondary:hover { border-color: var(--cyan2); background: rgba(0,229,255,.1); }
+.btn svg {
+  width: 13px; height: 13px;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 2;
+  flex-shrink: 0;
+}
+
+/* Footer */
+.footer {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  padding: 8px 20px;
+  background: var(--bg2);
+  border-top: 1px solid var(--b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 8.5px;
+  color: var(--dim);
+  z-index: 10;
+  animation: slideUp .5s ease both;
+}
+@keyframes slideUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to { transform: none; opacity: 1; }
+}
+.footer span { color: var(--cyan); }
+.footer-sep { color: var(--b); }
+
+/* Floating particles */
+.particles {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+}
+.particle {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: var(--cyan);
+  border-radius: 50%;
+  opacity: 0;
+  animation: floatUp var(--dur, 8s) ease-in infinite;
+  animation-delay: var(--del, 0s);
+  left: var(--x, 50%);
+}
+@keyframes floatUp {
+  0% { opacity: 0; transform: translateY(100vh) scale(0); }
+  10% { opacity: .6; }
+  90% { opacity: .2; }
+  100% { opacity: 0; transform: translateY(-10vh) scale(1.5); }
+}
+
+@media(max-width:500px){
+  .error-code { font-size: clamp(60px,18vw,100px); }
+  .terminal { max-width: 95vw; }
+  .actions { flex-direction: column; align-items: center; }
+  .btn { width: 200px; justify-content: center; }
+  .footer { font-size: 8px; gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- Ambient blobs -->
+<div class="blob blob-1"></div>
+<div class="blob blob-2"></div>
+<div class="blob blob-3"></div>
+
+<!-- Floating particles -->
+<div class="particles" id="particles"></div>
+
+<!-- Top bar -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <img src="nexusai.png" alt="N" onerror="this.style.display='none'">
+  </div>
+  <div class="topbar-name">NEXUS AI</div>
+  <div class="topbar-sep">/</div>
+  <div class="topbar-sub">Roblox Dev Intelligence</div>
+  <div class="topbar-right">
+    <div class="topbar-dot"></div>
+    <div class="topbar-status">Page Error</div>
+  </div>
+</div>
+
+<!-- Main content -->
+<div class="page">
+  <div class="main">
+
+    <!-- Glitch 404 -->
+    <div class="error-code">404</div>
+    <div class="code-label">PAGE_NOT_FOUND</div>
+
+    <!-- Terminal card -->
+    <div class="terminal">
+      <div class="terminal-hdr">
+        <div class="t-dot r"></div>
+        <div class="t-dot y"></div>
+        <div class="t-dot g"></div>
+        <div class="terminal-path">nexusai-roblox.vercel.app/~</div>
+      </div>
+      <div class="terminal-body">
+        <div class="t-line">
+          <span class="t-prompt">$</span>
+          <span class="t-text">nexus scan <span class="hl">--path</span> <span class="warn">"<?php echo htmlspecialchars($_SERVER['REQUEST_URI'] ?? '/???'); ?>"</span></span>
+        </div>
+        <div class="t-line">
+          <span class="t-prompt err">✗</span>
+          <span class="t-text"><span class="err">ERROR</span> <span class="dim">Route not found in workspace</span></span>
+        </div>
+        <div class="t-line">
+          <span class="t-prompt warn">!</span>
+          <span class="t-text"><span class="warn">WARN</span> <span class="dim">Instance does not exist in ServerStorage</span></span>
+        </div>
+        <div class="t-line">
+          <span class="t-prompt ok">→</span>
+          <span class="t-text"><span class="dim">Suggest:</span> <span class="ok">redirect to /dashboard</span></span>
+        </div>
+        <div class="t-line">
+          <span class="t-prompt" style="color:var(--cyan)">_</span>
+          <span class="t-text"><span class="dim">Waiting for input...</span><span class="cursor"></span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="actions">
+      <a href="/dashboard" class="btn btn-primary">
+        <svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Dashboard
+      </a>
+      <a href="/chats" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Buka Chat
+      </a>
+      <a href="javascript:history.back()" class="btn btn-secondary">
+        <svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+        Kembali
+      </a>
+    </div>
+
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  Made by <span>NEXUS STUDIO</span>
+  <span class="footer-sep">|</span>
+  YouTube: <span>NEXUS STUDIO</span>
+  <span class="footer-sep">|</span>
+  <span style="color:var(--dim);">v10.6</span>
+</div>
+
+<script>
+// Generate floating particles
+(function(){
+  var container = document.getElementById('particles');
+  var colors = ['var(--cyan)','var(--purple)','var(--pink)','var(--green)'];
+  for(var i = 0; i < 28; i++){
+    var p = document.createElement('div');
+    p.className = 'particle';
+    p.style.setProperty('--x', (Math.random()*100)+'%');
+    p.style.setProperty('--dur', (6+Math.random()*10)+'s');
+    p.style.setProperty('--del', (Math.random()*12)+'s');
+    p.style.background = colors[Math.floor(Math.random()*colors.length)];
+    p.style.width = p.style.height = (1+Math.random()*2.5)+'px';
+    p.style.opacity = 0;
+    container.appendChild(p);
+  }
+})();
+</script>
+</body>
+</html>
