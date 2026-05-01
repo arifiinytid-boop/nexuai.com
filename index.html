@@ -9,398 +9,713 @@
 <style>
 :root{
   --bg:#030312;--bg2:#06071a;--bg3:#0a0b22;
-  --cyan:#00e5ff;--cyan2:rgba(0,229,255,.35);--cyan3:rgba(0,229,255,.12);
+  --cyan:#00e5ff;--cyan2:rgba(0,229,255,.35);
   --purple:#8800ff;--pink:#ff2d6b;--green:#00ffaa;--yellow:#ffd600;
   --text:#b8cfff;--dim:#3a4a7a;
-  --b:rgba(0,229,255,.12);--bb:rgba(0,229,255,.3);
-  --gc:0 0 40px rgba(0,229,255,.2);--gp:0 0 40px rgba(136,0,255,.15);
-  --r:8px;
+  --b:rgba(0,229,255,.12);--bb:rgba(0,229,255,.3);--r:8px;
 }
 *{margin:0;padding:0;box-sizing:border-box;}
 html{scroll-behavior:smooth;}
 body{font-family:'JetBrains Mono',monospace;background:var(--bg);color:var(--text);font-size:13px;overflow-x:hidden;}
 body::before{content:'';position:fixed;inset:0;background:linear-gradient(rgba(0,229,255,.012)1px,transparent 1px),linear-gradient(90deg,rgba(0,229,255,.012)1px,transparent 1px);background-size:40px 40px;pointer-events:none;z-index:0;}
 
-/* NAVBAR */
-.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:12px 40px;display:flex;align-items:center;gap:12px;background:rgba(3,3,18,.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--b);}
-.nav-logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:15px;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;}
-.nav-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pd 1.8s infinite;flex-shrink:0;}
-@keyframes pd{0%,100%{opacity:1}50%{opacity:.3}}
-.nav-status{font-size:9px;color:var(--green);}
-.nav-r{margin-left:auto;display:flex;align-items:center;gap:8px;}
-.nav-discord{padding:6px 14px;border-radius:6px;border:1px solid rgba(88,101,242,.4);background:rgba(88,101,242,.1);color:#7289da;font-size:10px;text-decoration:none;transition:.15s;}
-.nav-discord:hover{background:rgba(88,101,242,.2);border-color:rgba(88,101,242,.7);}
-.nav-login{padding:7px 20px;border-radius:6px;background:linear-gradient(135deg,var(--cyan),var(--purple));color:white;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;text-decoration:none;letter-spacing:1px;transition:.15s;}
-.nav-login:hover{opacity:.85;transform:translateY(-1px);}
+/* ── SCROLL ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(32px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.active{opacity:1;transform:translateY(0);}
+.reveal-left{opacity:0;transform:translateX(-32px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-left.active{opacity:1;transform:translateX(0);}
+.reveal-right{opacity:0;transform:translateX(32px);transition:opacity .65s ease,transform .65s ease;}
+.reveal-right.active{opacity:1;transform:translateX(0);}
+.reveal-scale{opacity:0;transform:scale(.92);transition:opacity .6s ease,transform .6s ease;}
+.reveal-scale.active{opacity:1;transform:scale(1);}
+.d1{transition-delay:.05s!important;}
+.d2{transition-delay:.15s!important;}
+.d3{transition-delay:.25s!important;}
+.d4{transition-delay:.35s!important;}
+.d5{transition-delay:.45s!important;}
+.d6{transition-delay:.55s!important;}
 
-/* HERO */
-.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 20px 60px;position:relative;z-index:1;background:radial-gradient(ellipse at 50% 10%,rgba(136,0,255,.15) 0%,transparent 60%),radial-gradient(ellipse at 50% 50%,rgba(0,229,255,.06) 0%,transparent 50%);}
-.hero-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(0,229,255,.06);border:1px solid var(--b);border-radius:20px;font-size:9px;color:var(--cyan);margin-bottom:20px;letter-spacing:2px;text-transform:uppercase;}
-.hero-title{font-family:'Orbitron',sans-serif;font-size:clamp(36px,7vw,80px);font-weight:900;line-height:1.05;margin-bottom:12px;}
-.hero-title span{background:linear-gradient(135deg,var(--cyan),var(--purple),var(--pink));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-.hero-sub{font-size:clamp(12px,1.6vw,16px);color:var(--dim);max-width:560px;line-height:1.8;margin-bottom:36px;}
-.hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;}
-.btn-primary{padding:14px 36px;background:linear-gradient(135deg,var(--cyan),var(--purple));border:none;border-radius:10px;color:white;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:1.5px;transition:.2s;display:inline-flex;align-items:center;gap:8px;}
-.btn-primary:hover{opacity:.85;transform:translateY(-2px);box-shadow:0 8px 30px rgba(0,229,255,.25);}
-.btn-secondary{padding:13px 28px;border:1px solid var(--b);border-radius:10px;color:var(--text);font-size:11px;cursor:pointer;text-decoration:none;transition:.2s;display:inline-flex;align-items:center;gap:7px;}
-.btn-secondary:hover{border-color:var(--cyan2);color:var(--cyan);background:rgba(0,229,255,.04);}
-.hero-stats{display:flex;gap:32px;margin-top:48px;flex-wrap:wrap;justify-content:center;}
-.stat{text-align:center;}
-.stat-n{font-family:'Orbitron',sans-serif;font-size:28px;font-weight:900;color:var(--cyan);}
-.stat-l{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;margin-top:3px;}
-.hero-scroll{margin-top:48px;animation:bounce 2s infinite;}
-@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
+/* ── NAVBAR ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 48px;display:flex;align-items:center;gap:12px;background:rgba(3,3,18,.8);backdrop-filter:blur(16px);border-bottom:1px solid var(--b);transition:padding .3s;}
+.nav.scrolled{padding:10px 48px;background:rgba(3,3,18,.95);}
+.nav-logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.nav-logo-img{width:26px;height:26px;border-radius:7px;object-fit:cover;border:1px solid rgba(0,229,255,.2);}
+.nav-logo{font-family:'Orbitron',sans-serif;font-weight:900;font-size:14px;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;letter-spacing:3px;}
+.nav-pulse{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pd 1.8s infinite;flex-shrink:0;}
+@keyframes pd{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(0,255,170,.4)}50%{opacity:.4;box-shadow:0 0 0 4px rgba(0,255,170,0)}}
+.nav-status{font-size:9px;color:var(--green);letter-spacing:1px;}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.nav-discord{padding:7px 16px;border-radius:7px;border:1px solid rgba(88,101,242,.35);background:rgba(88,101,242,.08);color:#7289da;font-size:10px;text-decoration:none;transition:.15s;display:flex;align-items:center;gap:6px;}
+.nav-discord:hover{background:rgba(88,101,242,.18);border-color:rgba(88,101,242,.6);}
+.nav-discord img{width:14px;height:14px;border-radius:2px;object-fit:cover;opacity:.85;}
+.nav-login{padding:8px 22px;border-radius:7px;background:linear-gradient(135deg,var(--cyan),var(--purple));color:white;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;text-decoration:none;letter-spacing:1px;transition:.15s;display:flex;align-items:center;gap:6px;}
+.nav-login:hover{opacity:.85;transform:translateY(-1px);box-shadow:0 6px 20px rgba(0,229,255,.2);}
+.nav-login svg{flex-shrink:0;}
 
-/* SECTION */
-.section{padding:80px 40px;position:relative;z-index:1;max-width:1200px;margin:0 auto;}
-.sec-label{font-size:9px;color:var(--cyan);text-transform:uppercase;letter-spacing:3px;margin-bottom:10px;text-align:center;}
-.sec-title{font-family:'Orbitron',sans-serif;font-size:clamp(20px,3.5vw,34px);font-weight:900;text-align:center;color:white;margin-bottom:10px;}
-.sec-sub{font-size:12px;color:var(--dim);text-align:center;max-width:500px;margin:0 auto 50px;line-height:1.8;}
-
-/* SCREENSHOT SECTION */
-.screenshots{background:linear-gradient(180deg,transparent,rgba(0,229,255,.03),transparent);border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:80px 40px;}
-.screen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:20px;max-width:1200px;margin:0 auto;}
-.screen-card{border-radius:12px;overflow:hidden;border:1px solid var(--b);background:var(--bg2);transition:.25s;position:relative;}
-.screen-card:hover{border-color:var(--cyan2);transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,229,255,.1);}
-.screen-card img{width:100%;height:220px;object-fit:cover;object-position:top;display:block;border-bottom:1px solid var(--b);}
-.screen-card-body{padding:14px 16px;}
-.screen-card-title{font-size:11px;color:white;font-weight:700;margin-bottom:4px;}
-.screen-card-desc{font-size:10px;color:var(--dim);line-height:1.65;}
-.screen-badge{position:absolute;top:10px;right:10px;padding:3px 8px;border-radius:5px;font-size:8px;font-weight:700;background:rgba(0,229,255,.15);color:var(--cyan);border:1px solid var(--cyan2);}
-
-/* FEATURES */
-.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
-.feat{padding:22px;background:var(--bg2);border:1px solid var(--b);border-radius:12px;transition:.2s;}
-.feat:hover{border-color:var(--cyan2);background:rgba(0,229,255,.03);}
-.feat-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;margin-bottom:14px;}
-.feat-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:white;margin-bottom:7px;}
-.feat-desc{font-size:10.5px;color:var(--dim);line-height:1.75;}
-.feat-tag{display:inline-block;margin-top:10px;padding:2px 8px;border-radius:4px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-
-/* HOW IT WORKS */
-.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;position:relative;}
-.step-card{text-align:center;padding:28px 20px;background:var(--bg2);border:1px solid var(--b);border-radius:12px;}
-.step-num{width:52px;height:52px;border-radius:50%;border:2px solid var(--cyan);background:rgba(0,229,255,.06);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:18px;font-weight:900;color:var(--cyan);margin:0 auto 16px;}
-.step-title{font-size:12px;font-weight:700;color:white;margin-bottom:8px;}
-.step-desc{font-size:10px;color:var(--dim);line-height:1.7;}
-
-/* MODELS */
-.models-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
-.model-chip{padding:8px 16px;border:1px solid var(--b);border-radius:20px;font-size:10px;color:var(--text);background:var(--bg2);display:flex;align-items:center;gap:7px;transition:.15s;}
-.model-chip:hover{border-color:var(--cyan2);color:var(--cyan);}
-.model-chip img{width:16px;height:16px;border-radius:3px;object-fit:contain;}
-.model-chip .mbadge{font-size:7.5px;padding:1px 5px;border-radius:3px;font-weight:700;}
-.mbadge.free{background:rgba(0,255,170,.12);color:var(--green);}
-.mbadge.soon{background:rgba(255,214,0,.1);color:var(--yellow);}
-
-/* CTA SECTION */
-.cta-section{padding:80px 40px;text-align:center;position:relative;z-index:1;}
-.cta-box{max-width:600px;margin:0 auto;padding:50px 40px;background:var(--bg2);border:1px solid var(--b);border-radius:20px;position:relative;overflow:hidden;}
-.cta-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));}
-.cta-title{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:900;color:white;margin-bottom:12px;}
-.cta-sub{font-size:11.5px;color:var(--dim);margin-bottom:28px;line-height:1.75;}
-.cta-free-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(0,255,170,.08);border:1px solid rgba(0,255,170,.25);border-radius:20px;font-size:9px;color:var(--green);margin-bottom:20px;font-weight:700;}
-
-/* FOOTER */
-footer{padding:30px 40px;border-top:1px solid var(--b);text-align:center;font-size:9px;color:var(--dim);position:relative;z-index:1;}
-footer a{color:var(--cyan);text-decoration:none;}
-
-/* PARTICLES */
+/* ── PARTICLES ── */
 .particles{position:fixed;inset:0;pointer-events:none;z-index:0;}
 .p{position:absolute;border-radius:50%;animation:float linear infinite;}
-@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.5}90%{opacity:.3}100%{transform:translateY(-5vh) scale(1.2);opacity:0}}
+@keyframes float{0%{transform:translateY(100vh) scale(0);opacity:0}10%{opacity:.6}85%{opacity:.2}100%{transform:translateY(-8vh) scale(1);opacity:0}}
 
-/* GLOW ORBS */
-.orb{position:absolute;border-radius:50%;filter:blur(80px);pointer-events:none;}
-.orb1{width:400px;height:400px;background:rgba(0,229,255,.06);top:-100px;left:-100px;}
-.orb2{width:500px;height:500px;background:rgba(136,0,255,.06);top:200px;right:-150px;}
-.orb3{width:300px;height:300px;background:rgba(255,45,107,.04);bottom:100px;left:30%;}
+/* ── GLOW ORBS ── */
+.orbs{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden;}
+.orb{position:absolute;border-radius:50%;filter:blur(90px);}
+.orb1{width:500px;height:500px;background:rgba(0,229,255,.05);top:-120px;left:-80px;}
+.orb2{width:600px;height:600px;background:rgba(136,0,255,.055);top:160px;right:-160px;}
+.orb3{width:380px;height:380px;background:rgba(255,45,107,.04);bottom:80px;left:25%;}
 
-/* CODE PREVIEW */
-.code-preview{background:var(--bg3);border:1px solid rgba(0,229,255,.15);border-radius:10px;padding:16px;text-align:left;font-size:10px;color:var(--text);line-height:1.6;overflow:hidden;margin-top:30px;position:relative;}
-.code-preview .k{color:#cc55ff;}.code-preview .s{color:var(--green);}.code-preview .c{color:var(--dim);}.code-preview .n{color:var(--cyan);}
-.code-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:3px;}
-.code-dots{margin-bottom:12px;display:flex;gap:5px;}
+/* ── HERO ── */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:110px 24px 70px;position:relative;z-index:1;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 0%,rgba(136,0,255,.18) 0%,transparent 60%),radial-gradient(ellipse at 50% 60%,rgba(0,229,255,.07) 0%,transparent 50%);pointer-events:none;}
+.hero-badge{display:inline-flex;align-items:center;gap:7px;padding:6px 16px;background:rgba(0,229,255,.06);border:1px solid var(--b);border-radius:20px;font-size:9px;color:var(--cyan);margin-bottom:24px;letter-spacing:2px;text-transform:uppercase;animation:fadeUp .8s ease both;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.hero-badge svg{flex-shrink:0;}
+.hero-title{font-family:'Orbitron',sans-serif;font-size:clamp(38px,7.5vw,88px);font-weight:900;line-height:1.04;margin-bottom:14px;animation:fadeUp .8s .1s ease both;}
+.hero-title .grad{background:linear-gradient(135deg,var(--cyan) 0%,var(--purple) 50%,var(--pink) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-sub{font-size:clamp(12px,1.6vw,16px);color:var(--dim);max-width:540px;line-height:1.85;margin-bottom:38px;animation:fadeUp .8s .2s ease both;}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .3s ease both;}
+.btn-primary{padding:14px 38px;background:linear-gradient(135deg,var(--cyan),var(--purple));border:none;border-radius:10px;color:white;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;cursor:pointer;text-decoration:none;letter-spacing:1.5px;transition:.22s;display:inline-flex;align-items:center;gap:8px;}
+.btn-primary:hover{opacity:.84;transform:translateY(-2px);box-shadow:0 10px 36px rgba(0,229,255,.28);}
+.btn-primary svg{flex-shrink:0;}
+.btn-secondary{padding:13px 28px;border:1px solid var(--b);border-radius:10px;color:var(--text);font-size:11px;cursor:pointer;text-decoration:none;transition:.2s;display:inline-flex;align-items:center;gap:7px;backdrop-filter:blur(6px);}
+.btn-secondary:hover{border-color:var(--cyan2);color:var(--cyan);background:rgba(0,229,255,.05);}
+.btn-secondary img{width:14px;height:14px;border-radius:2px;object-fit:cover;opacity:.8;}
+.hero-stats{display:flex;gap:36px;margin-top:52px;flex-wrap:wrap;justify-content:center;animation:fadeUp .8s .4s ease both;}
+.stat{text-align:center;}
+.stat-n{font-family:'Orbitron',sans-serif;font-size:30px;font-weight:900;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+.stat-l{font-size:9px;color:var(--dim);text-transform:uppercase;letter-spacing:2px;margin-top:4px;}
+.hero-scroll{margin-top:52px;cursor:pointer;animation:bounce 2.2s infinite,fadeUp .8s .5s ease both;}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(9px)}}
+.hero-scroll svg{opacity:.35;transition:.2s;}
+.hero-scroll:hover svg{opacity:.75;}
+.stat-divider{width:1px;background:var(--b);align-self:stretch;margin:4px 0;}
 
-/* MYSTERY GATE (new) */
-.mystery-gate{padding:80px 20px;text-align:center;position:relative;z-index:1;background:linear-gradient(180deg,transparent,rgba(136,0,255,.05),transparent);}
-.gate-box{max-width:400px;margin:0 auto;padding:40px 30px;border:1px solid var(--b);border-radius:20px;background:var(--bg2);}
-.gate-icon{font-size:40px;margin-bottom:16px;filter:grayscale(0.3);}
-.gate-title{font-family:'Orbitron',sans-serif;font-size:16px;color:white;margin-bottom:8px;text-transform:uppercase;letter-spacing:2px;}
-.gate-sub{font-size:10px;color:var(--dim);margin-bottom:24px;}
-.gate-btn{padding:12px 32px;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:8px;color:white;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:.2s;text-decoration:none;display:inline-block;letter-spacing:1px;}
-.gate-btn:hover{opacity:.9;transform:translateY(-2px);box-shadow:0 10px 30px rgba(136,0,255,.3);}
+/* ── MYSTERY TEASER ── */
+.mystery{padding:80px 24px;position:relative;z-index:1;text-align:center;background:linear-gradient(180deg,transparent,rgba(136,0,255,.06),transparent);}
+.mystery-inner{max-width:720px;margin:0 auto;}
+.mystery-eyebrow{font-size:9px;color:var(--purple);text-transform:uppercase;letter-spacing:3px;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.mystery-eyebrow::before,.mystery-eyebrow::after{content:'';flex:1;max-width:80px;height:1px;background:rgba(136,0,255,.3);}
+.mystery-title{font-family:'Orbitron',sans-serif;font-size:clamp(22px,4vw,42px);font-weight:900;color:white;margin-bottom:16px;line-height:1.2;}
+.mystery-sub{font-size:12px;color:var(--dim);line-height:1.85;margin-bottom:32px;}
+.mystery-hints{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:32px;}
+.hint-card{padding:18px 16px;background:rgba(136,0,255,.04);border:1px solid rgba(136,0,255,.15);border-radius:10px;text-align:left;transition:.2s;}
+.hint-card:hover{border-color:rgba(136,0,255,.35);background:rgba(136,0,255,.08);}
+.hint-icon{width:32px;height:32px;border-radius:8px;background:rgba(136,0,255,.1);display:flex;align-items:center;justify-content:center;margin-bottom:10px;}
+.hint-title{font-size:11px;color:white;font-weight:700;margin-bottom:4px;}
+.hint-sub{font-size:9.5px;color:var(--dim);line-height:1.65;}
+.mystery-lock{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;background:rgba(255,45,107,.06);border:1px solid rgba(255,45,107,.2);border-radius:20px;font-size:9px;color:var(--pink);margin-bottom:20px;}
+.mystery-lock svg{flex-shrink:0;}
 
-/* RESPONSIVE */
+/* ── SECTION WRAPPER ── */
+.section{padding:80px 40px;position:relative;z-index:1;max-width:1200px;margin:0 auto;}
+.sec-label{font-size:9px;color:var(--cyan);text-transform:uppercase;letter-spacing:3px;margin-bottom:10px;text-align:center;display:flex;align-items:center;justify-content:center;gap:8px;}
+.sec-label::before,.sec-label::after{content:'';width:30px;height:1px;background:rgba(0,229,255,.3);}
+.sec-title{font-family:'Orbitron',sans-serif;font-size:clamp(20px,3.5vw,36px);font-weight:900;text-align:center;color:white;margin-bottom:10px;}
+.sec-sub{font-size:12px;color:var(--dim);text-align:center;max-width:500px;margin:0 auto 52px;line-height:1.85;}
+
+/* ── FEATURES ── */
+.features-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px;}
+.feat{padding:24px;background:var(--bg2);border:1px solid var(--b);border-radius:12px;transition:.25s;position:relative;overflow:hidden;}
+.feat::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:0;transition:.25s;}
+.feat:hover{border-color:var(--cyan2);background:rgba(0,229,255,.025);transform:translateY(-3px);}
+.feat:hover::before{opacity:1;}
+.feat-icon{width:44px;height:44px;border-radius:11px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;flex-shrink:0;}
+.feat-title{font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;color:white;margin-bottom:8px;}
+.feat-desc{font-size:10.5px;color:var(--dim);line-height:1.8;}
+.feat-tag{display:inline-flex;align-items:center;gap:4px;margin-top:12px;padding:3px 9px;border-radius:5px;font-size:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+
+/* ── SCREENSHOTS ── */
+.screenshots-section{background:linear-gradient(180deg,transparent,rgba(0,229,255,.025),transparent);border-top:1px solid var(--b);border-bottom:1px solid var(--b);padding:80px 24px;}
+.screen-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:20px;max-width:1160px;margin:0 auto;}
+.screen-card{border-radius:12px;overflow:hidden;border:1px solid var(--b);background:var(--bg2);transition:.25s;position:relative;}
+.screen-card:hover{border-color:var(--cyan2);transform:translateY(-5px);box-shadow:0 20px 50px rgba(0,229,255,.1);}
+.screen-card-img{width:100%;height:210px;object-fit:cover;object-position:top;display:block;border-bottom:1px solid var(--b);background:var(--bg3);}
+.screen-card-body{padding:16px 18px;}
+.screen-card-title{font-size:11px;color:white;font-weight:700;margin-bottom:5px;display:flex;align-items:center;gap:7px;}
+.screen-card-title svg{flex-shrink:0;}
+.screen-card-desc{font-size:10px;color:var(--dim);line-height:1.7;}
+.screen-badge{position:absolute;top:10px;right:10px;padding:3px 9px;border-radius:5px;font-size:8px;font-weight:700;background:rgba(0,229,255,.1);color:var(--cyan);border:1px solid rgba(0,229,255,.25);backdrop-filter:blur(4px);}
+
+/* ── HOW IT WORKS ── */
+.how-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;}
+.step-card{text-align:center;padding:30px 22px;background:var(--bg2);border:1px solid var(--b);border-radius:12px;transition:.2s;position:relative;}
+.step-card:hover{border-color:var(--cyan2);transform:translateY(-3px);}
+.step-num{width:54px;height:54px;border-radius:50%;border:2px solid rgba(0,229,255,.35);background:rgba(0,229,255,.05);display:flex;align-items:center;justify-content:center;font-family:'Orbitron',sans-serif;font-size:20px;font-weight:900;color:var(--cyan);margin:0 auto 18px;transition:.2s;}
+.step-card:hover .step-num{border-color:var(--cyan);background:rgba(0,229,255,.1);box-shadow:0 0 20px rgba(0,229,255,.15);}
+.step-title{font-size:12px;font-weight:700;color:white;margin-bottom:8px;}
+.step-desc{font-size:10px;color:var(--dim);line-height:1.75;}
+.step-connector{display:none;}
+
+/* ── CODE DEMO ── */
+.code-demo{max-width:700px;margin:36px auto 0;background:var(--bg3);border:1px solid rgba(0,229,255,.12);border-radius:12px;overflow:hidden;}
+.code-top{padding:10px 16px;border-bottom:1px solid var(--b);display:flex;align-items:center;gap:8px;}
+.code-dots-row{display:flex;gap:6px;}
+.cd{width:10px;height:10px;border-radius:50%;}
+.cd1{background:#ff5f57;}.cd2{background:#febc2e;}.cd3{background:#28c840;}
+.code-label{font-size:9px;color:var(--dim);margin-left:4px;flex:1;}
+.code-tag{font-size:8px;padding:2px 8px;border-radius:4px;background:rgba(0,229,255,.08);color:var(--cyan);border:1px solid rgba(0,229,255,.15);}
+.code-body{padding:18px 20px;font-size:10.5px;line-height:1.65;}
+.code-body .k{color:#cc55ff;}.code-body .s{color:var(--green);}.code-body .c{color:var(--dim);font-style:italic;}.code-body .n{color:var(--cyan);}.code-body .v{color:var(--yellow);}
+.code-result{margin:0 16px 16px;padding:10px 14px;background:rgba(0,255,170,.05);border-radius:7px;border:1px solid rgba(0,255,170,.15);font-size:10px;display:flex;align-items:center;gap:8px;color:var(--green);}
+.code-result svg{flex-shrink:0;}
+
+/* ── MODELS ── */
+.models-grid{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;}
+.model-chip{padding:9px 16px;border:1px solid var(--b);border-radius:20px;font-size:10px;color:var(--text);background:var(--bg2);display:flex;align-items:center;gap:8px;transition:.18s;}
+.model-chip:hover{border-color:var(--cyan2);color:var(--cyan);background:rgba(0,229,255,.04);}
+.model-chip img{width:16px;height:16px;border-radius:3px;object-fit:contain;flex-shrink:0;}
+.mbadge{font-size:7.5px;padding:2px 6px;border-radius:4px;font-weight:700;}
+.mbadge.free{background:rgba(0,255,170,.12);color:var(--green);}
+.mbadge.cr{background:rgba(0,229,255,.1);color:var(--cyan);}
+.mbadge.soon{background:rgba(255,214,0,.08);color:var(--yellow);opacity:.6;}
+
+/* ── GATE ── */
+.gate-section{padding:80px 24px;text-align:center;position:relative;z-index:1;}
+.gate-box{max-width:480px;margin:0 auto;padding:50px 40px;background:var(--bg2);border:1px solid var(--b);border-radius:20px;position:relative;overflow:hidden;}
+.gate-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--purple),var(--cyan),var(--purple));}
+.gate-glow{position:absolute;bottom:-60px;left:50%;transform:translateX(-50%);width:200px;height:120px;background:rgba(136,0,255,.2);filter:blur(40px);pointer-events:none;}
+.gate-icon{width:60px;height:60px;border-radius:16px;background:rgba(136,0,255,.1);border:1px solid rgba(136,0,255,.25);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;}
+.gate-title{font-family:'Orbitron',sans-serif;font-size:18px;color:white;margin-bottom:10px;letter-spacing:1px;}
+.gate-sub{font-size:10.5px;color:var(--dim);margin-bottom:28px;line-height:1.8;}
+.gate-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 34px;background:linear-gradient(135deg,var(--purple),var(--cyan));border:none;border-radius:9px;color:white;font-family:'Orbitron',sans-serif;font-size:11px;font-weight:700;cursor:pointer;transition:.22s;text-decoration:none;letter-spacing:1px;}
+.gate-btn:hover{opacity:.88;transform:translateY(-2px);box-shadow:0 12px 36px rgba(136,0,255,.35);}
+.gate-note{margin-top:16px;font-size:9px;color:var(--dim);}
+.gate-note span{color:var(--green);}
+
+/* ── CTA SECTION ── */
+.cta-section{padding:80px 24px;text-align:center;position:relative;z-index:1;}
+.cta-box{max-width:620px;margin:0 auto;padding:54px 44px;background:var(--bg2);border:1px solid var(--b);border-radius:20px;position:relative;overflow:hidden;}
+.cta-box::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--cyan),var(--purple),var(--pink));}
+.cta-box::after{content:'';position:absolute;top:3px;left:0;right:0;height:60px;background:linear-gradient(180deg,rgba(0,229,255,.04),transparent);pointer-events:none;}
+.cta-free{display:inline-flex;align-items:center;gap:6px;padding:5px 14px;background:rgba(0,255,170,.07);border:1px solid rgba(0,255,170,.22);border-radius:20px;font-size:9px;color:var(--green);font-weight:700;margin-bottom:20px;letter-spacing:1px;}
+.cta-free svg{flex-shrink:0;}
+.cta-title{font-family:'Orbitron',sans-serif;font-size:clamp(20px,3vw,30px);font-weight:900;color:white;margin-bottom:12px;}
+.cta-sub{font-size:11.5px;color:var(--dim);margin-bottom:30px;line-height:1.8;}
+.cta-actions{display:flex;flex-direction:column;align-items:center;gap:12px;}
+.cta-discord{display:inline-flex;align-items:center;gap:7px;font-size:10px;color:var(--dim);text-decoration:none;transition:.15s;padding:8px 14px;border-radius:7px;border:1px solid transparent;}
+.cta-discord:hover{color:var(--cyan);border-color:var(--b);}
+.cta-discord img{width:15px;height:15px;border-radius:2px;object-fit:cover;opacity:.75;}
+.cta-meta{margin-top:18px;font-size:9px;color:var(--dim);line-height:1.9;}
+.cta-meta span{color:var(--green);}
+
+/* ── FOOTER ── */
+footer{padding:32px 40px;border-top:1px solid var(--b);position:relative;z-index:1;}
+.footer-inner{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-brand{font-family:'Orbitron',sans-serif;font-size:12px;background:linear-gradient(135deg,var(--cyan),var(--purple));-webkit-background-clip:text;-webkit-text-fill-color:transparent;font-weight:900;letter-spacing:2px;}
+.footer-links{display:flex;gap:20px;flex-wrap:wrap;}
+.footer-links a{font-size:10px;color:var(--dim);text-decoration:none;transition:.15s;}
+.footer-links a:hover{color:var(--cyan);}
+.footer-copy{font-size:9px;color:var(--dim);}
+
+/* ── MOBILE ── */
 @media(max-width:768px){
-  .nav{padding:10px 16px;}
+  .nav{padding:11px 16px;}
+  .nav.scrolled{padding:9px 16px;}
+  .nav-status,.nav-pulse+.nav-status{display:none;}
   .section{padding:50px 16px;}
-  .screenshots{padding:50px 16px;}
+  .screenshots-section{padding:50px 16px;}
   .screen-grid{grid-template-columns:1fr;}
-  .hero{padding:80px 16px 40px;}
-  .cta-box{padding:30px 20px;}
+  .hero{padding:90px 16px 50px;}
+  .hero-title{font-size:clamp(32px,9vw,56px);}
+  .hero-stats{gap:22px;}
+  .stat-divider{display:none;}
+  .how-grid{grid-template-columns:1fr;}
+  .gate-box,.cta-box{padding:32px 20px;}
+  .mystery-hints{grid-template-columns:1fr 1fr;}
+  .footer-inner{flex-direction:column;text-align:center;}
+  .footer-links{justify-content:center;}
+  .mystery{padding:50px 16px;}
+  .gate-section,.cta-section{padding:50px 16px;}
+}
+@media(max-width:480px){
+  .hero-cta{flex-direction:column;align-items:stretch;}
+  .btn-primary,.btn-secondary{justify-content:center;}
+  .mystery-hints{grid-template-columns:1fr;}
 }
 </style>
 </head>
 <body>
-<div class="particles" id="particles"></div>
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-<div class="orb orb3"></div>
 
-<nav class="nav">
-  <img src="nexusai.png" alt="N" style="width:24px;height:24px;border-radius:6px;object-fit:cover;" onerror="this.style.display='none'">
-  <span class="nav-logo">NEXUS AI</span>
-  <div class="nav-dot"></div>
-  <span class="nav-status">Active</span>
+<!-- PARTICLES -->
+<div class="particles" id="particles"></div>
+
+<!-- GLOW ORBS -->
+<div class="orbs">
+  <div class="orb orb1"></div>
+  <div class="orb orb2"></div>
+  <div class="orb orb3"></div>
+</div>
+
+<!-- NAVBAR -->
+<nav class="nav" id="navbar">
+  <a href="/" class="nav-logo-wrap">
+    <img src="nexusai.png" alt="N" class="nav-logo-img" onerror="this.style.display='none'">
+    <span class="nav-logo">NEXUS AI</span>
+  </a>
+  <div class="nav-pulse"></div>
+  <span class="nav-status">Live</span>
   <div class="nav-r">
     <a href="https://discord.gg/HuGtbRvD" target="_blank" class="nav-discord">
-      💬 Discord
+      <img src="/icon/discord.png" alt="Discord" onerror="this.style.display='none'">
+      Discord
     </a>
-    <a href="/login" class="nav-login">Enter →</a>
+    <a href="/login" class="nav-login">
+      <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Enter
+    </a>
   </div>
 </nav>
 
+<!-- HERO -->
 <section class="hero">
   <div class="hero-badge">
-    <div class="nav-dot"></div>
+    <svg width="8" height="8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="12"/></svg>
     Roblox Studio · Direct Injection · AI Agent
   </div>
   <h1 class="hero-title">
-    Your Game.<br><span>Built Instantly.</span>
+    Your Game.<br>
+    <span class="grad">Built Instantly.</span>
   </h1>
   <p class="hero-sub">
-    NEXUS AI is the most advanced AI assistant for Roblox developers. Write Lua, debug scripts, design GUIs — and inject everything directly into your Roblox Studio. No copy-paste, just pure creation.
+    NEXUS AI is the most advanced AI assistant for Roblox developers.
+    Describe your idea — and watch it appear inside Roblox Studio in seconds.
+    No copy-paste. No limits. Just pure creation.
   </p>
   <div class="hero-cta">
     <a href="/login" class="btn-primary">
-      <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-      Start Building
+      <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Start Building Free
     </a>
     <a href="https://discord.gg/HuGtbRvD" target="_blank" class="btn-secondary">
-      <svg width="13" height="13" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      <img src="/icon/discord.png" alt="Discord" onerror="this.style.display='none'" style="width:14px;height:14px;border-radius:2px;object-fit:cover;">
       Join Discord
     </a>
   </div>
   <div class="hero-stats">
-    <div class="stat"><div class="stat-n">60+</div><div class="stat-l">Actions</div></div>
-    <div class="stat"><div class="stat-n">7</div><div class="stat-l">AI Models</div></div>
-    <div class="stat"><div class="stat-n">FREE</div><div class="stat-l">To Start</div></div>
-    <div class="stat"><div class="stat-n">∞</div><div class="stat-l">Possibilities</div></div>
+    <div class="stat">
+      <div class="stat-n">Free</div>
+      <div class="stat-l">To Start</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-n">7+</div>
+      <div class="stat-l">AI Models</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-n">Direct</div>
+      <div class="stat-l">Injection</div>
+    </div>
+    <div class="stat-divider"></div>
+    <div class="stat">
+      <div class="stat-n">∞</div>
+      <div class="stat-l">Potential</div>
+    </div>
   </div>
-  <div class="hero-scroll">
-    <svg width="20" height="20" viewBox="0 0 24 24" stroke="var(--dim)" fill="none" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+  <div class="hero-scroll" id="heroScroll">
+    <svg width="22" height="22" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
   </div>
 </section>
 
-<div class="screenshots">
-  <div style="text-align:center;margin-bottom:40px;">
-    <div class="sec-label">See It In Action</div>
-    <h2 class="sec-title" style="margin-bottom:8px;">Your AI That Lives Inside Studio</h2>
-    <p class="sec-sub" style="margin-bottom:0;">Chat, generate, inject. No manual labor — just describe your idea and watch it appear.</p>
+<!-- MYSTERY SECTION -->
+<div class="mystery" id="mystery">
+  <div class="mystery-inner">
+    <div class="mystery-eyebrow reveal">What is NEXUS AI?</div>
+    <h2 class="mystery-title reveal d1">The AI That Lives<br><span style="color:var(--cyan)">Inside Your Studio</span></h2>
+    <p class="mystery-sub reveal d2">
+      Most AI tools give you code. You still have to copy it, paste it, organize it, test it, fix it.<br>
+      NEXUS AI skips all of that. It injects everything directly into your Roblox place — scripts, GUIs, parts, systems — while you just describe what you want.
+    </p>
+    <div class="mystery-lock reveal d2">
+      <svg width="11" height="11" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      Full capabilities revealed after login
+    </div>
+    <div class="mystery-hints">
+      <div class="hint-card reveal d1">
+        <div class="hint-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" stroke="var(--cyan)" fill="none" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        </div>
+        <div class="hint-title">Zero Copy-Paste</div>
+        <div class="hint-sub">Every script goes directly into Roblox Studio via plugin. Type once, it appears instantly.</div>
+      </div>
+      <div class="hint-card reveal d2">
+        <div class="hint-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" stroke="var(--purple)" fill="none" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+        </div>
+        <div class="hint-title">Studio-Aware AI</div>
+        <div class="hint-sub">The AI sees your workspace. It knows what scripts exist and builds on top of them.</div>
+      </div>
+      <div class="hint-card reveal d3">
+        <div class="hint-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" stroke="var(--green)" fill="none" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <div class="hint-title">Natural Language</div>
+        <div class="hint-sub">No technical syntax needed. Just describe — "make a shop with coins" and it happens.</div>
+      </div>
+      <div class="hint-card reveal d4">
+        <div class="hint-icon">
+          <svg width="18" height="18" viewBox="0 0 24 24" stroke="var(--yellow)" fill="none" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="hint-title">Auto Test & Fix</div>
+        <div class="hint-sub">AI runs a play test after building. If errors appear in console — it stops, reads them, and self-fixes.</div>
+      </div>
+    </div>
+    <a href="/login" class="btn-primary reveal d3" style="display:inline-flex;">
+      <svg width="13" height="13" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Unlock Everything
+    </a>
+  </div>
+</div>
+
+<!-- SCREENSHOTS -->
+<div class="screenshots-section" id="screenshots">
+  <div style="text-align:center;margin-bottom:44px;">
+    <div class="sec-label reveal">See It In Action</div>
+    <h2 class="sec-title reveal d1">From Prompt to Studio</h2>
+    <p class="sec-sub reveal d2" style="margin-bottom:0;">Watch an idea transform into actual Roblox content in under 5 seconds.</p>
   </div>
   <div class="screen-grid">
-    <div class="screen-card">
+    <div class="screen-card reveal d1">
       <div class="screen-badge">Web</div>
-      <img src="screenshots/screen1.png" alt="NEXUS AI Web Interface" onerror="this.style.height='120px';this.style.background='var(--bg3)';this.alt=''">
+      <img src="screenshots/screen1.png" alt="NEXUS AI Chat Interface" class="screen-card-img" onerror="this.style.display='block';this.style.height='140px';">
       <div class="screen-card-body">
-        <div class="screen-card-title">💬 Chat Interface</div>
-        <div class="screen-card-desc">Type your request — NEXUS AI instantly generates JSON commands and Lua scripts.</div>
+        <div class="screen-card-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" stroke="var(--cyan)" fill="none" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Chat Interface
+        </div>
+        <div class="screen-card-desc">Type your request in plain English. NEXUS AI breaks it down into precise actions and executes them.</div>
       </div>
     </div>
-    <div class="screen-card">
+    <div class="screen-card reveal d2">
       <div class="screen-badge">Plugin</div>
-      <img src="screenshots/screen2.png" alt="Roblox Studio Plugin" onerror="this.style.height='120px';this.style.background='var(--bg3)';this.alt=''">
+      <img src="screenshots/screen2.png" alt="Roblox Studio Plugin" class="screen-card-img" onerror="this.style.display='block';this.style.height='140px';">
       <div class="screen-card-body">
-        <div class="screen-card-title">🔌 Studio Plugin</div>
-        <div class="screen-card-desc">NEXUS AI plugin in Roblox Studio — real-time sync, queue system, auto-injection.</div>
+        <div class="screen-card-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" stroke="var(--green)" fill="none" stroke-width="2"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"/><line x1="16" y1="8" x2="2" y2="22"/></svg>
+          Studio Plugin
+        </div>
+        <div class="screen-card-desc">The companion plugin in Roblox Studio — connected, listening, injecting in real-time with zero lag.</div>
       </div>
     </div>
-    <div class="screen-card">
+    <div class="screen-card reveal d3">
       <div class="screen-badge">Connected</div>
-      <img src="screenshots/screen3.png" alt="Connected State" onerror="this.style.height='120px';this.style.background='var(--bg3)';this.alt=''">
+      <img src="screenshots/screen3.png" alt="Connected State" class="screen-card-img" onerror="this.style.display='block';this.style.height='140px';">
       <div class="screen-card-body">
-        <div class="screen-card-title">✅ Connected & Injecting</div>
-        <div class="screen-card-desc">When the plugin is connected, every AI command goes straight to your place – parts, scripts, GUIs!</div>
+        <div class="screen-card-title">
+          <svg width="13" height="13" viewBox="0 0 24 24" stroke="var(--yellow)" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Live & Injecting
+        </div>
+        <div class="screen-card-desc">When connected, every AI command materializes in your place — parts, scripts, GUIs, systems — all live.</div>
       </div>
     </div>
   </div>
 </div>
 
-<section class="section">
-  <div class="sec-label">Core Features</div>
-  <h2 class="sec-title">Everything You Need</h2>
-  <p class="sec-sub">From script injection to visual GUI builder — NEXUS AI has it all.</p>
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="sec-label reveal">Core Capabilities</div>
+  <h2 class="sec-title reveal d1">Built for Serious Developers</h2>
+  <p class="sec-sub reveal d2">Every tool you need to build a complete Roblox game — powered by AI that actually understands Studio.</p>
   <div class="features-grid">
-    <div class="feat">
-      <div class="feat-icon" style="background:rgba(0,229,255,.1);">⚡</div>
+    <div class="feat reveal d1">
+      <div class="feat-icon" style="background:rgba(0,229,255,.08);">
+        <svg width="20" height="20" viewBox="0 0 24 24" stroke="var(--cyan)" fill="none" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      </div>
       <div class="feat-title">Direct Studio Injection</div>
-      <div class="feat-desc">AI directly injects scripts and creates objects in your Roblox Studio via plugin. No more copy-paste!</div>
-      <span class="feat-tag" style="background:rgba(0,229,255,.08);color:var(--cyan);">Plugin Required</span>
+      <div class="feat-desc">Scripts, parts, GUIs — AI creates everything directly in your Roblox Studio via the companion plugin. No manual copy-paste, ever.</div>
+      <span class="feat-tag" style="background:rgba(0,229,255,.07);color:var(--cyan);">
+        <svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg>
+        Plugin Required
+      </span>
     </div>
-    <div class="feat">
-      <div class="feat-icon" style="background:rgba(136,0,255,.1);">🧠</div>
+    <div class="feat reveal d2">
+      <div class="feat-icon" style="background:rgba(136,0,255,.08);">
+        <svg width="20" height="20" viewBox="0 0 24 24" stroke="#cc55ff" fill="none" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      </div>
       <div class="feat-title">Multiple AI Models</div>
-      <div class="feat-desc">Choose from Gemini, DeepSeek, Groq, Mistral, and more — all tuned for Roblox development.</div>
-      <span class="feat-tag" style="background:rgba(0,255,170,.08);color:var(--green);">7 Models Active</span>
+      <div class="feat-desc">Switch between Gemini, DeepSeek, Groq, Mistral and more — all fine-tuned to write production-quality Lua for Roblox.</div>
+      <span class="feat-tag" style="background:rgba(0,255,170,.07);color:var(--green);">
+        <svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Many Free
+      </span>
     </div>
-    <div class="feat">
-      <div class="feat-icon" style="background:rgba(255,45,107,.1);">🏗️</div>
-      <div class="feat-title">60+ JSON Actions</div>
-      <div class="feat-desc">create_part, create_gui, inject_script, batch_commands — everything you need to construct your game.</div>
-      <span class="feat-tag" style="background:rgba(0,229,255,.08);color:var(--cyan);">JSON + Lua</span>
-    </div>
-    <div class="feat">
-      <div class="feat-icon" style="background:rgba(0,255,170,.1);">🎨</div>
+    <div class="feat reveal d3">
+      <div class="feat-icon" style="background:rgba(0,255,170,.07);">
+        <svg width="20" height="20" viewBox="0 0 24 24" stroke="var(--green)" fill="none" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      </div>
       <div class="feat-title">Visual GUI Builder</div>
-      <div class="feat-desc">Drag-and-drop GUI builder with direct export to Lua script or send to Studio.</div>
-      <span class="feat-tag" style="background:rgba(0,255,170,.08);color:var(--green);">Drag & Drop</span>
+      <div class="feat-desc">Drag-and-drop interface builder. Design your UI visually, then export as Lua or send directly to Studio with one click.</div>
+      <span class="feat-tag" style="background:rgba(0,255,170,.07);color:var(--green);">
+        <svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+        Drag & Drop
+      </span>
     </div>
-    <div class="feat">
-      <div class="feat-icon" style="background:rgba(255,214,0,.1);">🔒</div>
+    <div class="feat reveal d4">
+      <div class="feat-icon" style="background:rgba(255,214,0,.07);">
+        <svg width="20" height="20" viewBox="0 0 24 24" stroke="var(--yellow)" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <div class="feat-title">Auto Play-Test & Debug</div>
+      <div class="feat-desc">After building, AI runs a play-test automatically. If errors appear in the console, it stops, reads them, and re-injects a fix — all on its own.</div>
+      <span class="feat-tag" style="background:rgba(255,214,0,.08);color:var(--yellow);">
+        <svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Auto-Fix
+      </span>
+    </div>
+    <div class="feat reveal d5">
+      <div class="feat-icon" style="background:rgba(255,45,107,.07);">
+        <svg width="20" height="20" viewBox="0 0 24 24" stroke="var(--pink)" fill="none" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      </div>
+      <div class="feat-title">@ Mention System</div>
+      <div class="feat-desc">Type @ in chat to mention any script or object from your place. AI reads it, understands it, and builds on top of it intelligently.</div>
+      <span class="feat-tag" style="background:rgba(0,229,255,.07);color:var(--cyan);">
+        <svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/></svg>
+        Context-Aware
+      </span>
+    </div>
+    <div class="feat reveal d6">
+      <div class="feat-icon" style="background:rgba(0,229,255,.07);">
+        <svg width="20" height="20" viewBox="0 0 24 24" stroke="var(--cyan)" fill="none" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+      </div>
       <div class="feat-title">Roblox Account Sync</div>
-      <div class="feat-desc">Your data is saved per Roblox account. Switch devices — credits and chat history stay with you.</div>
-      <span class="feat-tag" style="background:rgba(255,214,0,.1);color:var(--yellow);">Persistent Data</span>
-    </div>
-    <div class="feat">
-      <div class="feat-icon" style="background:rgba(0,229,255,.1);">🎮</div>
-      <div class="feat-title">Minecraft Support</div>
-      <div class="feat-desc">Not just Roblox — NEXUS AI is also expert in Minecraft Java modding (Forge/Fabric) and Bedrock addons.</div>
-      <span class="feat-tag" style="background:rgba(0,229,255,.08);color:var(--cyan);">Bonus Feature</span>
+      <div class="feat-desc">Data tied to your Roblox account. Credits, chat history, and projects persist across all devices automatically.</div>
+      <span class="feat-tag" style="background:rgba(255,214,0,.08);color:var(--yellow);">
+        <svg width="9" height="9" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5"/></svg>
+        Persistent
+      </span>
     </div>
   </div>
 </section>
 
-<section class="section" style="padding-top:0;">
-  <div class="sec-label">How It Works</div>
-  <h2 class="sec-title">3 Simple Steps</h2>
-  <p class="sec-sub">Setup once, keep building forever.</p>
+<!-- HOW IT WORKS -->
+<section class="section" style="padding-top:0;" id="how">
+  <div class="sec-label reveal">Setup</div>
+  <h2 class="sec-title reveal d1">3 Steps. That's It.</h2>
+  <p class="sec-sub reveal d2">One-time setup, infinite creation.</p>
   <div class="how-grid">
-    <div class="step-card">
+    <div class="step-card reveal d1">
       <div class="step-num">1</div>
-      <div class="step-title">Login & Setup</div>
-      <div class="step-desc">Sign in with Google + Roblox. Download the NEXUS AI plugin for Roblox Studio from our Discord.</div>
+      <div class="step-title">Login & Verify</div>
+      <div class="step-desc">Sign in with your Roblox account. Get 30 free credits instantly — no credit card, no commitment.</div>
     </div>
-    <div class="step-card">
+    <div class="step-card reveal d2">
       <div class="step-num">2</div>
-      <div class="step-title">Connect Plugin</div>
-      <div class="step-desc">Open Roblox Studio, click NEXUS AI in the toolbar, and hit CONNECT. Green light = ready to go!</div>
+      <div class="step-title">Install Plugin</div>
+      <div class="step-desc">Install the NEXUS AI plugin from Creator Store. Open Studio, click CONNECT — green light means ready.</div>
     </div>
-    <div class="step-card">
+    <div class="step-card reveal d3">
       <div class="step-num">3</div>
-      <div class="step-title">Chat & Build</div>
-      <div class="step-desc">Describe what you want. AI immediately injects code + objects into your place. That's it!</div>
+      <div class="step-title">Describe & Build</div>
+      <div class="step-desc">Type what you want. AI builds, injects, tests. Your game grows while you watch. That's literally all.</div>
     </div>
   </div>
 
-  <div class="code-preview" style="max-width:700px;margin:30px auto 0;">
-    <div class="code-dots">
-      <span class="code-dot" style="background:#ff5f57;"></span>
-      <span class="code-dot" style="background:#febc2e;"></span>
-      <span class="code-dot" style="background:#28c840;"></span>
+  <div class="code-demo reveal d2">
+    <div class="code-top">
+      <div class="code-dots-row">
+        <span class="cd cd1"></span>
+        <span class="cd cd2"></span>
+        <span class="cd cd3"></span>
+      </div>
+      <span class="code-label">AI → Studio Pipeline</span>
+      <span class="code-tag">Live Example</span>
     </div>
-    <div style="color:var(--dim);font-size:9px;margin-bottom:8px;">// AI Response → JSON command directly to Studio</div>
-    <div><span class="c">// AI will build a house with batch_commands</span></div>
-    <div><span class="k">{</span></div>
-    <div style="margin-left:16px;"><span class="n">"action"</span>: <span class="s">"batch_commands"</span>,</div>
-    <div style="margin-left:16px;"><span class="n">"commands"</span>: [</div>
-    <div style="margin-left:32px;"><span class="k">{</span><span class="n">"action"</span>:<span class="s">"create_part"</span>,<span class="n">"name"</span>:<span class="s">"Floor"</span>,<span class="n">"size"</span>:[20,1,20]<span class="k">}</span>,</div>
-    <div style="margin-left:32px;"><span class="k">{</span><span class="n">"action"</span>:<span class="s">"inject_script"</span>,<span class="n">"name"</span>:<span class="s">"GameSystem"</span>,<span class="n">"parent"</span>:<span class="s">"ServerScriptService"</span><span class="k">}</span></div>
-    <div style="margin-left:16px;">]</div>
-    <div><span class="k">}</span></div>
-    <div style="margin-top:10px;padding:8px;background:rgba(0,255,170,.05);border-radius:5px;border:1px solid rgba(0,255,170,.15);">
-      <span style="color:var(--green);">✅ Plugin received 2 commands → Floor created, GameSystem injected!</span>
+    <div class="code-body">
+      <div><span class="c">// User says: "build a shop with coins and buy button"</span></div>
+      <div style="margin-top:8px;"><span class="c">// AI generates &amp; sends to Studio hidden:</span></div>
+      <div style="margin-left:0;margin-top:6px;"><span class="k">{</span> <span class="n">"action"</span>: <span class="s">"batch_commands"</span>, <span class="n">"commands"</span>: [</div>
+      <div style="margin-left:16px;"><span class="k">{</span> <span class="n">"action"</span>: <span class="s">"create_remote"</span>, <span class="n">"name"</span>: <span class="s">"BuyItem"</span> <span class="k">}</span>,</div>
+      <div style="margin-left:16px;"><span class="k">{</span> <span class="n">"action"</span>: <span class="s">"inject_script"</span>, <span class="n">"name"</span>: <span class="s">"ShopServer"</span>, <span class="n">"parent"</span>: <span class="s">"ServerScriptService"</span> <span class="k">}</span>,</div>
+      <div style="margin-left:16px;"><span class="k">{</span> <span class="n">"action"</span>: <span class="s">"create_gui"</span>, <span class="n">"name"</span>: <span class="s">"ShopGUI"</span>, <span class="n">"parent"</span>: <span class="s">"StarterGui"</span> <span class="k">}</span>,</div>
+      <div style="margin-left:16px;"><span class="k">{</span> <span class="n">"action"</span>: <span class="s">"play_test"</span>, <span class="n">"duration"</span>: <span class="v">15</span> <span class="k">}</span></div>
+      <div>] <span class="k">}</span></div>
+    </div>
+    <div class="code-result">
+      <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+      4 commands executed · Shop built · Auto-tested · Zero errors
     </div>
   </div>
 </section>
 
-<section class="section" style="padding-top:0;">
-  <div class="sec-label">AI Models</div>
-  <h2 class="sec-title">Elite Model Collection</h2>
-  <p class="sec-sub">Handpicked models for speed, power, and precision — many completely free.</p>
-  <div class="models-grid">
-    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 2.5 Flash Lite<span class="mbadge free">FREE</span></div>
-    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 2.5 Flash<span class="mbadge free">1 CR</span></div>
-    <div class="model-chip"><img src="icon/gemini.png" alt="" onerror="this.style.display='none'">Gemini 3 Flash<span class="mbadge free">FREE</span></div>
-    <div class="model-chip"><img src="icon/groq.png" alt="" onerror="this.style.display='none'">Llama 3.3 70B<span class="mbadge free">FREE</span></div>
-    <div class="model-chip"><img src="icon/mistral.png" alt="" onerror="this.style.display='none'">Mistral Small<span class="mbadge free">FREE</span></div>
-    <div class="model-chip"><img src="icon/deepseek.svg" alt="" onerror="this.style.display='none'">DeepSeek V3<span class="mbadge free">1 CR</span></div>
-    <div class="model-chip" style="opacity:.5;"><img src="icon/claude.png" alt="" onerror="this.style.display='none'">Claude Sonnet<span class="mbadge soon">SOON</span></div>
-    <div class="model-chip" style="opacity:.5;"><img src="icon/chatgpt.png" alt="" onerror="this.style.display='none'">GPT-4o<span class="mbadge soon">SOON</span></div>
-    <div class="model-chip" style="opacity:.5;"><img src="icon/grok.png" alt="" onerror="this.style.display='none'">Grok 3<span class="mbadge soon">SOON</span></div>
+<!-- MODELS -->
+<section class="section" style="padding-top:0;" id="models">
+  <div class="sec-label reveal">AI Models</div>
+  <h2 class="sec-title reveal d1">Best-in-Class Model Selection</h2>
+  <p class="sec-sub reveal d2">Handpicked models for speed, precision, and Roblox expertise. Many are completely free.</p>
+  <div class="models-grid reveal d2">
+    <div class="model-chip">
+      <img src="/icon/gemini.png" alt="" onerror="this.style.display='none'">
+      Gemini 2.5 Flash Lite
+      <span class="mbadge free">FREE</span>
+    </div>
+    <div class="model-chip">
+      <img src="/icon/gemini.png" alt="" onerror="this.style.display='none'">
+      Gemini 2.5 Flash
+      <span class="mbadge cr">1 CR</span>
+    </div>
+    <div class="model-chip">
+      <img src="/icon/gemini.png" alt="" onerror="this.style.display='none'">
+      Gemini 3 Flash
+      <span class="mbadge free">FREE</span>
+    </div>
+    <div class="model-chip">
+      <img src="/icon/groq.ico" alt="" onerror="this.style.display='none'">
+      Llama 3.3 70B
+      <span class="mbadge free">FREE</span>
+    </div>
+    <div class="model-chip">
+      <img src="/icon/groq.ico" alt="" onerror="this.style.display='none'">
+      OpenAI OSS 120B
+      <span class="mbadge free">FREE</span>
+    </div>
+    <div class="model-chip">
+      <img src="/icon/mistral.png" alt="" onerror="this.style.display='none'">
+      Mistral Small
+      <span class="mbadge free">FREE</span>
+    </div>
+    <div class="model-chip">
+      <img src="/icon/deepseek.svg" alt="" onerror="this.style.display='none'">
+      DeepSeek V3
+      <span class="mbadge cr">1 CR</span>
+    </div>
+    <div class="model-chip" style="opacity:.5;">
+      <img src="/icon/claude.png" alt="" onerror="this.style.display='none'">
+      Claude Sonnet
+      <span class="mbadge soon">SOON</span>
+    </div>
+    <div class="model-chip" style="opacity:.5;">
+      <img src="/icon/chatgpt.png" alt="" onerror="this.style.display='none'">
+      GPT-4o
+      <span class="mbadge soon">SOON</span>
+    </div>
   </div>
 </section>
 
-<div class="mystery-gate">
-  <div class="gate-box">
-    <div class="gate-icon">🔐</div>
-    <div class="gate-title">Unlock Full Access</div>
-    <div class="gate-sub">Only developers inside can experience the real magic. Login to reveal your dashboard, credits, and all AI tools.</div>
-    <a href="/login" class="gate-btn">Enter NEXUS AI</a>
-    <div style="margin-top:14px;font-size:9px;color:var(--dim);">30 free credits waiting · No credit card required</div>
+<!-- GATE -->
+<div class="gate-section" id="gate">
+  <div class="gate-box reveal-scale">
+    <div class="gate-glow"></div>
+    <div class="gate-icon">
+      <svg width="28" height="28" viewBox="0 0 24 24" stroke="#cc55ff" fill="none" stroke-width="1.8">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+        <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        <circle cx="12" cy="16" r="1" fill="#cc55ff"/>
+      </svg>
+    </div>
+    <div class="gate-title">The Rest is Inside</div>
+    <div class="gate-sub">Projects, dashboard, full model access, credit system, plugin download, daily rewards — all of it is waiting behind one login.</div>
+    <a href="/login" class="gate-btn">
+      <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+      Enter NEXUS AI
+    </a>
+    <div class="gate-note"><span>30 free credits</span> · No credit card · Sign in with Roblox</div>
   </div>
 </div>
 
+<!-- CTA -->
 <section class="cta-section">
-  <div class="cta-box">
-    <div class="cta-free-badge">🎉 FREE to start — 30 CR instantly!</div>
+  <div class="cta-box reveal-scale">
+    <div class="cta-free">
+      <svg width="12" height="12" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      30 Free Credits — No Card Required
+    </div>
     <h2 class="cta-title">Ready to Build Faster?</h2>
-    <p class="cta-sub">Join thousands of Roblox developers already using NEXUS AI. Sign up free, start building now.</p>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
-      <a href="/login" class="btn-primary" style="width:100%;max-width:280px;justify-content:center;font-size:12px;">
-        ⚡ Start Free Now
+    <p class="cta-sub">Join developers who've already stopped copy-pasting and started creating. Your game deserves better than manual scripting.</p>
+    <div class="cta-actions">
+      <a href="/login" class="btn-primary" style="width:100%;max-width:300px;justify-content:center;">
+        <svg width="14" height="14" viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+        Start Free Now
       </a>
-      <a href="https://discord.gg/HuGtbRvD" target="_blank" class="btn-secondary" style="font-size:10px;">
-        Join Discord for Plugin & Codes
+      <a href="https://discord.gg/HuGtbRvD" target="_blank" class="cta-discord">
+        <img src="/icon/discord.png" alt="Discord" onerror="this.style.display='none'">
+        Join Discord for Plugin &amp; Codes
       </a>
     </div>
-    <div style="margin-top:20px;font-size:9px;color:var(--dim);">
-      30 free credits on signup · +2 CR daily · No credit card needed
+    <div class="cta-meta">
+      <span>30 CR on signup</span> · +2 CR daily free · Pro plan for power users
     </div>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
-  <div style="margin-bottom:10px;font-family:'Orbitron',sans-serif;font-size:11px;color:var(--cyan);">NEXUS AI</div>
-  <div style="margin-bottom:8px;">
-    Made by <a href="https://discord.gg/HuGtbRvD">NEXUS STUDIO</a> · 
-    <a href="/privacy">Privacy</a> · 
-    <a href="/terms">Terms</a> · 
-    <a href="https://discord.gg/HuGtbRvD">Discord</a>
+  <div class="footer-inner">
+    <span class="footer-brand">NEXUS AI</span>
+    <div class="footer-links">
+      <a href="https://discord.gg/HuGtbRvD" target="_blank">Discord</a>
+      <a href="/login">Login</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/terms">Terms</a>
+    </div>
+    <span class="footer-copy">© 2026 NEXUS STUDIO · nexusai-roblox.vercel.app</span>
   </div>
-  <div>nexusai-roblox.vercel.app · © 2026 NEXUS STUDIO</div>
 </footer>
 
 <script>
+// ── AUTH CHECK ──
 (function(){
-  try {
-    var s = localStorage.getItem('nexus_session');
-    if (s) {
-      var p = JSON.parse(s);
-      if (p && p.user && p.user.username && p.loginTime && (Date.now()-p.loginTime) < 86400000*7) {
-        window.location.replace('/dashboard');
-        return;
+  try{
+    var s=localStorage.getItem('nexus_session');
+    if(s){
+      var p=JSON.parse(s);
+      if(p&&p.user&&p.user.username&&p.loginTime&&(Date.now()-p.loginTime)<86400000*7){
+        window.location.replace('/dashboard');return;
       }
     }
-  } catch(e) { localStorage.removeItem('nexus_session'); }
+  }catch(e){localStorage.removeItem('nexus_session');}
 })();
 
+// ── PARTICLES ──
 (function(){
-  var p = document.getElementById('particles');
-  for (var i = 0; i < 22; i++) {
-    var d = document.createElement('div');
-    d.className = 'p';
-    var sz = Math.random() * 4 + 1;
-    d.style.cssText = 'width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;background:rgba('
-      +(Math.random()>.5?'0,229,255':'136,0,255')+','+(Math.random()*.4+.08)
-      +');animation-duration:'+(Math.random()*14+8)+'s;animation-delay:'+(Math.random()*12)+'s;';
+  var p=document.getElementById('particles');
+  for(var i=0;i<28;i++){
+    var d=document.createElement('div');d.className='p';
+    var sz=Math.random()*3.5+1;
+    var isCyan=Math.random()>.45;
+    d.style.cssText='width:'+sz+'px;height:'+sz+'px;left:'+Math.random()*100+'%;background:rgba('+(isCyan?'0,229,255':'136,0,255')+','+(Math.random()*.35+.07)+');animation-duration:'+(Math.random()*16+9)+'s;animation-delay:'+(Math.random()*14)+'s;';
     p.appendChild(d);
   }
 })();
 
-document.querySelector('.hero-scroll')?.addEventListener('click', function(){
-  document.querySelector('.screenshots')?.scrollIntoView({behavior:'smooth'});
+// ── NAVBAR SCROLL ──
+var navbar=document.getElementById('navbar');
+window.addEventListener('scroll',function(){
+  if(window.scrollY>60)navbar.classList.add('scrolled');
+  else navbar.classList.remove('scrolled');
+},{passive:true});
+
+// ── HERO SCROLL BUTTON ──
+document.getElementById('heroScroll').addEventListener('click',function(){
+  document.getElementById('mystery').scrollIntoView({behavior:'smooth'});
 });
+
+// ── SCROLL REVEAL ──
+(function(){
+  var els=document.querySelectorAll('.reveal,.reveal-left,.reveal-right,.reveal-scale');
+  function check(){
+    var wh=window.innerHeight;
+    els.forEach(function(el){
+      var rect=el.getBoundingClientRect();
+      if(rect.top<wh-60){el.classList.add('active');}
+    });
+  }
+  window.addEventListener('scroll',check,{passive:true});
+  window.addEventListener('resize',check,{passive:true});
+  setTimeout(check,100);
+})();
+
+// ── COUNTER ANIMATION ──
+(function(){
+  var stats=document.querySelectorAll('.stat-n');
+  var animated=false;
+  function animateStats(){
+    if(animated)return;
+    var hero=document.querySelector('.hero-stats');
+    if(!hero)return;
+    var r=hero.getBoundingClientRect();
+    if(r.top<window.innerHeight){animated=true;}
+  }
+  window.addEventListener('scroll',animateStats,{passive:true});
+})();
 </script>
 </body>
 </html>
